@@ -7,7 +7,7 @@ When confirmation, clarification, or approval is needed, **always use the `AskUs
 
 
 ## Mission
-Check that all 21 agents in the solo-dev-orchestrator plugin are properly installed and functional.
+Check that all 21 agents + 3 teams (24 total) in the solo-dev-orchestrator plugin are properly installed and functional, along with all 25 commands and 63 skills.
 
 ## Checks to Perform
 
@@ -82,7 +82,7 @@ Check team definitions exist:
 ║  ✅ review-team     (3 members)              ║
 ║  ✅ planning-team   (4 members)              ║
 ║                                              ║
-║  COMMANDS (15 available)                     ║
+║  COMMANDS (25 available)                     ║
 ║  ✅ All commands loaded                      ║
 ║                                              ║
 ║  SKILLS DEPENDENCIES                         ║

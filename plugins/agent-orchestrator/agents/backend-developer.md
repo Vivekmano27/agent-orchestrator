@@ -1,6 +1,6 @@
 ---
 name: backend-developer
-description: Implements NestJS and Python/Django backend services — API endpoints, business logic, database queries, authentication, middleware, background jobs, and inter-service communication. Invoke for any backend implementation.
+description: Implements NestJS and Python/Django backend services — API endpoints, business logic, database queries, authentication, middleware, background jobs, and inter-service communication. Invoke for any backend implementation. For Python/Django AI service work, use python-developer instead. For cross-service integration, use senior-engineer instead.
 tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion
 model: sonnet
 permissionMode: acceptEdits

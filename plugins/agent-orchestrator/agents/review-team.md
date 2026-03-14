@@ -2,7 +2,7 @@
 name: review-team
 description: Agent team for comprehensive code review. Spawns parallel reviewers for code quality, security, and performance that produce a combined report.
 tools: Agent, Read, Bash, Grep, Glob, TaskOutput, AskUserQuestion
-model: claude-opus-4-6
+model: opus
 maxTurns: 30
 permissionMode: default
 ---
@@ -45,7 +45,7 @@ Agent(
 Agent(
   subagent_type="agent-orchestrator:security-auditor",
   run_in_background=True,
-  prompt="Audit [feature/files] for security vulnerabilities. Check: OWASP Top 10, injection, broken auth, XSS, CSRF, secrets in code, insecure dependencies. Output findings organized by severity: Critical / High / Medium / Low."
+  prompt="Perform a FOCUSED security spot-check of the CODE CHANGES only. Check for: injection vectors in new endpoints, auth bypass in new routes, secrets accidentally committed. Do NOT repeat the full OWASP/STRIDE analysis — that was done in Phase 5. Reference the Phase 5 report at .claude/specs/[feature]/security-audit.md. Audit [feature/files] for security vulnerabilities. Output findings organized by severity: Critical / High / Medium / Low."
 )
 
 Agent(

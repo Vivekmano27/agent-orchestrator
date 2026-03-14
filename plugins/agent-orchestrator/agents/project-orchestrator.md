@@ -30,10 +30,13 @@ AskUserQuestion(
     "NestJS + React + PostgreSQL (recommended)",
     "NestJS + React + SQLite (simpler, no Docker needed)",
     "Express + Vue + SQLite",
-    "Let the agents decide (use defaults)"
+    "Use full stack from steering/tech.md: NestJS + Django + React + Flutter + KMP + PostgreSQL + Redis + Docker (skip all questions)"
   ]
 )
 ```
+
+If user selects the last option ("Use full stack..."), skip questions 2 and 3.
+Read steering/tech.md for the complete tech stack, use "Standard" feature scope, and "Docker Compose" for local run.
 
 **Call 2 — Feature scope:**
 ```
@@ -131,49 +134,86 @@ Task size determines HOW MUCH you interact, not WHICH agents run:
 
 ### MEDIUM (4-10 files, 1-2 services)
 - ALL 21 agents still run
-- ONE approval gate — **STOP and call the tool:**
+- ONE approval gate after Phase 2 (design) — **STOP, read SUMMARY.md, and call the tool:**
   ```
+  1. Read .claude/specs/[feature]/SUMMARY.md
+  2. Include key decisions in the question:
   AskUserQuestion(
-    question="Plan ready. Proceed with implementation?",
-    options=["Yes, proceed", "Request changes"]
+    question="Planning & design complete for [feature]:
+    - [X] user stories with acceptance criteria
+    - Architecture: [monolith/microservices], [tech stack]
+    - [Y] API endpoints designed
+    - Database: [Z] tables
+    Proceed with implementation?",
+    options=["Yes, proceed", "Request changes", "Cancel"]
   )
   ```
 
 ### BIG (10+ files, multiple services)
 - ALL 21 agents still run
-- FOUR approval gates — at each gate, **STOP and call the tool:**
+- FOUR approval gates — at each gate, **read spec files and include a summary:**
 
-  **Gate 1 — after requirements:**
+  **Gate 1 — after requirements (Phase 1):**
+  Read requirements.md, business-rules.md, ux.md. Summarize key decisions.
   ```
   AskUserQuestion(
-    question="Requirements ready. Approve to proceed to design?",
+    question="Requirements complete: [X] user stories, [Y] business rules, [Z] personas.
+    Key scope: [brief description]. Approve to proceed to design?",
     options=["Approve — proceed to design", "Request changes", "Cancel"]
   )
   ```
 
-  **Gate 2 — after design:**
+  **Gate 2 — after design (Phase 2):**
+  Read architecture.md, api-spec.md, schema.md, design.md. Summarize.
   ```
   AskUserQuestion(
-    question="Design ready. Approve to proceed to implementation?",
+    question="Design complete: [architecture type], [X] endpoints, [Y] tables, [Z] components.
+    Tech: [stack]. Approve to proceed to implementation?",
     options=["Approve — proceed to implementation", "Request changes", "Cancel"]
   )
   ```
 
-  **Gate 3 — after task plan:**
+  **Gate 3 — after implementation (Phase 3):**
+  Read feature-team report. Summarize files changed.
   ```
   AskUserQuestion(
-    question="Task plan ready. Approve to begin implementation?",
-    options=["Approve — begin implementation", "Reorder tasks", "Cancel"]
+    question="Implementation complete: [X] files across [Y] services.
+    Backend: [done/issues]. Frontend: [done/issues]. Proceed to testing?",
+    options=["Approve — proceed to testing", "Request changes", "Cancel"]
   )
   ```
 
-  **Gate 4 — after staging tests pass:**
+  **Gate 4 — after tests + security + review (Phases 4-6):**
   ```
   AskUserQuestion(
-    question="Staging tests passed. Approve production deploy?",
-    options=["Deploy to production", "More testing needed", "Cancel"]
+    question="Testing + security + review complete. Coverage: [X]%.
+    Security: [findings]. Review: [findings]. Proceed to DevOps + deploy?",
+    options=["Proceed to DevOps + docs", "More testing needed", "Cancel"]
   )
   ```
+
+### Handling "Request changes" at any gate
+When user selects "Request changes":
+1. Ask what they want changed (use AskUserQuestion with free text)
+2. Re-run ONLY the affected agent(s) with the change feedback appended to the prompt
+3. Include context: "REVISION: User requested these changes: [feedback]. Previous output at .claude/specs/[feature]/[file]. Update accordingly."
+4. Re-present the gate with updated summary
+
+### Handling "Cancel" at any gate
+When user selects "Cancel":
+1. Confirm: AskUserQuestion("Cancel this feature? Spec files and feature branch will be cleaned up.", options=["Yes, cancel and clean up", "No, go back"])
+2. If confirmed: delete .claude/specs/[feature]/, switch to previous branch, report "Feature cancelled."
+
+### Subagent Failure Detection
+After each phase completes, verify expected output files exist:
+
+**After Phase 1:** requirements.md, business-rules.md, ux.md
+**After Phase 2:** architecture.md, api-spec.md, schema.md, design.md, SUMMARY.md
+**After Phase 3:** api-contracts.md
+
+If ANY file is missing:
+1. Retry the SPECIFIC FAILED AGENT once with context: "RETRY: Previous attempt failed to produce [file]. Focus on this deliverable."
+2. If still missing after retry: AskUserQuestion("Agent [name] failed to produce [file]. How to proceed?", options=["Skip and continue", "Retry differently", "Cancel"])
 
 ## Delegation Mechanism — Subagents (Primary)
 
@@ -289,38 +329,36 @@ Agent(
 ```
 2c. Wait for all three to complete.
 
-### Phase 3: Build — staggered parallel (file-based coordination)
+2d. Generate SUMMARY.md — Read all Phase 1-2 output files and write a human-readable overview:
+```bash
+# Write .claude/specs/[feature]/SUMMARY.md with:
+# - Tech stack chosen
+# - Feature list (from requirements.md)
+# - Architecture overview (from architecture.md)
+# - Key API endpoints (from api-spec.md)
+# - Database tables (from schema.md)
+# - Component list (from design.md)
+# This summary is shown to the user at approval gates.
+```
 
-**Why staggered**: frontend-developer needs backend API contracts. Backend runs first, writes contracts to a file, then frontend reads that file. Senior-engineer and python-developer are independent and run alongside backend.
+### Phase 3: Build — dispatched to feature-team
 
-3a. Spawn backend-developer + senior-engineer + python-developer IN PARALLEL (same response):
+Delegate the entire implementation phase to the feature-team agent. It manages the staggered parallel dispatch internally (backend first, then frontend after contracts are written) and enforces file ownership boundaries.
+
+3a. Spawn feature-team:
 ```
 Agent(
-  subagent_type="agent-orchestrator:backend-developer",
-  run_in_background=True,
-  prompt="Implement NestJS API for [feature]. Specs at .claude/specs/[feature]/api-spec.md and schema.md. Follow TDD. When all endpoints are implemented, write final API contracts (actual routes, request/response shapes) to .claude/specs/[feature]/api-contracts.md"
-)
-
-Agent(
-  subagent_type="agent-orchestrator:senior-engineer",
-  run_in_background=True,
-  prompt="Implement cross-service integration for [feature]. Specs at .claude/specs/[feature]/architecture.md. Handle service boundaries, auth middleware, error handling, and timeouts."
-)
-
-Agent(
-  subagent_type="agent-orchestrator:python-developer",
-  run_in_background=True,
-  prompt="Implement Python/Django AI service features for [feature]. Specs at .claude/specs/[feature]/. Follow TDD."
+  subagent_type="agent-orchestrator:feature-team",
+  prompt="Implement all features for [feature] based on specs at .claude/specs/[feature]/.
+          Read api-spec.md, schema.md, design.md, architecture.md for contracts.
+          Backend runs first and writes api-contracts.md.
+          Then frontend reads api-contracts.md.
+          Follow TDD. Commit after each logical unit.
+          Return: list of files changed, issues encountered, whether api-contracts.md was written."
 )
 ```
-3b. Wait for backend-developer to complete (notified automatically). Then spawn frontend-developer:
-```
-Agent(
-  subagent_type="agent-orchestrator:frontend-developer",
-  prompt="Implement React/Flutter UI for [feature]. Specs at .claude/specs/[feature]/design.md. Backend API contracts are at .claude/specs/[feature]/api-contracts.md — read this file for exact endpoint routes and shapes. Follow TDD."
-)
-```
-3c. Wait for all agents to complete.
+3b. Wait for feature-team to complete. Check its report for any issues.
+3c. Verify `.claude/specs/[feature]/api-contracts.md` exists (backend output).
 
 ### Phase 4: Testing — parallel
 Spawn test-engineer + qa-automation IN PARALLEL (same response):

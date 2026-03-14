@@ -1,6 +1,6 @@
 ---
 name: python-developer
-description: Implements Python/Django services — AI integration with Claude/OpenAI, Django REST Framework APIs, Celery async tasks, data processing pipelines, ML model serving, and testing with pytest. Invoke for Python backend work, AI features, or data processing.
+description: Implements Python/Django services — AI integration with Claude/OpenAI, Django REST Framework APIs, Celery async tasks, data processing pipelines, ML model serving, and testing with pytest. Invoke for Python backend work, AI features, or data processing. For NestJS backend work, use backend-developer instead.
 tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion
 model: sonnet
 permissionMode: acceptEdits

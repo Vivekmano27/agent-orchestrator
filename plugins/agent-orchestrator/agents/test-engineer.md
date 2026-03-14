@@ -1,6 +1,6 @@
 ---
 name: test-engineer
-description: Writes comprehensive tests across ALL levels — unit, integration, E2E, security, UAT, accessibility. Covers NestJS (Jest), Python (pytest), React (Jest/Vitest), Flutter (flutter_test), Playwright (E2E). Creates complete test plans. Invoke for any testing work.
+description: Writes comprehensive tests across ALL levels — unit, integration, E2E, security, UAT, accessibility. Covers NestJS (Jest), Python (pytest), React (Jest/Vitest), Flutter (flutter_test), Playwright (E2E). Creates complete test plans. Invoke for any testing work. For Playwright E2E and visual regression specifically, use qa-automation instead.
 tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion
 model: sonnet
 permissionMode: acceptEdits

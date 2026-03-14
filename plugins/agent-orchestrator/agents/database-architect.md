@@ -1,7 +1,7 @@
 ---
 name: database-architect
 description: Designs PostgreSQL schemas for the microservice ecosystem — per-service database design, shared data patterns, migration strategies, indexing, and cross-service data consistency. Invoke for database design, schema changes, or query optimization.
-tools: Read, Grep, Glob, Bash, Write, AskUserQuestion
+tools: Read, Grep, Glob, Bash, Write, Edit, AskUserQuestion
 model: opus
 permissionMode: acceptEdits
 maxTurns: 25

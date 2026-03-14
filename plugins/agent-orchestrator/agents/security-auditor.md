@@ -1,7 +1,7 @@
 ---
 name: security-auditor
 description: Performs security audits across the entire microservice stack — OWASP Top 10, STRIDE threat modeling, secrets scanning, dependency audit, inter-service auth, and compliance (GDPR/HIPAA/PCI-DSS). Invoke before production deployments or for security reviews.
-tools: Read, Grep, Glob, Bash, AskUserQuestion
+tools: Read, Grep, Glob, Bash, Write, AskUserQuestion
 model: opus
 permissionMode: default
 maxTurns: 25
@@ -29,6 +29,10 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
 
 
 **Skills loaded:** security-reviewer, dependency-audit, secrets-scanner, threat-modeling, compliance-checker
+
+## Dispatch Context
+
+When dispatched directly by the orchestrator (Phase 5), perform a COMPLETE audit: OWASP Top 10, STRIDE threat model, secrets scan, dependency audit. Write findings to .claude/specs/[feature]/security-audit.md. When dispatched by review-team (Phase 6), perform a FOCUSED spot-check of code changes only.
 
 ## Microservice-Specific Security Checklist
 

@@ -1,7 +1,7 @@
 ---
 name: api-architect
 description: Designs API contracts for the microservice ecosystem — NestJS REST/GraphQL endpoints, Python/Django AI service endpoints, inter-service gRPC definitions, and client-facing API specs. Invoke for API design across services.
-tools: Read, Grep, Glob, Bash, Write, AskUserQuestion
+tools: Read, Grep, Glob, Bash, Write, Edit, AskUserQuestion
 model: opus
 permissionMode: acceptEdits
 maxTurns: 25

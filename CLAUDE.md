@@ -1,5 +1,22 @@
 # Project — Microservices Application
 
+## About This Repository
+This repo is the **Solo Dev Orchestrator** — a Claude Code plugin (all markdown files).
+It contains 24 agents, 25 commands, 63 skills, hooks, and steering docs that orchestrate
+microservices application development.
+
+### Working on This Plugin
+- There is no application code to build or test in this repo.
+- To test changes: `claude --plugin-dir plugins/agent-orchestrator`
+- To install into a project: `bash install.sh /path/to/project`
+- To validate: `bash plugins/agent-orchestrator/validate-plugin.sh`
+
+---
+
+## Target Project Configuration
+> The sections below apply to the **project where this plugin is installed**, not this plugin repo itself.
+> When the orchestrator generates a project, these are the conventions it follows.
+
 ## Project Overview
 Microservices application with NestJS backend, Python/Django AI service, React/Next.js web frontend, Flutter + KMP mobile apps, deployed on AWS with Docker/K8s.
 
@@ -12,7 +29,7 @@ Microservices application with NestJS backend, Python/Django AI service, React/N
 - Testing: Jest, Pytest, Playwright, Flutter Test
 
 ## Architecture
-Microservices: API Gateway (NestJS) → Core Service (NestJS+PostgreSQL) ↔ AI Service (Python/Django)
+Microservices: API Gateway (NestJS) -> Core Service (NestJS+PostgreSQL) <-> AI Service (Python/Django)
 For details see @steering/tech.md and @docs/ARCHITECTURE.md
 
 ## Build & Run
@@ -82,16 +99,26 @@ ALWAYS route through the project-orchestrator agent for ANY of these:
 - Any new feature or application request
 
 The project-orchestrator MUST be the entry point. It classifies the task
-(SMALL/MEDIUM/BIG), then delegates to the right specialist agents.
+(SMALL/MEDIUM/BIG), then runs the full 21-agent pipeline with approval
+gates determined by task size.
+
+Pipeline dispatch model (hybrid):
+- Phases 1-2 (Planning/Design): orchestrator dispatches specialist agents directly
+- Phase 3 (Build): orchestrator dispatches feature-team (Agent Teams peer-to-peer)
+- Phases 4-5 (Testing/Security): orchestrator dispatches agents directly
+- Phase 6 (Review): orchestrator dispatches review-team (Agent Teams peer-to-peer)
+- Phases 7-8 (DevOps/Docs): orchestrator dispatches agents directly
 
 NEVER let individual skills (fullstack-dev, react-patterns, frontend-design, etc.)
 handle a new application request directly. They are used BY agents, not invoked
 standalone for new projects.
 
 The correct flow is ALWAYS:
-  User request → project-orchestrator → classifies → delegates to agents → agents use skills
+  User request -> project-orchestrator -> classifies -> delegates to agents -> agents use skills
 
 For quick tasks, use these commands instead of free-form prompts:
-- /build-feature "description" → orchestrated feature build
-- /quick-fix "error" → autonomous bug fix
-- /setup-service name type → new microservice scaffold
+- /build-feature "description" -> orchestrated feature build
+- /new "description" -> full pipeline for new project/feature
+- /quick-fix "error" -> autonomous bug fix
+- /setup-service name type -> new microservice scaffold
+- /init-project name -> scaffold full monorepo from scratch

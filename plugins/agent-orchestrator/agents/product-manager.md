@@ -1,7 +1,7 @@
 ---
 name: product-manager
 description: Gathers requirements, writes PRDs, user stories with acceptance criteria, feature lists, and business rules. The starting point for every feature. Invoke when planning features, defining scope, writing specs, or creating product documentation.
-tools: Read, Grep, Glob, Bash, Write, AskUserQuestion
+tools: Read, Grep, Glob, Bash, Write, Edit, AskUserQuestion
 model: opus
 permissionMode: acceptEdits
 maxTurns: 25
