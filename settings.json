@@ -1,0 +1,52 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(npm test *)",
+      "Bash(npm install *)",
+      "Bash(npx *)",
+      "Bash(git *)",
+      "Bash(pytest *)",
+      "Bash(python manage.py *)",
+      "Bash(pip *)",
+      "Bash(flutter *)",
+      "Bash(dart *)",
+      "Bash(docker *)",
+      "Bash(docker-compose *)",
+      "Bash(cargo *)",
+      "Bash(gradle *)",
+      "Bash(./gradlew *)",
+      "Bash(ruff *)",
+      "Bash(mypy *)",
+      "Bash(cat *)",
+      "Bash(ls *)",
+      "Bash(find *)",
+      "Bash(grep *)",
+      "Bash(mkdir *)",
+      "Bash(cp *)",
+      "Bash(mv *)",
+      "Bash(echo *)",
+      "Bash(head *)",
+      "Bash(tail *)",
+      "Bash(wc *)",
+      "Edit(/services/**)",
+      "Edit(/apps/**)",
+      "Edit(/docs/**)",
+      "Edit(/tests/**)",
+      "Edit(/infrastructure/**)",
+      "Edit(/prisma/**)",
+      "Edit(/.github/**)"
+    ],
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./secrets/**)",
+      "Read(./config/credentials.*)",
+      "Read(./**/node_modules/**)",
+      "Bash(rm -rf /)*",
+      "Bash(sudo *)",
+      "Bash(chmod 777 *)"
+    ]
+  },
+  "autoMemoryEnabled": true
+}

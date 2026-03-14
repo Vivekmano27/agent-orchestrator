@@ -1,0 +1,45 @@
+# === Solo Dev Orchestrator — Add these to your .gitignore ===
+
+# Claude Code local files (never commit)
+CLAUDE.local.md
+.claude/settings.local.json
+.claude/memory/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Secrets
+secrets/
+config/credentials.*
+
+# Node
+node_modules/
+dist/
+coverage/
+.next/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+htmlcov/
+.coverage
+
+# Flutter
+.dart_tool/
+build/
+
+# Docker
+*.log
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,35 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "INPUT=$(cat); CMD=$(echo \"$INPUT\" | jq -r '.tool_input.command // empty' 2>/dev/null || echo ''); if echo \"$CMD\" | grep -qE 'git\\s+commit'; then echo '🔍 Running pre-commit lint checks...'; CHANGED=$(git diff --cached --name-only 2>/dev/null || echo ''); if echo \"$CHANGED\" | grep -q 'services/core-service'; then (cd services/core-service && npm run lint 2>/dev/null) || echo '⚠️  core-service lint issues'; fi; if echo \"$CHANGED\" | grep -q 'services/ai-service'; then (cd services/ai-service && ruff check . 2>/dev/null) || echo '⚠️  ai-service lint issues'; fi; if echo \"$CHANGED\" | grep -q 'apps/web'; then (cd apps/web && npm run lint 2>/dev/null) || echo '⚠️  web lint issues'; fi; echo '✅ Pre-commit checks done'; fi; if echo \"$CMD\" | grep -qE 'git\\s+push'; then echo '🔍 Running pre-push tests...'; CHANGED=$(git diff origin/$(git branch --show-current 2>/dev/null)..HEAD --name-only 2>/dev/null || echo ''); if echo \"$CHANGED\" | grep -q 'services/core-service'; then (cd services/core-service && npm test 2>/dev/null) || { echo '❌ core-service tests failed' >&2; exit 2; }; fi; if echo \"$CHANGED\" | grep -q 'services/ai-service'; then (cd services/ai-service && pytest -q 2>/dev/null) || { echo '❌ ai-service tests failed' >&2; exit 2; }; fi; if echo \"$CHANGED\" | grep -q 'apps/web'; then (cd apps/web && npm test -- --watchAll=false 2>/dev/null) || { echo '❌ web tests failed' >&2; exit 2; }; fi; echo '✅ Pre-push checks passed'; fi"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "INPUT=$(cat); CMD=$(echo \"$INPUT\" | jq -r '.tool_input.command // empty' 2>/dev/null || echo ''); if echo \"$CMD\" | grep -qE 'git\\s+commit'; then HASH=$(git rev-parse --short HEAD 2>/dev/null || echo '?'); MSG=$(git log -1 --format='%s' 2>/dev/null || echo ''); BRANCH=$(git branch --show-current 2>/dev/null || echo '?'); TS=$(date '+%Y-%m-%d %H:%M'); echo \"[$TS] $HASH | $BRANCH | $MSG\" >> claude-progress.txt 2>/dev/null || true; fi"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "INPUT=$(cat); FILE=$(echo \"$INPUT\" | jq -r '.tool_input.file_path // empty' 2>/dev/null || echo ''); if [ -n \"$FILE\" ]; then EXT=\"${FILE##*.}\"; case \"$EXT\" in ts|tsx|js|jsx|json) npx prettier --write \"$FILE\" 2>/dev/null || true ;; py) ruff format \"$FILE\" 2>/dev/null || true ;; dart) dart format \"$FILE\" 2>/dev/null || true ;; kt|kts) which ktlint >/dev/null 2>&1 && ktlint --format \"$FILE\" 2>/dev/null || true ;; esac; fi"
+          }
+        ]
+      }
+    ]
+  }
+}

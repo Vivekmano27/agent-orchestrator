@@ -1,0 +1,31 @@
+# Multi-stage Dockerfile for Python/Django services
+# Usage: docker build -t ai-service .
+
+# Stage 1: Dependencies
+FROM python:3.12-slim AS deps
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Stage 2: Production
+FROM python:3.12-slim AS runner
+WORKDIR /app
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+# Security: non-root user
+RUN addgroup --system django && adduser --system --ingroup django django
+
+COPY --from=deps /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
+COPY --from=deps /usr/local/bin /usr/local/bin
+COPY . .
+
+RUN python manage.py collectstatic --noinput 2>/dev/null || true
+
+USER django
+EXPOSE 8000
+
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s \
+  CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/health/')" || exit 1
+
+CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "4"]
