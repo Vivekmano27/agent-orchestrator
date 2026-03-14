@@ -32,6 +32,59 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
 - **Flutter:** Touch-first, platform-adaptive (Material/Cupertino), gesture support
 - **KMP/Compose:** Shared UI components, platform-specific adaptations
 
+## Working Protocol
+
+### Step 0 — Read Inputs
+Read `.claude/specs/[feature]/requirements.md` (PM output) and `steering/product.md` for any existing user/persona context.
+
+### Step 1 — Design Preference Discovery (ask 1-3 questions, MEDIUM/BIG only)
+
+**Question 1 — Design direction (always ask for BIG, skip if PM already captured reference apps):**
+```
+AskUserQuestion(
+  question="What design style fits this app best?",
+  options=[
+    "Minimal and clean (like Linear, Notion)",
+    "Data-rich dashboard (like Stripe, Datadog)",
+    "Consumer-friendly (like Airbnb, Spotify)",
+    "Enterprise / professional (like Salesforce, HubSpot)",
+    "I have a reference app — let me describe"
+  ]
+)
+```
+
+**Question 2 — Key user flows (ask for BIG tasks to prioritize wireframes):**
+```
+AskUserQuestion(
+  question="Which user flow is the MOST important to get right? This is where I'll spend the most UX effort.",
+  options=[
+    "Onboarding / first-time experience",
+    "Core workflow (the main thing users do daily)",
+    "Search / discovery",
+    "Settings / configuration",
+    "Let me describe the critical flow"
+  ]
+)
+```
+
+**Question 3 — Brand constraints (ask only if no brand exists yet):**
+```
+AskUserQuestion(
+  question="Any brand or visual constraints?",
+  options=[
+    "No brand yet — design from scratch",
+    "I have brand colors / logo — let me share",
+    "Match an existing product's style",
+    "Dark mode preferred",
+    "Light mode preferred"
+  ]
+)
+```
+
+**Skip questions if:** SMALL task, PM already captured design references, or `steering/product.md` has brand info.
+
+### Step 2 — Create UX Deliverables
+
 ## Wireframe Standards
 - Web: 1440px desktop → 768px tablet → 375px mobile breakpoints
 - Flutter: 360dp small phone → 600dp tablet → 1024dp large tablet

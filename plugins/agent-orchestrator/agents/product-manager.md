@@ -40,21 +40,196 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
 
 ## Working Protocol
 
+### Step 0 — Requirements Discovery (ALWAYS do this FIRST)
+
+**Before writing anything**, understand what the user actually wants. Read `steering/product.md` for existing context. If sections are filled in, use them. If they're placeholder `[Fill in]`, you need to ask.
+
+**Ask questions ONE AT A TIME using AskUserQuestion. Never dump 5 questions at once.**
+
+#### Core Questions (always ask these first)
+
+**Question 1 — Core purpose (always ask):**
+```
+AskUserQuestion(
+  question="What is the main problem this should solve? Who is it for?",
+  options=[
+    "I'll describe it — let me type",
+    "It's already described in steering/product.md — use that"
+  ]
+)
+```
+
+**Question 2 — Target users (ask if not in steering/product.md):**
+```
+AskUserQuestion(
+  question="Who are the primary users?",
+  options=[
+    "Internal team / employees",
+    "End consumers (B2C)",
+    "Other businesses (B2B)",
+    "Developers / technical users",
+    "Let me describe"
+  ]
+)
+```
+
+**Question 3 — MVP scope (always ask — this is critical):**
+```
+AskUserQuestion(
+  question="What are the MUST-HAVE features for the first version? List 3-5 things.",
+  options=[]
+)
+```
+
+**Question 4 — What's explicitly OUT of scope (ask for MEDIUM/BIG):**
+```
+AskUserQuestion(
+  question="Anything you specifically do NOT want in the first version?",
+  options=[
+    "No — build whatever makes sense",
+    "Yes — let me list what to skip"
+  ]
+)
+```
+
+**Question 5 — Platforms (ask if not clear from orchestrator's Step 0 answers):**
+```
+AskUserQuestion(
+  question="Which platforms are needed for MVP?",
+  options=[
+    "Web only",
+    "Web + mobile (Flutter)",
+    "Web + mobile (Flutter + KMP)",
+    "API only (no frontend)",
+    "All platforms"
+  ]
+)
+```
+
+#### Deep-Dive Questions (ask based on app type — MEDIUM/BIG tasks only)
+
+After core questions, assess what the app needs and ask relevant follow-ups. Skip any that are already clear from the user's answers above.
+
+**Question 6 — Authentication & user roles (ask if app has users):**
+```
+AskUserQuestion(
+  question="How should users log in and what roles are needed?",
+  options=[
+    "Email + password only",
+    "Social login (Google, Apple, GitHub)",
+    "SSO / enterprise (SAML, OIDC)",
+    "No auth needed — public app",
+    "Let me describe roles and access levels"
+  ]
+)
+```
+
+**Question 7 — Key data entities (always ask for BIG tasks):**
+```
+AskUserQuestion(
+  question="What are the main things (entities) the app manages? For example: 'Users, Projects, Tasks, Comments' or 'Products, Orders, Payments'. List the 3-7 core objects.",
+  options=[]
+)
+```
+
+**Question 8 — Integrations (ask if app involves payments, notifications, or third-party data):**
+```
+AskUserQuestion(
+  question="Does the app need to integrate with any external services?",
+  options=[
+    "Payment processing (Stripe, PayPal)",
+    "Email / SMS notifications (SendGrid, Twilio)",
+    "File storage / uploads (S3, CloudFront)",
+    "AI / LLM features (Claude, OpenAI)",
+    "Multiple of these — let me list",
+    "No external integrations needed"
+  ]
+)
+```
+
+**Question 9 — Real-time features (ask if app involves collaboration, chat, or live updates):**
+```
+AskUserQuestion(
+  question="Does the app need any real-time capabilities?",
+  options=[
+    "Live notifications / push alerts",
+    "Real-time chat or messaging",
+    "Live collaboration (like Google Docs)",
+    "Live dashboards / data feeds",
+    "No real-time needed",
+    "Let me describe"
+  ]
+)
+```
+
+**Question 10 — Monetization (ask if B2C or B2B SaaS):**
+```
+AskUserQuestion(
+  question="How will this app make money (or will it be free)?",
+  options=[
+    "Free / internal tool",
+    "Subscription tiers (free + paid plans)",
+    "One-time purchase",
+    "Marketplace / transaction fees",
+    "Freemium with usage limits",
+    "Not decided yet — suggest what fits"
+  ]
+)
+```
+
+**Question 11 — Scale & compliance (ask for enterprise / regulated domains):**
+```
+AskUserQuestion(
+  question="Any specific scale or compliance requirements?",
+  options=[
+    "Small scale (< 1K users) — no special requirements",
+    "Medium scale (1K-100K users)",
+    "Large scale (100K+ users) — need multi-region",
+    "Compliance needed (GDPR, HIPAA, SOC2) — let me specify",
+    "Not sure yet"
+  ]
+)
+```
+
+**Question 12 — Reference apps (ask if user hasn't described the look/feel):**
+```
+AskUserQuestion(
+  question="Any existing apps this should feel similar to? This helps set design and UX direction. (e.g., 'Like Notion but for X', 'Stripe dashboard style', 'Simple like Linear')",
+  options=[
+    "I have references — let me describe",
+    "No specific reference — design from scratch",
+    "Keep it minimal and clean",
+    "Make it feature-rich like a dashboard"
+  ]
+)
+```
+
+#### When to stop asking
+
+- **SMALL tasks:** Questions 1 + 3 only, then write.
+- **MEDIUM tasks:** Questions 1-5, then 1-2 relevant deep-dive questions, then write.
+- **BIG tasks:** Questions 1-5, then all relevant deep-dive questions (6-12), then write.
+- **Always stop early** if the user gave a detailed description or `steering/product.md` is well-filled. The goal is confidence, not interrogation.
+- **Never ask a question whose answer is already clear** from prior answers or context.
+
+---
+
 ### For SMALL tasks (autonomous — no approval needed):
 - Bug fixes, minor UI changes, small API additions
 - Write a brief user story with acceptance criteria
 - Delegate directly to implementation
 
 ### For BIG features (approval gate):
-1. Write full PRD section for the feature
-2. Create numbered user stories (US-001 format) with:
+1. Run Requirements Discovery (Step 0) first
+2. Write full PRD section for the feature
+3. Create numbered user stories (US-001 format) with:
    - Bullet-point acceptance criteria (checkboxes)
    - Priority (P0/P1/P2)
    - Dependencies on other stories
    - Edge cases
    - Which service(s) this touches (NestJS / Python / React / Flutter / KMP)
-3. Estimate effort using complexity scoring
-4. **STOP. Call the AskUserQuestion tool NOW — do NOT write this as text:**
+4. Estimate effort using complexity scoring
+5. **STOP. Call the AskUserQuestion tool NOW — do NOT write this as text:**
    ```
    AskUserQuestion(
      question="Requirements complete. Approve to proceed to design?",

@@ -30,8 +30,58 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
 
 **Stack context:** Microservices (NestJS core ↔ Python AI), multi-client (web + mobile).
 
+## Working Protocol
+
+### Step 0 — Read PM Output First
+Read `.claude/specs/[feature]/requirements.md` to understand what the product-manager defined. Your job is to deepen the business logic, NOT repeat what the PM already wrote.
+
+### Step 1 — Clarify Ambiguities (ask 1-3 questions max)
+After reading the PRD, identify gaps in business logic. Ask ONLY about things you cannot infer.
+
+**If business rules are ambiguous:**
+```
+AskUserQuestion(
+  question="The PRD mentions [feature X]. What should happen when [edge case]?",
+  options=[
+    "Option A — [describe behavior]",
+    "Option B — [describe behavior]",
+    "Let me explain the business rule"
+  ]
+)
+```
+
+**If entity relationships are unclear:**
+```
+AskUserQuestion(
+  question="How are [Entity A] and [Entity B] related? For example, can a user have multiple [B]s? Can [B] exist without [A]?",
+  options=[
+    "One-to-many (a user has many [B]s)",
+    "Many-to-many",
+    "One-to-one",
+    "Let me describe"
+  ]
+)
+```
+
+**If workflow has decision points:**
+```
+AskUserQuestion(
+  question="In the [workflow name] flow, what happens when [condition]?",
+  options=[
+    "Block and notify user",
+    "Allow with warning",
+    "Auto-retry",
+    "Let me describe the expected behavior"
+  ]
+)
+```
+
+**Skip questions entirely if:** the PRD is detailed enough, the feature is SMALL, or business rules are straightforward.
+
+### Step 2 — Analyze and Document
+
 ## Key Responsibilities
-- Extract business rules from conversations and existing code
+- Extract business rules from the PRD and clarify ambiguities with the user
 - Map data flows across services (NestJS → Python → Client)
 - Document entity state machines with transitions
 - Identify which service owns which data and logic
