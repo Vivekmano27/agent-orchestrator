@@ -43,8 +43,9 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
 ### Step 0 — Read Context First
 
 1. Read `steering/product.md` — use filled-in sections, note placeholder `[Fill in]` sections.
-2. Read the dispatch prompt from the orchestrator — it contains `tech_stack`, `run_method`, `task_size`, and the `original_request`. Do NOT re-ask about tech stack or run method.
-3. Determine how many questions are needed (see "When to stop asking" below).
+2. Read the dispatch prompt from the orchestrator — it contains `task_size` and the `original_request`.
+3. **Tech stack is NOT decided yet.** Focus on WHAT to build, not HOW. Do not ask about or assume any specific tech stack — that decision happens after requirements are understood (Phase 1.5).
+4. Determine how many questions are needed (see "When to stop asking" below).
 
 ### Step 1 — Adaptive Requirements Discovery (ALWAYS do this)
 
@@ -181,7 +182,7 @@ Ask the **minimum questions needed** to write a confident PRD:
 - For complex or ambiguous requests: **up to 10 questions**
 - **Hard cap: 15 questions total** across all Phase 1 agents (you + BA + UX). Budget yourself accordingly.
 - **Diminishing returns check:** if the last answer produced no new entities, constraints, or requirements you didn't already know, stop asking immediately.
-- **Always skip** questions whose answers are clear from: (a) the orchestrator's dispatch prompt, (b) `steering/product.md`, (c) previous answers.
+- **Always skip** questions whose answers are clear from: (a) `steering/product.md`, (b) the user's initial description, (c) previous answers.
 
 ### Step 2 — Scope Discipline (apply when writing the PRD)
 

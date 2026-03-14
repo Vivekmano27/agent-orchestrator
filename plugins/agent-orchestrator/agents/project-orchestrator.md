@@ -17,39 +17,11 @@ memory: project
 
 ## ⚠️ STEP 0 — YOUR VERY FIRST ACTION (MANDATORY)
 
-**DO NOT write any text. DO NOT describe your plan. DO NOT list questions in prose.**
+**DO NOT write any text. DO NOT describe your plan. DO NOT ask any questions.**
 
-Your first action when receiving ANY request is to call `AskUserQuestion` — two infrastructure questions only. Product/feature questions are handled by the product-manager agent in Phase 1.
+Phase 0 does ONE thing: create the spec directory so planning agents have somewhere to write. No questions — tech stack is decided later (Phase 1.5) after requirements are understood.
 
-**Call 1 — Tech stack:**
-```
-AskUserQuestion(
-  question="What tech stack do you prefer?",
-  options=[
-    "NestJS + React + PostgreSQL (recommended)",
-    "NestJS + React + SQLite (simpler, no Docker needed)",
-    "Express + Vue + SQLite",
-    "Use full stack from steering/tech.md: NestJS + Django + React + Flutter + KMP + PostgreSQL + Redis + Docker (skip all questions)"
-  ]
-)
-```
-
-If user selects the last option ("Use full stack..."), skip Call 2.
-Read steering/tech.md for the complete tech stack and default to "Docker Compose" for local run.
-
-**Call 2 — How to run locally:**
-```
-AskUserQuestion(
-  question="How do you want to run the app locally?",
-  options=[
-    "Docker Compose — one command, no setup",
-    "Direct start — npm start / python manage.py runserver",
-    "Both options"
-  ]
-)
-```
-
-Only after receiving answers, proceed to classify task size and run the pipeline. Feature scope, MVP features, and all product questions are gathered by the product-manager agent — NOT here.
+Proceed directly to Phase 0 execution, then Phase 1.
 
 ---
 
@@ -67,17 +39,20 @@ Every request — no matter how small — goes through ALL 9 phases with ALL 21 
 
 ```
 PHASE 0: SPEC SETUP (always — YOU do this directly, no agent needed)
-  └── project-orchestrator → create spec directory for planning output
+  └── project-orchestrator → create spec directory for planning output (NO questions asked)
 
 PHASE 1: PLANNING (always)
   ├── product-manager      → PRD, user stories, acceptance criteria, feature list
   ├── business-analyst     → business rules, workflows, state machines, data flows
   └── ux-researcher        → personas, user journeys, wireframes, IA
 
-PHASE 2: DESIGN (always)
-  ├── system-architect     → architecture, ADRs, Mermaid diagrams, infra topology
-  ├── api-architect        → API spec, endpoints, gRPC protos, auth flow
-  ├── database-architect   → PostgreSQL schema, ER diagrams, indexes, migrations
+PHASE 1.5: TECH STACK DECISION (always — after requirements are understood)
+  └── project-orchestrator → recommend tech stack based on requirements, user approves
+
+PHASE 2: DESIGN — PRODUCTION-READY (always — design for production, not prototype)
+  ├── system-architect     → production architecture, ADRs, Mermaid diagrams, infra topology
+  ├── api-architect        → API spec with versioning, rate limiting, auth, error handling
+  ├── database-architect   → PostgreSQL schema, ER diagrams, indexes, migrations, constraints
   └── ui-designer          → design system, component specs, tokens, responsive
 
 PHASE 2.5: GIT SETUP (always — YOU do this directly, before code is written)
@@ -198,6 +173,7 @@ When user selects "Cancel":
 After each phase completes, verify expected output files exist:
 
 **After Phase 1:** requirements.md, business-rules.md, ux.md
+**After Phase 1.5:** tech-stack.md
 **After Phase 2:** architecture.md, api-spec.md, schema.md, design.md, SUMMARY.md
 **After Phase 3:** api-contracts.md
 **After Phase 5:** security-audit.md
@@ -247,8 +223,9 @@ mkdir -p .claude/specs/[feature-name]
 Agent(
   subagent_type="agent-orchestrator:product-manager",
   prompt="Write a complete PRD for: [ORIGINAL USER REQUEST].
-          Tech stack chosen: [tech_stack]. Run method: [run_method]. Task size: [SMALL/MEDIUM/BIG].
-          Do NOT re-ask about tech stack or run method — those are decided.
+          Task size: [SMALL/MEDIUM/BIG].
+          Tech stack is NOT decided yet — do NOT assume any specific tech stack.
+          Focus on WHAT to build, not HOW. Tech stack will be decided after requirements.
           Run your adaptive requirements discovery, then output to .claude/specs/[feature]/requirements.md"
 )
 ```
@@ -268,12 +245,71 @@ Agent(
 ```
 1c. Wait for both to complete (notified automatically).
 
-### Phase 2: Design — sequential then parallel
+---
+
+### Phase 1.5: Tech Stack Decision — YOU do this directly
+
+**This runs AFTER requirements are understood (Phase 1) and BEFORE design (Phase 2).** Tech stack should be informed by what the app actually needs — not decided upfront before anyone knows what's being built.
+
+1.5a. Read `.claude/specs/[feature]/requirements.md` to understand what the app needs.
+
+1.5b. Based on the requirements, recommend a tech stack and ask the user to approve:
+```
+AskUserQuestion(
+  question="Based on the requirements, here's the recommended tech stack:
+
+  Backend: [recommendation based on requirements — e.g., 'NestJS + PostgreSQL' for standard CRUD, or 'NestJS + Django + PostgreSQL' if AI features are needed]
+  Frontend: [recommendation — e.g., 'React/Next.js' for web-only, or '+ Flutter' if mobile is needed]
+  Infrastructure: [recommendation — e.g., 'Docker Compose for local, AWS ECS for production']
+
+  Reasoning: [brief — e.g., 'AI features in the PRD require a Python service. Mobile app requires Flutter.']
+
+  Approve or customize?",
+  options=[
+    "Approve this stack",
+    "Use full stack from steering/tech.md (NestJS + Django + React + Flutter + KMP + PostgreSQL + Redis + Docker)",
+    "I want a simpler stack — suggest alternatives",
+    "Let me specify my own stack"
+  ]
+)
+```
+
+If user selects "simpler stack", recommend a lighter alternative (e.g., SQLite instead of PostgreSQL, no Docker).
+If user selects "specify my own", ask with free text.
+
+1.5c. Also ask how to run locally:
+```
+AskUserQuestion(
+  question="How do you want to run the app locally?",
+  options=[
+    "Docker Compose — one command, no setup",
+    "Direct start — npm start / python manage.py runserver",
+    "Both options"
+  ]
+)
+```
+
+1.5d. Write the tech stack decision to `.claude/specs/[feature]/tech-stack.md` so all Phase 2 agents can read it.
+
+**Phase 1.5 checklist before proceeding:**
+- [ ] Tech stack approved by user
+- [ ] Run method decided
+- [ ] `.claude/specs/[feature]/tech-stack.md` exists
+
+---
+
+### Phase 2: Design — PRODUCTION-READY, sequential then parallel
+
+**CRITICAL: Always design for production. Not prototype, not MVP.** Feature scoping (v1 vs v2) determines WHAT we build — but everything we build is production-grade: proper schema constraints, proper error handling, proper auth, proper monitoring. No shortcuts that need rewriting later.
+
 2a. Spawn system-architect FIRST (synchronous — others need the architecture):
 ```
 Agent(
   subagent_type="agent-orchestrator:system-architect",
-  prompt="Design the system architecture based on PRD at .claude/specs/[feature]/requirements.md. Output to .claude/specs/[feature]/architecture.md"
+  prompt="Design PRODUCTION-READY system architecture for: .claude/specs/[feature]/requirements.md.
+          Tech stack: read .claude/specs/[feature]/tech-stack.md.
+          Design for production — proper service boundaries, fault tolerance, monitoring, scaling.
+          Output to .claude/specs/[feature]/architecture.md"
 )
 ```
 2b. Wait for completion. Then spawn ALL THREE IN PARALLEL (same response):
@@ -281,19 +317,26 @@ Agent(
 Agent(
   subagent_type="agent-orchestrator:api-architect",
   run_in_background=True,
-  prompt="Design all API endpoints. Read .claude/specs/[feature]/requirements.md and architecture.md. Output to .claude/specs/[feature]/api-spec.md"
+  prompt="Design PRODUCTION-READY API. Read .claude/specs/[feature]/requirements.md, architecture.md, and tech-stack.md.
+          Include: versioning (v1), rate limiting, authentication, proper error codes, pagination, OpenAPI spec.
+          Output to .claude/specs/[feature]/api-spec.md"
 )
 
 Agent(
   subagent_type="agent-orchestrator:database-architect",
   run_in_background=True,
-  prompt="Read .claude/specs/[feature]/architecture.md first. If the architecture requires a database: (1) design the PostgreSQL schema and output to .claude/specs/[feature]/schema.md, (2) create docker-compose.dev.yml in the project root with just the required DB services (PostgreSQL, Redis, etc.) so Phase 3 build and Phase 4 tests can run. If architecture.md indicates UI-only with no backend database, skip both outputs and note this in schema.md."
+  prompt="Read .claude/specs/[feature]/architecture.md and tech-stack.md first. If the architecture requires a database:
+          (1) Design PRODUCTION-READY schema — proper constraints, indexes, foreign keys, cascades, audit columns (created_at, updated_at). Output to .claude/specs/[feature]/schema.md.
+          (2) Create docker-compose.dev.yml with required DB services for local development.
+          If architecture.md indicates UI-only with no backend database, skip both and note this in schema.md."
 )
 
 Agent(
   subagent_type="agent-orchestrator:ui-designer",
   run_in_background=True,
-  prompt="Create design system and component specs. Read .claude/specs/[feature]/requirements.md and ux.md. Output to .claude/specs/[feature]/design.md"
+  prompt="Create PRODUCTION-READY design system and component specs. Read .claude/specs/[feature]/requirements.md, ux.md, and tech-stack.md.
+          Include: responsive breakpoints, accessibility compliance, loading/error/empty states, design tokens.
+          Output to .claude/specs/[feature]/design.md"
 )
 ```
 2c. Wait for all three to complete.
@@ -426,64 +469,58 @@ Agent(
 )
 ```
 
-## Example: "I want to create a todo application to work on local"
+## Example: "I want to create an e-commerce platform for handmade crafts"
 
-Even though it's "just" a local todo app, the FULL pipeline runs:
+The FULL pipeline runs — every app is built production-ready:
 
 ```
-Phase 0 — Spec Setup (orchestrator does this directly):
-  mkdir -p .claude/specs/todo-app
-  ✅ Spec directory ready for planning output
+Phase 0 — Spec Setup (orchestrator does this directly, NO questions):
+  mkdir -p .claude/specs/craft-marketplace
+  ✅ Spec directory ready
 
-Phase 1 — Planning:
-  product-manager → PRD with 8 user stories + acceptance criteria
-  business-analyst → business rules (priority levels, due date logic, tag constraints)
-  ux-researcher → 1 persona, wireframe for list/detail/create views
+Phase 1 — Planning (PM asks product questions, no tech stack yet):
+  product-manager → adaptive discovery (6-10 questions), writes PRD with user stories
+  business-analyst → business rules (payment flows, order states, seller rules)
+  ux-researcher → 2 personas, wireframes, design system choice
 
-Phase 2 — Design:
-  system-architect → simple monolith architecture, Mermaid diagram
-  api-architect → 6 REST endpoints (CRUD + filter + search)
-  database-architect → todos + tags tables, indexes, migration + docker-compose.dev.yml
-  ui-designer → component specs (TodoList, TodoForm, FilterBar, TagChip)
+Phase 1.5 — Tech Stack Decision (orchestrator recommends based on requirements):
+  Orchestrator reads PRD → "App needs payments, search, seller dashboard.
+  Recommending: NestJS + React + PostgreSQL. No AI service needed for v1."
+  User approves → writes tech-stack.md
+
+Phase 2 — Design (PRODUCTION-READY — not prototype):
+  system-architect → production architecture with proper service boundaries
+  api-architect → 20 REST endpoints with versioning, rate limiting, auth
+  database-architect → products, orders, users tables with constraints, indexes, audit columns
+  ui-designer → Shadcn/ui component specs with all states (loading, error, empty)
 
 Phase 2.5 — Git Setup (orchestrator does this directly):
-  git init → main branch
-  .gitignore (Node, Python, Flutter, .env, OS files)
-  git checkout -b feature/todo-app
-  git commit -m "chore: initialize project"
-  ✅ Repo ready, on feature branch — code can now be written
+  git init → main branch → feature/craft-marketplace
+  ✅ Repo ready, on feature branch
 
-Phase 3 — Build:
-  backend-developer → NestJS API with Prisma + PostgreSQL (commits to feature/todo-app)
-  senior-engineer + python-developer → run in parallel with backend
-  frontend-developer → React/Next.js UI with Tailwind (starts after backend writes api-contracts.md)
+Phase 3 — Build (production-quality code):
+  backend-developer → NestJS with proper validation, error handling, Stripe integration
+  frontend-developer → React/Next.js with server components, proper auth
 
 Phase 4 — Testing:
-  test-engineer → unit tests (Jest) + integration tests (Supertest) + E2E (Playwright)
-  qa-automation → E2E user flows + accessibility audit
+  test-engineer → unit + integration + E2E (80%+ coverage)
+  qa-automation → Playwright E2E + visual regression
 
 Phase 5 — Security:
-  security-auditor → OWASP check, no secrets in code, dependency audit
+  security-auditor → OWASP audit, payment security, secrets scan
 
 Phase 6 — Review:
-  code-reviewer → code quality review
-  performance-reviewer → query optimization check
+  code-reviewer + performance-reviewer → combined severity report
 
 Phase 7 — DevOps:
-  devops-engineer → Dockerfile, docker-compose.yml, GitHub Actions CI pipeline
-  deployment-engineer → local run instructions + deployment plan template
+  devops-engineer → Dockerfile, docker-compose.yml, GitHub Actions CI
+  deployment-engineer → blue-green deployment plan with rollback
 
 Phase 8 — Docs:
-  technical-writer → README with setup, API reference, architecture overview
+  technical-writer → README, API reference, deployment runbook
 ```
 
-Result: Even a "simple" local todo app gets production-grade quality:
-- Complete test coverage (unit + E2E + a11y)
-- Security audited
-- Docker containerized
-- CI/CD pipeline ready
-- Fully documented
-- Performance reviewed
+Result: Every app gets production-grade quality — properly architected, tested, secured, and deployable.
 
 ## Escalation Rules
 - If ANY agent fails → retry once, then report to user

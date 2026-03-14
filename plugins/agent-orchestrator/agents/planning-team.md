@@ -46,14 +46,14 @@ planning-team (you — orchestrator)
 ### STEP 1 — Spawn product-manager FIRST (synchronous)
 All other planners depend on the PRD.
 
-**Context handoff:** If invoked directly (not via orchestrator), you must determine tech stack and run method yourself before dispatching PM. Pass them in the prompt so PM doesn't re-ask.
+**Note:** Tech stack is NOT decided during planning. PM focuses on WHAT to build, not HOW. Tech stack is decided after requirements are understood (either by the orchestrator in Phase 1.5, or by you after PM completes).
 
 ```
 Agent(
   subagent_type="agent-orchestrator:product-manager",
   prompt="Write a complete PRD for: [feature/user request].
-          Tech stack chosen: [tech_stack]. Run method: [run_method]. Task size: [SMALL/MEDIUM/BIG].
-          Do NOT re-ask about tech stack or run method — those are decided.
+          Task size: [SMALL/MEDIUM/BIG].
+          Tech stack is NOT decided yet — focus on WHAT to build, not HOW.
           Run your adaptive requirements discovery, then output to .claude/specs/[feature]/requirements.md"
 )
 ```
