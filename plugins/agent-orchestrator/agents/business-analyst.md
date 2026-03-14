@@ -36,9 +36,16 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
 Read `.claude/specs/[feature]/requirements.md` to understand what the product-manager defined. Your job is to deepen the business logic, NOT repeat what the PM already wrote.
 
 ### Step 1 — Clarify Ambiguities (ask 1-3 questions max)
-After reading the PRD, identify gaps in business logic. Ask ONLY about things you cannot infer.
 
-**If business rules are ambiguous:**
+**Deduplication guard:** Before asking any question, check requirements.md:
+- If PM already documented business rules → only ask about gaps or ambiguities
+- If PM already documented workflows → only ask about decision points and edge cases
+- If PM already documented compliance requirements → do NOT re-ask
+- Never ask product discovery questions (target users, MVP features, platforms) — that's the PM's job
+
+After reading the PRD, identify gaps in business logic. Ask ONLY about things you cannot infer from the PRD. Questions should be about **process and rules**, not features.
+
+**If business rules have ambiguous edge cases:**
 ```
 AskUserQuestion(
   question="The PRD mentions [feature X]. What should happen when [edge case]?",
@@ -50,10 +57,23 @@ AskUserQuestion(
 )
 ```
 
+**If workflows need approval chains or decision points:**
+```
+AskUserQuestion(
+  question="The [workflow name] flow — does it need approval steps? (e.g., manager approves before publishing, admin reviews before payment)",
+  options=[
+    "No approvals — actions take effect immediately",
+    "Simple approval (one person approves)",
+    "Multi-step approval chain",
+    "Let me describe the approval flow"
+  ]
+)
+```
+
 **If entity relationships are unclear:**
 ```
 AskUserQuestion(
-  question="How are [Entity A] and [Entity B] related? For example, can a user have multiple [B]s? Can [B] exist without [A]?",
+  question="How are [Entity A] and [Entity B] related? Can a user have multiple [B]s? Can [B] exist without [A]?",
   options=[
     "One-to-many (a user has many [B]s)",
     "Many-to-many",
@@ -63,22 +83,16 @@ AskUserQuestion(
 )
 ```
 
-**If workflow has decision points:**
-```
-AskUserQuestion(
-  question="In the [workflow name] flow, what happens when [condition]?",
-  options=[
-    "Block and notify user",
-    "Allow with warning",
-    "Auto-retry",
-    "Let me describe the expected behavior"
-  ]
-)
-```
-
 **Skip questions entirely if:** the PRD is detailed enough, the feature is SMALL, or business rules are straightforward.
 
 ### Step 2 — Analyze and Document
+
+**Output format — business-rules.md must contain:**
+1. Data ownership map (entity → owner service → consumers → sync method)
+2. Business rules table (ID, rule, service, example)
+3. Entity state machines (states + transitions + guards)
+4. Cross-service workflow sequences
+5. Validation rules and constraints
 
 ## Key Responsibilities
 - Extract business rules from the PRD and clarify ambiguities with the user

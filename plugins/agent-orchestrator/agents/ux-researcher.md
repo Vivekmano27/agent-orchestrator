@@ -39,7 +39,39 @@ Read `.claude/specs/[feature]/requirements.md` (PM output) and `steering/product
 
 ### Step 1 — Design Preference Discovery (ask 1-3 questions, MEDIUM/BIG only)
 
-**Question 1 — Design direction (always ask for BIG, skip if PM already captured reference apps):**
+**Deduplication guard:** Before asking any question, check requirements.md:
+- If PM captured reference apps or design direction → skip design direction question
+- If PM captured accessibility requirements → skip accessibility question
+- If tech stack implies a design system (e.g., Flutter → Material) → adjust options accordingly
+- Never ask product discovery questions (users, features, platforms) — that's the PM's job
+
+**Question 1 — Design system (always ask for BIG):**
+```
+AskUserQuestion(
+  question="What design system should I base components on?",
+  options=[
+    "Shadcn/ui (recommended for Next.js)",
+    "Material Design (recommended for Flutter)",
+    "Ant Design",
+    "Custom from scratch",
+    "I have an existing design system"
+  ]
+)
+```
+
+**Question 2 — Accessibility level (ask if healthcare, government, enterprise, or compliance mentioned in PRD):**
+```
+AskUserQuestion(
+  question="What accessibility level is required?",
+  options=[
+    "WCAG AA (standard — recommended)",
+    "WCAG AAA (strict — government/healthcare)",
+    "Basic only — internal tool"
+  ]
+)
+```
+
+**Question 3 — Design direction (ONLY if PM didn't capture reference apps — check requirements.md first):**
 ```
 AskUserQuestion(
   question="What design style fits this app best?",
@@ -49,34 +81,6 @@ AskUserQuestion(
     "Consumer-friendly (like Airbnb, Spotify)",
     "Enterprise / professional (like Salesforce, HubSpot)",
     "I have a reference app — let me describe"
-  ]
-)
-```
-
-**Question 2 — Key user flows (ask for BIG tasks to prioritize wireframes):**
-```
-AskUserQuestion(
-  question="Which user flow is the MOST important to get right? This is where I'll spend the most UX effort.",
-  options=[
-    "Onboarding / first-time experience",
-    "Core workflow (the main thing users do daily)",
-    "Search / discovery",
-    "Settings / configuration",
-    "Let me describe the critical flow"
-  ]
-)
-```
-
-**Question 3 — Brand constraints (ask only if no brand exists yet):**
-```
-AskUserQuestion(
-  question="Any brand or visual constraints?",
-  options=[
-    "No brand yet — design from scratch",
-    "I have brand colors / logo — let me share",
-    "Match an existing product's style",
-    "Dark mode preferred",
-    "Light mode preferred"
   ]
 )
 ```

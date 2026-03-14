@@ -13,7 +13,7 @@ Task size (SMALL/MEDIUM/BIG) only determines approval gates, NOT which agents ru
 
 ## Steps
 1. Pass the user's description to project-orchestrator
-2. Orchestrator uses **AskUserQuestion tool** to ask 2-3 clarifying questions (e.g. target platform, scale, key constraints)
+2. Orchestrator uses **AskUserQuestion tool** to ask 2 infrastructure questions (tech stack, run method). Product/feature questions are handled by the product-manager agent.
 3. Orchestrator classifies size and uses **AskUserQuestion tool** for approval gates:
    - SMALL (1-3 files): all agents run, no approval needed
    - MEDIUM (4-10 files): all agents run — **AskUserQuestion**: "Plan looks good. Proceed?" → [Proceed / Request changes]

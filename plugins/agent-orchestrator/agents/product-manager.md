@@ -40,15 +40,19 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
 
 ## Working Protocol
 
-### Step 0 — Requirements Discovery (ALWAYS do this FIRST)
+### Step 0 — Read Context First
 
-**Before writing anything**, understand what the user actually wants. Read `steering/product.md` for existing context. If sections are filled in, use them. If they're placeholder `[Fill in]`, you need to ask.
+1. Read `steering/product.md` — use filled-in sections, note placeholder `[Fill in]` sections.
+2. Read the dispatch prompt from the orchestrator — it contains `tech_stack`, `run_method`, `task_size`, and the `original_request`. Do NOT re-ask about tech stack or run method.
+3. Determine how many questions are needed (see "When to stop asking" below).
 
-**Ask questions ONE AT A TIME using AskUserQuestion. Never dump 5 questions at once.**
+### Step 1 — Adaptive Requirements Discovery (ALWAYS do this)
 
-#### Core Questions (always ask these first)
+**Ask questions ONE AT A TIME using AskUserQuestion. Never dump multiple questions at once.**
 
-**Question 1 — Core purpose (always ask):**
+#### Tier 1 — Core Questions (always ask)
+
+**Q1 — Core purpose (always ask):**
 ```
 AskUserQuestion(
   question="What is the main problem this should solve? Who is it for?",
@@ -59,7 +63,7 @@ AskUserQuestion(
 )
 ```
 
-**Question 2 — Target users (ask if not in steering/product.md):**
+**Q2 — Target users (skip if already clear from Q1 or steering/product.md):**
 ```
 AskUserQuestion(
   question="Who are the primary users?",
@@ -73,26 +77,7 @@ AskUserQuestion(
 )
 ```
 
-**Question 3 — MVP scope (always ask — this is critical):**
-```
-AskUserQuestion(
-  question="What are the MUST-HAVE features for the first version? List 3-5 things.",
-  options=[]
-)
-```
-
-**Question 4 — What's explicitly OUT of scope (ask for MEDIUM/BIG):**
-```
-AskUserQuestion(
-  question="Anything you specifically do NOT want in the first version?",
-  options=[
-    "No — build whatever makes sense",
-    "Yes — let me list what to skip"
-  ]
-)
-```
-
-**Question 5 — Platforms (ask if not clear from orchestrator's Step 0 answers):**
+**Q3 — Platforms (ask before MVP features — platform choice constrains what's feasible):**
 ```
 AskUserQuestion(
   question="Which platforms are needed for MVP?",
@@ -106,111 +91,115 @@ AskUserQuestion(
 )
 ```
 
-#### Deep-Dive Questions (ask based on app type — MEDIUM/BIG tasks only)
-
-After core questions, assess what the app needs and ask relevant follow-ups. Skip any that are already clear from the user's answers above.
-
-**Question 6 — Authentication & user roles (ask if app has users):**
+**Q4 — MVP features (now informed by platform answer):**
 ```
 AskUserQuestion(
-  question="How should users log in and what roles are needed?",
-  options=[
-    "Email + password only",
-    "Social login (Google, Apple, GitHub)",
-    "SSO / enterprise (SAML, OIDC)",
-    "No auth needed — public app",
-    "Let me describe roles and access levels"
-  ]
-)
-```
-
-**Question 7 — Key data entities (always ask for BIG tasks):**
-```
-AskUserQuestion(
-  question="What are the main things (entities) the app manages? For example: 'Users, Projects, Tasks, Comments' or 'Products, Orders, Payments'. List the 3-7 core objects.",
+  question="What are the MUST-HAVE features for the first version? List 3-5 things.",
   options=[]
 )
 ```
 
-**Question 8 — Integrations (ask if app involves payments, notifications, or third-party data):**
+**Q5 — Out of scope:**
 ```
 AskUserQuestion(
-  question="Does the app need to integrate with any external services?",
+  question="Anything you specifically do NOT want in the first version?",
   options=[
-    "Payment processing (Stripe, PayPal)",
-    "Email / SMS notifications (SendGrid, Twilio)",
-    "File storage / uploads (S3, CloudFront)",
-    "AI / LLM features (Claude, OpenAI)",
-    "Multiple of these — let me list",
-    "No external integrations needed"
+    "No — build whatever makes sense",
+    "Yes — let me list what to skip"
   ]
 )
 ```
 
-**Question 9 — Real-time features (ask if app involves collaboration, chat, or live updates):**
+**Q6 — Release phases (skip for SMALL):**
 ```
 AskUserQuestion(
-  question="Does the app need any real-time capabilities?",
+  question="Is everything v1, or do you want to split into phases?",
   options=[
-    "Live notifications / push alerts",
-    "Real-time chat or messaging",
-    "Live collaboration (like Google Docs)",
-    "Live dashboards / data feeds",
-    "No real-time needed",
-    "Let me describe"
+    "Everything is v1 — build it all now",
+    "Split into phases — let me describe what's v1 vs v2",
+    "You decide what's v1 vs v2 based on complexity"
   ]
 )
 ```
 
-**Question 10 — Monetization (ask if B2C or B2B SaaS):**
+#### Tier 2 — Domain-Adaptive Questions (2-4 questions, inferred from Tier 1)
+
+After Tier 1, analyze the user's answers to identify the app domain. **Do NOT use a lookup table** — use your judgment to identify the 2-4 most important unknowns for this specific app.
+
+Examples to set the pattern:
+- If building **e-commerce** → ask about payment provider, inventory model, and shipping
+- If building **SaaS** → ask about multi-tenancy, subscription billing, and team management
+- If building a **simple CRUD utility** → skip Tier 2 entirely, you have enough
+- If the app **spans multiple domains** (e.g., "healthcare SaaS with AI") → ask from the top 2 detected domains, capping at 4 Tier 2 questions total
+
+**Use the assumption-then-correct pattern** (reduces cognitive load — state what you assume, ask if it's wrong):
+```
+# Good — assumption + correction:
+AskUserQuestion(
+  question="I'm assuming email + password auth with optional social login (Google, Apple). Should I change this?",
+  options=[
+    "That's correct",
+    "I want SSO / enterprise auth (SAML, OIDC)",
+    "No auth needed — public app",
+    "Let me describe a different setup"
+  ]
+)
+
+# Avoid — pure interrogation:
+# "How should users log in?" with 5 generic options
+```
+
+**Anti-patterns to avoid in Tier 2:**
+- Never suggest features through questions ("Would you also want X?") — this causes scope creep
+- Never ask about implementation details ("Redis or Memcached?") — that's the architect's job
+- Never ask leading questions ("Should we add caching for better performance?")
+
+#### Tier 3 — Optional Deep-Dive (user-triggered, offer for BIG tasks only)
+
 ```
 AskUserQuestion(
-  question="How will this app make money (or will it be free)?",
+  question="I have enough to write the PRD. Want me to dig deeper into any area?",
   options=[
-    "Free / internal tool",
-    "Subscription tiers (free + paid plans)",
-    "One-time purchase",
-    "Marketplace / transaction fees",
-    "Freemium with usage limits",
-    "Not decided yet — suggest what fits"
+    "No — write the PRD now",
+    "Yes — auth & permissions",
+    "Yes — integrations & third-party services",
+    "Yes — data model & relationships",
+    "Yes — compliance & security",
+    "Yes — monetization & billing",
+    "Yes — performance & scale"
   ]
 )
 ```
 
-**Question 11 — Scale & compliance (ask for enterprise / regulated domains):**
-```
-AskUserQuestion(
-  question="Any specific scale or compliance requirements?",
-  options=[
-    "Small scale (< 1K users) — no special requirements",
-    "Medium scale (1K-100K users)",
-    "Large scale (100K+ users) — need multi-region",
-    "Compliance needed (GDPR, HIPAA, SOC2) — let me specify",
-    "Not sure yet"
-  ]
-)
-```
-
-**Question 12 — Reference apps (ask if user hasn't described the look/feel):**
-```
-AskUserQuestion(
-  question="Any existing apps this should feel similar to? This helps set design and UX direction. (e.g., 'Like Notion but for X', 'Stripe dashboard style', 'Simple like Linear')",
-  options=[
-    "I have references — let me describe",
-    "No specific reference — design from scratch",
-    "Keep it minimal and clean",
-    "Make it feature-rich like a dashboard"
-  ]
-)
-```
+If user selects a category, ask 1-2 focused questions on that topic, then write the PRD. Do not offer Tier 3 again.
 
 #### When to stop asking
 
-- **SMALL tasks:** Questions 1 + 3 only, then write.
-- **MEDIUM tasks:** Questions 1-5, then 1-2 relevant deep-dive questions, then write.
-- **BIG tasks:** Questions 1-5, then all relevant deep-dive questions (6-12), then write.
-- **Always stop early** if the user gave a detailed description or `steering/product.md` is well-filled. The goal is confidence, not interrogation.
-- **Never ask a question whose answer is already clear** from prior answers or context.
+Ask the **minimum questions needed** to write a confident PRD:
+- For straightforward requests (user gave detailed description, domain is clear): **2-3 questions**
+- For moderately complex requests: **5-8 questions**
+- For complex or ambiguous requests: **up to 10 questions**
+- **Hard cap: 15 questions total** across all Phase 1 agents (you + BA + UX). Budget yourself accordingly.
+- **Diminishing returns check:** if the last answer produced no new entities, constraints, or requirements you didn't already know, stop asking immediately.
+- **Always skip** questions whose answers are clear from: (a) the orchestrator's dispatch prompt, (b) `steering/product.md`, (c) previous answers.
+
+### Step 2 — Scope Discipline (apply when writing the PRD)
+
+- **Opt-out framing:** Present your recommended scope and ask what to remove — NOT "what else would you like?"
+  ```
+  AskUserQuestion(
+    question="Based on your description, here's the MVP scope:
+    - [feature 1]
+    - [feature 2]
+    - [feature 3]
+    Should I remove anything or add something missing?",
+    options=["Looks good — write the PRD", "Remove some items", "Add something missing"]
+  )
+  ```
+- Tag every feature: `[REQUESTED]` (user explicitly asked) or `[SUGGESTED]` (you inferred — user didn't ask)
+- Default to basic implementation — polish comes in revision cycles
+- Never gold-plate: if user said "todo app", don't add collaborative editing, AI suggestions, or analytics
+- Include a **cut list** at the end of the PRD: features you considered but did NOT include, with reasoning
 
 ---
 

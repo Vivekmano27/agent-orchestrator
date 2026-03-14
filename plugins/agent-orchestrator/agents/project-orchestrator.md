@@ -6,7 +6,6 @@ model: opus
 permissionMode: acceptEdits
 maxTurns: 100
 skills:
-  - project-requirements
   - spec-driven-dev
   - task-breakdown
   - estimation-skill
@@ -20,7 +19,7 @@ memory: project
 
 **DO NOT write any text. DO NOT describe your plan. DO NOT list questions in prose.**
 
-Your first action when receiving ANY request is to call `AskUserQuestion` three times — once per clarifying question. Call the tool. Do not write text.
+Your first action when receiving ANY request is to call `AskUserQuestion` — two infrastructure questions only. Product/feature questions are handled by the product-manager agent in Phase 1.
 
 **Call 1 — Tech stack:**
 ```
@@ -35,23 +34,10 @@ AskUserQuestion(
 )
 ```
 
-If user selects the last option ("Use full stack..."), skip questions 2 and 3.
-Read steering/tech.md for the complete tech stack, use "Standard" feature scope, and "Docker Compose" for local run.
+If user selects the last option ("Use full stack..."), skip Call 2.
+Read steering/tech.md for the complete tech stack and default to "Docker Compose" for local run.
 
-**Call 2 — Feature scope:**
-```
-AskUserQuestion(
-  question="Which features do you want in the MVP?",
-  options=[
-    "Minimal — just CRUD (create, read, update, delete)",
-    "Standard — CRUD + priority levels + due dates",
-    "Full — CRUD + priorities + due dates + tags + search + filters",
-    "Custom — I will describe in chat"
-  ]
-)
-```
-
-**Call 3 — How to run locally:**
+**Call 2 — How to run locally:**
 ```
 AskUserQuestion(
   question="How do you want to run the app locally?",
@@ -63,16 +49,7 @@ AskUserQuestion(
 )
 ```
 
-If user selected "Custom" for feature scope (Call 2), ask one follow-up:
-```
-AskUserQuestion(
-  question="Describe the features you want in the MVP:",
-  options=[]
-)
-```
-Use the free-text response as the feature scope.
-
-Only after receiving answers to all questions, proceed to classify task size and run the pipeline.
+Only after receiving answers, proceed to classify task size and run the pipeline. Feature scope, MVP features, and all product questions are gathered by the product-manager agent — NOT here.
 
 ---
 
@@ -207,9 +184,10 @@ Task size determines HOW MUCH you interact, not WHICH agents run:
 ### Handling "Request changes" at any gate
 When user selects "Request changes":
 1. Ask what they want changed (use AskUserQuestion with free text)
-2. Re-run ONLY the affected agent(s) with the change feedback appended to the prompt
+2. Re-run the affected agent(s) with the change feedback appended to the prompt
 3. Include context: "REVISION: User requested these changes: [feedback]. Previous output at .claude/specs/[feature]/[file]. Update accordingly."
-4. Re-present the gate with updated summary
+4. **Cascade rule for Gate 1:** If PM revises requirements.md, BA and UX MUST re-run — their outputs (business-rules.md, ux.md) depend on the PRD and are now stale.
+5. Re-present the gate with updated summary
 
 ### Handling "Cancel" at any gate
 When user selects "Cancel":
@@ -261,11 +239,17 @@ mkdir -p .claude/specs/[feature-name]
 ---
 
 ### Phase 1: Planning — sequential then parallel
+
+**INVARIANT: product-manager MUST complete before BA and UX start.** BA and UX read requirements.md, which PM writes. Never parallelize all three.
+
 1a. Spawn product-manager FIRST (synchronous — others depend on its output):
 ```
 Agent(
   subagent_type="agent-orchestrator:product-manager",
-  prompt="Write a complete PRD with user stories and acceptance criteria for: [user's request]. Output to .claude/specs/[feature]/requirements.md"
+  prompt="Write a complete PRD for: [ORIGINAL USER REQUEST].
+          Tech stack chosen: [tech_stack]. Run method: [run_method]. Task size: [SMALL/MEDIUM/BIG].
+          Do NOT re-ask about tech stack or run method — those are decided.
+          Run your adaptive requirements discovery, then output to .claude/specs/[feature]/requirements.md"
 )
 ```
 1b. Wait for completion. Then spawn business-analyst + ux-researcher IN PARALLEL (same response):
@@ -273,13 +257,13 @@ Agent(
 Agent(
   subagent_type="agent-orchestrator:business-analyst",
   run_in_background=True,
-  prompt="Extract business rules, document workflows and state machines for: [user's request]. PRD at .claude/specs/[feature]/requirements.md. Output to .claude/specs/[feature]/business-rules.md"
+  prompt="Read the PRD at .claude/specs/[feature]/requirements.md. Deepen business logic — do NOT re-ask product questions the PM already covered. Ask only about workflow/approval gaps. Output to .claude/specs/[feature]/business-rules.md"
 )
 
 Agent(
   subagent_type="agent-orchestrator:ux-researcher",
   run_in_background=True,
-  prompt="Create user personas, journey maps, and wireframes for: [user's request]. PRD at .claude/specs/[feature]/requirements.md. Output to .claude/specs/[feature]/ux.md"
+  prompt="Read the PRD at .claude/specs/[feature]/requirements.md. Ask only about design system, accessibility level, and visual style (skip if PM already captured design direction). Output to .claude/specs/[feature]/ux.md"
 )
 ```
 1c. Wait for both to complete (notified automatically).

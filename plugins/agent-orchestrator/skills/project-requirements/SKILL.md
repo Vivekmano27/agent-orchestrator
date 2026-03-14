@@ -16,30 +16,7 @@ Phase 1: Requirements → Phase 2: Design → Phase 3: Tasks → Phase 4: Implem
 
 Review happens at phase gates, not during implementation.
 
-## Interview Process (for new projects)
-
-Ask these questions. If codebase exists, scan and pre-fill.
-
-### Product Questions
-1. What is this application? (elevator pitch)
-2. Who are the target users?
-3. What problem does it solve?
-4. Success metrics / KPIs?
-5. Competitive landscape?
-
-### Feature Questions
-6. Core features (P0 / MVP)?
-7. Secondary features (P1)?
-8. Explicitly out of scope?
-9. Business rules / domain logic?
-10. Edge cases that worry you?
-
-### Technical Questions
-11. Tech stack?
-12. Existing systems to integrate?
-13. Infrastructure constraints?
-14. Performance targets?
-15. Security / compliance requirements?
+**Note:** Requirements discovery questions are handled by the product-manager agent's adaptive discovery system. This skill provides output templates only — do NOT run a separate interview.
 
 ## Document Templates
 
