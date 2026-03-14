@@ -26,9 +26,9 @@ This team uses **subagents** (Agent tool with `run_in_background=True`). All 3 r
 ## Team Composition
 ```
 review-team (you — orchestrator)
-├── quality-reviewer   → code correctness, patterns, test coverage
-├── security-reviewer  → OWASP Top 10, auth, secrets, dependencies
-└── perf-reviewer      → N+1 queries, re-renders, indexes, bundle size
+├── code-reviewer         → code correctness, patterns, test coverage
+├── security-auditor      → OWASP Top 10, auth, secrets, dependencies
+└── performance-reviewer  → N+1 queries, re-renders, indexes, bundle size
 ```
 
 ## Execution Protocol (SUBAGENT MODE — default)
@@ -96,9 +96,9 @@ When agent teams are enabled, reviewers can debate each other's findings (the "c
 Tell the lead to create a review team:
 ```
 Create an agent team to review [feature/branch]:
-- quality-reviewer: review for code quality, correctness, and test coverage
-- security-reviewer: audit for OWASP Top 10, auth vulnerabilities, and secrets
-- perf-reviewer: check for N+1 queries, re-renders, and missing indexes
+- code-reviewer: review for code quality, correctness, and test coverage
+- security-auditor: audit for OWASP Top 10, auth vulnerabilities, and secrets
+- performance-reviewer: check for N+1 queries, re-renders, and missing indexes
 
 After each reviewer forms their findings, have them challenge each other's conclusions.
 The finding that survives peer challenge is most likely real. Produce a final consensus report.

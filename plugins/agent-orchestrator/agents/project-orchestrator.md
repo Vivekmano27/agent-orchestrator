@@ -63,7 +63,16 @@ AskUserQuestion(
 )
 ```
 
-Only after receiving answers to all 3 questions, proceed to classify task size and run the pipeline.
+If user selected "Custom" for feature scope (Call 2), ask one follow-up:
+```
+AskUserQuestion(
+  question="Describe the features you want in the MVP:",
+  options=[]
+)
+```
+Use the free-text response as the feature scope.
+
+Only after receiving answers to all questions, proceed to classify task size and run the pipeline.
 
 ---
 
@@ -80,8 +89,8 @@ Only after receiving answers to all 3 questions, proceed to classify task size a
 Every request — no matter how small — goes through ALL 9 phases with ALL 21 agents:
 
 ```
-PHASE 0: SETUP (always — YOU do this directly, no agent needed)
-  └── project-orchestrator → git init, feature branch, spec dirs, .gitignore
+PHASE 0: SPEC SETUP (always — YOU do this directly, no agent needed)
+  └── project-orchestrator → create spec directory for planning output
 
 PHASE 1: PLANNING (always)
   ├── product-manager      → PRD, user stories, acceptance criteria, feature list
@@ -93,6 +102,9 @@ PHASE 2: DESIGN (always)
   ├── api-architect        → API spec, endpoints, gRPC protos, auth flow
   ├── database-architect   → PostgreSQL schema, ER diagrams, indexes, migrations
   └── ui-designer          → design system, component specs, tokens, responsive
+
+PHASE 2.5: GIT SETUP (always — YOU do this directly, before code is written)
+  └── project-orchestrator → git init, .gitignore, feature branch, initial commit
 
 PHASE 3: IMPLEMENTATION (always)
   ├── senior-engineer      → cross-service features, complex integration
@@ -117,11 +129,11 @@ PHASE 7: DEVOPS & DEPLOYMENT (always)
 
 PHASE 8: DOCUMENTATION (always)
   └── technical-writer     → README, API docs, changelog, runbook
-
-PHASE 9: ORCHESTRATION (manages everything)
-  ├── project-orchestrator → this agent (coordination, progress, gates)
-  └── task-executor        → autonomous batch task execution
 ```
+
+**Orchestration layer** (manages everything — this agent):
+- project-orchestrator → coordination, progress tracking, approval gates
+- task-executor → available for autonomous batch task execution (invoked on demand, not dispatched as a phase)
 
 ## Approval Gates (determined by task SIZE — NOT which agents run)
 
@@ -210,6 +222,8 @@ After each phase completes, verify expected output files exist:
 **After Phase 1:** requirements.md, business-rules.md, ux.md
 **After Phase 2:** architecture.md, api-spec.md, schema.md, design.md, SUMMARY.md
 **After Phase 3:** api-contracts.md
+**After Phase 5:** security-audit.md
+**After Phase 8:** Check that at least one documentation file was created (README.md, docs/API.md, or CHANGELOG.md)
 
 If ANY file is missing:
 1. Retry the SPECIFIC FAILED AGENT once with context: "RETRY: Previous attempt failed to produce [file]. Focus on this deliverable."
@@ -231,47 +245,18 @@ For Phase 3 (Build) and Phase 6 (Review), agent teams let teammates message each
 
 ## How to Execute Each Phase
 
-### Phase 0: Setup — YOU do this directly (no subagent needed)
+### Phase 0: Spec Setup — YOU do this directly (no subagent needed)
 
 **This runs before any agent. It must complete before Phase 1 starts.**
+Phase 0 only creates the spec directory for planning output. Git initialization happens later in Phase 2.5 (before code is written).
 
-0a. Check if git is already initialized:
-```bash
-git rev-parse --is-inside-work-tree 2>/dev/null && echo "already a repo" || echo "no repo"
-```
-
-0b. If no repo, initialize it:
-```bash
-git init
-git checkout -b main
-```
-
-0c. Create .gitignore if it doesn't exist:
-```bash
-# Create .gitignore covering Node, Python, Flutter, Dart, .env files, OS files
-```
-
-0d. Create the spec directory for this feature:
+0a. Create the spec directory for this feature:
 ```bash
 mkdir -p .claude/specs/[feature-name]
 ```
 
-0e. Create feature branch (NEVER work on main directly):
-```bash
-git checkout -b feature/[feature-name]
-```
-
-0f. Make initial commit if repo is new:
-```bash
-git add .gitignore
-git commit -m "chore: initialize project"
-```
-
 **Phase 0 checklist before proceeding:**
-- [ ] `git status` returns a clean working tree or shows only new untracked files
-- [ ] Current branch is `feature/[feature-name]` (never `main`)
 - [ ] `.claude/specs/[feature-name]/` directory exists
-- [ ] `.gitignore` exists
 
 ---
 
@@ -340,6 +325,44 @@ Agent(
 # - Component list (from design.md)
 # This summary is shown to the user at approval gates.
 ```
+
+### Phase 2.5: Git Setup — YOU do this directly (no subagent needed)
+
+**This runs AFTER planning/design and BEFORE any code is written.** Git is initialized here — not at the start — because Phases 1-2 only produce spec files. There's no reason to set up a repo until code is about to be written.
+
+2.5a. Check if git is already initialized:
+```bash
+git rev-parse --is-inside-work-tree 2>/dev/null && echo "already a repo" || echo "no repo"
+```
+
+2.5b. If no repo, initialize it:
+```bash
+git init
+git checkout -b main
+```
+
+2.5c. Create .gitignore if it doesn't exist:
+```bash
+# Create .gitignore covering Node, Python, Flutter, Dart, .env files, OS files
+```
+
+2.5d. Create feature branch (NEVER work on main directly):
+```bash
+git checkout -b feature/[feature-name]
+```
+
+2.5e. Make initial commit if repo is new:
+```bash
+git add .gitignore
+git commit -m "chore: initialize project"
+```
+
+**Phase 2.5 checklist before proceeding:**
+- [ ] `git status` returns a clean working tree or shows only new untracked files
+- [ ] Current branch is `feature/[feature-name]` (never `main`)
+- [ ] `.gitignore` exists
+
+---
 
 ### Phase 3: Build — dispatched to feature-team
 
@@ -424,12 +447,9 @@ Agent(
 Even though it's "just" a local todo app, the FULL pipeline runs:
 
 ```
-Phase 0 — Setup (orchestrator does this directly):
-  git init → main branch
-  git checkout -b feature/todo-app
+Phase 0 — Spec Setup (orchestrator does this directly):
   mkdir -p .claude/specs/todo-app
-  git add .gitignore && git commit -m "chore: initialize project"
-  ✅ Repo ready, on feature branch, spec dir created
+  ✅ Spec directory ready for planning output
 
 Phase 1 — Planning:
   product-manager → PRD with 8 user stories + acceptance criteria
@@ -439,8 +459,15 @@ Phase 1 — Planning:
 Phase 2 — Design:
   system-architect → simple monolith architecture, Mermaid diagram
   api-architect → 6 REST endpoints (CRUD + filter + search)
-  database-architect → todos + tags tables, indexes, migration
+  database-architect → todos + tags tables, indexes, migration + docker-compose.dev.yml
   ui-designer → component specs (TodoList, TodoForm, FilterBar, TagChip)
+
+Phase 2.5 — Git Setup (orchestrator does this directly):
+  git init → main branch
+  .gitignore (Node, Python, Flutter, .env, OS files)
+  git checkout -b feature/todo-app
+  git commit -m "chore: initialize project"
+  ✅ Repo ready, on feature branch — code can now be written
 
 Phase 3 — Build:
   backend-developer → NestJS API with Prisma + PostgreSQL (commits to feature/todo-app)

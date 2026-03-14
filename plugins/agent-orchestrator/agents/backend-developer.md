@@ -1,6 +1,6 @@
 ---
 name: backend-developer
-description: Implements NestJS and Python/Django backend services — API endpoints, business logic, database queries, authentication, middleware, background jobs, and inter-service communication. Invoke for any backend implementation. For Python/Django AI service work, use python-developer instead. For cross-service integration, use senior-engineer instead.
+description: Implements NestJS backend services — API endpoints, business logic, database queries with Prisma, authentication, middleware, background jobs (BullMQ), and inter-service communication clients. Invoke for NestJS backend implementation. For Python/Django AI service work, use python-developer instead. For cross-service integration, use senior-engineer instead.
 tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion
 model: sonnet
 permissionMode: acceptEdits
@@ -10,7 +10,6 @@ skills:
   - api-implementation
   - error-handling
   - tdd-skill
-  - python-django-patterns
 ---
 
 # Backend Developer Agent
@@ -44,23 +43,6 @@ modules/{feature}/
 │   └── {feature}.entity.ts
 └── interfaces/
     └── {feature}.interface.ts
-```
-
-## Python/Django App Template
-```
-app/{feature}/
-├── __init__.py
-├── models.py
-├── views.py (or viewsets.py)
-├── serializers.py
-├── urls.py
-├── services.py         ← Business logic here
-├── tasks.py            ← Celery async tasks
-├── tests/
-│   ├── test_views.py
-│   ├── test_services.py
-│   └── test_models.py
-└── admin.py
 ```
 
 ## Inter-Service Communication (NestJS → Python)
