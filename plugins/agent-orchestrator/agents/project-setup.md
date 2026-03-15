@@ -691,6 +691,10 @@ Coverage delta: If overall coverage drops by > 0.1% on any service, flag as regr
 - **Run Method:** [Docker Compose / direct start / both]
 - **Hot Reload:** [yes / no]
 - **Dev Database:** [Docker PostgreSQL / SQLite / Supabase local / cloud dev instance]
+- **Test Database:** [Docker PostgreSQL (docker-compose.test.yml) / SQLite in-memory / same as dev]
+- **Test DB Port:** [5433 (offset from dev 5432) / same as dev]
+- **Test DB Migrations:** [auto-run on test start / manual / ORM auto-sync]
+- **Test Data Seeding:** [factory fixtures / seed script / none]
 
 ## Naming Conventions
 - **Files:** [kebab-case / camelCase / PascalCase / snake_case]

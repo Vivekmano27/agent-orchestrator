@@ -297,6 +297,26 @@ After each re-test, compare the new test-report.md against the previous one:
   )
   ```
 
+### Handling ENVIRONMENT_ISSUE from quality-team
+When quality-team reports ENVIRONMENT_ISSUE (Docker/DB won't start, test infra broken):
+1. Present recovery options:
+   ```
+   AskUserQuestion(
+     question="Test infrastructure failed: [error from quality-team].
+     Tests cannot run without a working database/Docker environment.",
+     options=[
+       "Retry — I fixed the infrastructure",
+       "Skip integration/E2E tests — run unit tests only",
+       "Skip all testing and proceed to security review",
+       "Cancel feature"
+     ]
+   )
+   ```
+2. **"Retry"** → re-dispatch quality-team (full run, including Gate 3.5)
+3. **"Unit tests only"** → re-dispatch quality-team with "UNIT_ONLY: Skip integration and E2E tests. Run unit tests only."
+4. **"Skip all testing"** → proceed to Phase 5. Log warning in test-report.md: "SKIPPED: Environment issue prevented testing."
+5. **"Cancel"** → standard cancel handler
+
 ### Handling "Cancel" at any gate
 When user selects "Cancel":
 1. Confirm: AskUserQuestion("Cancel this feature? Spec files and feature branch will be cleaned up.", options=["Yes, cancel and clean up", "No, go back"])
@@ -307,7 +327,7 @@ After each phase completes, verify expected output files exist:
 
 **After Phase 0.5:** project-config.md
 **After Phase 1:** requirements.md, business-rules.md, ux.md
-**After Phase 2:** architecture.md, api-spec.md, schema.md, design.md, agent-spec.md (MEDIUM/BIG only), SUMMARY.md
+**After Phase 2:** architecture.md, api-spec.md, schema.md, design.md, agent-spec.md (MEDIUM/BIG only), SUMMARY.md, docker-compose.test.yml (if database required)
 **After Phase 2.1:** tasks.md
 **After Phase 3:** api-contracts.md, `.claude/agents/` directory exists (when agent-spec.md was present in Phase 2)
 **After Phase 4:** test-plan.md, test-report.md

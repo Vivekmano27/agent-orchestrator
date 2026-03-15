@@ -57,10 +57,27 @@ echo "\n[6/9] KMP Shared Module — Unit Tests + JaCoCo"
 
 # ─── 7. Integration Tests ─────────────────────────────────────────
 echo "\n[7/9] Integration Tests (requires Docker)"
-(cd "$ROOT" && docker-compose -f docker-compose.test.yml up -d --wait \
-  && cd services/core-service && npm run test:integration \
-  && cd "$ROOT/services/ai-service" && pytest tests/integration/ -q \
-  && cd "$ROOT" && docker-compose -f docker-compose.test.yml down) || FAILED=1
+# Step 1: Start test DB (isolated from dev DB on port 5433)
+(cd "$ROOT" && docker-compose -f docker-compose.test.yml up -d --wait) || { echo "❌ Test DB failed to start (ENVIRONMENT_ISSUE)"; FAILED=1; }
+
+# Step 2: Run migrations on test DB
+if [ $FAILED -eq 0 ]; then
+  echo "  Running migrations on test DB..."
+  (cd "$ROOT/services/core-service" && DATABASE_URL=postgresql://test:test@localhost:5433/test_db npx prisma migrate deploy 2>/dev/null \
+    || DATABASE_URL=postgresql://test:test@localhost:5433/test_db npx prisma db push --accept-data-loss 2>/dev/null \
+    || echo "  (No Prisma migrations — using ORM auto-sync or manual setup)")
+  (cd "$ROOT/services/ai-service" && DATABASE_URL=postgresql://test:test@localhost:5433/test_db python manage.py migrate --no-input 2>/dev/null \
+    || echo "  (No Django migrations — using pytest fixtures)")
+fi
+
+# Step 3: Run integration tests
+if [ $FAILED -eq 0 ]; then
+  (cd "$ROOT/services/core-service" && DATABASE_URL=postgresql://test:test@localhost:5433/test_db npm run test:integration \
+    && cd "$ROOT/services/ai-service" && DATABASE_URL=postgresql://test:test@localhost:5433/test_db pytest tests/integration/ -q) || FAILED=1
+fi
+
+# Step 4: Tear down test DB
+(cd "$ROOT" && docker-compose -f docker-compose.test.yml down) 2>/dev/null
 
 # ─── 8. E2E Tests (Playwright) ────────────────────────────────────
 echo "\n[8/9] E2E Tests — Playwright"

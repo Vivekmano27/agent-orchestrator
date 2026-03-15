@@ -123,10 +123,49 @@ volumes:
   postgres_data:
 ```
 
-- **If UI-only / no backend database** → skip `docker-compose.dev.yml` entirely. Note in `schema.md`: "No database required — UI-only architecture."
+- **If UI-only / no backend database** → skip Docker Compose files entirely. Note in `schema.md`: "No database required — UI-only architecture."
+
+**Also create `docker-compose.test.yml`** — isolated test database for Phase 4 (quality-team):
+
+```yaml
+# docker-compose.test.yml — Isolated DB for integration/E2E tests
+# Used by run-tests command and quality-team (Phase 4)
+services:
+  test-postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: test_db
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test
+    ports:
+      - "5433:5432"    # Different port to avoid conflict with dev DB
+    tmpfs:
+      - /var/lib/postgresql/data    # RAM-backed for speed, no persistence
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U test"]
+      interval: 3s
+      timeout: 3s
+      retries: 10
+
+  test-redis:                       # include only if architecture requires it
+    image: redis:7-alpine
+    ports:
+      - "6380:6379"    # Different port to avoid conflict with dev Redis
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 3s
+      timeout: 3s
+      retries: 5
+```
+
+Key differences from dev:
+- **Port offset** (5433/6380) to run alongside dev DB
+- **tmpfs** for RAM-backed storage (fast, no persistent data between runs)
+- **Fixed credentials** (test/test) — no env vars needed
+- **Faster health checks** (3s intervals vs 5s)
 
 **Why here (Phase 2) not Phase 7:**
-Phase 3 (build) and Phase 4 (tests) need a running database. devops-engineer in Phase 7 handles production Dockerfiles, docker-compose.prod.yml, Kubernetes, and Terraform — not the dev DB bootstrap.
+Phase 3 (build) and Phase 4 (tests) need a running database. devops-engineer in Phase 7 handles production Dockerfiles, docker-compose.prod.yml, Kubernetes, and Terraform — not the dev/test DB bootstrap.
 
 ## Self-Review (BEFORE signaling DONE)
 After writing schema.md, re-read it and verify:
