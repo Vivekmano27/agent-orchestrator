@@ -55,7 +55,9 @@ Each task gets exactly ONE agent from this list:
 | `backend-developer` | `services/core-service/` (except `src/common/`), `prisma/` |
 | `senior-engineer` | `services/core-service/src/common/`, `services/api-gateway/`, `services/shared/` |
 | `python-developer` | `services/ai-service/` |
-| `frontend-developer` | `apps/web/`, `apps/mobile-flutter/`, `apps/mobile-kmp/` |
+| `frontend-developer` | `apps/web/` |
+| `flutter-developer` | `apps/mobile-flutter/` |
+| `kmp-developer` | `apps/mobile-kmp/` |
 | `agent-native-developer` | `.claude/agents/`, `.claude/skills/`, `.claude/commands/`, `packages/mcp-server/` |
 
 Assignment rule: match the task's file paths to the ownership matrix above.
@@ -117,6 +119,8 @@ Verify coverage:
 | senior-engineer | N | [total effort] |
 | python-developer | N | [total effort] |
 | frontend-developer | N | [total effort] |
+| flutter-developer | N | [total effort] |
+| kmp-developer | N | [total effort] |
 | agent-native-developer | N | [total effort] |
 
 ---

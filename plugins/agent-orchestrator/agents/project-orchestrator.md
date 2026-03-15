@@ -64,10 +64,12 @@ PHASE 2.5: GIT SETUP (always — YOU do this directly, before code is written)
 
 PHASE 3: IMPLEMENTATION (always)
   ├── agent-native-developer → agent definitions, skills, commands, MCP servers (two-pass: scaffold + wire)
-  ├── senior-engineer      → cross-service features, complex integration
-  ├── backend-developer    → NestJS modules, API endpoints, middleware
-  ├── frontend-developer   → React components, Flutter widgets, KMP UI
-  └── python-developer     → Django AI service, Celery tasks, data pipelines
+  ├── senior-engineer        → cross-service features, complex integration
+  ├── backend-developer      → API endpoints, business logic, middleware
+  ├── python-developer       → AI service, async tasks, data pipelines
+  ├── frontend-developer     → React/Next.js web app (if web in project-config.md)
+  ├── flutter-developer      → Flutter mobile app (if Flutter in project-config.md)
+  └── kmp-developer          → KMP mobile app (if KMP in project-config.md)
 
 PHASE 4: TESTING (always)
   ├── test-engineer        → unit, integration, E2E, security, UAT, a11y tests
