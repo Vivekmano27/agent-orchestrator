@@ -56,6 +56,25 @@ Read `tasks.md` and group tasks by their `**Agent:**` field:
 - `frontend-developer` tasks → dispatched to frontend-developer (starts after backend contracts ready)
 - `agent-native-developer` tasks → dispatched to agent-native-developer (Pass 1 before backend, Pass 2 after backend)
 
+### Incremental Commit Policy (applies to ALL implementation agents)
+
+Include this in every agent's dispatch prompt. Agents should commit incrementally, not just at the end:
+
+| Commit when... | Don't commit when... |
+|----------------|---------------------|
+| Logical unit complete (model + service + controller) | Small part of a larger unit |
+| Tests pass + meaningful progress | Tests failing |
+| About to switch contexts (backend → frontend) | Purely scaffolding with no behavior |
+| About to attempt risky/uncertain changes | Would need a "WIP" commit message |
+
+**Heuristic for agents:** "Can you write a commit message that describes a complete, valuable change? If yes, commit. If the message would be 'WIP' or 'partial', wait."
+
+**Commit format:** `type(scope): description` — match project conventions from project-config.md.
+
+Stage specific files (`git add <files>`) — never `git add .` which can include secrets or unrelated files.
+
+---
+
 ### STEP 2.5 — Scaffold agent-native artifacts (before backend wave)
 
 Dispatch agent-native-developer Pass 1 to scaffold agent definitions, skills, commands, and MCP server skeleton. This runs BEFORE the backend wave so implementation agents can see the agent structure.

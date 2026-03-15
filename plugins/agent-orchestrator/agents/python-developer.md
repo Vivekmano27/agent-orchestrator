@@ -98,6 +98,20 @@ def process_ai_request(self, request_id: str):
         self.retry(exc=e)
 ```
 
+## System-Wide Test Check (BEFORE marking any task done)
+
+Before completing each task, pause and run through this checklist:
+
+| Question | What to do |
+|----------|------------|
+| **What fires when this runs?** Django signals, middleware, Celery task chains — trace two levels out from your change. | Read the actual code for `post_save`/`pre_save` signals, middleware in MIDDLEWARE list, Celery chain/chord dependencies. |
+| **Do my tests exercise the real chain?** If every dependency is mocked, the test proves logic in isolation — says nothing about the interaction. | Write at least one integration test using real objects through the full signal/middleware chain. |
+| **Can failure leave orphaned state?** If your code persists state before calling an external API or queuing a Celery task, what happens on failure? | Trace the failure path. Test that failure cleans up or retry is idempotent. |
+| **What other interfaces expose this?** DRF views, Celery tasks, management commands, agent tools — all may need the same change. | Grep for the method/behavior. If parity is needed, add it now. |
+| **Do error strategies align?** Celery retry + DRF exception handler + middleware — do they conflict or create double execution? | List exception classes at each layer. Verify your except clauses match what lower layers raise. |
+
+**When to skip:** Leaf-node changes with no signals, no state persistence, no parallel interfaces.
+
 ## Testing with Pytest
 ```python
 @pytest.fixture

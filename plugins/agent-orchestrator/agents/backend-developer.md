@@ -47,6 +47,20 @@ modules/{feature}/
     └── {feature}.interface.ts
 ```
 
+## System-Wide Test Check (BEFORE marking any task done)
+
+Before completing each task, pause and run through this checklist:
+
+| Question | What to do |
+|----------|------------|
+| **What fires when this runs?** Callbacks, middleware, observers, event handlers — trace two levels out from your change. | Read the actual code (not docs) for callbacks on models you touch, middleware in the request chain, `after_*` hooks. |
+| **Do my tests exercise the real chain?** If every dependency is mocked, the test proves logic in isolation — says nothing about the interaction. | Write at least one integration test that uses real objects through the full callback/middleware chain. No mocks for the layers that interact. |
+| **Can failure leave orphaned state?** If your code persists state (DB row, cache) before calling an external service, what happens when the service fails? | Trace the failure path. If state is created before the risky call, test that failure cleans up or that retry is idempotent. |
+| **What other interfaces expose this?** API routes, WebSocket events, background jobs, agent tools — all may need the same change. | Grep for the method/behavior in related classes. If parity is needed, add it now. |
+| **Do error strategies align across layers?** Retry middleware + application fallback + framework error handling — do they conflict? | List error classes at each layer. Verify your rescue list matches what the lower layer actually raises. |
+
+**When to skip:** Leaf-node changes with no callbacks, no state persistence, no parallel interfaces. Purely additive changes (new helper, new DTO) can skip.
+
 ## Inter-Service Communication (NestJS → Python)
 ```typescript
 // NestJS calling Python AI service

@@ -129,6 +129,38 @@ jobs:
         run: echo "Deploy each service to ECS Fargate"
 ```
 
+## Post-Deploy Monitoring & Validation Plan (REQUIRED)
+
+Every deployment MUST include a monitoring and validation plan. Write this to `.claude/specs/[feature]/deploy-monitoring.md`:
+
+```markdown
+# Post-Deploy Monitoring & Validation — [feature]
+
+## What to Monitor
+- **Logs:** [specific log queries/search terms to watch]
+- **Metrics/Dashboards:** [specific dashboards or metric names]
+- **Health endpoints:** [URLs to check]
+
+## Validation Checks
+- [ ] [Specific command or query to verify the feature works]
+- [ ] [Expected response or behavior]
+
+## Expected Healthy Signals
+- [What "working correctly" looks like in metrics/logs]
+- [Expected request volume, latency, error rate]
+
+## Failure Signals & Rollback Triggers
+- [What indicates something is wrong]
+- [Automatic rollback threshold (e.g., error rate > 5%)]
+- [Manual rollback procedure]
+
+## Validation Window
+- **Duration:** [e.g., 30 minutes post-deploy]
+- **Owner:** [who monitors during this window]
+```
+
+If there is truly no production/runtime impact, still include the section with: "No additional operational monitoring required: [one-line reason]."
+
 ## AWS Architecture
 ```
 Route53 → CloudFront → ALB → ECS Fargate (api-gateway)
