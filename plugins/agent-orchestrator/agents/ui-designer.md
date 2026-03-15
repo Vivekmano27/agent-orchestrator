@@ -1,7 +1,7 @@
 ---
 name: ui-designer
 description: Creates UI component specifications, design systems, responsive layouts for React/Next.js web and Flutter/KMP mobile. Invoke for component design, design system creation, or visual specifications.
-tools: Read, Grep, Glob, Write, AskUserQuestion
+tools: Read, Grep, Glob, Write, Edit, Bash, AskUserQuestion
 model: sonnet
 permissionMode: acceptEdits
 maxTurns: 25
@@ -98,3 +98,56 @@ After writing design.md, re-read it and verify:
 - [ ] Covers all UI-relevant requirements from requirements.md
 
 Message the team: "Self-review complete. Fixed [N] issues: [brief list]."
+
+## Prototype Generation (MEDIUM/BIG tasks only, skip for SMALL)
+
+After writing design.md, create an interactive React/Next.js prototype
+directly in the target app directory (apps/web/ or as specified in architecture.md).
+This prototype IS the production codebase — frontend-developer builds on top of it.
+
+### Project Setup (if not already scaffolded)
+- Next.js 14+ with App Router, TypeScript strict mode
+- Tailwind CSS configured with design tokens from design.md
+- src/components/ui/ — shared primitive components
+- src/components/features/ — domain components
+- src/lib/mock-data.ts — hardcoded sample data
+
+### Design System Page (REQUIRED)
+Create a /design-system route showing:
+
+1. **Design Tokens** — all colors (primary-50 to 900, semantic), spacing scale,
+   typography scale, border radius values. Rendered as visual swatches/samples.
+
+2. **Component Library** — every shared component with ALL states:
+   - Buttons: Primary, Secondary, Ghost, Danger × Default, Hover, Disabled, Loading
+   - Inputs: Text, Select, Checkbox, Textarea × Default, Focus, Error, Disabled
+   - Cards, Modals, Alerts, Badges, Avatars, Skeletons
+   - Each component shows all variants and states side by side
+
+3. **Platform Mapping** — reference table for mobile teams:
+   | Token | Web (Tailwind) | Flutter (ThemeData) | KMP (Compose) |
+   |-------|----------------|---------------------|---------------|
+   | primary-500 | bg-indigo-500 | Color(0xFF6366F1) | MaterialTheme.colorScheme.primary |
+   | spacing-md | p-4 | EdgeInsets.all(16) | Modifier.padding(16.dp) |
+   | body text | text-base | bodyMedium | typography.bodyMedium |
+
+### Screen Pages
+For each screen in requirements.md:
+- Create a Next.js App Router page at src/app/[route]/page.tsx
+- Use shared components from src/components/ui/
+- Use mock data from src/lib/mock-data.ts
+- Add basic navigation (Next.js Link/router)
+- Click handlers for primary actions (console.log, not real logic)
+- Show all component states: default, loading (skeleton), error, empty
+- Responsive across breakpoints from design.md
+
+### Verify
+Run `cd apps/web && npm install && npm run dev` — confirm app starts and screens render.
+
+### What NOT to add (frontend-developer handles in Phase 3)
+- No real API calls — mock data only
+- No form validation (no Zod, no React Hook Form)
+- No auth guards
+- No error boundaries
+- No tests
+- No state management (no Zustand, no TanStack Query)

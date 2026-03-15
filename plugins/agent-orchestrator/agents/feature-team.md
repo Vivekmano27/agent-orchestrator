@@ -133,6 +133,15 @@ Agent(
           Read .claude/specs/[feature]/tasks.md — execute these tasks IN ORDER: [TASK-NNN, TASK-NNN, ...].
           Each task has Description, Files, Verification, and Commit message — follow them exactly.
           Read .claude/specs/[feature]/api-contracts.md for exact backend API routes and shapes.
+          The UI prototype already exists at apps/web/ — created by ui-designer in Phase 2.
+          DO NOT rewrite existing components. Build on top of them:
+          - Replace mock data in src/lib/mock-data.ts with real API calls (read api-contracts.md)
+          - Add state management (TanStack Query for server state, Zustand for client state)
+          - Add form validation (React Hook Form + Zod)
+          - Add auth guards on protected routes
+          - Add error handling and error boundaries
+          - Keep the /design-system page as a dev reference (exclude from production build if desired)
+          - Add tests for all new logic
           FILE OWNERSHIP: You own apps/web/, apps/mobile-flutter/, apps/mobile-kmp/.
           Do NOT touch services/.
           Follow TDD."

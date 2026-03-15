@@ -42,7 +42,8 @@ design-team (you — leader)
 | system-architect | architecture.md | api-spec.md, schema.md, design.md, agent-spec.md |
 | api-architect | api-spec.md | architecture.md, schema.md, design.md, agent-spec.md |
 | database-architect | schema.md, docker-compose.dev.yml | architecture.md, api-spec.md, design.md, agent-spec.md |
-| ui-designer | design.md | architecture.md, api-spec.md, schema.md, agent-spec.md |
+| ui-designer (lead) | design.md, apps/web/src/components/ui/, apps/web/src/app/design-system/ | architecture.md, api-spec.md, schema.md, agent-spec.md |
+| ui-designer (screen agents) | apps/web/src/app/[assigned-routes]/ | design.md, architecture.md, api-spec.md, schema.md, agent-spec.md |
 | agent-native-designer | agent-spec.md | architecture.md, api-spec.md, schema.md, design.md |
 
 **Agents discuss and negotiate via SendMessage, but each agent writes ONLY to its own file.** If api-architect and database-architect agree on an entity name change, each updates their own spec file independently.
@@ -120,13 +121,36 @@ Create an agent team to design production-ready specs for [feature]:
   Write schema.md.
   SELF-REVIEW before signaling DONE.
 
-- ui-designer: Design component specs, design tokens, responsive breakpoints, accessibility.
+- ui-designer (LEAD): Create design.md, scaffold the Next.js project, build shared
+  components (src/components/ui/), and build the /design-system page with component
+  library + design tokens + platform mapping table.
   Read requirements.md, ux.md, tech-stack.md, and research-context.md (if exists).
   Do your own Pre-Design Research (scan existing component patterns in codebase).
-  COORDINATE with api-architect on endpoint shapes for data-fetching components via SendMessage.
+  COORDINATE with api-architect on endpoint shapes via SendMessage.
   IMPORTANT: Include an '## Interaction Inventory' section listing every user-initiated action.
-  Write design.md.
-  SELF-REVIEW before signaling DONE.
+  Write design.md, then scaffold prototype (MEDIUM/BIG only — see Prototype Generation in agent).
+  After shared components are ready, broadcast: "Shared components ready at
+  src/components/ui/. Screen agents can now build pages."
+  SELF-REVIEW the /design-system page before signaling DONE.
+
+- ui-designer (SCREEN AGENTS — BIG tasks only, spawn 2-3 based on screen count):
+  Build specific screen pages using shared components from ui-designer lead.
+  Each screen agent gets assigned screens: "Build pages: /home, /dashboard" or
+  "Build pages: /tasks, /tasks/:id" or "Build pages: /settings, /profile".
+
+  COLLABORATION RULES (enforced via SendMessage):
+  1. BEFORE building, list components you need → message the team
+  2. If a shared component exists in src/components/ui/ → IMPORT it, don't recreate
+  3. If you need a NEW component others might use → propose it via message, wait for
+     agreement, ONE agent builds it in ui/, others import
+  4. AFTER building, share your screen summary with the team
+  5. PEER REVIEW: read each other's screens for visual consistency
+     Flag inconsistencies (custom components vs shared, different spacing, etc.)
+     Agree on fixes before signaling DONE
+
+  For MEDIUM tasks: lead builds ALL screens (no parallel screen agents).
+  For BIG tasks: lead builds shared components + /design-system, then 2-3 screen
+  agents collaborate on pages with the protocol above.
 
 - agent-native-designer: Design agent-native capabilities — parity map, tool definitions, agent features.
   Read requirements.md, architecture.md, tech-stack.md, and research-context.md (if exists).
@@ -249,6 +273,11 @@ Read all Phase 1-2 output files and write a human-readable overview:
 # - Key API endpoints (from api-spec.md)
 # - Database tables (from schema.md)
 # - Component list (from design.md)
+# - UI prototype (MEDIUM/BIG only): run `cd apps/web && npm run dev` → http://localhost:3000
+# - Design system: http://localhost:3000/design-system
+# - Screens built: [list of routes]
+# - Platform mapping: see /design-system for Flutter/KMP token equivalents
+# - What frontend-developer will add: API calls, validation, auth, tests
 # - Agent-native summary (from agent-spec.md, MEDIUM/BIG only):
 #   tool count, agent feature count, parity coverage %
 # - Design review verdict (from design-review.md, MEDIUM/BIG only)
