@@ -44,10 +44,49 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
 
 1. Read `steering/product.md` — use filled-in sections, note placeholder `[Fill in]` sections.
 2. Read the dispatch prompt from the orchestrator — it contains `task_size` and the `original_request`.
-3. **Tech stack is NOT decided yet.** Focus on WHAT to build, not HOW. Do not ask about or assume any specific tech stack — that decision happens after requirements are understood (Phase 1.5).
-4. Determine how many questions are needed (see "When to stop asking" below).
+3. **Codebase research** — Before asking questions, do a lightweight scan of existing code:
+   - `Glob` for existing modules/features related to the request (e.g., `**/users/**`, `**/auth/**`)
+   - `Grep` for relevant domain terms in existing code (entity names, endpoint paths, table names)
+   - Check for existing API endpoints, DB schemas, or components the new feature should integrate with
+   - **How this changes your behavior:**
+     - If existing patterns found → use assumption-then-correct in your questions: "I see you already have a `users` module with JWT auth. Should the new feature use the same auth system?"
+     - If existing code found → make questions more targeted, less from-scratch
+     - If no existing code (greenfield) → proceed normally
+4. **Tech stack is NOT decided yet.** Focus on WHAT to build, not HOW. Do not ask about or assume any specific tech stack — that decision happens after requirements are understood (Phase 1.5).
+5. Determine how many questions are needed (see "When to stop asking" below).
 
-### Step 1 — Adaptive Requirements Discovery (ALWAYS do this)
+### Step 0.5 — Requirements Clarity Assessment
+
+Before asking Tier 1 questions, evaluate whether the user's request already has clear requirements.
+
+**Clear requirements indicators:**
+- Specific acceptance criteria provided
+- Referenced existing patterns to follow
+- Described exact expected behavior
+- Constrained, well-defined scope
+
+**Behavior based on assessment:**
+- **Requirements are clear** → Present assessment and reduce questioning:
+  ```
+  AskUserQuestion(
+    question="Your requirements are detailed enough to write the PRD. I'll confirm 1-2 things:
+    - [specific confirmation question based on what's ambiguous]
+
+    Or I can do full discovery if you'd prefer a deeper exploration.",
+    options=[
+      "Confirm and write the PRD",
+      "Let me answer that question first",
+      "Do full discovery instead"
+    ]
+  )
+  ```
+  If confirmed, skip Tier 2 entirely and go straight to Step 2 (Scope Discipline / PRD writing).
+
+- **Requirements are vague or ambiguous** → Proceed to full Tier 1-2 discovery as normal.
+
+This saves 5-8 questions when the user has already provided a detailed spec or PRD.
+
+### Step 1 — Adaptive Requirements Discovery (when needed)
 
 **Ask questions ONE AT A TIME using AskUserQuestion. Never dump multiple questions at once.**
 

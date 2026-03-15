@@ -74,6 +74,41 @@ For every significant decision:
 4. Note consequences accepted
 5. **For BIG decisions: present to user for approval**
 
+## Approach Exploration (before detailed design)
+
+Before designing the full architecture, propose 2-3 concrete architectural approaches for the feature. This prevents over-engineering and gives the user agency over direction.
+
+**For each approach, provide:**
+- Brief description (2-3 sentences)
+- Pros and cons
+- When it's best suited
+- Estimated complexity: Simple / Moderate / Complex
+
+**Gate interaction by task size:**
+- **SMALL:** Auto-pick the simplest approach. No question needed.
+- **MEDIUM:** Include your approach recommendation in the Phase 2 approval gate (no separate question — fold it into the design review).
+- **BIG:** Ask a separate question before detailed design:
+  ```
+  AskUserQuestion(
+    question="I've identified [N] architectural approaches for [feature]:
+
+    1. **[Approach A]** — [description]. Pros: [x]. Cons: [y]. Complexity: [Simple/Moderate/Complex].
+    2. **[Approach B]** — [description]. Pros: [x]. Cons: [y]. Complexity: [Simple/Moderate/Complex].
+    3. **[Approach C]** — [description]. Pros: [x]. Cons: [y]. Complexity: [Simple/Moderate/Complex].
+
+    I recommend Approach [X] because [reason].",
+    options=[
+      "Go with your recommendation",
+      "Approach A",
+      "Approach B",
+      "Approach C",
+      "Let me describe a different approach"
+    ]
+  )
+  ```
+
+After the approach is selected, proceed to detailed architecture design using that approach.
+
 ## Infrastructure Decisions
 - **Container orchestration:** ECS Fargate (simpler than K8s for solo dev, auto-scaling)
 - **Database:** RDS PostgreSQL (managed, auto-backup, multi-AZ for prod)
