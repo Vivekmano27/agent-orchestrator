@@ -317,6 +317,105 @@ When quality-team reports ENVIRONMENT_ISSUE (Docker/DB won't start, test infra b
 4. **"Skip all testing"** → proceed to Phase 5. Log warning in test-report.md: "SKIPPED: Environment issue prevented testing."
 5. **"Cancel"** → standard cancel handler
 
+### Phase 5→3 Feedback Loop (Security Fix Routing)
+When security-auditor reports CRITICAL or HIGH findings:
+
+**Step 1 — Read finding list:**
+Structured list with stable IDs (SEC-NNN), severity, file:line, description, recommended fix.
+
+**Step 2 — Re-dispatch feature-team:**
+```
+Agent(
+  subagent_type="agent-orchestrator:feature-team",
+  prompt="PHASE 5→3 FEEDBACK: Security audit found CRITICAL/HIGH vulnerabilities.
+  Feature: [feature-name]. Spec directory: .claude/specs/[feature]/
+
+  SECURITY FINDINGS TO FIX:
+  [structured finding list from security-audit.md]
+
+  RULES:
+  - Fix ONLY the identified security vulnerabilities
+  - Follow file ownership matrix
+  - Surgical fixes — minimum code change necessary
+  - Do NOT bundle refactoring with security fixes
+  - Run tests locally before marking done
+  - Commit as: fix(security): [description]
+  - This is a TARGETED SECURITY FIX, not a full re-implementation
+
+  Previous security-audit.md: .claude/specs/[feature]/security-audit.md"
+)
+```
+
+**Step 3 — Scoped re-audit:**
+```
+Agent(
+  subagent_type="agent-orchestrator:security-auditor",
+  prompt="PHASE 5→3 SCOPED RE-AUDIT for [feature].
+  Spec directory: .claude/specs/[feature]/
+  Round-trip: 1
+
+  ORIGINAL FINDINGS ROUTED FOR FIX: [SEC-NNN list with file:line]
+  FILES CHANGED BY FIX: [list]
+
+  SCOPED RE-AUDIT PROTOCOL (do NOT run full audit):
+  1. VERIFY FIXES: Re-check each routed finding at original location. Mark RESOLVED or PERSISTS.
+  2. REGRESSION SCAN: Run security-reviewer on ALL changed files for new vulnerabilities.
+  3. DEPENDENCY RE-CHECK: If package.json/requirements.txt/go.mod changed, re-run dependency-audit.
+  4. DO NOT re-run: secrets-scanner (unless new files created), threat-modeling, compliance-checker.
+  5. UPDATE security-audit.md with Round-trip: 1 and Fix History.
+  6. RETURN: per-finding status, new findings count, regression detected Y/N,
+     overall: CLEAN / PARTIAL / REGRESSION / STUCK."
+)
+```
+
+**Step 4 — Regression detection:**
+After scoped re-audit, compare results:
+
+| Condition | Signal | Action |
+|---|---|---|
+| All findings resolved, no new findings | CLEAN | Proceed to Phase 6 |
+| Some resolved, no new findings | PARTIAL | Escalate to user (round-trip exhausted) |
+| New CRITICAL/HIGH findings appeared | REGRESSION | Hard stop — fix made things worse. Escalate immediately. |
+| Original findings persist unchanged | STUCK | Escalate to user immediately |
+
+**Step 5 — Max retries:**
+- Allow **1 Phase 5→3 round-trip** maximum (security fixes should be surgical)
+- If still CRITICAL/HIGH after 1 loop → escalate to user:
+  ```
+  AskUserQuestion(
+    question="Security vulnerabilities persist after 1 fix attempt.
+    Remaining: [finding list from security-audit.md].
+    These issues BLOCK deployment.",
+    options=[
+      "Let me fix manually — show me the findings",
+      "Accept risk and proceed (documents risk acceptance in security-audit.md)",
+      "Re-audit with different approach",
+      "Cancel feature"
+    ]
+  )
+  ```
+  If "Accept risk": write permanent record to security-audit.md with user acknowledgment, findings accepted, and timestamp.
+
+### Handling STOP from security-auditor
+When security-auditor reports STOP (actively exploitable vulnerability):
+```
+AskUserQuestion(
+  question="SECURITY STOP: [finding description].
+  [file:line]. The pipeline is halted.
+  This vulnerability requires immediate attention.",
+  options=[
+    "I'll fix this immediately — show details",
+    "Rotate compromised credentials and re-audit",
+    "This is a false positive — downgrade to CRITICAL",
+    "Cancel feature"
+  ]
+)
+```
+- **"Fix immediately"** → show finding details, wait for user to fix, then re-dispatch security-auditor (full run)
+- **"Rotate and re-audit"** → user rotates credentials externally, then re-dispatch security-auditor (full run)
+- **"False positive"** → add to `.claude/security-allowlist.md`, downgrade to CRITICAL, resume audit from next skill (do not restart completed skills)
+- **"Cancel"** → standard cancel handler
+
 ### Handling "Cancel" at any gate
 When user selects "Cancel":
 1. Confirm: AskUserQuestion("Cancel this feature? Spec files and feature branch will be cleaned up.", options=["Yes, cancel and clean up", "No, go back"])
@@ -564,9 +663,24 @@ Agent(
 ```
 Agent(
   subagent_type="agent-orchestrator:security-auditor",
-  prompt="Full security audit for [feature]: OWASP Top 10, STRIDE threat model, secrets scan, dependency audit. Files: [list]."
+  prompt="Run Phase 5 Security Audit for [feature].
+  Task size: [SMALL/MEDIUM/BIG].
+  Spec directory: .claude/specs/[feature]/
+  Files changed: [Phase 3 files + Phase 4→3 fix files — complete list].
+  Tech stack and compliance: Read from project-config.md.
+
+  Run full execution protocol (STEPs 1-4).
+  Write security-audit.md to spec directory.
+  Return: status (COMPLETE/STOPPED/FAILED/PARTIAL), severity summary,
+  CRITICAL/HIGH finding list (if any) for Phase 5→3 routing."
 )
 ```
+5a. Wait for security-auditor to complete. Read its report.
+5b. Check status:
+  - **COMPLETE** → read severity counts. If CRITICAL/HIGH > 0 → trigger Phase 5→3 Feedback Loop.
+  - **STOPPED** → present STOP handler to user (see below).
+  - **FAILED** → retry once. If still failing, present as infrastructure issue.
+  - **PARTIAL** → proceed normally (skips were intentional per task size).
 
 ### Phase 6: Review — parallel via review-team subagent
 The review-team subagent internally spawns 3 reviewers in parallel and returns a combined report:
@@ -681,7 +795,8 @@ This creates a feedback loop: mistakes → lessons → rules → prevention.
 ## Escalation Rules
 - If ANY agent fails → retry once, then report to user
 - If agents produce conflicting outputs → resolve based on PRD (product-manager wins)
-- If security-auditor finds CRITICAL → block deployment, report immediately
+- If security-auditor finds CRITICAL/HIGH → trigger Phase 5→3 Feedback Loop (max 1 round-trip, then escalate to user)
+- If security-auditor reports STOP → halt pipeline immediately, present STOP handler to user
 - If quality-team reports coverage below project-config.md thresholds → trigger Phase 4→3 Feedback Loop (max 2 round-trips, stuck/regression detection may terminate early)
 - If Phase 4→3 loop exhausts retries or detects stuck/regression → present failures to user with manual fix option
 - If review-team finds CRITICAL issues → route back to owning agent before proceeding to Phase 7
