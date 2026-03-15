@@ -42,25 +42,25 @@ review-team (you — orchestrator)
 All reviewers run independently on the same files simultaneously:
 ```
 Agent(
-  subagent_type="agent-orchestrator:code-reviewer",
+  subagent_type="project-orchestrator:code-reviewer",
   run_in_background=True,
   prompt="Review [feature/files] for code quality and correctness. Check: logic errors, naming, duplication, complexity, test coverage, NestJS/React/Flutter patterns. Output findings organized by severity: Critical / High / Medium / Low."
 )
 
 Agent(
-  subagent_type="agent-orchestrator:security-auditor",
+  subagent_type="project-orchestrator:security-auditor",
   run_in_background=True,
   prompt="Perform a FOCUSED security spot-check of the CODE CHANGES only. Check for: injection vectors in new endpoints, auth bypass in new routes, secrets accidentally committed. Do NOT repeat the full OWASP/STRIDE analysis — that was done in Phase 5. Reference the Phase 5 report at .claude/specs/[feature]/security-audit.md. Audit [feature/files] for security vulnerabilities. Output findings organized by severity: Critical / High / Medium / Low."
 )
 
 Agent(
-  subagent_type="agent-orchestrator:performance-reviewer",
+  subagent_type="project-orchestrator:performance-reviewer",
   run_in_background=True,
   prompt="Review [feature/files] for performance issues. Check: N+1 queries, unnecessary re-renders, missing indexes, bundle size, memory leaks, API latency. Output findings organized by severity: Critical / High / Medium / Low."
 )
 
 Agent(
-  subagent_type="agent-orchestrator:static-analyzer",
+  subagent_type="project-orchestrator:static-analyzer",
   run_in_background=True,
   prompt="Run tool-based static analysis on [feature/files]. Read project-config.md for tech stack.
   Check: code duplication (jscpd), complexity (Semgrep/ESLint/Ruff/Detekt), dead code (knip/vulture/deadcode), code smells (Semgrep best-practices).
@@ -69,7 +69,7 @@ Agent(
 
 # When agent-native artifacts exist (.claude/agents/ is present):
 Agent(
-  subagent_type="agent-orchestrator:agent-native-reviewer",
+  subagent_type="project-orchestrator:agent-native-reviewer",
   run_in_background=True,
   prompt="Review all agent-native artifacts for [feature]. Check: agent definition quality,
           skill/command completeness, MCP server best practices, parity coverage against
@@ -82,7 +82,7 @@ Agent(
 
 # MEDIUM/BIG only — skip for SMALL tasks:
 Agent(
-  subagent_type="agent-orchestrator:code-reviewer",
+  subagent_type="project-orchestrator:code-reviewer",
   run_in_background=True,
   prompt="SPEC TRACEABILITY REVIEW for [feature].
           You are reviewing whether the implementation matches the requirements.

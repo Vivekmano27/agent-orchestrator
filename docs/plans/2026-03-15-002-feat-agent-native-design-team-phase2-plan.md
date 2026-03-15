@@ -202,7 +202,7 @@ Per entity, full CRUD. Follow these rules:
 
 #### Phase 1: Create agent-native-design skill
 
-**File:** `plugins/agent-orchestrator/skills/agent-native-design/SKILL.md`
+**File:** `plugins/project-orchestrator/skills/agent-native-design/SKILL.md`
 
 **Research insight (pattern-recognition specialist):** Skill must use `allowed-tools` (not `tools`) in frontmatter. Include `## When to Use` section.
 
@@ -234,7 +234,7 @@ allowed-tools: Read, Grep, Glob, Write
 10. Checklist
 
 **Tasks:**
-- [x] Create `plugins/agent-orchestrator/skills/agent-native-design/SKILL.md`
+- [x] Create `plugins/project-orchestrator/skills/agent-native-design/SKILL.md`
 
 **Estimated effort:** S
 
@@ -242,7 +242,7 @@ allowed-tools: Read, Grep, Glob, Write
 
 #### Phase 2: Create agent-native-designer agent
 
-**File:** `plugins/agent-orchestrator/agents/agent-native-designer.md`
+**File:** `plugins/project-orchestrator/agents/agent-native-designer.md`
 
 **Research insight (pattern-recognition specialist, CRITICAL):** Original name `agent-designer` collides with existing `agent-builder` skill. Renamed to `agent-native-designer` — describes the methodology (agent-native), not the output (agents).
 
@@ -285,7 +285,7 @@ skills:
 10. agent-spec.md output template
 
 **Tasks:**
-- [x] Create `plugins/agent-orchestrator/agents/agent-native-designer.md`
+- [x] Create `plugins/project-orchestrator/agents/agent-native-designer.md`
 
 **Estimated effort:** M
 
@@ -297,7 +297,7 @@ skills:
 
 ##### If Option A (Design Team):
 
-**Create:** `plugins/agent-orchestrator/agents/design-team.md`
+**Create:** `plugins/project-orchestrator/agents/design-team.md`
 
 **Research insights for design-team definition:**
 
@@ -358,10 +358,10 @@ STEP 6 — Return to orchestrator
 | ui-designer | design.md | architecture.md, api-spec.md, schema.md, agent-spec.md |
 | agent-native-designer | agent-spec.md | architecture.md, api-spec.md, schema.md, design.md |
 
-**Modify:** `plugins/agent-orchestrator/agents/project-orchestrator.md` — Phase 2 section becomes single design-team dispatch.
+**Modify:** `plugins/project-orchestrator/agents/project-orchestrator.md` — Phase 2 section becomes single design-team dispatch.
 
 **Tasks:**
-- [x] Create `plugins/agent-orchestrator/agents/design-team.md`
+- [x] Create `plugins/project-orchestrator/agents/design-team.md`
 - [x] Modify Phase 2 section in project-orchestrator.md (~lines 323-376)
 - [ ] Update failure detection file list (line ~198) to include agent-spec.md
 
@@ -369,17 +369,17 @@ STEP 6 — Return to orchestrator
 
 ##### If Option B (Lightweight Addition):
 
-**Modify only:** `plugins/agent-orchestrator/agents/project-orchestrator.md`
+**Modify only:** `plugins/project-orchestrator/agents/project-orchestrator.md`
 
 Add agent-native-designer as 4th parallel agent in Phase 2b:
 
 ```
 2b. Wait for completion. Then spawn ALL FOUR IN PARALLEL:
-Agent(subagent_type="agent-orchestrator:api-architect", run_in_background=True, ...)
-Agent(subagent_type="agent-orchestrator:database-architect", run_in_background=True, ...)
-Agent(subagent_type="agent-orchestrator:ui-designer", run_in_background=True, ...)
+Agent(subagent_type="project-orchestrator:api-architect", run_in_background=True, ...)
+Agent(subagent_type="project-orchestrator:database-architect", run_in_background=True, ...)
+Agent(subagent_type="project-orchestrator:ui-designer", run_in_background=True, ...)
 Agent(
-  subagent_type="agent-orchestrator:agent-native-designer",
+  subagent_type="project-orchestrator:agent-native-designer",
   run_in_background=True,
   prompt="Design agent-native capabilities. Read .claude/specs/[feature]/requirements.md,
           architecture.md, and tech-stack.md. Produce parity map, tool definitions,
@@ -403,7 +403,7 @@ Agent(
 
 #### Phase 4: Modify task-decomposer to handle agent-spec.md
 
-**File:** `plugins/agent-orchestrator/agents/task-decomposer.md`
+**File:** `plugins/project-orchestrator/agents/task-decomposer.md`
 
 **Changes:**
 1. Add `agent-spec.md` to the input file list
@@ -434,7 +434,7 @@ When agent-spec.md is present:
 
 #### Phase 5: Update feature-team to consume agent-spec.md
 
-**File:** `plugins/agent-orchestrator/agents/feature-team.md`
+**File:** `plugins/project-orchestrator/agents/feature-team.md`
 
 **Research insight (architecture reviewer + agent-native reviewer, CRITICAL):** This was MISSING from the original plan. feature-team's Step 1 (line 43) explicitly lists spec files to read: `api-spec.md, schema.md, design.md, architecture.md, and tasks.md`. agent-spec.md is not in this list. Without updating feature-team, builder agents will receive agent/tool tasks but lack context.
 
@@ -457,7 +457,7 @@ When agent-spec.md is present:
 
 #### Phase 6: Update ui-designer for interaction inventory
 
-**File:** `plugins/agent-orchestrator/agents/ui-designer.md`
+**File:** `plugins/project-orchestrator/agents/ui-designer.md`
 
 **Research insight (agent-native reviewer, WARNING):** Cross-review parity verification depends on knowing every UI action, but design.md is a design system spec (tokens, components, states), not an interaction inventory. Agent-native-designer has no structured source of UI interactions to verify against.
 
@@ -483,7 +483,7 @@ This gives agent-native-designer a structured input for parity verification.
 
 #### Phase 7: Update validate-plugin.sh
 
-**File:** `plugins/agent-orchestrator/validate-plugin.sh`
+**File:** `plugins/project-orchestrator/validate-plugin.sh`
 
 **Research insight (architecture reviewer):** The validation script hardcodes agent count at 24 (line ~27). Adding agent-native-designer brings it to 25 (Option B) or 26 (Option A, with design-team). Skill count check at 63 must become 64.
 
@@ -580,31 +580,31 @@ This gives agent-native-designer a structured input for parity verification.
 
 | Action | File | Effort |
 |--------|------|--------|
-| **Create** | `plugins/agent-orchestrator/skills/agent-native-design/SKILL.md` | S |
-| **Create** | `plugins/agent-orchestrator/agents/agent-native-designer.md` | M |
-| **Create** | `plugins/agent-orchestrator/agents/design-team.md` | L |
-| **Modify** | `plugins/agent-orchestrator/agents/project-orchestrator.md` (Phase 2 → design-team dispatch) | M |
-| **Modify** | `plugins/agent-orchestrator/agents/task-decomposer.md` (add agent-spec.md input) | M |
-| **Modify** | `plugins/agent-orchestrator/agents/feature-team.md` (add agent-spec.md to read list) | S |
-| **Modify** | `plugins/agent-orchestrator/agents/ui-designer.md` (add interaction inventory) | S |
-| **Modify** | `plugins/agent-orchestrator/validate-plugin.sh` (update counts to 26/64) | S |
+| **Create** | `plugins/project-orchestrator/skills/agent-native-design/SKILL.md` | S |
+| **Create** | `plugins/project-orchestrator/agents/agent-native-designer.md` | M |
+| **Create** | `plugins/project-orchestrator/agents/design-team.md` | L |
+| **Modify** | `plugins/project-orchestrator/agents/project-orchestrator.md` (Phase 2 → design-team dispatch) | M |
+| **Modify** | `plugins/project-orchestrator/agents/task-decomposer.md` (add agent-spec.md input) | M |
+| **Modify** | `plugins/project-orchestrator/agents/feature-team.md` (add agent-spec.md to read list) | S |
+| **Modify** | `plugins/project-orchestrator/agents/ui-designer.md` (add interaction inventory) | S |
+| **Modify** | `plugins/project-orchestrator/validate-plugin.sh` (update counts to 26/64) | S |
 
 ### Option B (Lightweight): 2 new files, 4 modified files
 
 | Action | File | Effort |
 |--------|------|--------|
-| **Create** | `plugins/agent-orchestrator/skills/agent-native-design/SKILL.md` | S |
-| **Create** | `plugins/agent-orchestrator/agents/agent-native-designer.md` | M |
-| **Modify** | `plugins/agent-orchestrator/agents/project-orchestrator.md` (add 4th parallel agent) | S |
-| **Modify** | `plugins/agent-orchestrator/agents/task-decomposer.md` (add agent-spec.md input) | M |
-| **Modify** | `plugins/agent-orchestrator/agents/feature-team.md` (add agent-spec.md to read list) | S |
-| **Modify** | `plugins/agent-orchestrator/agents/ui-designer.md` (add interaction inventory) | S |
-| **Modify** | `plugins/agent-orchestrator/validate-plugin.sh` (update counts to 25/64) | S |
+| **Create** | `plugins/project-orchestrator/skills/agent-native-design/SKILL.md` | S |
+| **Create** | `plugins/project-orchestrator/agents/agent-native-designer.md` | M |
+| **Modify** | `plugins/project-orchestrator/agents/project-orchestrator.md` (add 4th parallel agent) | S |
+| **Modify** | `plugins/project-orchestrator/agents/task-decomposer.md` (add agent-spec.md input) | M |
+| **Modify** | `plugins/project-orchestrator/agents/feature-team.md` (add agent-spec.md to read list) | S |
+| **Modify** | `plugins/project-orchestrator/agents/ui-designer.md` (add interaction inventory) | S |
+| **Modify** | `plugins/project-orchestrator/validate-plugin.sh` (update counts to 25/64) | S |
 
 ### Deferred (both options)
 | Action | File | When |
 |--------|------|------|
-| **Modify** | `plugins/agent-orchestrator/agents/planning-team.md` | After main pipeline proves concept |
+| **Modify** | `plugins/project-orchestrator/agents/planning-team.md` | After main pipeline proves concept |
 
 ---
 
@@ -624,11 +624,11 @@ This gives agent-native-designer a structured input for parity verification.
 - **Brainstorm document:** [docs/brainstorms/2026-03-15-agent-native-design-team-brainstorm.md](docs/brainstorms/2026-03-15-agent-native-design-team-brainstorm.md) — Key decisions: design-team replaces orchestrator-dispatched Phase 2, agent-native-designer produces agent-spec.md with parity maps
 
 ### Internal References
-- Agent Team pattern: `plugins/agent-orchestrator/agents/feature-team.md` (execution protocol, file ownership)
-- Agent Team pattern: `plugins/agent-orchestrator/agents/review-team.md` (cross-review, combined report)
-- Planning team: `plugins/agent-orchestrator/agents/planning-team.md` (parallel design dispatch)
-- Agent builder skill: `plugins/agent-orchestrator/skills/agent-builder/SKILL.md` (agent file structure)
-- Orchestrator Phase 2: `plugins/agent-orchestrator/agents/project-orchestrator.md:323-376`
+- Agent Team pattern: `plugins/project-orchestrator/agents/feature-team.md` (execution protocol, file ownership)
+- Agent Team pattern: `plugins/project-orchestrator/agents/review-team.md` (cross-review, combined report)
+- Planning team: `plugins/project-orchestrator/agents/planning-team.md` (parallel design dispatch)
+- Agent builder skill: `plugins/project-orchestrator/skills/agent-builder/SKILL.md` (agent file structure)
+- Orchestrator Phase 2: `plugins/project-orchestrator/agents/project-orchestrator.md:323-376`
 - Refactor plan: `docs/plans/2026-03-14-001-refactor-full-orchestrator-overhaul-plan.md` (gate placement)
 
 ### External References

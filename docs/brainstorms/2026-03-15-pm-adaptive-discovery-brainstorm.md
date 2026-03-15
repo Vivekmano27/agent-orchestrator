@@ -46,11 +46,11 @@ Reference: [msitarzewski/agency-agents SeniorProjectManager](https://github.com/
 ## Scope of Changes
 
 ### Files to modify:
-- `plugins/agent-orchestrator/agents/project-orchestrator.md` — Remove feature scope question from Step 0 (keep tech stack + run method only). Update PM dispatch prompt to include full context.
-- `plugins/agent-orchestrator/agents/product-manager.md` — Replace current 5-question Step 0 with 3-tier adaptive system. Add domain detection logic. Add scope discipline rules.
-- `plugins/agent-orchestrator/agents/business-analyst.md` — Add 2-3 structured domain questions (workflows, approvals, business rules).
-- `plugins/agent-orchestrator/agents/ux-researcher.md` — Add 2-3 structured design questions (colors, brand, reference apps, accessibility level).
-- `plugins/agent-orchestrator/skills/project-requirements/SKILL.md` — Deduplicate with PM's new question flow. Convert 15-question template to reference material (not a competing interview).
+- `plugins/project-orchestrator/agents/project-orchestrator.md` — Remove feature scope question from Step 0 (keep tech stack + run method only). Update PM dispatch prompt to include full context.
+- `plugins/project-orchestrator/agents/product-manager.md` — Replace current 5-question Step 0 with 3-tier adaptive system. Add domain detection logic. Add scope discipline rules.
+- `plugins/project-orchestrator/agents/business-analyst.md` — Add 2-3 structured domain questions (workflows, approvals, business rules).
+- `plugins/project-orchestrator/agents/ux-researcher.md` — Add 2-3 structured design questions (colors, brand, reference apps, accessibility level).
+- `plugins/project-orchestrator/skills/project-requirements/SKILL.md` — Deduplicate with PM's new question flow. Convert 15-question template to reference material (not a competing interview).
 
 ### Files NOT modified:
 - Other agents (system-architect, api-architect, etc.) — they consume the PRD, no changes needed.

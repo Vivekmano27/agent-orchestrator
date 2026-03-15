@@ -81,7 +81,7 @@ For each affected spec, dispatch the owning agent with a REVISION prompt. Run in
 **Wave 1 — Requirements (ALWAYS runs first):**
 ```
 Agent(
-  subagent_type="agent-orchestrator:product-manager",
+  subagent_type="project-orchestrator:product-manager",
   prompt="REVISION: Add this new feature to the existing PRD.
           New feature: [user's description]
           Previous output at .claude/specs/[feature]/requirements.md — read it first.
@@ -99,7 +99,7 @@ Wait for completion.
 If business rules affected:
 ```
 Agent(
-  subagent_type="agent-orchestrator:business-analyst",
+  subagent_type="project-orchestrator:business-analyst",
   run_in_background=True,
   prompt="REVISION: New feature added to requirements.md.
           New feature: [user's description]
@@ -113,7 +113,7 @@ Agent(
 If UX affected:
 ```
 Agent(
-  subagent_type="agent-orchestrator:ux-researcher",
+  subagent_type="project-orchestrator:ux-researcher",
   run_in_background=True,
   prompt="REVISION: New feature added to requirements.md.
           New feature: [user's description]
@@ -130,7 +130,7 @@ Wait for Wave 2 to complete.
 For each affected design agent (architecture, API, database, UI, agent-native), dispatch with:
 ```
 Agent(
-  subagent_type="agent-orchestrator:[agent-name]",
+  subagent_type="project-orchestrator:[agent-name]",
   run_in_background=True,
   prompt="REVISION: New feature added. Update your spec to include it.
           New feature: [user's description]
@@ -147,7 +147,7 @@ Wait for Wave 3 to complete.
 **Wave 4 — Task decomposition (ALWAYS runs last):**
 ```
 Agent(
-  subagent_type="agent-orchestrator:task-decomposer",
+  subagent_type="project-orchestrator:task-decomposer",
   prompt="REVISION: New feature added to all specs. Regenerate tasks.md.
           Previous output at .claude/specs/[feature]/tasks.md — read it first.
           Read ALL updated specs in .claude/specs/[feature]/.

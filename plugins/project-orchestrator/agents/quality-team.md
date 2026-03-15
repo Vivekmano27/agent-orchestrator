@@ -146,7 +146,7 @@ AskUserQuestion(
 **Agent Teams mode (when SendMessage available):**
 ```
 Agent(
-  subagent_type="agent-orchestrator:test-engineer",
+  subagent_type="project-orchestrator:test-engineer",
   run_in_background=True,
   prompt="Execute testing per test-plan.md at .claude/specs/[feature]/test-plan.md.
   YOUR SCOPE: [assigned scope from test-plan.md].
@@ -160,7 +160,7 @@ Agent(
 )
 
 Agent(
-  subagent_type="agent-orchestrator:qa-automation",
+  subagent_type="project-orchestrator:qa-automation",
   run_in_background=True,
   prompt="Execute E2E testing per test-plan.md at .claude/specs/[feature]/test-plan.md.
   YOUR SCOPE: [assigned scope from test-plan.md].

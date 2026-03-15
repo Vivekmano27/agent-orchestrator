@@ -13,7 +13,7 @@ Read project-config.md to determine conditional reviewers:
 
 ```
 Agent(
-  subagent_type="agent-orchestrator:review-team",
+  subagent_type="project-orchestrator:review-team",
   prompt="Review all code changes for [feature]. Files changed: [list].
           Write combined severity-organized report (Critical/High/Medium/Low) to .claude/specs/[feature]/review-report.md.
           [IF no agent-native features]: Skip agent-native-reviewer — no agent artifacts to review.

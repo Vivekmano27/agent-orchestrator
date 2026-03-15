@@ -10,7 +10,7 @@
 
 ```
 Agent(
-  subagent_type="agent-orchestrator:security-auditor",
+  subagent_type="project-orchestrator:security-auditor",
   prompt="Run Phase 5 Security Audit for [feature].
   Task size: [SMALL/MEDIUM/BIG].
   Spec directory: .claude/specs/[feature]/

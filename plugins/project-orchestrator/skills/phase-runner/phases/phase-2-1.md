@@ -12,7 +12,7 @@
 
 ```
 Agent(
-  subagent_type="agent-orchestrator:task-decomposer",
+  subagent_type="project-orchestrator:task-decomposer",
   prompt="Read all specs in .claude/specs/[feature]/: project-config.md, requirements.md, business-rules.md, architecture.md, api-spec.md, schema.md, design.md, agent-spec.md (if exists).
           Decompose into ordered, dependency-aware implementation tasks with agent assignments.
           Output to .claude/specs/[feature]/tasks.md"

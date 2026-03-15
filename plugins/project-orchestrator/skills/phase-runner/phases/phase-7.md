@@ -16,13 +16,13 @@ Log: "Skipping Phase 7: no cloud deployment configured in project-config.md."
 **If cloud deployment is configured, dispatch both agents IN PARALLEL:**
 ```
 Agent(
-  subagent_type="agent-orchestrator:devops-engineer",
+  subagent_type="project-orchestrator:devops-engineer",
   run_in_background=True,
   prompt="Set up CI/CD pipeline, Docker configuration, Terraform infrastructure, K8s manifests, and monitoring for [feature]."
 )
 
 Agent(
-  subagent_type="agent-orchestrator:deployment-engineer",
+  subagent_type="project-orchestrator:deployment-engineer",
   run_in_background=True,
   prompt="Create blue-green deployment plan with rollback procedure and smoke tests for [feature]."
 )

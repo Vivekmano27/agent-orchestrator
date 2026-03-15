@@ -23,7 +23,7 @@
 ### Option 1: Plugin Mode (recommended)
 ```bash
 # Run Claude Code with plugin directory
-claude --plugin-dir /path/to/solo-dev-orchestrator/plugins/agent-orchestrator
+claude --plugin-dir /path/to/solo-dev-orchestrator/plugins/project-orchestrator
 
 # Or for GitHub-hosted marketplace
 claude plugin marketplace add your-github/solo-dev-orchestrator
@@ -45,7 +45,7 @@ bash /tmp/plugin/install.sh ~
 
 ### Option 3: Manual Copy
 ```bash
-PLUGIN=/path/to/solo-dev-orchestrator/plugins/agent-orchestrator
+PLUGIN=/path/to/solo-dev-orchestrator/plugins/project-orchestrator
 cp -r $PLUGIN/agents/* your-project/.claude/agents/
 cp -r $PLUGIN/commands/* your-project/.claude/commands/
 cp -r $PLUGIN/skills/* your-project/.claude/skills/

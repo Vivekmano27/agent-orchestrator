@@ -14,7 +14,7 @@
 
 ```
 Agent(
-  subagent_type="agent-orchestrator:feature-team",
+  subagent_type="project-orchestrator:feature-team",
   prompt="Implement all features for [feature] based on specs at .claude/specs/[feature]/.
           Task size: [SMALL/MEDIUM/BIG].
           Read tasks.md for ordered task list with agent assignments.

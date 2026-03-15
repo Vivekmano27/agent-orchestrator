@@ -94,7 +94,7 @@ Show what was found and what will be resumed:
 
 ```
 Agent(
-  subagent_type="agent-orchestrator:project-orchestrator",
+  subagent_type="project-orchestrator:project-orchestrator",
   prompt="RESUME pipeline for feature: [feature-name].
          Spec directory: .claude/specs/[feature]/
 

@@ -145,7 +145,7 @@ quality-team collects results, writes test-report.md + coverage artifacts
 ## Changes Required
 
 ### New files to create
-- `plugins/agent-orchestrator/agents/quality-team.md` — Agent Teams wrapper
+- `plugins/project-orchestrator/agents/quality-team.md` — Agent Teams wrapper
 
 ### Files to modify
 - `project-orchestrator.md` — Phase 4 dispatch (use quality-team), add Gate 3.5, add Phase 4 to failure detection

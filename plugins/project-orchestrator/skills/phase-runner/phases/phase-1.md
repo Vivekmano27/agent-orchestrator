@@ -13,7 +13,7 @@
 **1a. Spawn product-manager FIRST (synchronous):**
 ```
 Agent(
-  subagent_type="agent-orchestrator:product-manager",
+  subagent_type="project-orchestrator:product-manager",
   prompt="Write a complete PRD for: [ORIGINAL USER REQUEST].
           Task size: [SMALL/MEDIUM/BIG].
           Tech stack and infrastructure are already decided — see .claude/specs/[feature]/project-config.md.
@@ -29,13 +29,13 @@ Agent(
 **1b. Spawn business-analyst + ux-researcher IN PARALLEL:**
 ```
 Agent(
-  subagent_type="agent-orchestrator:business-analyst",
+  subagent_type="project-orchestrator:business-analyst",
   run_in_background=True,
   prompt="Read the PRD at .claude/specs/[feature]/requirements.md. Deepen business logic — do NOT re-ask product questions the PM already covered. Ask only about workflow/approval gaps. Output to .claude/specs/[feature]/business-rules.md"
 )
 
 Agent(
-  subagent_type="agent-orchestrator:ux-researcher",
+  subagent_type="project-orchestrator:ux-researcher",
   run_in_background=True,
   prompt="Read the PRD at .claude/specs/[feature]/requirements.md. Ask only about design system, accessibility level, and visual style (skip if PM already captured design direction). Output to .claude/specs/[feature]/ux.md"
 )

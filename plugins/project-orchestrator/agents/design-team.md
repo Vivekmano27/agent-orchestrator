@@ -101,7 +101,7 @@ After writing, message all teammates: "Research complete. Read .claude/specs/[fe
 
 ```
 Agent(
-  subagent_type="agent-orchestrator:system-architect",
+  subagent_type="project-orchestrator:system-architect",
   prompt="Design service boundaries, infrastructure topology, and ADRs for [feature].
           Read .claude/specs/[feature]/requirements.md, project-config.md, and research-context.md (if exists).
           Do your own Pre-Design Research (institutional learnings + external research gate for BIG tasks).
@@ -116,7 +116,7 @@ Wait for architecture.md to be written.
 
 ```
 Agent(
-  subagent_type="agent-orchestrator:api-architect",
+  subagent_type="project-orchestrator:api-architect",
   run_in_background=True,
   prompt="Design all API endpoints (REST/gRPC), versioning, auth, rate limiting, error codes for [feature].
           Read requirements.md, project-config.md, research-context.md (if exists), and architecture.md.
@@ -126,7 +126,7 @@ Agent(
 )
 
 Agent(
-  subagent_type="agent-orchestrator:database-architect",
+  subagent_type="project-orchestrator:database-architect",
   run_in_background=True,
   prompt="Design PostgreSQL schema — tables, columns, constraints, indexes, migrations for [feature].
           Read architecture.md, project-config.md, and research-context.md (if exists).
@@ -137,7 +137,7 @@ Agent(
 )
 
 Agent(
-  subagent_type="agent-orchestrator:ui-designer",
+  subagent_type="project-orchestrator:ui-designer",
   run_in_background=True,
   prompt="Create design.md, scaffold the Next.js project, build shared components (src/components/ui/),
           and build the /design-system page with component library + design tokens + platform mapping table.
@@ -153,7 +153,7 @@ Agent(
 **Conditional: agent-native-designer (MEDIUM/BIG only, skip for SMALL):**
 ```
 Agent(
-  subagent_type="agent-orchestrator:agent-native-designer",
+  subagent_type="project-orchestrator:agent-native-designer",
   run_in_background=True,
   prompt="Design agent-native capabilities — parity map, tool definitions, agent features for [feature].
           Read requirements.md, architecture.md, project-config.md, and research-context.md (if exists).
@@ -223,7 +223,7 @@ Spawn the design-reviewer as an independent, fresh-context reviewer:
 
 ```
 Agent(
-  subagent_type="agent-orchestrator:design-reviewer",
+  subagent_type="project-orchestrator:design-reviewer",
   prompt="Review all design specs at .claude/specs/[feature]/:
           architecture.md, api-spec.md, schema.md, design.md, agent-spec.md (if exists).
           Also read requirements.md and project-config.md for context.

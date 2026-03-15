@@ -11,7 +11,7 @@
 
 ```
 Agent(
-  subagent_type="agent-orchestrator:technical-writer",
+  subagent_type="project-orchestrator:technical-writer",
   prompt="Generate README, API docs, architecture docs, changelog, and deployment runbook for [feature]. All specs are in .claude/specs/[feature]/.
           IMPORTANT: Read deploy-monitoring.md and deployment-plan.md (if they exist) and use them as source material for docs/DEPLOYMENT.md."
 )

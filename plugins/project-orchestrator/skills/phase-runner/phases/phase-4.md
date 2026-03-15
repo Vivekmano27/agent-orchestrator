@@ -11,7 +11,7 @@
 
 ```
 Agent(
-  subagent_type="agent-orchestrator:quality-team",
+  subagent_type="project-orchestrator:quality-team",
   prompt="Run Phase 4 Testing for [feature].
   Task size: [SMALL/MEDIUM/BIG].
   Spec directory: .claude/specs/[feature]/

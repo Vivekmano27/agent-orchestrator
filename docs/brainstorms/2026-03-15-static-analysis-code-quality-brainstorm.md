@@ -119,8 +119,8 @@ The static-analyzer returns findings to review-team, which includes them in the 
 ## Changes Required
 
 ### New files to create
-- `plugins/agent-orchestrator/agents/static-analyzer.md` — new agent (~80-100 lines)
-- `plugins/agent-orchestrator/skills/static-analysis/SKILL.md` — new skill with tool commands and output parsing
+- `plugins/project-orchestrator/agents/static-analyzer.md` — new agent (~80-100 lines)
+- `plugins/project-orchestrator/skills/static-analysis/SKILL.md` — new skill with tool commands and output parsing
 
 ### Files to modify
 - `agents/review-team.md` — add static-analyzer to team composition and dispatch

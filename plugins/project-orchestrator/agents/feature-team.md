@@ -143,7 +143,7 @@ Dispatch agent-native-developer Pass 1 to scaffold agent definitions, skills, co
 
 ```
 Agent(
-  subagent_type="agent-orchestrator:agent-native-developer",
+  subagent_type="project-orchestrator:agent-native-developer",
   prompt="PASS 1 — SCAFFOLD agent-native artifacts for [feature].
           Read .claude/specs/[feature]/project-config.md FIRST for tech stack.
           IF .claude/specs/[feature]/agent-spec.md EXISTS: read it for parity map, tool definitions,
@@ -166,7 +166,7 @@ If Pass 1 fails: log "agent-native-developer Pass 1 failed: [error]", set `skip_
 ### STEP 3 — Spawn backend + senior + python IN PARALLEL (same response)
 ```
 Agent(
-  subagent_type="agent-orchestrator:backend-developer",
+  subagent_type="project-orchestrator:backend-developer",
   run_in_background=True,
   prompt="Implement your assigned tasks for [feature].
           Read .claude/specs/[feature]/tasks.md — execute these tasks IN ORDER: [TASK-NNN, TASK-NNN, ...].
@@ -180,7 +180,7 @@ Agent(
 )
 
 Agent(
-  subagent_type="agent-orchestrator:senior-engineer",
+  subagent_type="project-orchestrator:senior-engineer",
   run_in_background=True,
   prompt="Implement your assigned tasks for [feature].
           Read .claude/specs/[feature]/tasks.md — execute these tasks IN ORDER: [TASK-NNN, TASK-NNN, ...].
@@ -191,7 +191,7 @@ Agent(
 )
 
 Agent(
-  subagent_type="agent-orchestrator:python-developer",
+  subagent_type="project-orchestrator:python-developer",
   run_in_background=True,
   prompt="Implement your assigned tasks for [feature].
           Read .claude/specs/[feature]/tasks.md — execute these tasks IN ORDER: [TASK-NNN, TASK-NNN, ...].
@@ -255,7 +255,7 @@ If `skip_pass_2` is NOT set (Pass 1 succeeded), dispatch agent-native-developer 
 
 ```
 Agent(
-  subagent_type="agent-orchestrator:agent-native-developer",
+  subagent_type="project-orchestrator:agent-native-developer",
   prompt="PASS 2 — WIRE agent-native artifacts for [feature].
           Read .claude/specs/[feature]/project-config.md for tech stack.
           Read .claude/specs/[feature]/api-contracts.md for actual endpoint routes and shapes.
@@ -282,7 +282,7 @@ Read `project-config.md` to determine which frontend platforms are needed. Dispa
 **Always dispatch (if web frontend in project-config.md):**
 ```
 Agent(
-  subagent_type="agent-orchestrator:frontend-developer",
+  subagent_type="project-orchestrator:frontend-developer",
   run_in_background=True,
   prompt="Implement your assigned tasks for [feature].
           Read .claude/specs/[feature]/tasks.md — execute these tasks IN ORDER: [TASK-NNN, TASK-NNN, ...].
@@ -303,7 +303,7 @@ Agent(
 **Dispatch if Flutter in project-config.md:**
 ```
 Agent(
-  subagent_type="agent-orchestrator:flutter-developer",
+  subagent_type="project-orchestrator:flutter-developer",
   run_in_background=True,
   prompt="Implement your assigned tasks for [feature].
           Read .claude/specs/[feature]/tasks.md — execute these tasks IN ORDER: [TASK-NNN, TASK-NNN, ...].
@@ -321,7 +321,7 @@ Agent(
 **Dispatch if KMP in project-config.md:**
 ```
 Agent(
-  subagent_type="agent-orchestrator:kmp-developer",
+  subagent_type="project-orchestrator:kmp-developer",
   run_in_background=True,
   prompt="Implement your assigned tasks for [feature].
           Read .claude/specs/[feature]/tasks.md — execute these tasks IN ORDER: [TASK-NNN, TASK-NNN, ...].
@@ -381,7 +381,7 @@ Do NOT run testing or review — the orchestrator handles those in Phases 4 and 
 If `tasks.md` is missing, fall back to dispatching agents with spec files directly:
 ```
 Agent(
-  subagent_type="agent-orchestrator:backend-developer",
+  subagent_type="project-orchestrator:backend-developer",
   run_in_background=True,
   prompt="Implement NestJS API for [feature]. Read .claude/specs/[feature]/api-spec.md and schema.md.
           FILE OWNERSHIP: You own services/core-service/ (except src/common/) and prisma/.
@@ -391,7 +391,7 @@ Agent(
 )
 
 Agent(
-  subagent_type="agent-orchestrator:senior-engineer",
+  subagent_type="project-orchestrator:senior-engineer",
   run_in_background=True,
   prompt="Implement cross-service integration for [feature]. Read .claude/specs/[feature]/architecture.md.
           FILE OWNERSHIP: You own services/core-service/src/common/, services/api-gateway/, services/shared/.
@@ -400,7 +400,7 @@ Agent(
 )
 
 Agent(
-  subagent_type="agent-orchestrator:python-developer",
+  subagent_type="project-orchestrator:python-developer",
   run_in_background=True,
   prompt="Implement Python/Django AI service features for [feature]. Read .claude/specs/[feature]/.
           FILE OWNERSHIP: You own services/ai-service/ only.
@@ -411,7 +411,7 @@ Agent(
 If `agent-spec.md` or `api-spec.md` exists, also dispatch agent-native-developer Pass 1 before the backend wave:
 ```
 Agent(
-  subagent_type="agent-orchestrator:agent-native-developer",
+  subagent_type="project-orchestrator:agent-native-developer",
   prompt="PASS 1 — SCAFFOLD agent-native artifacts for [feature].
           Read .claude/specs/[feature]/project-config.md FIRST.
           Read agent-spec.md if it exists, otherwise auto-generate from api-spec.md + design.md.

@@ -8,12 +8,12 @@
 INPUT=$(cat)
 SUBAGENT_TYPE=$(echo "$INPUT" | jq -r '.tool_input.subagent_type // empty' 2>/dev/null || echo '')
 
-# Only check agent-orchestrator subagent types
-if [[ "$SUBAGENT_TYPE" != agent-orchestrator:* ]]; then
+# Only check project-orchestrator subagent types
+if [[ "$SUBAGENT_TYPE" != project-orchestrator:* ]]; then
   exit 0
 fi
 
-AGENT_NAME="${SUBAGENT_TYPE#agent-orchestrator:}"
+AGENT_NAME="${SUBAGENT_TYPE#project-orchestrator:}"
 
 # Map agent/team names to their expected phase
 declare -A AGENT_PHASE_MAP

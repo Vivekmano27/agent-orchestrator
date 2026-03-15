@@ -76,7 +76,7 @@ Security (Phase 5) remains standalone — the brainstorm explicitly rejected mer
 
 #### Phase 1: Foundation — project-config.md Coverage Thresholds
 
-**Files:** `plugins/agent-orchestrator/agents/project-setup.md`
+**Files:** `plugins/project-orchestrator/agents/project-setup.md`
 
 Expand the single `Coverage Target` field in the project-config.md template to per-service thresholds.
 
@@ -108,7 +108,7 @@ Also update the presets (Startup Lean, SaaS Standard, Enterprise Microservices) 
 
 #### Phase 2: Create quality-team.md
 
-**Files:** `plugins/agent-orchestrator/agents/quality-team.md` (NEW)
+**Files:** `plugins/project-orchestrator/agents/quality-team.md` (NEW)
 
 Create the Agent Teams wrapper following the established pattern from feature-team.md and review-team.md.
 
@@ -236,7 +236,7 @@ Handler for "Cancel": Escalate to orchestrator's cancel handler.
 Agent Teams mode (when SendMessage available):
 ```
 Agent(
-  subagent_type="agent-orchestrator:test-engineer",
+  subagent_type="project-orchestrator:test-engineer",
   run_in_background=True,
   prompt="Execute testing per test-plan.md at .claude/specs/[feature]/test-plan.md.
   YOUR SCOPE: [assigned scope from test-plan.md].
@@ -247,7 +247,7 @@ Agent(
 )
 
 Agent(
-  subagent_type="agent-orchestrator:qa-automation",
+  subagent_type="project-orchestrator:qa-automation",
   run_in_background=True,
   prompt="Execute E2E testing per test-plan.md at .claude/specs/[feature]/test-plan.md.
   YOUR SCOPE: [assigned scope from test-plan.md].
@@ -417,7 +417,7 @@ If during test execution:
 
 #### Phase 3: Update project-orchestrator.md
 
-**Files:** `plugins/agent-orchestrator/agents/project-orchestrator.md`
+**Files:** `plugins/project-orchestrator/agents/project-orchestrator.md`
 
 **3a. Update pipeline architecture diagram** (around line 74-76)
 
@@ -448,7 +448,7 @@ and routes any failures (test bugs internally, impl bugs back through feature-te
 4a. Spawn quality-team:
 ```
 Agent(
-  subagent_type="agent-orchestrator:quality-team",
+  subagent_type="project-orchestrator:quality-team",
   prompt="Run Phase 4 Testing for [feature].
   Task size: [SMALL/MEDIUM/BIG].
   Spec directory: .claude/specs/[feature]/
@@ -495,7 +495,7 @@ quality-team returns a structured list of impl bugs with: failing test, error, s
 **Step 2 — Re-dispatch feature-team** (NOT individual agents)
 ```
 Agent(
-  subagent_type="agent-orchestrator:feature-team",
+  subagent_type="project-orchestrator:feature-team",
   prompt="PHASE 4→3 FEEDBACK: Tests found implementation bugs.
   Feature: [feature-name]. Spec directory: .claude/specs/[feature]/
 
@@ -593,7 +593,7 @@ Update Phase 4 line:
 
 #### Phase 4: Update test-engineer.md
 
-**Files:** `plugins/agent-orchestrator/agents/test-engineer.md`
+**Files:** `plugins/project-orchestrator/agents/test-engineer.md`
 
 **4a. Update description** to reflect scoped role:
 ```
@@ -641,7 +641,7 @@ Return results as structured text that quality-team can parse:
 
 #### Phase 5: Update qa-automation.md
 
-**Files:** `plugins/agent-orchestrator/agents/qa-automation.md`
+**Files:** `plugins/project-orchestrator/agents/qa-automation.md`
 
 **5a. Update description** to clarify E2E ownership:
 ```
@@ -677,7 +677,7 @@ You do NOT write:
 
 #### Phase 6: Update run-tests.md
 
-**Files:** `plugins/agent-orchestrator/commands/run-tests.md`
+**Files:** `plugins/project-orchestrator/commands/run-tests.md`
 
 **6a. Replace hardcoded thresholds** (lines 11-19)
 ```
@@ -770,7 +770,7 @@ Max 2 round-trips before escalating to user.
 - [ ] Child agents cap return messages at ~200 lines (full output in coverage artifact files)
 
 ### Quality Gates
-- [ ] Validate plugin passes: `bash plugins/agent-orchestrator/validate-plugin.sh`
+- [ ] Validate plugin passes: `bash plugins/project-orchestrator/validate-plugin.sh`
 - [ ] All agent files have consistent interaction rule block
 - [ ] No hardcoded coverage thresholds remain in test-engineer.md or run-tests.md
 - [ ] quality-team.md follows same structural pattern as feature-team.md and review-team.md
@@ -820,11 +820,11 @@ The code-simplicity-reviewer flagged several areas where the plan may be over-en
 - **Brainstorm document:** [docs/brainstorms/2026-03-15-phase4-quality-team-brainstorm.md](docs/brainstorms/2026-03-15-phase4-quality-team-brainstorm.md) — Key decisions carried forward: quality-team Agent Teams wrapper, Gate 3.5 for all sizes, Phase 4→3 through feature-team
 
 ### Internal References
-- Agent Teams pattern: `plugins/agent-orchestrator/agents/feature-team.md` (canonical template)
-- Review team pattern: `plugins/agent-orchestrator/agents/review-team.md`
-- Design team fallback: `plugins/agent-orchestrator/agents/design-team.md` (lines 332-342)
+- Agent Teams pattern: `plugins/project-orchestrator/agents/feature-team.md` (canonical template)
+- Review team pattern: `plugins/project-orchestrator/agents/review-team.md`
+- Design team fallback: `plugins/project-orchestrator/agents/design-team.md` (lines 332-342)
 - Phase 3 coverage enforcement: `docs/plans/2026-03-15-004-feat-phase3-agent-native-developer-tdd-enforcement-plan.md`
-- Current Phase 4 dispatch: `plugins/agent-orchestrator/agents/project-orchestrator.md` (lines 499-514)
+- Current Phase 4 dispatch: `plugins/project-orchestrator/agents/project-orchestrator.md` (lines 499-514)
 
 ### External References
 - Google Testing Blog: Code Coverage Best Practices — focus on new code coverage, not overall

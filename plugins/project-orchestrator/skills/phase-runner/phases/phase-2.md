@@ -19,7 +19,7 @@
 **2b. Dispatch design-team (single dispatch — it manages internal sequencing):**
 ```
 Agent(
-  subagent_type="agent-orchestrator:design-team",
+  subagent_type="project-orchestrator:design-team",
   prompt="Design PRODUCTION-READY specs for: [feature].
           Task size: [SMALL/MEDIUM/BIG].
           Spec directory: .claude/specs/[feature]/

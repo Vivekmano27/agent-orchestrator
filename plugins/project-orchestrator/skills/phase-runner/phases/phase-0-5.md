@@ -10,7 +10,7 @@
 
 ```
 Agent(
-  subagent_type="agent-orchestrator:project-setup",
+  subagent_type="project-orchestrator:project-setup",
   prompt="Interview the user about project infrastructure and tech stack decisions for: [ORIGINAL USER REQUEST].
           Offer presets or custom configuration.
           Cover: architecture, backend, frontend, mobile, database, auth, CI/CD, testing, code quality, cloud, naming conventions.

@@ -5,7 +5,7 @@
 Run the plugin validator to check structure and cross-references:
 
 ```bash
-bash plugins/agent-orchestrator/validate-plugin.sh
+bash plugins/project-orchestrator/validate-plugin.sh
 ```
 
 This checks:
@@ -24,7 +24,7 @@ This checks:
 mkdir /tmp/test-project && cd /tmp/test-project
 
 # Run installer
-bash /path/to/agent-orchestrator/install.sh .
+bash /path/to/project-orchestrator/install.sh .
 
 # Verify file counts
 ls .claude/agents/*.md | wc -l      # Should be 35
@@ -37,7 +37,7 @@ ls .claude/rules/*.md | wc -l      # Should be 3
 ### 2. Plugin Mode Test
 ```bash
 # Start Claude with the plugin
-claude --plugin-dir /path/to/agent-orchestrator/plugins/agent-orchestrator
+claude --plugin-dir /path/to/project-orchestrator/plugins/project-orchestrator
 
 # Run these commands:
 > /check-agents      # All 30 agents + 5 teams should show green

@@ -152,7 +152,7 @@ When reporting findings, distinguish confirmed vendor-pattern matches (e.g., `AK
 
 #### Phase 2: Rewrite security-auditor.md
 
-**File:** `plugins/agent-orchestrator/agents/security-auditor.md`
+**File:** `plugins/project-orchestrator/agents/security-auditor.md`
 
 Expand from 73 to ~180 lines. Keep existing frontmatter fields. Add:
 
@@ -290,7 +290,7 @@ Replace minimal dispatch with full context:
 ### Phase 5: Security — single agent
 ```
 Agent(
-  subagent_type="agent-orchestrator:security-auditor",
+  subagent_type="project-orchestrator:security-auditor",
   prompt="Run Phase 5 Security Audit for [feature].
   Task size: [SMALL/MEDIUM/BIG].
   Spec directory: .claude/specs/[feature]/
@@ -316,7 +316,7 @@ Structured list with stable IDs (SEC-NNN), severity, file:line, description, rec
 **Step 2 — Re-dispatch feature-team:**
 ```
 Agent(
-  subagent_type="agent-orchestrator:feature-team",
+  subagent_type="project-orchestrator:feature-team",
   prompt="PHASE 5→3 FEEDBACK: Security audit found CRITICAL/HIGH vulnerabilities.
   Feature: [feature-name]. Spec directory: .claude/specs/[feature]/
 
@@ -437,7 +437,7 @@ In the project-config.md template, add after the Testing section:
 - [ ] Escalation AskUserQuestion templates for Phase 5→3 exhaustion and STOP
 
 ### Quality Gates
-- [ ] Plugin validation passes: `bash plugins/agent-orchestrator/validate-plugin.sh`
+- [ ] Plugin validation passes: `bash plugins/project-orchestrator/validate-plugin.sh`
 - [ ] No hardcoded tech stack references in security-auditor.md
 - [ ] All 5 skills have concrete tool commands (not just checklists)
 - [ ] security-audit.md template has severity, stable IDs, file:line, and fix recommendations
@@ -556,7 +556,7 @@ When user selects "False positive — downgrade to CRITICAL":
 
 ```
 Agent(
-  subagent_type="agent-orchestrator:security-auditor",
+  subagent_type="project-orchestrator:security-auditor",
   prompt="PHASE 5→3 SCOPED RE-AUDIT for [feature].
   Spec directory: .claude/specs/[feature]/
   Round-trip: 1
