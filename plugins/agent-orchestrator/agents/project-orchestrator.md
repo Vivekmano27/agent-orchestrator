@@ -115,14 +115,40 @@ When a tech stack component is absent, skip these agents across ALL phases:
 - project-orchestrator → coordination, progress tracking, approval gates
 - task-executor → available for autonomous batch task execution (invoked on demand, not dispatched as a phase)
 
+## Phase Transition Rule (ALL task sizes — MANDATORY, NO EXCEPTIONS)
+
+**⚠️ THIS IS A HARD RULE. VIOLATIONS ARE BUGS.**
+
+**After EVERY phase completes, you MUST call `AskUserQuestion` before proceeding to the next phase.** You are NEVER allowed to silently move to the next phase. This applies to ALL task sizes (SMALL, MEDIUM, BIG) and EVERY phase transition — no exceptions, no shortcuts, no "the task is small enough to skip".
+
+Skipping this question is the same as skipping a required tool call. It MUST happen.
+
+```
+AskUserQuestion(
+  question="Phase [N] — [name] complete.
+  [1-2 line summary of what was produced/accomplished].
+  Proceed to Phase [N+1] — [name]?",
+  options=["Continue", "Show me details", "Request changes", "Cancel"]
+)
+```
+
+- **"Continue"** → proceed to next phase
+- **"Show me details"** → read and display the phase output files, then re-ask
+- **"Request changes"** → ask what to change, re-run the phase with feedback
+- **"Cancel"** → standard cancel handler
+
+This rule is IN ADDITION to the formal approval gates below. At gates where approval gates already exist (e.g., Gate 1 after Phase 1 for BIG tasks), the approval gate replaces the phase transition question — do not ask twice. For all other phase transitions, this question is mandatory.
+
+---
+
 ## Approval Gates (determined by task SIZE — NOT which agents run)
 
 Task size determines HOW MUCH you interact, not WHICH agents run:
 
 ### SMALL (1-3 files, 1 service)
 - ALL agents still run
-- Agents work autonomously — no approval gates
-- You see the final result with everything done (spec, code, tests, security, docs, CI/CD)
+- Phase transition questions apply (see Phase Transition Rule above)
+- No additional formal approval gates beyond the phase transitions
 
 ### MEDIUM (4-10 files, 1-2 services)
 - ALL agents still run
@@ -473,6 +499,22 @@ For Phase 3 (Build) and Phase 6 (Review), agent teams let teammates message each
 
 ---
 
+### Resume Protocol (when dispatched with RESUME prefix)
+
+When your dispatch prompt starts with "RESUME pipeline for feature:":
+
+1. **Read progress.md** — trust the state it reports. Do NOT re-classify task size or re-run Phase 0/0.5.
+2. **Skip all completed phases** — check the Phase History table. Any phase marked `COMPLETE` is done.
+3. **For the current IN_PROGRESS phase:**
+   a. Check for `## Status: INCOMPLETE` markers in spec files — re-dispatch the specific agent with a resume prompt: "RESUME: Continue from where you stopped. Previous output at [path]. Read it and continue from section [N]. Do NOT restart from scratch."
+   b. Check for missing expected output files (see Subagent Failure Detection) — re-run the responsible agent.
+   c. If phase output is complete but gate not passed — present the gate to the user as normal.
+4. **For WAITING_FOR_APPROVAL status** — present the approval gate immediately. The user may have been disconnected before responding.
+5. **After resuming the current phase**, continue the pipeline normally from the next phase.
+6. **Do NOT** re-run discovery, re-ask project-setup questions, re-create the spec directory, or re-generate files that already exist and are complete.
+
+---
+
 ## Runtime Progress Tracking
 
 Write `.claude/specs/[feature]/progress.md` at every phase transition so monitoring commands (`/status`, `/check-teams`, `/pending`) can report real-time pipeline state. This file is the single source of truth for pipeline progress.
@@ -610,6 +652,17 @@ Agent(
           Run your adaptive requirements discovery, then output to .claude/specs/[feature]/requirements.md"
 )
 ```
+1a-resume. **If PM output is incomplete** (check for `## Status: INCOMPLETE` header in requirements.md), re-spawn the PM with a resume prompt:
+```
+Agent(
+  subagent_type="agent-orchestrator:product-manager",
+  prompt="Resume writing the PRD at .claude/specs/[feature]/requirements.md.
+          Read what's already written — it has a Status header indicating where it stopped.
+          Continue from the incomplete section. Do NOT rewrite completed sections.
+          Do NOT re-run discovery — requirements were already gathered."
+)
+```
+
 1b. Wait for completion. Then spawn business-analyst + ux-researcher IN PARALLEL (same response):
 ```
 Agent(
