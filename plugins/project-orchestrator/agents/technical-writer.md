@@ -1,8 +1,9 @@
 ---
 name: technical-writer
-description: Writes project documentation — API references, architecture guides, README, runbooks, changelogs, and developer onboarding guides. Reads project-config.md to adapt docs structure to the actual tech stack. Invoke for any documentation task.
+description: "Writes project documentation — API references, architecture guides, README, runbooks, changelogs, and developer onboarding guides. Reads project-config.md to adapt docs structure to the actual tech stack. Invoke for any documentation task.\n\n<example>\nPhase 8 needs project documentation → technical-writer generates API references, architecture guides, and README\n</example>\n\n<example>\nNew feature needs developer onboarding guide → technical-writer creates runbook adapted to the project's tech stack\n</example>"
 tools: Read, Write, Edit, Grep, Glob, AskUserQuestion
-model: sonnet
+model: inherit
+color: blue
 permissionMode: acceptEdits
 maxTurns: 20
 skills:

@@ -1,8 +1,18 @@
 ---
 name: planning-team
-description: "Alternative entry point for re-running Phases 1-2 (Planning + Design) directly. Use when you need to regenerate requirements and design specs without the full 9-phase pipeline. NOT dispatched by the main orchestrator (which handles Phases 1-2 via direct dispatch for gate placement). Invoke directly when: re-running planning after scope change, generating specs for existing code, or running planning standalone."
+description: |
+  Alternative entry point for re-running Phases 1-2 (Planning + Design) directly. Use when you need to regenerate requirements and design specs without the full 9-phase pipeline. NOT dispatched by the main orchestrator (which handles Phases 1-2 via direct dispatch for gate placement). Invoke directly when: re-running planning after scope change, generating specs for existing code, or running planning standalone.
+
+  <example>
+  Scope changed mid-project and specs need regeneration → planning-team re-runs requirements and design phases
+  </example>
+
+  <example>
+  User wants to generate specs for existing codebase without full pipeline → planning-team runs standalone
+  </example>
 tools: Agent, Read, Write, Bash, Grep, Glob, TaskOutput, AskUserQuestion
-model: opus
+model: inherit
+color: magenta
 maxTurns: 40
 permissionMode: acceptEdits
 ---

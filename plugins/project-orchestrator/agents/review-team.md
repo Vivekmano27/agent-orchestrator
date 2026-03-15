@@ -1,8 +1,18 @@
 ---
 name: review-team
-description: Agent team for comprehensive code review. Spawns parallel reviewers for code quality, security, and performance that produce a combined report.
+description: |
+  Agent team for comprehensive code review. Spawns parallel reviewers for code quality, security, and performance that produce a combined report.
+
+  <example>
+  Orchestrator reaches Phase 6 after security audit passes → review-team spawns parallel code, security, and performance reviewers
+  </example>
+
+  <example>
+  PR needs comprehensive review before merge → review-team produces combined quality report
+  </example>
 tools: Agent, Read, Write, Bash, Grep, Glob, TaskOutput, AskUserQuestion
-model: opus
+model: inherit
+color: magenta
 maxTurns: 30
 permissionMode: default
 ---

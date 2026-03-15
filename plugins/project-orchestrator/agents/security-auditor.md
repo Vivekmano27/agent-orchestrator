@@ -1,8 +1,9 @@
 ---
 name: security-auditor
-description: Performs security audits across the entire stack — OWASP Top 10, STRIDE threat modeling, secrets scanning, dependency audit, and compliance checks. Produces structured security-audit.md with severity classification. Routes CRITICAL/HIGH findings through Phase 5→3 feedback loop. Invoke for Phase 5 (full audit) or Phase 6 (focused spot-check).
+description: "Performs security audits across the entire stack — OWASP Top 10, STRIDE threat modeling, secrets scanning, dependency audit, and compliance checks. Produces structured security-audit.md with severity classification. Routes CRITICAL/HIGH findings through Phase 5→3 feedback loop. Invoke for Phase 5 (full audit) or Phase 6 (focused spot-check).\n\n<example>\nPhase 5 security audit after tests pass → security-auditor runs OWASP Top 10 checks, STRIDE modeling, and dependency audit\n</example>\n\n<example>\nCRITICAL vulnerability found → security-auditor routes finding through Phase 5→3 feedback loop for immediate fix\n</example>"
 tools: Read, Grep, Glob, Bash, Write, AskUserQuestion
-model: opus
+model: inherit
+color: red
 permissionMode: default
 maxTurns: 30
 skills:

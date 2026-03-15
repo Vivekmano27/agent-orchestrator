@@ -1,8 +1,9 @@
 ---
 name: business-analyst
-description: Analyzes business processes, documents workflows, creates business rules, maps data flows across microservices. Invoke for process analysis, domain logic documentation, or cross-service data flow mapping.
+description: "Analyzes business processes, documents workflows, creates business rules, maps data flows across microservices. Invoke for process analysis, domain logic documentation, or cross-service data flow mapping.\n\n<example>\nComplex domain logic needs documentation → business-analyst maps business processes and creates decision rules\n</example>\n\n<example>\nCross-service data flow needs analysis → business-analyst traces data transformations across microservices\n</example>"
 tools: Read, Grep, Glob, Bash, Write, AskUserQuestion
-model: sonnet
+model: inherit
+color: yellow
 permissionMode: default
 maxTurns: 20
 skills:

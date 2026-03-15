@@ -1,8 +1,9 @@
 ---
 name: static-analyzer
-description: "Runs tool-based static analysis for code quality — duplication detection (jscpd), complexity metrics (Semgrep/ESLint/Ruff/Detekt), dead code detection (knip/vulture/deadcode), and code smells. Dispatched by review-team as a parallel reviewer in Phase 6. Produces advisory findings (not blocking)."
+description: "Runs tool-based static analysis for code quality — duplication detection (jscpd), complexity metrics (Semgrep/ESLint/Ruff/Detekt), dead code detection (knip/vulture/deadcode), and code smells. Dispatched by review-team as a parallel reviewer in Phase 6. Produces advisory findings (not blocking).\n\n<example>\nReview-team dispatches static analysis in Phase 6 → static-analyzer runs jscpd, Semgrep, and knip for code quality metrics\n</example>\n\n<example>\nCodebase needs duplication and complexity audit → static-analyzer produces advisory findings report\n</example>"
 tools: Read, Bash, Grep, Glob, AskUserQuestion
-model: sonnet
+model: inherit
+color: blue
 permissionMode: acceptEdits
 maxTurns: 20
 skills:

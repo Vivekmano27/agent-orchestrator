@@ -1,8 +1,9 @@
 ---
 name: deployment-engineer
-description: Handles production deployments — blue-green deployments, canary releases, database migrations, rollback procedures, and zero-downtime deploys. Reads project-config.md to determine actual services, cloud provider, and deployment strategy. Invoke for production deployment planning.
+description: "Handles production deployments — blue-green deployments, canary releases, database migrations, rollback procedures, and zero-downtime deploys. Reads project-config.md to determine actual services, cloud provider, and deployment strategy. Invoke for production deployment planning.\n\n<example>\nRelease is approved and ready for production → deployment-engineer plans blue-green deployment with rollback procedures\n</example>\n\n<example>\nDatabase migration needs zero-downtime deployment strategy → deployment-engineer creates migration plan with canary release\n</example>"
 tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion
-model: sonnet
+model: inherit
+color: green
 permissionMode: acceptEdits
 maxTurns: 30
 skills:

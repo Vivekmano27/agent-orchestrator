@@ -1,8 +1,9 @@
 ---
 name: devops-engineer
-description: Manages CI/CD pipelines, Docker containerization, Kubernetes deployments, cloud infrastructure (AWS/GCP/Azure), Terraform IaC, and monitoring for the entire stack. Reads project-config.md to determine actual infrastructure. Invoke for deployment, infrastructure, or pipeline configuration.
+description: "Manages CI/CD pipelines, Docker containerization, Kubernetes deployments, cloud infrastructure (AWS/GCP/Azure), Terraform IaC, and monitoring for the entire stack. Reads project-config.md to determine actual infrastructure. Invoke for deployment, infrastructure, or pipeline configuration.\n\n<example>\nPhase 7 needs CI/CD pipeline and Docker configuration → devops-engineer generates GitHub Actions workflow and multi-stage Dockerfiles\n</example>\n\n<example>\nProject needs Kubernetes deployment manifests → devops-engineer creates Helm charts and Terraform configs\n</example>"
 tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion
-model: sonnet
+model: inherit
+color: green
 permissionMode: acceptEdits
 maxTurns: 30
 skills:

@@ -1,8 +1,18 @@
 ---
 name: project-setup
-description: "Phase 0.5 agent — interviews the user about ALL infrastructure, tech stack, and setup decisions before any planning begins. Generates project-config.md that replaces static steering files. Covers: architecture type, tech stack, auth, CI/CD, testing, code quality, database, cloud, folder structure, linting, formatting, PR templates, and more. Every project gets its own tailored configuration."
+description: |
+  Phase 0.5 agent — interviews the user about ALL infrastructure, tech stack, and setup decisions before any planning begins. Generates project-config.md that replaces static steering files. Covers: architecture type, tech stack, auth, CI/CD, testing, code quality, database, cloud, folder structure, linting, formatting, PR templates, and more. Every project gets its own tailored configuration.
+
+  <example>
+  New project starts and no project-config.md exists → project-setup interviews user about tech stack and infrastructure
+  </example>
+
+  <example>
+  User wants to change the testing framework for an existing project → project-setup regenerates project-config.md
+  </example>
 tools: Read, Grep, Glob, Bash, Write, Edit, AskUserQuestion
-model: opus
+model: inherit
+color: magenta
 permissionMode: acceptEdits
 maxTurns: 30
 skills:

@@ -1,14 +1,9 @@
 ---
 name: agent-native-designer
-description: >
-  Designs agent-native capabilities for target applications — parity maps (UI action to agent tool),
-  atomic tool definitions, prompt-defined agent features, shared workspace patterns, and dynamic
-  context injection. Invoke for agent-native architecture design during Phase 2.
-  Does NOT implement tools or agents — designs the specifications that implementers follow.
-  Does NOT handle UI component design (use ui-designer), system architecture (use system-architect),
-  or agent .md file creation (use agent-builder skill).
+description: "Designs agent-native capabilities for target applications — parity maps (UI action to agent tool), atomic tool definitions, prompt-defined agent features, shared workspace patterns, and dynamic context injection. Invoke for agent-native architecture design during Phase 2. Does NOT implement tools or agents — designs the specifications that implementers follow. Does NOT handle UI component design (use ui-designer), system architecture (use system-architect), or agent .md file creation (use agent-builder skill).\n\n<example>\nDesign-team needs agent-native spec for a new feature → agent-native-designer creates parity map of UI actions to agent tools\n</example>\n\n<example>\nApplication needs MCP tool definitions → agent-native-designer designs atomic tool parameters and shared workspace patterns\n</example>"
 tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion
-model: opus
+model: inherit
+color: yellow
 permissionMode: acceptEdits
 maxTurns: 25
 skills:

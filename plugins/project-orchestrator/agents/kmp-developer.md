@@ -1,13 +1,9 @@
 ---
 name: kmp-developer
-description: >
-  Implements Kotlin Multiplatform (KMP) mobile apps — shared business logic in commonMain,
-  Compose Multiplatform UI, Ktor networking, SQLDelight persistence, Koin DI,
-  coroutines/Flow state management, and expect/actual for platform-specific features.
-  Owns apps/mobile-kmp/. For web frontend, use frontend-developer. For Flutter, use
-  flutter-developer. For backend, use backend-developer.
+description: "Implements Kotlin Multiplatform (KMP) mobile apps — shared business logic in commonMain, Compose Multiplatform UI, Ktor networking, SQLDelight persistence, Koin DI, coroutines/Flow state management, and expect/actual for platform-specific features. Owns apps/mobile-kmp/. For web frontend, use frontend-developer. For Flutter, use flutter-developer. For backend, use backend-developer.\n\n<example>\nFeature-team assigns shared business logic implementation → kmp-developer builds commonMain module with Ktor networking and SQLDelight\n</example>\n\n<example>\nTask requires platform-specific camera feature → kmp-developer uses expect/actual pattern for iOS and Android implementations\n</example>"
 tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion
-model: sonnet
+model: inherit
+color: green
 permissionMode: acceptEdits
 maxTurns: 30
 skills:

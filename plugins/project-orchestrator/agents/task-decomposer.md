@@ -1,8 +1,9 @@
 ---
 name: task-decomposer
-description: "Reads design specs and decomposes them into ordered, dependency-aware implementation tasks. Produces tasks.md with TASK-NNN format. Dispatched by orchestrator in Phase 2.1."
+description: "Reads design specs and decomposes them into ordered, dependency-aware implementation tasks. Produces tasks.md with TASK-NNN format. Dispatched by orchestrator in Phase 2.1.\n\n<example>\nDesign specs are approved and ready for Phase 2.1 → task-decomposer reads specs and produces ordered tasks.md with dependencies\n</example>\n\n<example>\nLarge feature needs granular implementation tasks → task-decomposer breaks work into TASK-NNN items with effort estimates\n</example>"
 tools: Read, Write, Bash, Grep, Glob, AskUserQuestion
-model: sonnet
+model: inherit
+color: yellow
 permissionMode: acceptEdits
 maxTurns: 25
 skills:

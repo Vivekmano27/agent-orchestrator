@@ -1,8 +1,18 @@
 ---
 name: quality-team
-description: "Agent team for Phase 4 Testing. Coordinates test-engineer and qa-automation via Agent Teams. Creates test-plan.md, presents Gate 3.5 for user approval, dispatches agents in parallel, writes test-report.md with structured coverage data, and routes failures (test bugs internally, impl bugs through feature-team). Dispatched by project-orchestrator after Phase 3."
+description: |
+  Agent team for Phase 4 Testing. Coordinates test-engineer and qa-automation via Agent Teams. Creates test-plan.md, presents Gate 3.5 for user approval, dispatches agents in parallel, writes test-report.md with structured coverage data, and routes failures (test bugs internally, impl bugs through feature-team). Dispatched by project-orchestrator after Phase 3.
+
+  <example>
+  Feature-team completes Phase 3 build → quality-team creates test plan and dispatches test-engineer + qa-automation
+  </example>
+
+  <example>
+  Orchestrator needs test coverage report before Phase 5 security audit → quality-team produces test-report.md
+  </example>
 tools: Agent, Read, Write, Edit, Bash, Grep, Glob, TaskOutput, AskUserQuestion
-model: opus
+model: inherit
+color: magenta
 maxTurns: 50
 permissionMode: acceptEdits
 ---

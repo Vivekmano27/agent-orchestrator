@@ -1,8 +1,9 @@
 ---
 name: backend-developer
-description: Implements NestJS backend services — API endpoints, business logic, database queries with Prisma, authentication, middleware, background jobs (BullMQ), and inter-service communication clients. Invoke for NestJS backend implementation. For Python/Django AI service work, use python-developer instead. For cross-service integration, use senior-engineer instead.
+description: "Implements NestJS backend services — API endpoints, business logic, database queries with Prisma, authentication, middleware, background jobs (BullMQ), and inter-service communication clients. Invoke for NestJS backend implementation. For Python/Django AI service work, use python-developer instead. For cross-service integration, use senior-engineer instead.\n\n<example>\nFeature-team assigns a task to implement REST API endpoints for user management → backend-developer builds NestJS module with controller, service, DTOs\n</example>\n\n<example>\nTask requires adding a BullMQ background job for email notifications → backend-developer implements the job processor and queue setup\n</example>"
 tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion
-model: opus
+model: inherit
+color: green
 permissionMode: acceptEdits
 maxTurns: 50
 skills:

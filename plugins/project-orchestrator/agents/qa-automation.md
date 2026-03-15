@@ -1,8 +1,9 @@
 ---
 name: qa-automation
-description: "Owns ALL browser and mobile E2E testing — Playwright (web), Flutter integration tests (mobile), visual regression, cross-browser/cross-device validation. Dispatched by quality-team with scope assignments from test-plan.md. Does NOT write unit, integration, API E2E, or other test types — those are owned by test-engineer."
+description: "Owns ALL browser and mobile E2E testing — Playwright (web), Flutter integration tests (mobile), visual regression, cross-browser/cross-device validation. Dispatched by quality-team with scope assignments from test-plan.md. Does NOT write unit, integration, API E2E, or other test types — those are owned by test-engineer.\n\n<example>\nQuality-team assigns browser E2E scope → qa-automation writes Playwright tests with cross-browser validation\n</example>\n\n<example>\nMobile app needs E2E coverage → qa-automation creates Flutter integration tests with visual regression checks\n</example>"
 tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion
-model: sonnet
+model: inherit
+color: cyan
 permissionMode: acceptEdits
 maxTurns: 30
 skills:

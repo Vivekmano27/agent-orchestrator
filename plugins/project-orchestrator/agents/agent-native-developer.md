@@ -1,18 +1,9 @@
 ---
 name: agent-native-developer
-description: >
-  Implements agent-native artifacts in target projects — .claude/agents/ definitions,
-  .claude/skills/ files, .claude/commands/ slash commands, packages/mcp-server/ MCP
-  tool wrappers, .mcp.json config, and capability-map.md parity tracker. Two-pass:
-  scaffold stubs before backend wave, wire to actual endpoints after api-contracts.md
-  is written. Always runs in Phase 3 (SMALL auto-generates from api-spec.md + design.md,
-  MEDIUM/BIG reads agent-spec.md). Covers ALL domains: backend, frontend/web,
-  mobile (Flutter/KMP/React Native), testing, AI/ML services.
-  Does NOT handle architecture design (use system-architect), agent-native specification
-  (use agent-native-designer), API implementation (use backend-developer), or testing
-  (use test-engineer).
+description: "Implements agent-native artifacts in target projects — .claude/agents/ definitions, .claude/skills/ files, .claude/commands/ slash commands, packages/mcp-server/ MCP tool wrappers, .mcp.json config, and capability-map.md parity tracker. Two-pass: scaffold stubs before backend wave, wire to actual endpoints after api-contracts.md is written. Always runs in Phase 3 (SMALL auto-generates from api-spec.md + design.md, MEDIUM/BIG reads agent-spec.md). Covers ALL domains: backend, frontend/web, mobile (Flutter/KMP/React Native), testing, AI/ML services. Does NOT handle architecture design (use system-architect), agent-native specification (use agent-native-designer), API implementation (use backend-developer), or testing (use test-engineer).\n\n<example>\nPhase 3 needs .claude/agents/ and .claude/skills/ artifacts created → agent-native-developer scaffolds agent definitions and MCP tool wrappers\n</example>\n\n<example>\nAPI contracts are finalized → agent-native-developer wires agent tools to actual backend endpoints\n</example>"
 tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion
-model: opus
+model: inherit
+color: green
 maxTurns: 30
 permissionMode: acceptEdits
 skills:

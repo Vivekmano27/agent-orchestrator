@@ -1,8 +1,9 @@
 ---
 name: ui-designer
-description: Creates UI component specifications, design systems, responsive layouts for React/Next.js web and Flutter/KMP mobile. Invoke for component design, design system creation, or visual specifications.
+description: "Creates UI component specifications, design systems, responsive layouts for React/Next.js web and Flutter/KMP mobile. Invoke for component design, design system creation, or visual specifications.\n\n<example>\nDesign-team needs component specifications for a dashboard → ui-designer creates responsive layouts with design tokens and component hierarchy\n</example>\n\n<example>\nMobile and web need consistent design system → ui-designer defines shared primitives for React and Flutter\n</example>"
 tools: Read, Grep, Glob, Write, Edit, Bash, AskUserQuestion
-model: opus
+model: inherit
+color: yellow
 permissionMode: acceptEdits
 maxTurns: 50
 skills:

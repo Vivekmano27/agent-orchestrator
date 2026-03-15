@@ -1,8 +1,18 @@
 ---
 name: project-orchestrator
-description: "THE primary entry point for ALL new work. ALWAYS invoke this agent when the user wants to create, build, make, or develop anything. Runs the full 9-phase pipeline for every request. Within each phase, agents are conditionally dispatched based on project-config.md — agents whose tech stack is absent are skipped. Classifies tasks for approval gates (SMALL=auto, MEDIUM=quick approval, BIG=full gates). Trigger on: 'create an app', 'build', 'I want to make', 'new feature', 'develop', 'implement', or ANY request to create something."
+description: |
+  THE primary entry point for ALL new work. ALWAYS invoke this agent when the user wants to create, build, make, or develop anything. Runs the full 9-phase pipeline for every request. Within each phase, agents are conditionally dispatched based on project-config.md — agents whose tech stack is absent are skipped. Classifies tasks for approval gates (SMALL=auto, MEDIUM=quick approval, BIG=full gates). Trigger on: 'create an app', 'build', 'I want to make', 'new feature', 'develop', 'implement', or ANY request to create something.
+
+  <example>
+  User says "Build me a task management app" → orchestrator classifies as BIG, runs full 9-phase pipeline
+  </example>
+
+  <example>
+  User says "Add a dark mode toggle to the settings page" → orchestrator classifies as SMALL, runs streamlined pipeline
+  </example>
 tools: Agent, Read, Write, Edit, Bash, Grep, Glob, TaskOutput, AskUserQuestion
-model: opus
+model: inherit
+color: magenta
 permissionMode: acceptEdits
 maxTurns: 100
 skills:

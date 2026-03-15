@@ -1,13 +1,9 @@
 ---
 name: flutter-developer
-description: >
-  Implements Flutter mobile apps — Clean Architecture per feature, Riverpod state management,
-  go_router navigation, Dio networking, freezed models, platform channels, push notifications,
-  offline support, and widget/integration testing. Owns apps/mobile-flutter/.
-  For web frontend, use frontend-developer. For KMP, use kmp-developer.
-  For backend, use backend-developer.
+description: "Implements Flutter mobile apps — Clean Architecture per feature, Riverpod state management, go_router navigation, Dio networking, freezed models, platform channels, push notifications, offline support, and widget/integration testing. Owns apps/mobile-flutter/. For web frontend, use frontend-developer. For KMP, use kmp-developer. For backend, use backend-developer.\n\n<example>\nFeature-team assigns mobile app screen implementation → flutter-developer builds Flutter widgets with Riverpod state management\n</example>\n\n<example>\nTask requires offline-capable data sync for mobile → flutter-developer implements local storage with background sync\n</example>"
 tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion
-model: sonnet
+model: inherit
+color: green
 permissionMode: acceptEdits
 maxTurns: 30
 skills:

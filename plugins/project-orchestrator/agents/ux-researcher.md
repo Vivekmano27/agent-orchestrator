@@ -1,8 +1,9 @@
 ---
 name: ux-researcher
-description: Creates user personas, journey maps, information architecture, wireframes, and UI specifications for web (React) and mobile (Flutter/KMP). Invoke for UX planning and design.
+description: "Creates user personas, journey maps, information architecture, wireframes, and UI specifications for web (React) and mobile (Flutter/KMP). Invoke for UX planning and design.\n\n<example>\nNew feature needs user flow design → ux-researcher creates personas, journey maps, and information architecture\n</example>\n\n<example>\nExisting feature has usability issues → ux-researcher maps pain points and proposes wireframe improvements\n</example>"
 tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion
-model: sonnet
+model: inherit
+color: yellow
 permissionMode: acceptEdits
 maxTurns: 25
 skills:

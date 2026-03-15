@@ -1,8 +1,9 @@
 ---
 name: product-manager
-description: Gathers requirements, writes PRDs, user stories with acceptance criteria, feature lists, and business rules. The starting point for every feature. Invoke when planning features, defining scope, writing specs, or creating product documentation.
+description: "Gathers requirements, writes PRDs, user stories with acceptance criteria, feature lists, and business rules. The starting point for every feature. Invoke when planning features, defining scope, writing specs, or creating product documentation.\n\n<example>\nNew feature request needs requirements gathering → product-manager writes PRD with user stories and acceptance criteria\n</example>\n\n<example>\nScope is unclear and needs stakeholder alignment → product-manager conducts discovery and defines feature boundaries\n</example>"
 tools: Read, Grep, Glob, Bash, Write, Edit, AskUserQuestion
-model: opus
+model: inherit
+color: yellow
 permissionMode: acceptEdits
 maxTurns: 50
 skills:

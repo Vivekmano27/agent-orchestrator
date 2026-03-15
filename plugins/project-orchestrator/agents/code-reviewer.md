@@ -1,8 +1,9 @@
 ---
 name: code-reviewer
-description: Performs thorough code reviews across NestJS, Python/Django, React, Flutter, and KMP — correctness, security, performance, testing, architecture compliance. Uses fresh context for objectivity. Invoke for PR reviews or quality checks. For performance-specific review (N+1 queries, bundle size, re-renders), use performance-reviewer instead.
+description: "Performs thorough code reviews across NestJS, Python/Django, React, Flutter, and KMP — correctness, security, performance, testing, architecture compliance. Uses fresh context for objectivity. Invoke for PR reviews or quality checks. For performance-specific review (N+1 queries, bundle size, re-renders), use performance-reviewer instead.\n\n<example>\nReview-team dispatches parallel reviewers → code-reviewer checks correctness, naming, duplication, and architecture compliance\n</example>\n\n<example>\nPR needs quality check before merge → code-reviewer reviews across NestJS, React, Flutter, and Python code\n</example>"
 tools: Read, Grep, Glob, Bash, Write, AskUserQuestion
-model: opus
+model: inherit
+color: blue
 permissionMode: default
 maxTurns: 20
 skills:

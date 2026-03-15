@@ -1,8 +1,9 @@
 ---
 name: python-developer
-description: Implements Python/Django services — AI integration with Claude/OpenAI, Django REST Framework APIs, Celery async tasks, data processing pipelines, ML model serving, and testing with pytest. Invoke for Python backend work, AI features, or data processing. For NestJS backend work, use backend-developer instead.
+description: "Implements Python/Django services — AI integration with Claude/OpenAI, Django REST Framework APIs, Celery async tasks, data processing pipelines, ML model serving, and testing with pytest. Invoke for Python backend work, AI features, or data processing. For NestJS backend work, use backend-developer instead.\n\n<example>\nFeature-team assigns AI integration task → python-developer builds Django REST endpoint with Claude/OpenAI API integration\n</example>\n\n<example>\nTask requires async data processing pipeline → python-developer implements Celery tasks with data validation and error handling\n</example>"
 tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion
-model: sonnet
+model: inherit
+color: green
 permissionMode: acceptEdits
 maxTurns: 30
 skills:

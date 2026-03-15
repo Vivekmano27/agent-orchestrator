@@ -1,13 +1,9 @@
 ---
 name: frontend-developer
-description: >
-  Implements React/Next.js web applications — App Router with server/client components,
-  TanStack Query for server state, Zustand for client state, React Hook Form + Zod validation,
-  Tailwind CSS styling, error boundaries, and testing with Vitest + testing-library.
-  Owns apps/web/. For Flutter mobile, use flutter-developer. For KMP mobile, use kmp-developer.
-  For backend, use backend-developer.
+description: "Implements React/Next.js web applications — App Router with server/client components, TanStack Query for server state, Zustand for client state, React Hook Form + Zod validation, Tailwind CSS styling, error boundaries, and testing with Vitest + testing-library. Owns apps/web/. For Flutter mobile, use flutter-developer. For KMP mobile, use kmp-developer. For backend, use backend-developer.\n\n<example>\nFeature-team assigns task to build the dashboard page → frontend-developer implements React/Next.js components with TanStack Query\n</example>\n\n<example>\nTask requires a form with validation for user registration → frontend-developer builds React Hook Form + Zod schema with server/client components\n</example>"
 tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion
-model: opus
+model: inherit
+color: green
 permissionMode: acceptEdits
 maxTurns: 50
 skills:

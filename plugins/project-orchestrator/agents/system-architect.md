@@ -1,8 +1,9 @@
 ---
 name: system-architect
-description: Designs microservice architecture — service boundaries, communication patterns (REST/gRPC), data flow, infrastructure topology, and ADRs. Specializes in NestJS + Python microservices on AWS. Invoke for architecture decisions, service design, or infrastructure planning.
+description: "Designs microservice architecture — service boundaries, communication patterns (REST/gRPC), data flow, infrastructure topology, and ADRs. Specializes in NestJS + Python microservices on AWS. Invoke for architecture decisions, service design, or infrastructure planning.\n\n<example>\nNew project needs architecture design → system-architect defines service boundaries, communication patterns, and infrastructure topology\n</example>\n\n<example>\nFeature requires a new microservice → system-architect creates ADR and designs service integration points\n</example>"
 tools: Read, Grep, Glob, Bash, Write, Edit, AskUserQuestion
-model: opus
+model: inherit
+color: yellow
 permissionMode: acceptEdits
 maxTurns: 25
 skills:

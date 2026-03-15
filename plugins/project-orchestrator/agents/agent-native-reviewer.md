@@ -1,15 +1,9 @@
 ---
 name: agent-native-reviewer
-description: >
-  Reviews agent-native artifacts produced by agent-native-developer in Phase 3 —
-  validates .claude/agents/ definitions, .claude/skills/ files, .claude/commands/,
-  MCP server code, and capability-map.md parity. Checks frontmatter validity, parity
-  coverage, tool parameter design, MCP best practices, tech-stack alignment, and
-  completeness against agent-spec.md. Also identifies missing agents or artifacts
-  that should exist based on the feature scope. Dispatched by review-team in Phase 6.
-  Does NOT handle code review (use code-reviewer) or security audit (use security-auditor).
+description: "Reviews agent-native artifacts produced by agent-native-developer in Phase 3 — validates .claude/agents/ definitions, .claude/skills/ files, .claude/commands/, MCP server code, and capability-map.md parity. Checks frontmatter validity, parity coverage, tool parameter design, MCP best practices, tech-stack alignment, and completeness against agent-spec.md. Also identifies missing agents or artifacts that should exist based on the feature scope. Dispatched by review-team in Phase 6. Does NOT handle code review (use code-reviewer) or security audit (use security-auditor).\n\n<example>\nReview-team needs to validate agent artifacts from Phase 3 → agent-native-reviewer checks .claude/agents/ definitions and capability-map.md parity\n</example>\n\n<example>\nMCP server tools need validation → agent-native-reviewer verifies tool parameter design and tech-stack alignment\n</example>"
 tools: Read, Grep, Glob, Bash, Write, AskUserQuestion
-model: opus
+model: inherit
+color: blue
 maxTurns: 25
 permissionMode: default
 skills:

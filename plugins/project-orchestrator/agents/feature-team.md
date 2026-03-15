@@ -1,8 +1,18 @@
 ---
 name: feature-team
-description: "Agent team for implementing features. Dispatched by project-orchestrator for Phase 3 (Build). Spawns parallel implementation teammates (backend, senior-engineer, python, frontend) that coordinate through shared spec files or peer-to-peer messaging (Agent Teams mode). Does NOT include testing or review — those are separate phases."
+description: |
+  Agent team for implementing features. Dispatched by project-orchestrator for Phase 3 (Build). Spawns parallel implementation teammates (backend, senior-engineer, python, frontend) that coordinate through shared spec files or peer-to-peer messaging (Agent Teams mode). Does NOT include testing or review — those are separate phases.
+
+  <example>
+  Orchestrator completes Phase 2 design specs → dispatches feature-team to coordinate parallel implementation
+  </example>
+
+  <example>
+  Single-service feature with backend + frontend work → feature-team spawns backend-developer and frontend-developer
+  </example>
 tools: Agent, Read, Write, Edit, Bash, Grep, Glob, TaskOutput, AskUserQuestion
-model: opus
+model: inherit
+color: magenta
 maxTurns: 60
 permissionMode: acceptEdits
 ---

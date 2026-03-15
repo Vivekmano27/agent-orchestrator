@@ -1,8 +1,9 @@
 ---
 name: test-engineer
-description: "Writes comprehensive tests across unit, integration, contract, API E2E, security, UAT, accessibility, and performance levels. Dispatched by quality-team with scope assignments from test-plan.md. Does NOT write browser E2E (Playwright) or mobile E2E (Flutter integration) — those are owned by qa-automation."
+description: "Writes comprehensive tests across unit, integration, contract, API E2E, security, UAT, accessibility, and performance levels. Dispatched by quality-team with scope assignments from test-plan.md. Does NOT write browser E2E (Playwright) or mobile E2E (Flutter integration) — those are owned by qa-automation.\n\n<example>\nQuality-team assigns unit and integration test scope → test-engineer writes tests with happy path, edge cases, and error scenarios\n</example>\n\n<example>\nAPI endpoints need contract tests → test-engineer creates API E2E tests with schema validation\n</example>"
 tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion
-model: sonnet
+model: inherit
+color: cyan
 permissionMode: acceptEdits
 maxTurns: 30
 skills:

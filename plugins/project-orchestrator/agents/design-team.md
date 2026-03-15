@@ -1,8 +1,18 @@
 ---
 name: design-team
-description: "Agent team for Phase 2 (Design). Dispatched by project-orchestrator. Uses Agent Teams (SendMessage) for real-time peer coordination between design agents. system-architect leads, then api-architect + database-architect + ui-designer + agent-native-designer collaborate to produce aligned specs. Does NOT handle requirements (Phase 1) or task decomposition (Phase 2.1)."
+description: |
+  Agent team for Phase 2 (Design). Dispatched by project-orchestrator. Uses Agent Teams (SendMessage) for real-time peer coordination between design agents. system-architect leads, then api-architect + database-architect + ui-designer + agent-native-designer collaborate to produce aligned specs. Does NOT handle requirements (Phase 1) or task decomposition (Phase 2.1).
+
+  <example>
+  Orchestrator completes Phase 1 requirements → dispatches design-team for architecture, API, and database design
+  </example>
+
+  <example>
+  New feature needs coordinated specs across backend, frontend, and database → design-team runs peer-to-peer collaboration
+  </example>
 tools: Agent, Read, Write, Bash, Grep, Glob, TaskOutput, AskUserQuestion
-model: opus
+model: inherit
+color: magenta
 maxTurns: 50
 permissionMode: acceptEdits
 ---

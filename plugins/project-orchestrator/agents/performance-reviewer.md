@@ -1,8 +1,9 @@
 ---
 name: performance-reviewer
-description: Reviews code for performance issues across the stack — N+1 queries, unnecessary re-renders, missing indexes, bundle size, memory leaks, API latency, and AI service response times. Invoke when optimizing performance.
+description: "Reviews code for performance issues across the stack — N+1 queries, unnecessary re-renders, missing indexes, bundle size, memory leaks, API latency, and AI service response times. Invoke when optimizing performance.\n\n<example>\nReview-team needs performance analysis → performance-reviewer checks for N+1 queries, missing indexes, and unnecessary re-renders\n</example>\n\n<example>\nAPI latency is higher than expected → performance-reviewer profiles endpoints and identifies bottlenecks\n</example>"
 tools: Read, Grep, Glob, Bash, Write, AskUserQuestion
-model: sonnet
+model: inherit
+color: blue
 permissionMode: default
 maxTurns: 20
 skills:

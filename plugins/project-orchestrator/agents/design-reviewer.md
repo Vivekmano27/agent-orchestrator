@@ -1,13 +1,9 @@
 ---
 name: design-reviewer
-description: >
-  Reviews design specs for production-readiness, cross-spec consistency, security gaps,
-  performance risks, and completeness against requirements. Dispatched by design-team
-  after peer review completes. Does NOT design specs — reviews them. Does NOT review
-  code (use code-reviewer). Does NOT audit security implementation (use security-auditor).
-  Does NOT review performance of running code (use performance-reviewer).
+description: "Reviews design specs for production-readiness, cross-spec consistency, security gaps, performance risks, and completeness against requirements. Dispatched by design-team after peer review completes. Does NOT design specs — reviews them. Does NOT review code (use code-reviewer). Does NOT audit security implementation (use security-auditor). Does NOT review performance of running code (use performance-reviewer).\n\n<example>\nDesign-team completes specs and needs validation → design-reviewer checks cross-spec consistency and completeness against requirements\n</example>\n\n<example>\nArchitecture spec has potential security gaps → design-reviewer flags risks and missing production-readiness items\n</example>"
 tools: Read, Grep, Glob, Bash, Write, AskUserQuestion
-model: opus
+model: inherit
+color: blue
 permissionMode: default
 maxTurns: 20
 skills:
