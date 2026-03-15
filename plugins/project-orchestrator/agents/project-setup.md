@@ -4,11 +4,21 @@ description: |
   Phase 0.5 agent — interviews the user about ALL infrastructure, tech stack, and setup decisions before any planning begins. Generates project-config.md that replaces static steering files. Covers: architecture type, tech stack, auth, CI/CD, testing, code quality, database, cloud, folder structure, linting, formatting, PR templates, and more. Every project gets its own tailored configuration.
 
   <example>
-  New project starts and no project-config.md exists → project-setup interviews user about tech stack and infrastructure
+  Context: A new greenfield project is starting and no project-config.md exists yet. The orchestrator dispatches project-setup as Phase 0.5.
+  user: [orchestrator dispatches project-setup for a new project]
+  assistant: "I'll scan for existing project files first. Since this is greenfield, I'll ask about application type, scale, and offer preset configurations, then write project-config.md with all tech stack and infrastructure decisions."
+  <commentary>
+  Project-setup runs before any planning begins. It interviews the user through structured questions (app type, scale, preset vs custom), then generates project-config.md that all downstream agents read for tech stack decisions. Presets like Startup Lean or Enterprise Microservices provide smart defaults.
+  </commentary>
   </example>
 
   <example>
-  User wants to change the testing framework for an existing project → project-setup regenerates project-config.md
+  Context: An existing project has project-config.md but the user wants to switch from Jest to Vitest for unit testing.
+  user: "Switch our testing framework from Jest to Vitest."
+  assistant: "I'll read the current project-config.md, update the testing section to Vitest, adjust related configuration like coverage thresholds, and present the updated config for approval before writing."
+  <commentary>
+  Project-setup can regenerate or modify project-config.md for an existing project. It presents the full updated configuration for user approval before writing, ensuring downstream agents pick up the change on subsequent pipeline runs.
+  </commentary>
   </example>
 tools: Read, Grep, Glob, Bash, Write, Edit, AskUserQuestion
 model: inherit

@@ -4,11 +4,21 @@ description: |
   Alternative entry point for re-running Phases 1-2 (Planning + Design) directly. Use when you need to regenerate requirements and design specs without the full 9-phase pipeline. NOT dispatched by the main orchestrator (which handles Phases 1-2 via direct dispatch for gate placement). Invoke directly when: re-running planning after scope change, generating specs for existing code, or running planning standalone.
 
   <example>
-  Scope changed mid-project and specs need regeneration → planning-team re-runs requirements and design phases
+  Context: The user approved the initial design but then requested a major scope change at the Phase 2.1 gate, requiring requirements and design specs to be regenerated.
+  user: "I need to add multi-tenant support — regenerate the specs."
+  assistant: "I'll re-run planning-team to update requirements.md with multi-tenancy, then cascade through architecture, API, database, and UI design before producing an updated tasks.md."
+  <commentary>
+  Planning-team re-runs Phases 1-2 in dependency order: product-manager rewrites requirements.md, then system-architect updates architecture.md, then api-architect, database-architect, and ui-designer run in parallel against the updated specs. Consistency validation catches cross-spec conflicts before task decomposition.
+  </commentary>
   </example>
 
   <example>
-  User wants to generate specs for existing codebase without full pipeline → planning-team runs standalone
+  Context: An existing codebase has no documentation or specs, and the user wants to generate specs before adding a new feature.
+  user: "Generate specs for my existing project so I can plan the next feature."
+  assistant: "I'll run planning-team standalone to produce requirements, architecture, API, database, and design specs by analyzing the existing codebase, then decompose into tasks.md."
+  <commentary>
+  Planning-team can run independently of the 9-phase pipeline. Each agent reads the existing codebase to reverse-engineer specs rather than designing from scratch, producing the same structured output files that the full pipeline expects.
+  </commentary>
   </example>
 tools: Agent, Read, Write, Bash, Grep, Glob, TaskOutput, AskUserQuestion
 model: inherit

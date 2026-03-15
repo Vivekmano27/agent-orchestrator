@@ -4,11 +4,21 @@ description: |
   Agent team for Phase 4 Testing. Coordinates test-engineer and qa-automation via Agent Teams. Creates test-plan.md, presents Gate 3.5 for user approval, dispatches agents in parallel, writes test-report.md with structured coverage data, and routes failures (test bugs internally, impl bugs through feature-team). Dispatched by project-orchestrator after Phase 3.
 
   <example>
-  Feature-team completes Phase 3 build → quality-team creates test plan and dispatches test-engineer + qa-automation
+  Context: Feature-team has completed Phase 3 implementation for a BIG task. The orchestrator dispatches quality-team with the list of implemented services and files.
+  user: [orchestrator dispatches quality-team for Phase 4]
+  assistant: "I'll run requirements traceability, create a test plan covering all levels, present Gate 3.5 for approval, then dispatch test-engineer and qa-automation in parallel."
+  <commentary>
+  Quality-team creates test-plan.md with depth scaled to task size, gets user approval at Gate 3.5, then dispatches both test agents in parallel. Failures are classified as implementation bugs, test bugs, environment issues, or flaky tests and routed accordingly.
+  </commentary>
   </example>
 
   <example>
-  Orchestrator needs test coverage report before Phase 5 security audit → quality-team produces test-report.md
+  Context: Phase 3 is complete for a MEDIUM task and the orchestrator needs a coverage report with structured failure data before proceeding to the Phase 5 security audit.
+  user: [orchestrator dispatches quality-team with task_size=MEDIUM]
+  assistant: "I'll create the test plan scoped to unit, integration, contract, and API E2E for test-engineer, plus E2E for affected flows only via qa-automation, then produce test-report.md with per-service coverage deltas."
+  <commentary>
+  For MEDIUM tasks, test depth is moderate — test-engineer runs unit through API E2E while qa-automation covers only affected browser flows. The resulting test-report.md includes structured coverage data the orchestrator uses to decide whether to proceed or trigger a Phase 4-to-3 feedback loop.
+  </commentary>
   </example>
 tools: Agent, Read, Write, Edit, Bash, Grep, Glob, TaskOutput, AskUserQuestion
 model: inherit

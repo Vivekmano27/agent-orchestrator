@@ -4,11 +4,21 @@ description: |
   Agent team for comprehensive code review. Spawns parallel reviewers for code quality, security, and performance that produce a combined report.
 
   <example>
-  Orchestrator reaches Phase 6 after security audit passes → review-team spawns parallel code, security, and performance reviewers
+  Context: The orchestrator has completed Phase 5 security audit with no critical findings. Phase 6 review is next for a BIG task with agent-native artifacts present.
+  user: [orchestrator dispatches review-team for Phase 6]
+  assistant: "I'll spawn code-reviewer, security-auditor (spot-check mode), performance-reviewer, static-analyzer, agent-native-reviewer, and spec-tracer all in parallel, then compile a combined review-report.md."
+  <commentary>
+  Review-team dispatches all applicable reviewers simultaneously since they are independent. For BIG tasks with agent-native artifacts, all 6 reviewer roles run. The security-auditor performs a focused spot-check of code changes only, not a full OWASP audit (that was Phase 5).
+  </commentary>
   </example>
 
   <example>
-  PR needs comprehensive review before merge → review-team produces combined quality report
+  Context: A MEDIUM feature is ready for review. The orchestrator needs a combined report with severity-ranked findings and a spec traceability matrix before the feature can proceed to DevOps.
+  user: [orchestrator dispatches review-team for Phase 6 with task_size=MEDIUM]
+  assistant: "I'll spawn code-reviewer, security-auditor, performance-reviewer, static-analyzer, and spec-tracer in parallel, then merge all findings into review-report.md organized by severity with an approve/request-changes recommendation."
+  <commentary>
+  The combined report merges findings from all reviewers by severity (Critical, High, Medium, Low). Critical or High findings trigger a Phase 6-to-3 feedback loop where the orchestrator re-dispatches feature-team for surgical fixes.
+  </commentary>
   </example>
 tools: Agent, Read, Write, Bash, Grep, Glob, TaskOutput, AskUserQuestion
 model: inherit

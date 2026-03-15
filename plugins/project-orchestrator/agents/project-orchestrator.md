@@ -4,11 +4,21 @@ description: |
   THE primary entry point for ALL new work. ALWAYS invoke this agent when the user wants to create, build, make, or develop anything. Runs the full 9-phase pipeline for every request. Within each phase, agents are conditionally dispatched based on project-config.md — agents whose tech stack is absent are skipped. Classifies tasks for approval gates (SMALL=auto, MEDIUM=quick approval, BIG=full gates). Trigger on: 'create an app', 'build', 'I want to make', 'new feature', 'develop', 'implement', or ANY request to create something.
 
   <example>
-  User says "Build me a task management app" → orchestrator classifies as BIG, runs full 9-phase pipeline
+  Context: The user wants to build a new task management application from scratch.
+  user: "Build me a task management app"
+  assistant: "I'll use the project-orchestrator agent to run the full development pipeline."
+  <commentary>
+  New application request triggers the orchestrator which classifies it as BIG and runs all 9 phases with approval gates at requirements, design, tasks, and implementation.
+  </commentary>
   </example>
 
   <example>
-  User says "Add a dark mode toggle to the settings page" → orchestrator classifies as SMALL, runs streamlined pipeline
+  Context: The user has an existing settings page and wants a minor UI addition.
+  user: "Add a dark mode toggle to the settings page"
+  assistant: "I'll classify this as a SMALL task and run a streamlined pipeline — fewer approval gates, lighter testing."
+  <commentary>
+  A small scoped change (1-3 files, single service) skips formal approval gates and uses phase transition questions only, with test depth limited to unit and integration tests on changed files.
+  </commentary>
   </example>
 tools: Agent, Read, Write, Edit, Bash, Grep, Glob, TaskOutput, AskUserQuestion
 model: inherit

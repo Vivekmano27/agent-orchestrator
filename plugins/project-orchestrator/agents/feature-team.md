@@ -4,11 +4,21 @@ description: |
   Agent team for implementing features. Dispatched by project-orchestrator for Phase 3 (Build). Spawns parallel implementation teammates (backend, senior-engineer, python, frontend) that coordinate through shared spec files or peer-to-peer messaging (Agent Teams mode). Does NOT include testing or review — those are separate phases.
 
   <example>
-  Orchestrator completes Phase 2 design specs → dispatches feature-team to coordinate parallel implementation
+  Context: The project-orchestrator has completed Phase 2 design with architecture.md, api-spec.md, schema.md, and tasks.md ready in the spec directory.
+  user: [orchestrator dispatches feature-team for Phase 3]
+  assistant: "I'll read tasks.md, group tasks by agent, then spawn backend-developer, senior-engineer, and python-developer in parallel for the backend wave."
+  <commentary>
+  Feature-team coordinates parallel implementation by grouping tasks from tasks.md by agent assignment, running the backend wave first, verifying lint/typecheck/tests, then spawning the frontend wave.
+  </commentary>
   </example>
 
   <example>
-  Single-service feature with backend + frontend work → feature-team spawns backend-developer and frontend-developer
+  Context: A feature requires both a NestJS API endpoint and a React frontend component, running in a monorepo with web frontend in project-config.md.
+  user: [orchestrator dispatches feature-team with backend and frontend tasks]
+  assistant: "I'll spawn backend-developer and senior-engineer for the backend wave, verify api-contracts.md is written, then spawn frontend-developer to build on the existing UI prototype."
+  <commentary>
+  Feature-team enforces wave ordering — frontend agents wait for backend to complete and write api-contracts.md so they can consume actual endpoint shapes rather than spec assumptions.
+  </commentary>
   </example>
 tools: Agent, Read, Write, Edit, Bash, Grep, Glob, TaskOutput, AskUserQuestion
 model: inherit

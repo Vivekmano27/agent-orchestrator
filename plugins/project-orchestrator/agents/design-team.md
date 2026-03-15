@@ -4,11 +4,21 @@ description: |
   Agent team for Phase 2 (Design). Dispatched by project-orchestrator. Uses Agent Teams (SendMessage) for real-time peer coordination between design agents. system-architect leads, then api-architect + database-architect + ui-designer + agent-native-designer collaborate to produce aligned specs. Does NOT handle requirements (Phase 1) or task decomposition (Phase 2.1).
 
   <example>
-  Orchestrator completes Phase 1 requirements → dispatches design-team for architecture, API, and database design
+  Context: The project-orchestrator has completed Phase 1 with requirements.md, business-rules.md, and ux.md ready. The task is classified as BIG.
+  user: [orchestrator dispatches design-team for Phase 2]
+  assistant: "I'll dispatch system-architect first to set service boundaries, then spawn api-architect, database-architect, ui-designer, and agent-native-designer in parallel to produce aligned specs."
+  <commentary>
+  Design-team runs system-architect synchronously first since all other designers depend on architecture.md, then dispatches the remaining agents in parallel. For BIG tasks, peer cross-review and design-reviewer are included.
+  </commentary>
   </example>
 
   <example>
-  New feature needs coordinated specs across backend, frontend, and database → design-team runs peer-to-peer collaboration
+  Context: A new e-commerce feature needs coordinated API endpoints, database schema, and UI components that reference the same entity names and data shapes.
+  user: [orchestrator dispatches design-team with SendMessage available for Agent Teams mode]
+  assistant: "I'll run shared research first, then dispatch all designers with real-time peer negotiation via SendMessage so api-architect and database-architect can align entity names live."
+  <commentary>
+  When Agent Teams mode is enabled, designers negotiate entity names, field types, and endpoint shapes via SendMessage in real-time rather than relying solely on the post-hoc cross-review step to catch misalignments.
+  </commentary>
   </example>
 tools: Agent, Read, Write, Bash, Grep, Glob, TaskOutput, AskUserQuestion
 model: inherit
