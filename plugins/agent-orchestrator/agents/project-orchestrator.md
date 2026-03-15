@@ -71,9 +71,10 @@ PHASE 3: IMPLEMENTATION (always)
   ├── flutter-developer      → Flutter mobile app (if Flutter in project-config.md)
   └── kmp-developer          → KMP mobile app (if KMP in project-config.md)
 
-PHASE 4: TESTING (always)
-  ├── test-engineer        → unit, integration, E2E, security, UAT, a11y tests
-  └── qa-automation        → Playwright E2E, visual regression, cross-browser
+PHASE 4: TESTING (always) — via quality-team (Agent Teams)
+  └── quality-team         → test planning, execution coordination, reporting, fix routing
+      ├── test-engineer    → unit, integration, contract, security, UAT, a11y, perf, API E2E
+      └── qa-automation    → browser E2E (Playwright), mobile E2E, visual regression, cross-browser
 
 PHASE 5: SECURITY (always)
   └── security-auditor     → OWASP audit, STRIDE, secrets scan, dependency audit
@@ -174,11 +175,19 @@ Task size determines HOW MUCH you interact, not WHICH agents run:
   )
   ```
 
+  **Gate 3.5 — test plan approval (inside quality-team):**
+  quality-team presents Gate 3.5 internally. The orchestrator does NOT present this gate.
+  See quality-team.md STEP 2 for the gate format and handlers.
+  Gate 3.5 applies to ALL task sizes (user decision).
+  On Phase 4→3 re-runs, Gate 3.5 is SKIPPED (test plan unchanged, only code changed).
+
   **Gate 4 — after tests + security + review (Phases 4-6):**
   ```
   AskUserQuestion(
-    question="Testing + security + review complete. Coverage: [X]%.
-    Security: [findings]. Review: [findings]. Proceed to DevOps + deploy?",
+    question="Testing + security + review complete.
+    Coverage: [read from .claude/specs/[feature]/test-report.md].
+    Security: [from security-audit.md]. Review: [from review-team report].
+    Proceed to DevOps + deploy?",
     options=["Proceed to DevOps + docs", "Add a feature", "More testing needed", "Cancel"]
   )
   ```
@@ -219,61 +228,66 @@ When user selects "More testing needed":
    ```
 2. **Route based on response:**
    - **Coverage too low / Tests failing / More tests needed** → triggers Phase 4→3 Feedback Loop (see below)
-   - **Re-run all tests** → re-dispatch Phase 4 agents (test-engineer + qa-automation)
+   - **Re-run all tests** → re-dispatch quality-team (will skip test-plan.md and Gate 3.5)
    - **Other** → ask for details, dispatch appropriate agent
 
 ### Phase 4→3 Feedback Loop (Test Failure Recovery)
-When Phase 4 testing reveals failures or insufficient coverage, the orchestrator loops work back to Phase 3:
+When quality-team reports implementation bugs, the orchestrator routes fixes through feature-team:
 
-**Step 1 — Identify failures:**
-Read test-engineer and qa-automation reports. Categorize failures by service:
-- Which services have coverage < 80%?
-- Which specific tests are failing?
-- Which files need changes?
+**Step 1 — Read quality-team's impl bug list:**
+quality-team returns a structured list with stable failure IDs, file paths, error messages, and classifications from test-report.md.
 
-**Step 2 — Map failures to agents** (using the file ownership matrix from feature-team):
-
-| Service/Path | Route to |
-|---|---|
-| `services/core-service/`, backend business logic | backend-developer |
-| `services/api-gateway/`, `services/shared/` | senior-engineer |
-| `services/ai-service/`, Python code | python-developer |
-| `services/web-app/`, React/Next.js frontend | frontend-developer |
-| `services/flutter-app/` | flutter-developer |
-| `services/kmp-shared/` | kmp-developer |
-| `.claude/agents/`, agent specs | agent-native-developer |
-
-**Step 3 — Re-dispatch to Phase 3 agents:**
+**Step 2 — Re-dispatch feature-team** (NOT individual agents):
 ```
 Agent(
-  subagent_type="agent-orchestrator:[agent-name]",
-  prompt="PHASE 4→3 FEEDBACK: Tests failed or coverage insufficient.
+  subagent_type="agent-orchestrator:feature-team",
+  prompt="PHASE 4→3 FEEDBACK: Tests found implementation bugs.
   Feature: [feature-name]. Spec directory: .claude/specs/[feature]/
 
   FAILURES TO FIX:
-  [list of failing tests or coverage gaps from test-engineer report]
+  [structured failure list from quality-team's test-report.md]
 
   RULES:
   - Fix ONLY the identified failures — do not refactor unrelated code
-  - Add tests to bring coverage above 80% for your service
+  - Follow file ownership matrix — each agent fixes only its own files
+  - Add/update tests to cover the fix
   - Run tests locally before marking done
-  - Commit fixes as: fix(scope): [description of fix]
+  - Commit fixes as: fix(scope): [description]
+  - This is a TARGETED FIX request, not a full re-implementation
+  - Skip: task grouping from tasks.md, API contract drift check, agent-native passes
+  - Dispatch ONLY agents whose files appear in the failure list
 
-  Previous implementation files: [list from Phase 3 report]"
+  CONTEXT BRIDGE (round-trip 2+ only):
+  Previous fix attempt changed files [X, Y, Z] but tests [A, B] still fail.
+  The previous approach did not work. Try a different approach.
+
+  Previous test-report.md: .claude/specs/[feature]/test-report.md"
 )
 ```
 
-**Step 4 — Re-run Phase 4:**
-After all re-dispatched agents complete, re-run Phase 4 (test-engineer + qa-automation) to verify fixes.
+**Step 3 — Re-run Phase 4 (scoped):**
+After feature-team completes, re-dispatch quality-team.
+On re-runs: quality-team SKIPS test-plan.md creation and Gate 3.5.
+Runs tests directly, writes updated test-report.md with incremented round-trip number.
+
+**Step 4 — Stuck detection + regression detection:**
+After each re-test, compare the new test-report.md against the previous one:
+
+| Condition | Signal | Action |
+|---|---|---|
+| Failure count decreased | PROGRESS | Continue loop (if under max round-trips) |
+| Failure count unchanged (delta >= 0) | STUCK | Escalate to user immediately — do NOT consume next round-trip |
+| New failures appeared (not in previous report) | REGRESSION | Hard stop. The fix made things worse. Escalate immediately. |
 
 **Step 5 — Max retries:**
 - Allow **2 Phase 4→3 round-trips** maximum
+- Stuck detection may terminate loop BEFORE max retries
 - If still failing after 2 loops → escalate to user:
   ```
   AskUserQuestion(
     question="Tests still failing after 2 fix attempts.
-    Remaining failures: [list].
-    Coverage: [X]% (target: 80%).",
+    Remaining failures: [list from test-report.md].
+    Coverage: [X]% (target: [Y]% from project-config.md).",
     options=[
       "Let me fix manually — show me the failures",
       "Lower coverage threshold for this feature",
@@ -296,6 +310,7 @@ After each phase completes, verify expected output files exist:
 **After Phase 2:** architecture.md, api-spec.md, schema.md, design.md, agent-spec.md (MEDIUM/BIG only), SUMMARY.md
 **After Phase 2.1:** tasks.md
 **After Phase 3:** api-contracts.md, `.claude/agents/` directory exists (when agent-spec.md was present in Phase 2)
+**After Phase 4:** test-plan.md, test-report.md
 **After Phase 5:** security-audit.md
 **After Phase 8:** Check that at least one documentation file was created (README.md, docs/API.md, or CHANGELOG.md)
 
@@ -496,22 +511,34 @@ Agent(
 3b. Wait for feature-team to complete. Check its report for any issues.
 3c. Verify `.claude/specs/[feature]/api-contracts.md` exists (backend output).
 
-### Phase 4: Testing — parallel
-Spawn test-engineer + qa-automation IN PARALLEL (same response):
-```
-Agent(
-  subagent_type="agent-orchestrator:test-engineer",
-  run_in_background=True,
-  prompt="Write complete test suite for [feature]: unit, integration, E2E, security, UAT, accessibility. Minimum 80% coverage. Implementation files: [list changed files]."
-)
+### Phase 4: Testing — via quality-team
+quality-team creates test-plan.md, presents Gate 3.5 for user approval, dispatches
+test-engineer + qa-automation in parallel (Agent Teams), writes test-report.md,
+and routes any failures (test bugs internally, impl bugs back through feature-team).
 
+4a. Spawn quality-team:
+```
 Agent(
-  subagent_type="agent-orchestrator:qa-automation",
-  run_in_background=True,
-  prompt="Set up Playwright E2E tests, visual regression, and cross-browser validation for [feature]."
+  subagent_type="agent-orchestrator:quality-team",
+  prompt="Run Phase 4 Testing for [feature].
+  Task size: [SMALL/MEDIUM/BIG].
+  Spec directory: .claude/specs/[feature]/
+  Implementation report: [summary from Phase 3 feature-team].
+  Files changed: [list].
+  Coverage thresholds: Read from .claude/specs/[feature]/project-config.md.
+
+  Steps:
+  1. Create test-plan.md (skip on re-runs)
+  2. Present Gate 3.5 for user approval (skip on re-runs)
+  3. Dispatch test-engineer + qa-automation per plan
+  4. Collect results, write test-report.md
+  5. If failures: classify and route (test bugs internally, impl bugs report back)
+
+  Return: test-report.md summary, overall status, impl bug list (if any)."
 )
 ```
-Wait for both to complete.
+4b. Wait for quality-team to complete. Read its report.
+4c. Verify `.claude/specs/[feature]/test-plan.md` AND `test-report.md` exist.
 
 ### Phase 5: Security — single agent
 ```
@@ -635,6 +662,6 @@ This creates a feedback loop: mistakes → lessons → rules → prevention.
 - If ANY agent fails → retry once, then report to user
 - If agents produce conflicting outputs → resolve based on PRD (product-manager wins)
 - If security-auditor finds CRITICAL → block deployment, report immediately
-- If test-engineer reports < 80% coverage → trigger Phase 4→3 Feedback Loop (max 2 round-trips, then escalate to user)
-- If Phase 4→3 loop exhausts retries → present failures to user with manual fix option
+- If quality-team reports coverage below project-config.md thresholds → trigger Phase 4→3 Feedback Loop (max 2 round-trips, stuck/regression detection may terminate early)
+- If Phase 4→3 loop exhausts retries or detects stuck/regression → present failures to user with manual fix option
 - If review-team finds CRITICAL issues → route back to owning agent before proceeding to Phase 7

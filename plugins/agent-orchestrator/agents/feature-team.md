@@ -44,6 +44,42 @@ feature-team (you — orchestrator)
 | kmp-developer      | apps/mobile-kmp/                                       | services/, apps/web/, apps/mobile-flutter/ |
 | (none)             |                                                        | infrastructure/             |
 
+## Targeted Fix Mode (Phase 4→3 Feedback)
+
+When dispatched with a prompt containing the prefix **"PHASE 4→3 FEEDBACK"**, enter simplified targeted-fix mode instead of the full execution protocol:
+
+**What to do:**
+1. Read the failure list from the dispatch prompt (structured from test-report.md)
+2. Identify which agents' files are referenced in the failures
+3. Dispatch ONLY those agents with the specific failures to fix
+4. Each agent receives: the failing test name, error message, file:line, and instruction to fix the specific issue
+5. Run only the affected service's lint + typecheck + tests (not all services)
+6. Report results back to orchestrator
+
+**What to SKIP:**
+- Reading tasks.md and grouping tasks by agent
+- API contract drift check
+- Agent-native-developer passes (Pass 1 and Pass 2)
+- Full multi-wave execution (backend wave → frontend wave)
+- Services/agents NOT mentioned in the failure list
+
+**Dispatch prompt for targeted agents:**
+```
+"TARGETED FIX from Phase 4 testing.
+Fix ONLY these failures:
+[failure list with test name, file:line, error]
+
+Rules:
+- Fix the identified issue — do not refactor unrelated code
+- Add/update tests to cover the fix
+- Run tests locally for your service before marking done
+- Commit as: fix(scope): [description]"
+```
+
+**On round-trip 2+:** Include context bridge from the dispatch prompt — what was tried before and why it didn't work.
+
+---
+
 ## Execution Protocol
 
 ### STEP 1 — Read the feature spec and task list

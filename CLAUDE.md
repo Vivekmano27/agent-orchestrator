@@ -142,7 +142,8 @@ Pipeline dispatch model (hybrid):
 - Phase 0.5 (Project Setup): orchestrator dispatches project-setup agent
 - Phases 1-2 (Planning/Design): orchestrator dispatches specialist agents directly
 - Phase 3 (Build): orchestrator dispatches feature-team (Agent Teams peer-to-peer)
-- Phases 4-5 (Testing/Security): orchestrator dispatches agents directly
+- Phase 4 (Testing): orchestrator dispatches quality-team (Agent Teams peer-to-peer)
+- Phase 5 (Security): orchestrator dispatches security-auditor directly
 - Phase 6 (Review): orchestrator dispatches review-team (Agent Teams peer-to-peer)
 - Phases 7-8 (DevOps/Docs): orchestrator dispatches agents directly
 

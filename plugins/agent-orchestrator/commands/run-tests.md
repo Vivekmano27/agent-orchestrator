@@ -8,15 +8,17 @@ When confirmation, clarification, or approval is needed, **always use the `AskUs
 ## Mission
 Execute every test in the project, enforce coverage thresholds, and report results. The entire run fails if ANY service is below its coverage minimum.
 
-## Coverage Thresholds (enforced — fail if below)
-| Service | Framework | Threshold |
-|---------|-----------|-----------|
-| NestJS Core | Jest | ≥ 80% |
-| NestJS Gateway | Jest | ≥ 80% |
-| Python AI | pytest-cov | ≥ 80% |
-| React Web | Vitest | ≥ 75% |
-| Flutter | lcov | ≥ 75% |
-| KMP Shared | JaCoCo | ≥ 75% |
+## Coverage Thresholds
+Read from `.claude/specs/[feature]/project-config.md` under "Coverage Thresholds" section.
+Defaults (if project-config.md not found):
+
+| Service Type | Default Threshold |
+|---|---|
+| Backend (NestJS, Django, Go) | 80% |
+| Frontend (React, Vue, Next.js) | 75% |
+| Mobile (Flutter, KMP) | 75% |
+| AI/ML (Python AI services) | 80% |
+| Shared/Libraries | 80% |
 
 ## Execution
 ```bash

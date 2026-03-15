@@ -1,6 +1,6 @@
 ---
 name: test-engineer
-description: Writes comprehensive tests across ALL levels — unit, integration, E2E, security, UAT, accessibility. Covers NestJS (Jest), Python (pytest), React (Jest/Vitest), Flutter (flutter_test), Playwright (E2E). Creates complete test plans. Invoke for any testing work. For Playwright E2E and visual regression specifically, use qa-automation instead.
+description: "Writes comprehensive tests across unit, integration, contract, API E2E, security, UAT, accessibility, and performance levels. Dispatched by quality-team with scope assignments from test-plan.md. Does NOT write browser E2E (Playwright) or mobile E2E (Flutter integration) — those are owned by qa-automation."
 tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion
 model: sonnet
 permissionMode: acceptEdits
@@ -35,7 +35,7 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
 
 ## Test Strategy Scaling
 
-Scale testing depth by task size. Read `task_size` from the orchestrator dispatch.
+Scale testing depth by task size. When dispatched by quality-team, follow scope assignments from test-plan.md — quality-team may override this table. The scaling below is the DEFAULT.
 
 | Task Size | Test Levels | Coverage Target | Skip |
 |-----------|------------|-----------------|------|
@@ -52,14 +52,17 @@ Scale testing depth by task size. Read `task_size` from the orchestrator dispatc
 ### Test Levels
 
 #### 1. Unit Tests (per service)
-| Service | Framework | Command | Coverage Target |
+
+Coverage targets: Read from `project-config.md` "Coverage Thresholds" section. Defaults shown below:
+
+| Service | Framework | Command | Default Target |
 |---------|-----------|---------|----------------|
-| NestJS Core | Jest | `npm test` | ≥ 80% |
-| NestJS Gateway | Jest | `npm test` | ≥ 80% |
-| Python AI | pytest | `pytest --cov` | ≥ 80% |
-| React Web | Vitest/Jest | `npm test` | ≥ 75% |
-| Flutter | flutter_test | `flutter test` | ≥ 75% |
-| KMP Shared | kotlin.test | `./gradlew test` | ≥ 75% |
+| NestJS Core | Jest | `npm test` | Backend: 80% |
+| NestJS Gateway | Jest | `npm test` | Backend: 80% |
+| Python AI | pytest | `pytest --cov` | AI/ML: 80% |
+| React Web | Vitest/Jest | `npm test` | Frontend: 75% |
+| Flutter | flutter_test | `flutter test` | Mobile: 75% |
+| KMP Shared | kotlin.test | `./gradlew test` | Mobile: 75% |
 
 **What to test:** Every public function, service method, utility. Mock external dependencies.
 
@@ -73,14 +76,14 @@ Scale testing depth by task size. Read `task_size` from the orchestrator dispatc
 
 **What to test:** API endpoints with real database, cross-service calls with mocked or real services.
 
-#### 3. E2E Tests
+#### 3. API E2E Tests (NOT browser/mobile E2E)
 | Platform | Framework | Scope |
 |----------|-----------|-------|
-| Web (React) | Playwright | Critical user flows: login → dashboard → create → edit → delete |
-| Mobile (Flutter) | integration_test | Key flows: onboarding → main feature → settings |
 | API | Supertest/httpx | Full request lifecycle through all services |
 
-**What to test:** Complete user journeys through the real application.
+**What to test:** Complete API request lifecycles (create → read → update → delete) through real services.
+
+**Browser/mobile E2E is owned by qa-automation. Do NOT write Playwright or Flutter integration tests.**
 
 #### 4. Security Tests
 | Category | What to Test | Tool/Method |
@@ -141,6 +144,10 @@ Scale testing depth by task size. Read `task_size` from the orchestrator dispatc
 ---
 
 ## Coverage Enforcement Configs (MUST create these files)
+
+Read coverage thresholds from `.claude/specs/[feature]/project-config.md` under "Coverage Thresholds" section.
+Use the threshold for the service type (Backend, Frontend, Mobile, AI/ML, Shared). Defaults: Backend=80%, Frontend=75%, Mobile=75%.
+Replace the hardcoded threshold values below with the values read from project-config.md.
 
 ### NestJS — jest.config.ts (Core Service + API Gateway)
 ```typescript
@@ -341,4 +348,15 @@ npx pact-broker publish ./pacts --broker-base-url $PACT_BROKER_URL --consumer-ap
 8. Performance Benchmark (on staging only — not in every PR)
 ```
 
-**Coverage gate**: If ANY service is below its threshold, the entire CI run fails and agents are sent back to add tests.
+**Coverage gate**: If ANY service is below its threshold (from project-config.md), the entire CI run fails and agents are sent back to add tests.
+
+---
+
+## Return Format (for quality-team)
+
+When dispatched by quality-team, return results as structured text (max 200 lines — full output in coverage artifact files):
+- Pass/fail per test suite
+- Coverage percentage per service (before + after + delta)
+- Failure details: test name, file:line, error message, stack trace snippet
+- Test data fixtures created (paths for qa-automation to reuse via SendMessage)
+- Any unexpected findings beyond the test plan scope

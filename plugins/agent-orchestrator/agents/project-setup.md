@@ -146,7 +146,7 @@ Formatting: Prettier
 Code Quality: none (add later)
 Pre-commit: Husky + lint-staged
 Testing: Vitest (unit) + Playwright (E2E)
-Coverage: 70%
+Coverage: Backend 70%, Frontend 65%
 Methodology: test-after
 Branch: feature branches + main
 Commits: conventional commits
@@ -175,7 +175,7 @@ Formatting: Prettier (TS), Ruff format (Python), dart format
 Code Quality: SonarQube
 Pre-commit: Husky + lint-staged (TS), pre-commit (Python)
 Testing: Jest (NestJS) + Pytest (Django) + Playwright (E2E) + Flutter test
-Coverage: 80%
+Coverage: Backend 80%, Frontend 75%, Mobile 75%
 Methodology: TDD for business logic
 Visual Regression: yes
 Branch: feature branches + develop + main
@@ -207,7 +207,7 @@ Formatting: Prettier (TS), dart format
 Code Quality: none
 Pre-commit: Husky + lint-staged
 Testing: Jest (backend) + Flutter test (unit + widget) + integration_test (E2E)
-Coverage: 80%
+Coverage: Backend 80%, Frontend 75%, Mobile 75%
 Methodology: TDD for business logic
 Branch: feature branches + main
 Commits: conventional commits
@@ -235,7 +235,7 @@ Formatting: Prettier or Ruff format
 Code Quality: none
 Pre-commit: yes
 Testing: Jest or Pytest (unit + integration) + Supertest/httpx (API E2E)
-Coverage: 80%
+Coverage: Backend 80%, Frontend 75%, Mobile 75%
 Methodology: TDD
 Branch: feature branches + main
 Commits: conventional commits
@@ -264,7 +264,7 @@ Formatting: Prettier (TS), dart format
 Code Quality: optional SonarQube
 Pre-commit: Husky + lint-staged
 Testing: Jest + Playwright + Flutter test
-Coverage: 80%
+Coverage: Backend 80%, Frontend 75%, Mobile 75%
 Methodology: TDD for business logic
 Branch: feature branches + main
 Commits: conventional commits
@@ -666,10 +666,26 @@ Write the approved configuration to `.claude/specs/[feature]/project-config.md`:
 - **Unit Test Framework:** [Jest / Vitest / Pytest / JUnit / go test / Flutter test]
 - **Integration Testing:** [Supertest / pytest / Testcontainers / same as unit]
 - **E2E Framework:** [Playwright / Cypress / Detox / Maestro / none]
-- **Coverage Target:** [60% / 70% / 80% / 90%]
 - **Methodology:** [TDD / test-after / minimal]
 - **Visual Regression:** [yes / no]
 - **API Contract Testing:** [yes / no]
+
+### Coverage Thresholds (per service type)
+| Service Type | Threshold | Applies To |
+|---|---|---|
+| Backend | 80% | NestJS, Django, Spring Boot, Go, Rails |
+| Frontend | 75% | React, Vue, Angular, Next.js, Svelte |
+| Mobile | 75% | Flutter, KMP, React Native, SwiftUI |
+| AI/ML | 80% | Python AI services, ML pipelines |
+| Shared/Libraries | 80% | Shared modules, SDK packages |
+
+Coverage measures **new code** (lines added/modified by feature), not overall codebase.
+Coverage delta: If overall coverage drops by > 0.1% on any service, flag as regression.
+
+### Per-Service Overrides (optional)
+| Service | Threshold | Reason |
+|---|---|---|
+| [service-path] | [X]% | [why different from default] |
 
 ## Local Development
 - **Run Method:** [Docker Compose / direct start / both]
