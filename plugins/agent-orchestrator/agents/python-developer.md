@@ -32,7 +32,7 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
 ```
 
 
-**Skills loaded:** tdd-skill, api-implementation, error-handling, ai-integration, data-pipeline, code-documentation
+**Skills loaded:** tdd-skill, api-implementation, error-handling, ai-integration, data-pipeline, python-django-patterns, agent-builder, workflow-automation, code-documentation
 
 **Role:** Python specialist for Django AI service and data processing.
 

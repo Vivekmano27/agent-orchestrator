@@ -1,5 +1,5 @@
 ---
-description: "Build a feature end-to-end using the full 9-phase pipeline (35 agents, 5 teams). Smart dispatch skips agents not in the project's tech stack."
+description: "Build a feature end-to-end using the full 9-phase pipeline (30 agents, 5 teams). Smart dispatch skips agents not in the project's tech stack."
 argument-hint: "<feature description>"
 disable-model-invocation: true
 ---

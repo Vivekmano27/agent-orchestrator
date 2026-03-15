@@ -24,8 +24,8 @@ echo ""
 # 1. Count agents
 AGENT_COUNT=$(ls "$SCRIPT_DIR"/agents/*.md 2>/dev/null | wc -l | tr -d ' ')
 echo -e "Agents: $AGENT_COUNT files"
-if [ "$AGENT_COUNT" -lt 32 ]; then
-  echo -e "  ${RED}ERROR: Expected 32+ agents, found $AGENT_COUNT${NC}"
+if [ "$AGENT_COUNT" -lt 35 ]; then
+  echo -e "  ${RED}ERROR: Expected 35+ agents, found $AGENT_COUNT${NC}"
   ERRORS=$((ERRORS + 1))
 else
   echo -e "  ${GREEN}OK${NC}"
@@ -34,8 +34,8 @@ fi
 # 2. Count commands
 CMD_COUNT=$(ls "$SCRIPT_DIR"/commands/*.md 2>/dev/null | wc -l | tr -d ' ')
 echo -e "Commands: $CMD_COUNT files"
-if [ "$CMD_COUNT" -lt 25 ]; then
-  echo -e "  ${RED}ERROR: Expected 25 commands, found $CMD_COUNT${NC}"
+if [ "$CMD_COUNT" -lt 26 ]; then
+  echo -e "  ${RED}ERROR: Expected 26 commands, found $CMD_COUNT${NC}"
   ERRORS=$((ERRORS + 1))
 else
   echo -e "  ${GREEN}OK${NC}"
@@ -44,8 +44,8 @@ fi
 # 3. Count skills
 SKILL_COUNT=$(ls -d "$SCRIPT_DIR"/skills/*/ 2>/dev/null | wc -l | tr -d ' ')
 echo -e "Skills: $SKILL_COUNT directories"
-if [ "$SKILL_COUNT" -lt 64 ]; then
-  echo -e "  ${RED}ERROR: Expected 64 skills, found $SKILL_COUNT${NC}"
+if [ "$SKILL_COUNT" -lt 66 ]; then
+  echo -e "  ${RED}ERROR: Expected 66 skills, found $SKILL_COUNT${NC}"
   ERRORS=$((ERRORS + 1))
 else
   echo -e "  ${GREEN}OK${NC}"
@@ -133,7 +133,7 @@ echo -e "  ${GREEN}Skill reference check done${NC}"
 
 # 8. Check agents that write output have Write tool
 echo -e "Write tool check for output-producing agents:"
-for agent_name in business-analyst security-auditor code-reviewer performance-reviewer; do
+for agent_name in business-analyst security-auditor code-reviewer performance-reviewer review-team; do
   agent_file="$SCRIPT_DIR/agents/$agent_name.md"
   if [ -f "$agent_file" ]; then
     if ! head -20 "$agent_file" | grep "^tools:" | grep -q "Write"; then

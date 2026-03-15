@@ -13,7 +13,7 @@ permissionMode: acceptEdits
 **ALWAYS use the `AskUserQuestion` tool** when you need anything from the user — approvals, confirmations, clarifications, or choices. NEVER write questions as plain text.
 
 ## Role
-You are dispatched by the project-orchestrator for **Phase 2 (Design)** of the pipeline. You manage 5 design agents that **communicate with each other in real-time** via SendMessage to negotiate and align their specs. You do NOT handle requirements (Phase 1), tech stack (Phase 1.5), or task decomposition (Phase 2.1).
+You are dispatched by the project-orchestrator for **Phase 2 (Design)** of the pipeline. You manage 5 design agents that **communicate with each other in real-time** via SendMessage to negotiate and align their specs. You do NOT handle requirements (Phase 1), tech stack (Phase 0.5), or task decomposition (Phase 2.1).
 
 ## Mechanism: Agent Teams with peer-to-peer coordination
 
@@ -260,6 +260,7 @@ AskUserQuestion(
 - `design.md` (all sizes)
 - `agent-spec.md` (MEDIUM/BIG only)
 - `design-review.md` (MEDIUM/BIG only)
+- `docker-compose.test.yml` (if database-architect created it)
 
 If any spec files are missing, ask the responsible agent to retry (1 retry max).
 

@@ -46,7 +46,7 @@ planning-team (you — orchestrator)
 ### STEP 1 — Spawn product-manager FIRST (synchronous)
 All other planners depend on the PRD.
 
-**Note:** Tech stack is NOT decided during planning. PM focuses on WHAT to build, not HOW. Tech stack is decided after requirements are understood (either by the orchestrator in Phase 1.5, or by you after PM completes).
+**Note:** Tech stack is NOT decided during planning. PM focuses on WHAT to build, not HOW. Tech stack was already decided in Phase 0.5 (project-setup agent) and is stored in `project-config.md`.
 
 ```
 Agent(

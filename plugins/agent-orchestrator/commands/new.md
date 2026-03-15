@@ -1,5 +1,5 @@
 ---
-description: "Start a new project or feature. THE entry point for all new work. Runs the full 9-phase pipeline (35 agents, 5 teams) with smart dispatch based on tech stack."
+description: "Start a new project or feature. THE entry point for all new work. Runs the full 9-phase pipeline (30 agents, 5 teams) with smart dispatch based on tech stack."
 argument-hint: "<what you want to build>"
 disable-model-invocation: true
 ---
@@ -14,7 +14,7 @@ Route to the project-orchestrator agent which runs the full 9-phase pipeline.
 
 ## Steps
 1. Pass the user's description to project-orchestrator
-2. Orchestrator creates spec directory (Phase 0, no questions), then dispatches product-manager for requirements discovery. Tech stack is decided after requirements (Phase 0.5).
+2. Orchestrator creates spec directory (Phase 0, no questions), then runs Phase 0.5 (project-setup agent for tech stack decisions), then dispatches product-manager for requirements discovery (Phase 1).
 3. Orchestrator classifies size and uses **AskUserQuestion tool** for approval gates:
    - SMALL (1-3 files): auto-approve
    - MEDIUM (4-10 files): **AskUserQuestion**: "Plan looks good. Proceed?" → [Proceed / Request changes]

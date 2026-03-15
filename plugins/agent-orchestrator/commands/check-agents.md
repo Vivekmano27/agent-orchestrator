@@ -30,22 +30,22 @@ REVIEW:          code-reviewer, performance-reviewer, static-analyzer, agent-nat
 DEVOPS:          devops-engineer, deployment-engineer
 DOCUMENTATION:   technical-writer
 ORCHESTRATION:   project-orchestrator, task-executor
-TEAMS:           design-team, feature-team, review-team, planning-team
+TEAMS:           design-team, feature-team, review-team, planning-team, quality-team
 ```
 
 ### 3. Skill Dependency Check
 For each agent, verify its referenced skills are available:
 ```
 product-manager → needs: project-requirements, user-story-writer, estimation-skill
-backend-developer → needs: nestjs-patterns, api-implementation, error-handling, tdd-skill
-python-developer → needs: tdd-skill, ai-integration, data-pipeline
-frontend-developer → needs: react-patterns, frontend-design-extended, tdd-skill
-flutter-developer → needs: flutter-patterns, tdd-skill
-kmp-developer → needs: kmp-patterns, tdd-skill
+backend-developer → needs: nestjs-patterns, api-implementation, error-handling, tdd-skill, code-documentation
+python-developer → needs: tdd-skill, api-implementation, error-handling, ai-integration, data-pipeline, python-django-patterns, agent-builder, workflow-automation, code-documentation
+frontend-developer → needs: react-patterns, frontend-design-extended, tdd-skill, code-simplify, analytics-setup, data-visualization, code-documentation
+flutter-developer → needs: flutter-patterns, tdd-skill, code-simplify, code-documentation
+kmp-developer → needs: kmp-patterns, tdd-skill, code-simplify, code-documentation
 agent-native-developer → needs: agent-native-design, agent-builder, mcp-builder-extended
 agent-native-reviewer → needs: agent-native-design, agent-builder, mcp-builder-extended
-test-engineer → needs: test-writer, webapp-testing, web-quality, accessibility-audit
-security-auditor → needs: security-reviewer, dependency-audit, secrets-scanner
+test-engineer → needs: test-writer, webapp-testing, web-quality, accessibility-audit, api-tester, load-tester
+security-auditor → needs: security-reviewer, dependency-audit, secrets-scanner, threat-modeling, compliance-checker
 devops-engineer → needs: ci-cd-setup, docker-skill, aws-deployment, terraform-skills, k8s-skill, monitoring-setup, release-manager, env-setup
 deployment-engineer → needs: release-manager, docker-skill, aws-deployment, monitoring-setup
 ```
@@ -56,6 +56,7 @@ Check team definitions exist:
 - [ ] design-team.md (5 members: system-architect, api-architect, database-architect, ui-designer, agent-native-designer)
 - [ ] review-team.md (6 reviewers: code-reviewer, security-auditor, performance-reviewer, static-analyzer, agent-native-reviewer, spec-tracer via code-reviewer reuse)
 - [ ] planning-team.md (7 members: product-manager, business-analyst, ux-researcher, system-architect, api-architect, database-architect, ui-designer)
+- [ ] quality-team.md (2 members: test-engineer, qa-automation)
 
 ## Output Format
 ```
@@ -71,11 +72,12 @@ Check team definitions exist:
 ║           agent-native-reviewer [opus]       ║
 ║           ... and all other agents           ║
 ║                                              ║
-║  TEAMS (4/4 configured)                      ║
+║  TEAMS (5/5 configured)                      ║
 ║  ✅ feature-team    (7 members)              ║
 ║  ✅ design-team     (5 members)              ║
 ║  ✅ review-team     (6 reviewers)             ║
 ║  ✅ planning-team   (7 members)              ║
+║  ✅ quality-team    (2 members)              ║
 ║                                              ║
 ║  COMMANDS (N available)                      ║
 ║  ✅ All commands loaded                      ║

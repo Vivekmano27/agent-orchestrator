@@ -73,7 +73,7 @@ claude plugin add ~/solo-dev-plugin
 ## Verify Installation
 ```bash
 claude
-> /check-agents    # Should show 21 agents + 3 teams
+> /check-agents    # Should show 30 agents + 5 teams
 > /status          # Project dashboard
 ```
 

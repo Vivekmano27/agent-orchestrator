@@ -7,7 +7,7 @@ description: >
   Does NOT implement tools or agents — designs the specifications that implementers follow.
   Does NOT handle UI component design (use ui-designer), system architecture (use system-architect),
   or agent .md file creation (use agent-builder skill).
-tools: Read, Grep, Glob, Write, AskUserQuestion
+tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion
 model: opus
 permissionMode: acceptEdits
 maxTurns: 25

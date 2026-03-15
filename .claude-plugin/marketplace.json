@@ -9,7 +9,7 @@
   "plugins": [
     {
       "name": "agent-orchestrator",
-      "description": "21 agents, 3 teams, 25 commands, 63 skills, hooks, and 3 rules for full development",
+      "description": "30 agents, 5 teams, 26 commands, 66 skills, hooks, and 3 rules for full development",
       "version": "2.1.0",
       "strict": false,
       "source": "./plugins/agent-orchestrator"

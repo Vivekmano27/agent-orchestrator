@@ -4,10 +4,10 @@
 
 | Component | Count | Included? |
 |-----------|-------|-----------|
-| Agents | 35 | YES |
+| Agents | 30 | YES |
 | Agent Teams | 5 | YES |
 | Commands | 26 | YES |
-| Skills | 65 | YES |
+| Skills | 66 | YES |
 | Hooks | 1 (hooks.json) | YES |
 | Rules | 3 | YES |
 | Steering Docs | 3 | YES |

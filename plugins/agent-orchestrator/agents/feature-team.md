@@ -44,12 +44,13 @@ feature-team (you — orchestrator)
 | kmp-developer      | apps/mobile-kmp/                                       | services/, apps/web/, apps/mobile-flutter/ |
 | (none)             |                                                        | infrastructure/             |
 
-## Targeted Fix Mode (Phase 4→3 / Phase 5→3 Feedback)
+## Targeted Fix Mode (Phase 4→3 / Phase 5→3 / Phase 6→3 Feedback)
 
-When dispatched with a prompt containing **"PHASE 4→3 FEEDBACK"** or **"PHASE 5→3 FEEDBACK"**, enter simplified targeted-fix mode instead of the full execution protocol:
+When dispatched with a prompt containing **"PHASE 4→3 FEEDBACK"**, **"PHASE 5→3 FEEDBACK"**, or **"PHASE 6→3 FEEDBACK"**, enter simplified targeted-fix mode instead of the full execution protocol:
 
 - For **Phase 4→3**: read failures from `test-report.md`
 - For **Phase 5→3**: read findings from `security-audit.md` — these are security vulnerabilities, not test failures. Apply surgical fixes with minimum code changes.
+- For **Phase 6→3**: read findings from `review-report.md` — these are code review issues (CRITICAL/HIGH severity). Apply surgical fixes following the reviewer's recommended fix.
 
 **What to do:**
 1. Read the failure list from the dispatch prompt (structured from test-report.md)

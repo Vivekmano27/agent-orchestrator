@@ -233,6 +233,7 @@ class TestAIGenerateView:
         mock_ai_service.generate.side_effect = anthropic.RateLimitError("rate limited")
         response = api_client.post('/api/ai/generate/', {'prompt': 'Hello'})
         assert response.status_code == 429
+```
 
 ## Custom Exception Handler
 ```python

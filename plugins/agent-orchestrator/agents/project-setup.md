@@ -7,6 +7,7 @@ permissionMode: acceptEdits
 maxTurns: 30
 skills:
   - spec-driven-dev
+  - steering-docs
 memory: project
 ---
 

@@ -13,10 +13,13 @@ Spawn the review-team to perform a comprehensive review of the current branch.
 
 ## Steps
 1. Identify changed files: `git diff main...HEAD --name-only`
-2. Spawn review-team with 3 parallel reviewers:
+2. Spawn review-team with up to 6 parallel reviewers:
    - code-reviewer: correctness, patterns, testing, readability
    - security-auditor: OWASP, secrets, auth, injection
    - performance-reviewer: N+1, re-renders, indexes, caching
+   - static-analyzer: lint, type-check, dead code
+   - agent-native-reviewer: agent parity, tool definitions
+   - spec-tracer (via code-reviewer): spec compliance
 3. Collect all findings
 4. Produce combined report sorted by severity
 5. Present summary with action items

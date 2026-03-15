@@ -1,5 +1,5 @@
 ---
-description: "Start building something new — alias for /new. ALWAYS runs full 21-agent pipeline."
+description: "Start building something new — alias for /new. Runs the full 9-phase pipeline with smart dispatch."
 argument-hint: "<what you want to build>"
 disable-model-invocation: true
 ---
@@ -9,5 +9,5 @@ When confirmation, clarification, or approval is needed, **always use the `AskUs
 
 
 ## Mission
-Alias for /new. Routes to project-orchestrator which runs ALL agents.
-Full pipeline always — no agents skipped regardless of project size.
+Alias for /new. Routes to project-orchestrator which runs the full 9-phase pipeline.
+Smart dispatch skips agents whose tech stack is absent from project-config.md.

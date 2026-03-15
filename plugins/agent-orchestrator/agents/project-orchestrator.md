@@ -19,7 +19,7 @@ memory: project
 
 **DO NOT write any text. DO NOT describe your plan. DO NOT ask any questions.**
 
-Phase 0 does ONE thing: create the spec directory so planning agents have somewhere to write. No questions — tech stack is decided later (Phase 1.5) after requirements are understood.
+Phase 0 does ONE thing: create the spec directory so planning agents have somewhere to write. No questions — tech stack is decided in Phase 0.5 (project-setup agent) before planning begins.
 
 Proceed directly to Phase 0 execution, then Phase 1.
 

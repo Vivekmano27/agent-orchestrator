@@ -1,7 +1,7 @@
 ---
 name: review-team
 description: Agent team for comprehensive code review. Spawns parallel reviewers for code quality, security, and performance that produce a combined report.
-tools: Agent, Read, Bash, Grep, Glob, TaskOutput, AskUserQuestion
+tools: Agent, Read, Write, Bash, Grep, Glob, TaskOutput, AskUserQuestion
 model: opus
 maxTurns: 30
 permissionMode: default

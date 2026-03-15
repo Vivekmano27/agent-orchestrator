@@ -27,9 +27,9 @@ mkdir /tmp/test-project && cd /tmp/test-project
 bash /path/to/agent-orchestrator/install.sh .
 
 # Verify file counts
-ls .claude/agents/*.md | wc -l      # Should be 24
-ls .claude/commands/*.md | wc -l    # Should be 25
-ls -d .claude/skills/*/ | wc -l    # Should be 63
+ls .claude/agents/*.md | wc -l      # Should be 35
+ls .claude/commands/*.md | wc -l    # Should be 26
+ls -d .claude/skills/*/ | wc -l    # Should be 66
 ls .claude/hooks/hooks.json         # Should exist
 ls .claude/rules/*.md | wc -l      # Should be 3
 ```
@@ -40,7 +40,7 @@ ls .claude/rules/*.md | wc -l      # Should be 3
 claude --plugin-dir /path/to/agent-orchestrator/plugins/agent-orchestrator
 
 # Run these commands:
-> /check-agents      # All 21 agents + 3 teams should show green
+> /check-agents      # All 30 agents + 5 teams should show green
 > /status            # Dashboard should render
 > /pending           # Should show no pending tasks
 ```
