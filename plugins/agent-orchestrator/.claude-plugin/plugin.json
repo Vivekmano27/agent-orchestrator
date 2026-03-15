@@ -1,7 +1,7 @@
 {
   "name": "agent-orchestrator",
   "version": "2.1.0",
-  "description": "Complete autonomous development system — 34 agents, 5 teams, 26 commands, 64 skills, hooks, and 3 rules.",
+  "description": "Complete autonomous development system — 35 agents, 5 teams, 26 commands, 65 skills, hooks, and 3 rules.",
   "author": {
     "name": "Agent Orchestrator"
   }

@@ -82,6 +82,7 @@ PHASE 5: SECURITY (always)
 PHASE 6: REVIEW (always)
   ├── code-reviewer          → correctness, patterns, testing, architecture
   ├── performance-reviewer   → N+1 queries, re-renders, indexes, bundle size
+  ├── static-analyzer        → tool-based: duplication, complexity, dead code, code smells (advisory)
   └── agent-native-reviewer  → agent definitions, skills, commands, MCP tools, parity
 
 PHASE 7: DEVOPS & DEPLOYMENT (always)
