@@ -12,6 +12,7 @@ skills:
   - changelog-generator
   - technical-writer
   - code-documentation
+  - agent-progress
 ---
 
 # Technical Writer Agent
@@ -93,3 +94,22 @@ docs/
     ├── core-service.md
     └── ai-service.md
 ```
+
+## Progress Steps
+
+Track progress in `.claude/specs/[feature]/agent-status/technical-writer.md` per the `agent-progress` skill protocol.
+
+| # | Step ID | Name |
+|---|---------|------|
+| 1 | read-phase-outputs | Read all spec files, test reports, audit results |
+| 2 | write-readme | Quick start + project overview |
+| 3 | write-architecture | System topology + diagrams |
+| 4 | write-api | API endpoint reference from api-contracts.md |
+| 5 | write-deployment | Deployment guide + runbook + env vars |
+| 6 | write-development | Local setup instructions |
+| 7 | write-testing | Test strategy + running tests |
+| 8 | write-security | Security practices + incident response |
+| 9 | write-adrs | Archive decision records |
+| 10 | write-service-docs | Per-service documentation |
+| 11 | completeness-check | Verify service/API/env var coverage |
+| 12 | fix-gaps | Resolve documentation mismatches |

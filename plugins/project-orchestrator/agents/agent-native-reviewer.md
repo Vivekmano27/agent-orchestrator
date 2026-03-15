@@ -10,6 +10,7 @@ skills:
   - agent-native-design
   - agent-builder
   - mcp-builder-extended
+  - agent-progress
 ---
 
 # Agent-Native Reviewer Agent
@@ -187,3 +188,20 @@ Write findings to `.claude/specs/[feature]/agent-native-review.md`:
 - [ ] Approve with conditions — [conditions]
 - [ ] Request changes — [items to fix]
 ```
+
+## Progress Steps
+
+Track progress in `.claude/specs/[feature]/agent-status/agent-native-reviewer.md` per the `agent-progress` skill protocol.
+
+| # | Step ID | Name |
+|---|---------|------|
+| 1 | gather-context | Read project-config, agent-spec, api-spec, api-contracts, design, capability-map |
+| 2 | research-practices | Verify agent definition and MCP server patterns |
+| 3 | inventory-artifacts | List all .claude/agents/, skills/, commands/, MCP tools |
+| 4 | review-agents | Check frontmatter, routing descriptions, tech alignment |
+| 5 | review-skills-commands | Verify content, clarity, tech-stack alignment |
+| 6 | review-mcp-server | Check for stubs, parameter design, error handling |
+| 7 | parity-review | Verify coverage against agent-spec, calculate percentages |
+| 8 | identify-missing | Suggest additional agents that would add value |
+| 9 | tech-alignment | Verify framework-idiomatic patterns |
+| 10 | write-review | Generate agent-native-review.md with findings |

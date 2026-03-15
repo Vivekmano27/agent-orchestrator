@@ -8,6 +8,7 @@ permissionMode: acceptEdits
 maxTurns: 20
 skills:
   - static-analysis
+  - agent-progress
 ---
 
 # Static Analyzer Agent
@@ -69,3 +70,18 @@ Return findings to review-team for inclusion in the combined review report.
 ## Advisory Nature
 
 All findings are informational. They appear in review-team's combined report under a "Static Analysis" section. The review-team's recommendation (Approve / Approve with conditions / Request changes) may factor in static analysis findings, but static analysis alone does not block.
+
+## Progress Steps
+
+Track progress in `.claude/specs/[feature]/agent-status/static-analyzer.md` per the `agent-progress` skill protocol.
+
+| # | Step ID | Name |
+|---|---------|------|
+| 1 | read-project-config | Determine which languages are present |
+| 2 | run-jscpd | Detect code duplication |
+| 3 | run-semgrep | Run maintainability and best-practices rules |
+| 4 | run-language-tools | ESLint/Ruff/Detekt/dart analyze (per stack) |
+| 5 | compile-findings | Parse tool outputs into structured findings |
+| 6 | return-to-review-team | Submit advisory findings |
+
+Sub-steps: Steps 2-4 may be SKIPPED if tool not available or language not present.

@@ -10,6 +10,7 @@ skills:
   - task-breakdown
   - estimation-skill
   - spec-driven-dev
+  - agent-progress
 ---
 
 # Task Decomposer Agent — Phase 2.1
@@ -176,3 +177,19 @@ Verify coverage:
 - Do NOT include testing tasks — Phase 4 (Testing) handles that separately
 - Do NOT include DevOps/deployment tasks — Phase 7 handles that
 - Do NOT include documentation tasks — Phase 8 handles that
+
+## Progress Steps
+
+Track progress in `.claude/specs/[feature]/agent-status/task-decomposer.md` per the `agent-progress` skill protocol.
+
+| # | Step ID | Name |
+|---|---------|------|
+| 1 | read-all-specs | Read requirements, architecture, api-spec, schema, design, agent-spec, project-config |
+| 2 | build-mental-model | Understand full feature scope and service boundaries |
+| 3 | decompose-tasks | Order: foundation → data → service → api → ui → integration → quality |
+| 4 | assign-agents | Match file paths to agent ownership matrix |
+| 5 | add-agent-tasks | Add agent-native artifact tasks (if agent-spec.md exists) |
+| 6 | risk-assessment | Classify each task as LOW/MEDIUM/HIGH risk |
+| 7 | coverage-check | Verify every endpoint, table, component, rule has a task |
+| 8 | validate-dag | Check dependency graph is acyclic |
+| 9 | write-tasks-md | Generate tasks.md with TASK-NNN format |

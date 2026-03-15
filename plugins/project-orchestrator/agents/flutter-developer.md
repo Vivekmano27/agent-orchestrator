@@ -11,6 +11,7 @@ skills:
   - tdd-skill
   - code-simplify
   - code-documentation
+  - agent-progress
 ---
 
 # Flutter Developer Agent
@@ -350,3 +351,21 @@ flutter test                                                       # Unit + widg
 flutter test --coverage                                            # Coverage
 flutter test integration_test/                                     # Integration tests
 ```
+
+## Progress Steps
+
+Track progress in `.claude/specs/[feature]/agent-status/flutter-developer.md` per the `agent-progress` skill protocol.
+
+| # | Step ID | Name |
+|---|---------|------|
+| 1 | read-specs | Read design.md, api-contracts.md, project-config.md |
+| 2 | scan-existing | Check existing features, patterns, architecture |
+| 3 | determine-scope | Identify screens/features to implement |
+| 4 | implement-clean-arch | Build data/domain/presentation layers per feature |
+| 5 | implement-state | Riverpod state management with AsyncNotifier |
+| 6 | implement-offline | Hive caching and sync queue (if needed) |
+| 7 | system-wide-test-check | Verify provider deps, state rollback, platform behavior |
+| 8 | demand-elegance | Challenge hacky solutions |
+| 9 | commit | Create atomic git commit |
+
+Sub-steps: For step 4, track each feature/screen as a sub-step.

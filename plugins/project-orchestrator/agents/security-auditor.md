@@ -12,6 +12,7 @@ skills:
   - secrets-scanner
   - threat-modeling
   - compliance-checker
+  - agent-progress
 ---
 
 # Security Auditor Agent
@@ -115,3 +116,29 @@ STOP triggers at **two points** during STEP 2:
 3. Do NOT continue to remaining skills
 
 **Greenfield projects** (no live deployment target): treat potential STOP findings as CRITICAL instead — route through Phase 5→3 loop.
+
+## Progress Steps
+
+Track progress in `.claude/specs/[feature]/agent-status/security-auditor.md` per the `agent-progress` skill protocol.
+
+**Phase 5 (Full Audit):**
+
+| # | Step ID | Name |
+|---|---------|------|
+| 1 | read-project-config | Extract tech stack, compliance standards |
+| 2 | read-specs | Read architecture, requirements, tasks, test-report |
+| 3 | run-secrets-scanner | Scan for committed API keys, credentials (STOP if found) |
+| 4 | run-dependency-audit | Check npm/pip for known vulnerabilities |
+| 5 | run-owasp-checks | OWASP Top 10 review scaled by task size (STOP if auth bypass) |
+| 6 | run-threat-modeling | STRIDE analysis (BIG tasks only) |
+| 7 | run-compliance | PCI-DSS/HIPAA/GDPR checks (if applicable) |
+| 8 | classify-findings | Assign SEC-NNN IDs and severity levels |
+| 9 | write-security-audit | Write security-audit.md |
+| 10 | report-to-orchestrator | Return status with severity summary |
+
+**Phase 6 (Spot-Check):**
+
+| # | Step ID | Name |
+|---|---------|------|
+| 1 | review-code-changes | Review only new code changes (not full audit) |
+| 2 | return-findings | Send findings inline to review-team |

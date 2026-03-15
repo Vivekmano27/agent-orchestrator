@@ -13,6 +13,7 @@ skills:
   - aws-deployment
   - terraform-skills
   - monorepo-manager
+  - agent-progress
 ---
 
 # System Architect Agent
@@ -158,3 +159,18 @@ After writing architecture.md, re-read it and verify:
 - [ ] Covers all relevant requirements from requirements.md
 
 Message the team: "Self-review complete. Fixed [N] issues: [brief list]."
+
+## Progress Steps
+
+Track progress in `.claude/specs/[feature]/agent-status/system-architect.md` per the `agent-progress` skill protocol.
+
+| # | Step ID | Name |
+|---|---------|------|
+| 1 | read-project-config | Extract tech stack, infrastructure decisions |
+| 2 | institutional-learnings | Scan docs/solutions/ for relevant past decisions |
+| 3 | external-research | Determine if framework/pattern research needed |
+| 4 | approach-exploration | Propose 2-3 architectural approaches with pros/cons |
+| 5 | ask-approach | Ask user to select approach (BIG tasks only) |
+| 6 | design-architecture | Create service boundaries, communication patterns, ADRs |
+| 7 | self-review | Verify ADRs complete, diagrams correct, boundaries clear |
+| 8 | signal-done | Message team with self-review findings |

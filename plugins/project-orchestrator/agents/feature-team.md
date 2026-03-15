@@ -25,6 +25,8 @@ model: inherit
 color: magenta
 maxTurns: 60
 permissionMode: acceptEdits
+skills:
+  - agent-progress
 ---
 
 # Feature Team — Phase 3 Implementation
@@ -440,6 +442,29 @@ Agent(
 )
 ```
 Then wait for Pass 1 → spawn backend wave → verify → dispatch Pass 2 → spawn frontend → verify → report.
+
+---
+
+## Progress Steps
+
+Track progress in `.claude/specs/[feature]/agent-status/feature-team.md` per the `agent-progress` skill protocol.
+
+| # | Step ID | Name |
+|---|---------|------|
+| 1 | read-specs | Read all design specs and tasks.md |
+| 2 | group-tasks | Group tasks by agent assignment |
+| 3 | scaffold-agent-native | Pass 1 — scaffold agent artifacts (if applicable) |
+| 4 | spawn-backend-wave | Dispatch backend/senior/python agents in parallel |
+| 5 | verify-backend | Lint, typecheck, unit tests for backend wave |
+| 6 | tdd-enforcement-backend | Verify test files, assertion density, coverage >= 60% |
+| 7 | api-contract-drift | Diff api-contracts.md against api-spec.md |
+| 8 | wire-agent-native | Pass 2 — wire agent tools to endpoints (if applicable) |
+| 9 | spawn-frontend-wave | Dispatch frontend/flutter/kmp agents in parallel |
+| 10 | verify-frontend | Lint, typecheck, unit tests for frontend wave |
+| 11 | tdd-enforcement-frontend | Verify coverage per platform |
+| 12 | report-results | Return implementation summary to orchestrator |
+
+Sub-steps: For steps 4 and 9, track each dispatched agent as a sub-step (e.g., "backend-developer: COMPLETE", "senior-engineer: IN_PROGRESS").
 
 ---
 

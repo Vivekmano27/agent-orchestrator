@@ -12,6 +12,7 @@ skills:
   - ui-wireframes
   - react-patterns
   - flutter-patterns
+  - agent-progress
 ---
 
 # UI Designer Agent
@@ -380,3 +381,22 @@ AskUserQuestion(
 - No error boundaries
 - No tests
 - No state management (no Zustand, no TanStack Query)
+
+## Progress Steps
+
+Track progress in `.claude/specs/[feature]/agent-status/ui-designer.md` per the `agent-progress` skill protocol.
+
+| # | Step ID | Name |
+|---|---------|------|
+| 1 | pre-research | Scan for existing components, tokens, wireframes |
+| 2 | ask-design-prefs | Collect app type, visual style, typography, colors |
+| 3 | ask-references | Request wireframes/mockups/reference apps |
+| 4 | check-platforms | Determine web/mobile from project-config.md |
+| 5 | design-tokens | Define colors, spacing, typography, borders, shadows |
+| 6 | design-components | Specify all UI components with all states |
+| 7 | build-prototype | Create Next.js prototype with design-system page (if web) |
+| 8 | prototype-approval | Gate for visual approval |
+| 9 | iterate-design | Handle feedback rounds (max 3 iterations) |
+| 10 | write-design-spec | Write design.md |
+
+Sub-steps: For step 6, track each component group as a sub-step. For step 9, track each iteration round.

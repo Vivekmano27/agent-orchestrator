@@ -15,6 +15,7 @@ skills:
   - monitoring-setup
   - release-manager
   - env-setup
+  - agent-progress
 ---
 
 # DevOps Engineer Agent
@@ -127,3 +128,19 @@ Use the **env-setup** skill to generate:
 - Docker Compose override for development (`docker-compose.override.yml`)
 - Pre-commit hooks configuration
 - Developer setup documentation (referenced by technical-writer in Phase 8)
+
+## Progress Steps
+
+Track progress in `.claude/specs/[feature]/agent-status/devops-engineer.md` per the `agent-progress` skill protocol.
+
+| # | Step ID | Name |
+|---|---------|------|
+| 1 | read-project-config | Extract cloud provider, CI/CD, containers, orchestration |
+| 2 | generate-dockerfiles | Create per-service Dockerfiles |
+| 3 | generate-docker-compose | Create local dev docker-compose.yml |
+| 4 | generate-ci-cd | Create platform-specific pipeline (GitHub Actions/GitLab/Jenkins) |
+| 5 | generate-infrastructure | Create IaC (Terraform/PaaS configs) |
+| 6 | generate-kubernetes | Create K8s manifests (if applicable) |
+| 7 | generate-monitoring | Create logging, alerts, dashboards configs |
+| 8 | write-deploy-monitoring | Document post-deploy validation plan |
+| 9 | generate-env-setup | Create .env.example, docker-compose.override, pre-commit hooks |

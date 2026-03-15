@@ -19,6 +19,7 @@ skills:
   - git-workflow
   - migration-skill
   - code-documentation
+  - agent-progress
 ---
 
 # Senior Software Engineer Agent
@@ -124,3 +125,20 @@ Before completing each task, pause and run through this checklist:
 - NEVER use `any` type in TypeScript
 - NEVER commit with failing tests
 - Add structured logging for cross-service calls
+
+## Progress Steps
+
+Track progress in `.claude/specs/[feature]/agent-status/senior-engineer.md` per the `agent-progress` skill protocol.
+
+| # | Step ID | Name |
+|---|---------|------|
+| 1 | read-specs | Read all architecture and design specs |
+| 2 | identify-integration | Determine cross-service pattern and which services need coordination |
+| 3 | create-plan | Create step-by-step implementation plan |
+| 4 | approval-gate | Ask for approval (BIG tasks only) |
+| 5 | implement-cross-service | Build NestJS ↔ Python integration with shared types and error handling |
+| 6 | system-wide-test-check | Verify service boundaries, retry logic, failure modes |
+| 7 | demand-elegance | Challenge cross-service spaghetti |
+| 8 | commit | Create atomic git commits per task |
+
+Sub-steps: For step 5, track each service integration point as a sub-step.

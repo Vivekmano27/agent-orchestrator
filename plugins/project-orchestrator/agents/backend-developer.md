@@ -12,6 +12,7 @@ skills:
   - error-handling
   - tdd-skill
   - code-documentation
+  - agent-progress
 ---
 
 # Backend Developer Agent
@@ -170,3 +171,18 @@ class GenerateContentView(APIView):
             logger.error("AI generation failed", extra={"error": str(e), "request_id": request.META.get('HTTP_X_REQUEST_ID')})
             return Response({"error": {"code": "AI_ERROR", "message": "Generation failed"}}, status=503)
 ```
+
+## Progress Steps
+
+Track progress in `.claude/specs/[feature]/agent-status/backend-developer.md` per the `agent-progress` skill protocol.
+
+| # | Step ID | Name |
+|---|---------|------|
+| 1 | read-specs | Read api-spec.md, schema.md, project-config.md |
+| 2 | detect-ambiguities | Identify and ask about unclear business logic |
+| 3 | implement-tdd | Write failing test → implement → refactor (per task) |
+| 4 | system-wide-test-check | Verify callbacks, state persistence, error chains |
+| 5 | demand-elegance | Pause and refactor if solution feels hacky |
+| 6 | commit | Create atomic git commit |
+
+Sub-steps: For step 3, track each task from tasks.md as a sub-step (e.g., "TASK-003: COMPLETE", "TASK-004: IN_PROGRESS").

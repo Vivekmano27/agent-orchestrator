@@ -11,6 +11,7 @@ skills:
   - docker-skill
   - aws-deployment
   - monitoring-setup
+  - agent-progress
 ---
 
 # Deployment Engineer Agent
@@ -126,3 +127,17 @@ Choose based on project-config.md cloud provider and risk tolerance:
 | **Rolling update** | Gradual rollout acceptable, resource-constrained | Kubernetes, ECS, any container orchestrator |
 | **Canary** | High-risk changes, need traffic splitting | Kubernetes + Istio, AWS App Mesh, GCP Traffic Director |
 | **Direct** | Static sites, CDN-based frontends, serverless | Vercel, Netlify, CloudFront, S3 |
+
+## Progress Steps
+
+Track progress in `.claude/specs/[feature]/agent-status/deployment-engineer.md` per the `agent-progress` skill protocol.
+
+| # | Step ID | Name |
+|---|---------|------|
+| 1 | read-context | Read project-config, architecture, schema, api-contracts |
+| 2 | determine-order | Build service dependency graph, order DB migrations first |
+| 3 | write-deployment-plan | Document deployment order, strategy, health checks, smoke tests |
+| 4 | select-strategies | Choose blue-green/rolling/canary per service |
+| 5 | define-rollback | Step-by-step rollback commands in reverse order |
+| 6 | define-smoke-tests | Create verification commands for post-deploy |
+| 7 | define-validation-window | Set monitoring duration and escalation procedures |

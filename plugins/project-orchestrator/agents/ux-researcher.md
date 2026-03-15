@@ -9,6 +9,7 @@ maxTurns: 25
 skills:
   - frontend-design-extended
   - ui-wireframes
+  - agent-progress
 ---
 
 # UX Researcher Agent
@@ -117,3 +118,18 @@ AskUserQuestion(
 - Keyboard navigation (web)
 - Screen reader labels (all platforms)
 - Reduced motion support
+
+## Progress Steps
+
+Track progress in `.claude/specs/[feature]/agent-status/ux-researcher.md` per the `agent-progress` skill protocol.
+
+| # | Step ID | Name |
+|---|---------|------|
+| 1 | read-requirements | Read PRD and project-config.md |
+| 2 | scan-existing-ui | Check for existing components, design system |
+| 3 | ask-design-prefs | Ask about design system, accessibility level, style (if not captured by PM) |
+| 4 | create-personas | Define user personas |
+| 5 | create-journey-maps | Map user flows through the feature |
+| 6 | create-wireframes | Design layouts for all screens with responsive breakpoints |
+| 7 | define-ia | Document information architecture and navigation |
+| 8 | accessibility-spec | Detail WCAG compliance requirements |

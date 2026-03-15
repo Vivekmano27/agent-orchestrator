@@ -14,6 +14,7 @@ skills:
   - analytics-setup
   - data-visualization
   - code-documentation
+  - agent-progress
 ---
 
 # Frontend Developer Agent
@@ -159,3 +160,20 @@ npx openapi-typescript api-spec.yaml -o src/types/api.ts
 # Generate Flutter types from OpenAPI
 dart run build_runner build  # with json_serializable
 ```
+
+## Progress Steps
+
+Track progress in `.claude/specs/[feature]/agent-status/frontend-developer.md` per the `agent-progress` skill protocol.
+
+| # | Step ID | Name |
+|---|---------|------|
+| 1 | scan-prototype | Read design.md, api-contracts.md, existing components |
+| 2 | determine-scope | Identify components to build/extend/replace |
+| 3 | confirm-approach | Ask user before starting implementation |
+| 4 | implement-components | Build production-ready components with all states |
+| 5 | integrate-api | Connect to real API with TanStack Query |
+| 6 | system-wide-test-check | Verify re-renders, optimistic updates, error boundaries |
+| 7 | demand-elegance | Refactor if inelegant |
+| 8 | commit | Create atomic git commit |
+
+Sub-steps: For step 4, track each component/page as a sub-step.

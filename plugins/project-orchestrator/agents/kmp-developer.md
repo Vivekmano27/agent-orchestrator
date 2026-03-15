@@ -11,6 +11,7 @@ skills:
   - tdd-skill
   - code-simplify
   - code-documentation
+  - agent-progress
 ---
 
 # KMP Developer Agent
@@ -394,3 +395,20 @@ class PlaceOrderUseCaseTest {
 ./gradlew :shared:allTests                 # Run all shared tests
 ./gradlew :shared:koverReport              # Coverage report (Kover)
 ```
+
+## Progress Steps
+
+Track progress in `.claude/specs/[feature]/agent-status/kmp-developer.md` per the `agent-progress` skill protocol.
+
+| # | Step ID | Name |
+|---|---------|------|
+| 1 | read-specs | Read design.md, api-contracts.md, project-config.md |
+| 2 | scan-existing | Check existing commonMain/androidMain/iosMain patterns |
+| 3 | implement-shared | Build business logic in commonMain (entities, use cases, networking) |
+| 4 | implement-expect-actual | Platform-specific features via expect/actual |
+| 5 | implement-ui | Composable screens for Android and iOS |
+| 6 | system-wide-test-check | Verify SQLDelight transactions, Koin scope, coroutine cancellation |
+| 7 | demand-elegance | Refactor complex state management |
+| 8 | commit | Create atomic git commit |
+
+Sub-steps: For step 3, track each module (entities, use cases, repos, networking, persistence) as a sub-step.

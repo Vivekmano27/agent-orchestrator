@@ -99,6 +99,38 @@ Display a comprehensive project status dashboard with real-time pipeline progres
 +==================================================+
 ```
 
+## Agent Sub-Step Status (NEW)
+
+After showing the main dashboard, also check for agent-level detail:
+
+```bash
+# Find agent status files for the active feature
+Glob(".claude/specs/[feature]/agent-status/*.md")
+```
+
+If agent-status files exist, append an AGENT DETAIL section to the dashboard:
+```
+|  AGENT DETAIL (current phase)                     |
+|  backend-developer:                                |
+|    [x] read-specs  [x] detect-ambiguities          |
+|    [>] implement-tdd (TASK-003, 3 of 8 tasks)     |
+|    [ ] system-check  [ ] elegance  [ ] commit      |
+|  senior-engineer:                                   |
+|    [x] read-specs  [x] cross-service-plan          |
+|    [>] implement (NestJS ↔ Python integration)     |
+|  frontend-developer:                                |
+|    [~] BLOCKED — waiting on api-contracts.md        |
+```
+
+Parse each agent-status file:
+- Read the Steps table for status of each step
+- Show only agents in the CURRENT phase (skip completed phases)
+- Use compact format: `[x]` done, `[>]` active, `[ ]` pending, `[~]` blocked, `[!]` failed
+
+**Tip:** For deeper agent debugging, use `/agent-debug [agent-name]`.
+
+---
+
 ## How to Gather Each Section
 
 ### Pipeline Progress (PRIMARY SOURCE)

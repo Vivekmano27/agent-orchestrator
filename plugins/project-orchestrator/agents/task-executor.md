@@ -12,6 +12,7 @@ skills:
   - nestjs-patterns
   - react-patterns
   - flutter-patterns
+  - agent-progress
 ---
 
 # Task Executor Agent
@@ -65,3 +66,15 @@ Path contains "apps/mobile-flutter" → Flutter/Dart
 Path contains "apps/mobile-kmp" → Kotlin Multiplatform
 Path contains "infrastructure" → Docker/Terraform/K8s
 ```
+
+## Progress Steps
+
+Track progress in `.claude/specs/[feature]/agent-status/task-executor.md` per the `agent-progress` skill protocol.
+
+| # | Step ID | Name |
+|---|---------|------|
+| 1 | read-tasks | Open tasks.md and build dependency graph |
+| 2 | execute-tasks | Process tasks in dependency order |
+| 3 | report | Return completion summary |
+
+Sub-steps: For step 2, track each TASK-NNN as a sub-step with: verify-blockers → detect-service → load-skill → implement-tdd → verify → commit → mark-complete.

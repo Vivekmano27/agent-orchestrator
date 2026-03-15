@@ -25,6 +25,8 @@ model: inherit
 color: magenta
 maxTurns: 40
 permissionMode: acceptEdits
+skills:
+  - agent-progress
 ---
 
 # Planning Team
@@ -145,6 +147,25 @@ Agent(
   prompt="Read all specs in .claude/specs/[feature]/. Decompose into ordered, dependency-aware implementation tasks with agent assignments. Output to .claude/specs/[feature]/tasks.md"
 )
 ```
+
+## Progress Steps
+
+Track progress in `.claude/specs/[feature]/agent-status/planning-team.md` per the `agent-progress` skill protocol.
+
+| # | Step ID | Name |
+|---|---------|------|
+| 1 | dispatch-pm | Spawn product-manager (synchronous) |
+| 2 | dispatch-ba-ux | Spawn business-analyst + ux-researcher in parallel |
+| 3 | dispatch-architect | Spawn system-architect (synchronous) |
+| 4 | dispatch-designers | Spawn api-architect + database-architect + ui-designer in parallel |
+| 5 | validate-consistency | Check cross-spec consistency (API covers requirements, schema supports endpoints) |
+| 6 | fix-conflicts | Re-run affected agents if conflicts found |
+| 7 | dispatch-task-decomposer | Spawn task-decomposer to produce tasks.md |
+| 8 | report | Summarize all files produced, consistency issues resolved |
+
+Sub-steps: For steps 2 and 4, track each parallel agent separately.
+
+---
 
 ### STEP 8 — Report
 Summarize what was produced:

@@ -10,6 +10,7 @@ skills:
   - agent-native-design
   - agent-builder
   - mcp-builder-extended
+  - agent-progress
 ---
 
 # Agent-Native Developer Agent
@@ -308,3 +309,34 @@ When Agent Teams mode is enabled, agent-native-developer can coordinate with oth
 - Faster feedback loop — no waiting for files to be written
 - Can resolve tool/endpoint naming mismatches in real-time
 - Reduces duplicate work — if backend-developer already documented endpoint shapes in a message, agent-native-developer doesn't need to re-parse api-contracts.md
+
+## Progress Steps
+
+Track progress in `.claude/specs/[feature]/agent-status/agent-native-developer.md` per the `agent-progress` skill protocol.
+
+**Pass 1 (before backend wave):**
+
+| # | Step ID | Name |
+|---|---------|------|
+| 1 | read-context | Read project-config.md, determine input source |
+| 2 | pre-research | Research framework-specific patterns |
+| 3 | pre-scan | Check for existing agents/skills/commands |
+| 4 | gen-backend-artifacts | Create agent definitions, CRUD tools, skills, commands |
+| 5 | gen-web-artifacts | Create web action tools (if web frontend) |
+| 6 | gen-mobile-artifacts | Create mobile tools (if mobile) |
+| 7 | gen-testing-artifacts | Create testing and parity audit tools |
+| 8 | gen-cross-cutting | Create entry point, meta tools, API client, .mcp.json, capability-map.md |
+| 9 | self-review-p1 | Verify all entities have CRUD, scaffolding complete |
+
+**Pass 2 (after backend wave):**
+
+| # | Step ID | Name |
+|---|---------|------|
+| 10 | read-contracts | Read api-contracts.md for real endpoint shapes |
+| 11 | research-wiring | Verify correct API patterns and error handling |
+| 12 | wire-mcp-tools | Replace stubs with real API calls |
+| 13 | wire-api-client | Build HTTP client with actual endpoint URLs |
+| 14 | wire-shared-workspace | Implement WebSocket/cache patterns |
+| 15 | wire-dynamic-context | Implement runtime context injection |
+| 16 | parity-verification | Verify coverage against agent-spec.md |
+| 17 | self-review-p2 | Verify all tools wired, error handling correct |

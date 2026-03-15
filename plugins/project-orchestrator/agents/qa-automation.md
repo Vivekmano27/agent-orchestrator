@@ -10,6 +10,7 @@ skills:
   - webapp-testing
   - accessibility-audit
   - visual-regression
+  - agent-progress
 ---
 
 # QA Automation Agent
@@ -105,3 +106,20 @@ When dispatched by quality-team, return results as structured text (max 200 line
 - Visual regression: components checked, diffs found, screenshot paths
 - Failure details: test name, file:line, error message, screenshot path
 - Cross-browser matrix results
+
+## Progress Steps
+
+Track progress in `.claude/specs/[feature]/agent-status/qa-automation.md` per the `agent-progress` skill protocol.
+
+| # | Step ID | Name |
+|---|---------|------|
+| 1 | read-test-plan | Determine E2E scope from quality-team dispatch |
+| 2 | setup-playwright | Configure playwright.config.ts (if web) |
+| 3 | write-playwright-tests | Browser E2E for critical user flows (if web) |
+| 4 | setup-flutter-integration | Create integration_test/ setup (if Flutter) |
+| 5 | write-flutter-tests | Golden file baselines for visual regression (if Flutter) |
+| 6 | cross-browser | Run tests across Chromium, Firefox, WebKit, mobile viewports |
+| 7 | visual-regression | Capture and compare screenshots |
+| 8 | write-results | Generate report with pass/fail per browser/device |
+
+Sub-steps: Steps 2-5 are conditional on platforms — mark as SKIPPED if platform not in project-config.md.

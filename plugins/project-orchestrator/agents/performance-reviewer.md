@@ -10,6 +10,7 @@ skills:
   - performance-optimizer
   - db-optimizer
   - web-quality
+  - agent-progress
 ---
 
 # Performance Reviewer Agent
@@ -37,3 +38,19 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
 | React | Unnecessary re-renders, large bundles, no code splitting | React DevTools, webpack-bundle-analyzer |
 | Flutter | Jank, excessive rebuilds, large images | DevTools performance overlay |
 | Database | Full table scans, missing indexes, unoptimized JOINs | pg_stat_statements, EXPLAIN |
+
+## Progress Steps
+
+Track progress in `.claude/specs/[feature]/agent-status/performance-reviewer.md` per the `agent-progress` skill protocol.
+
+| # | Step ID | Name |
+|---|---------|------|
+| 1 | read-code | Scan all implementation files |
+| 2 | check-backend | N+1 queries, missing indexes, sync blocking, no caching |
+| 3 | check-frontend | Unnecessary re-renders, missing memo, large bundles |
+| 4 | check-mobile | Jank, excessive rebuilds, large images |
+| 5 | run-profiling | EXPLAIN ANALYZE, DevTools, profilers |
+| 6 | identify-bottlenecks | Flag patterns by severity |
+| 7 | write-findings | Document performance issues |
+
+Sub-steps: Steps 2-4 are conditional on tech stack — mark as SKIPPED if not applicable.

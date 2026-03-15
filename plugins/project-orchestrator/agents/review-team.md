@@ -25,6 +25,8 @@ model: inherit
 color: magenta
 maxTurns: 30
 permissionMode: default
+skills:
+  - agent-progress
 ---
 
 # Review Team
@@ -161,6 +163,23 @@ After all reviewers complete, merge findings into a single report and **write to
 [ ] Approve with conditions — [conditions]
 [ ] Request changes — [items to fix]
 ```
+
+---
+
+## Progress Steps
+
+Track progress in `.claude/specs/[feature]/agent-status/review-team.md` per the `agent-progress` skill protocol.
+
+| # | Step ID | Name |
+|---|---------|------|
+| 1 | spawn-reviewers | Dispatch all reviewers in parallel (code, security, performance, static, agent-native) |
+| 2 | wait-for-completion | All reviewers finish independently |
+| 3 | compile-report | Merge findings by severity into combined report |
+| 4 | write-review-report | Write review-report.md |
+| 5 | handle-critical | Escalate Critical findings to orchestrator for Phase 6→3 feedback |
+| 6 | report-to-orchestrator | Return combined report, severity breakdown, recommendation |
+
+Sub-steps: For step 1, track each reviewer as a sub-step (code-reviewer, security-auditor, performance-reviewer, static-analyzer, agent-native-reviewer).
 
 ---
 

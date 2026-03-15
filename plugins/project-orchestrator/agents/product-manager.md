@@ -12,6 +12,7 @@ skills:
   - estimation-skill
   - competitor-analysis
   - product-knowledge
+  - agent-progress
 memory: project
 ---
 
@@ -359,3 +360,21 @@ When a feature spans multiple services, create separate stories per service:
 - `.claude/specs/{feature}/requirements.md` (the PRD — always this path)
 - `feature_list.json` (machine-readable checklist)
 - User stories embedded in PRD or separate file
+
+## Progress Steps
+
+Track progress in `.claude/specs/[feature]/agent-status/product-manager.md` per the `agent-progress` skill protocol.
+
+| # | Step ID | Name |
+|---|---------|------|
+| 1 | read-context | Read project-config.md, dispatch prompt, scan codebase |
+| 2 | assess-requirements | Evaluate clarity — clear (skip to PRD) or vague (full discovery) |
+| 3 | tier-1-discovery | Core questions: purpose, users, platforms, MVP, out-of-scope, phases |
+| 4 | tier-2-discovery | Domain-adaptive questions (2-4, inferred from Tier 1) |
+| 5 | tier-3-optional | Offer deep-dive for BIG tasks (auth, integrations, data model, etc.) |
+| 6 | scope-discipline | Present MVP scope with opt-out framing |
+| 7 | write-prd | Write PRD sections 1-10 + feature_list.json |
+| 8 | gap-analysis | Self-validate: missing flows, incomplete criteria, edge cases, cross-service gaps |
+| 9 | approval-gate | Present approval question (MEDIUM/BIG only) |
+
+Sub-steps: For step 3, track each question (Q1-Q6) as a sub-step. For step 7, track sections written (e.g., "Sections 1-5 COMPLETE, 6-10 PENDING").

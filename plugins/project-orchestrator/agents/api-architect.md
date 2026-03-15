@@ -9,6 +9,7 @@ maxTurns: 25
 skills:
   - api-designer
   - nestjs-patterns
+  - agent-progress
 ---
 
 # API Architect Agent
@@ -107,10 +108,23 @@ export class UsersController {
 class ContentGenerationView(APIView):
     permission_classes = [IsAuthenticated]
     throttle_classes = [UserRateThrottle]
-    
+
     def post(self, request):
         serializer = ContentRequestSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         result = ai_service.generate(serializer.validated_data)
         return Response(ContentResponseSerializer(result).data, status=201)
 ```
+
+## Progress Steps
+
+Track progress in `.claude/specs/[feature]/agent-status/api-architect.md` per the `agent-progress` skill protocol.
+
+| # | Step ID | Name |
+|---|---------|------|
+| 1 | pre-research | Scan codebase for existing API patterns |
+| 2 | design-apis | Define REST/gRPC endpoints, schemas, auth, rate limits |
+| 3 | self-review | Verify auth on all endpoints, error codes, pagination, validation |
+| 4 | message-team | Notify team of completion |
+
+Sub-steps: For step 2, track each resource/endpoint group as a sub-step.

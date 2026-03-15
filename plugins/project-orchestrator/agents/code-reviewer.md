@@ -14,6 +14,7 @@ skills:
   - python-django-patterns
   - kmp-patterns
   - code-documentation
+  - agent-progress
 ---
 
 # Code Reviewer Agent
@@ -89,3 +90,21 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
 ### ✅ What's Good  |  ### 🔴 Must Fix  |  ### 🟡 Should Fix  |  ### 💡 Suggestions
 **Recommendation:** ✅ Approve | 🔄 Request Changes
 ```
+
+## Progress Steps
+
+Track progress in `.claude/specs/[feature]/agent-status/code-reviewer.md` per the `agent-progress` skill protocol.
+
+| # | Step ID | Name |
+|---|---------|------|
+| 1 | read-context | Read code changes and project-config.md |
+| 2 | inventory-code | Scan all modified files |
+| 3 | review-nestjs | Check DTOs, services, controllers, error handling |
+| 4 | review-python | Check serializers, views, async tasks, logging |
+| 5 | review-react | Check components, hooks, states, TanStack Query |
+| 6 | review-flutter | Check widgets, Riverpod, state management, dispose |
+| 7 | review-kmp | Check commonMain, expect/actual, StateFlow |
+| 8 | review-docs | Check JSDoc/KDoc/docstrings, TODO references |
+| 9 | write-review | Generate report with Must Fix / Should Fix / Suggestions |
+
+Sub-steps: Steps 3-7 are conditional on tech stack — mark as SKIPPED if not applicable.

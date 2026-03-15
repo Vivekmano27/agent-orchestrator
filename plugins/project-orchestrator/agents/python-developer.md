@@ -16,6 +16,7 @@ skills:
   - agent-builder
   - workflow-automation
   - code-documentation
+  - agent-progress
 ---
 
 # Python Developer Agent
@@ -163,3 +164,20 @@ class TestContentGenerationView:
         response = api_client.post('/api/ai/generate/', {'prompt': 'Hello'})
         assert response.status_code == 503
 ```
+
+## Progress Steps
+
+Track progress in `.claude/specs/[feature]/agent-status/python-developer.md` per the `agent-progress` skill protocol.
+
+| # | Step ID | Name |
+|---|---------|------|
+| 1 | read-specs | Read requirements.md, api-contracts.md, project-config.md |
+| 2 | scan-existing | Check existing Django models, serializers, views |
+| 3 | implement-django | Build DRF serializers, views, models, signals |
+| 4 | integrate-ai | Call Claude/OpenAI API with error handling and retry |
+| 5 | implement-async | Celery tasks for async processing |
+| 6 | system-wide-test-check | Verify Django signals, Celery chains, state persistence |
+| 7 | demand-elegance | Refactor complex async pipelines |
+| 8 | commit | Create atomic git commit |
+
+Sub-steps: For step 3, track each model/view/serializer as a sub-step.

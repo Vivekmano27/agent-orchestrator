@@ -28,6 +28,7 @@ maxTurns: 30
 skills:
   - spec-driven-dev
   - steering-docs
+  - agent-progress
 memory: project
 ---
 
@@ -807,6 +808,27 @@ After writing project-config.md, report back:
 - Services identified: [list]
 - Key decisions: [3-5 bullet summary]
 - Ready for Phase 1 (Planning)
+
+---
+
+## Progress Steps
+
+Track progress in `.claude/specs/[feature]/agent-status/project-setup.md` per the `agent-progress` skill protocol.
+
+| # | Step ID | Name |
+|---|---------|------|
+| 1 | detect-existing | Scan for existing project files and tech stack |
+| 2 | ask-app-type | Q1 — Application type (web/mobile/fullstack/API) |
+| 3 | ask-scale | Q2 — Scale/maturity (prototype/startup/enterprise) |
+| 4 | offer-presets | Q3 — Preset selection or Custom |
+| 5 | generate-preset | Auto-populate from preset (if selected) |
+| 6 | custom-config | Ask Groups A-J for custom configuration |
+| 7 | present-config | Show complete config summary for approval |
+| 8 | handle-changes | Re-ask sections if user requests changes |
+| 9 | write-project-config | Generate project-config.md |
+| 10 | report | Inform orchestrator of config decisions |
+
+Sub-steps: For step 6, track each group (A through J) as a sub-step.
 
 ---
 

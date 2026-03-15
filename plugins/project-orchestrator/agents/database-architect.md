@@ -9,6 +9,7 @@ maxTurns: 25
 skills:
   - database-designer
   - db-optimizer
+  - agent-progress
 ---
 
 # Database Architect Agent
@@ -180,3 +181,18 @@ After writing schema.md, re-read it and verify:
 - [ ] Covers all entities referenced in requirements.md
 
 Message the team: "Self-review complete. Fixed [N] issues: [brief list]."
+
+## Progress Steps
+
+Track progress in `.claude/specs/[feature]/agent-status/database-architect.md` per the `agent-progress` skill protocol.
+
+| # | Step ID | Name |
+|---|---------|------|
+| 1 | pre-research | Scan for existing Prisma/Django patterns, naming conventions |
+| 2 | design-schemas | Create tables with UUIDs, timestamps, soft deletes, indexes |
+| 3 | design-migrations | Define migration naming and rollback strategy |
+| 4 | create-docker-compose | Generate docker-compose.dev.yml and docker-compose.test.yml |
+| 5 | self-review | Verify table structure, indexes, entity consistency |
+| 6 | message-team | Notify team of completion |
+
+Sub-steps: For step 2, track each table as a sub-step.

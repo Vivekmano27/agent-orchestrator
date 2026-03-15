@@ -25,6 +25,8 @@ model: inherit
 color: magenta
 maxTurns: 50
 permissionMode: acceptEdits
+skills:
+  - agent-progress
 ---
 
 # Design Team — Phase 2 Production-Ready Design
@@ -322,6 +324,29 @@ Report back:
 - Key negotiations resolved: [list decisions agents aligned on via SendMessage]
 - Known issues: [list or "none"]
 - Ready for approval gate: yes / no (with blockers if no)
+
+---
+
+## Progress Steps
+
+Track progress in `.claude/specs/[feature]/agent-status/design-team.md` per the `agent-progress` skill protocol.
+
+| # | Step ID | Name |
+|---|---------|------|
+| 1 | read-task-size | Parse dispatch prompt for task classification |
+| 2 | codebase-research | Scan existing patterns and prior solutions |
+| 3 | write-research-context | Write research-context.md and broadcast to team |
+| 4 | dispatch-architect | Dispatch system-architect (synchronous first) |
+| 5 | dispatch-parallel-designers | Dispatch api-architect + database-architect + ui-designer + agent-native-designer |
+| 6 | peer-negotiation | Coordinate entity names, endpoint shapes, tool mappings |
+| 7 | verify-outputs | Check all expected spec files exist with substantive content |
+| 8 | cross-peer-review | Agents review each other's specs, fix issues |
+| 9 | dispatch-design-reviewer | Independent reviewer checks production-readiness |
+| 10 | handle-critical-issues | Route Critical findings to responsible agents |
+| 11 | generate-summary | Synthesize SUMMARY.md |
+| 12 | report-to-orchestrator | Return files produced, parity coverage, verdict |
+
+Sub-steps: For step 5, track each parallel agent as a sub-step.
 
 ---
 

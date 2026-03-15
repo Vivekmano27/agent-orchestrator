@@ -11,6 +11,7 @@ skills:
   - api-designer
   - database-designer
   - security-reviewer
+  - agent-progress
 ---
 
 # Design Reviewer Agent
@@ -131,3 +132,19 @@ When dispatched with "Verify ONLY these Critical issues have been resolved":
 - Check ONLY whether those specific issues are fixed
 - Do NOT perform a full review
 - Update the verdict in design-review.md
+
+## Progress Steps
+
+Track progress in `.claude/specs/[feature]/agent-status/design-reviewer.md` per the `agent-progress` skill protocol.
+
+| # | Step ID | Name |
+|---|---------|------|
+| 1 | read-specs | Read all design spec files and project-config.md |
+| 2 | architecture-alignment | Verify api-spec, schema, design align with architecture.md |
+| 3 | api-schema-consistency | Check entity names match, FK relationships represented |
+| 4 | production-readiness | Verify auth, error handling, rate limiting, logging |
+| 5 | security-review | Check sensitive data exposure, input validation, soft deletes |
+| 6 | performance-risks | Identify N+1 patterns, missing indexes, unbounded lists |
+| 7 | completeness | Verify every user story, endpoint, table, component has coverage |
+| 8 | agent-native-parity | Verify parity coverage if agent-spec.md exists |
+| 9 | write-design-review | Generate design-review.md with severity-rated findings |

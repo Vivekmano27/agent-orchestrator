@@ -25,6 +25,8 @@ model: inherit
 color: magenta
 maxTurns: 50
 permissionMode: acceptEdits
+skills:
+  - agent-progress
 ---
 
 # Quality Team — Phase 4 Testing
@@ -309,6 +311,27 @@ Return to the project-orchestrator:
 - Flaky tests detected (for tracking)
 
 Do NOT run security audit or code review — the orchestrator handles those in Phases 5 and 6.
+
+## Progress Steps
+
+Track progress in `.claude/specs/[feature]/agent-status/quality-team.md` per the `agent-progress` skill protocol.
+
+| # | Step ID | Name |
+|---|---------|------|
+| 1 | requirements-traceability | Cross-check acceptance criteria against implementation |
+| 2 | create-test-plan | Write test-plan.md with coverage targets |
+| 3 | gate-3-5 | Present test plan for user approval |
+| 4 | dispatch-testers | Spawn test-engineer + qa-automation in parallel |
+| 5 | collect-results | Parse test agent reports |
+| 6 | write-test-report | Synthesize test-report.md with coverage data |
+| 7 | classify-failures | Categorize as IMPLEMENTATION_BUG / TEST_BUG / ENVIRONMENT_ISSUE / FLAKY |
+| 8 | handle-test-bugs | Re-dispatch test agent for test bugs (1 retry max) |
+| 9 | route-impl-bugs | Route implementation bugs to orchestrator → feature-team |
+| 10 | report-to-orchestrator | Return pass/fail, coverage summary, classified failures |
+
+Sub-steps: For step 4, track test-engineer and qa-automation separately.
+
+---
 
 ## STOP and Re-plan Policy
 

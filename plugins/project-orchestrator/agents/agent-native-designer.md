@@ -9,6 +9,7 @@ maxTurns: 25
 skills:
   - agent-native-design
   - agent-builder
+  - agent-progress
 ---
 
 # Agent-Native Designer Agent
@@ -163,3 +164,19 @@ Write to `.claude/specs/[feature]/agent-spec.md` following the template in the a
 4. **Agent-Native Features** — prompt-defined agents with runtime artifact format
 5. **Shared Workspace** — database, observation, cache
 6. **Dynamic Context Injection** — context data table
+
+## Progress Steps
+
+Track progress in `.claude/specs/[feature]/agent-status/agent-native-designer.md` per the `agent-progress` skill protocol.
+
+| # | Step ID | Name |
+|---|---------|------|
+| 1 | read-inputs | Read requirements, architecture, api-spec, schema, design |
+| 2 | identify-entities | Extract domain entities and user-initiated actions |
+| 3 | design-tool-surface | Define CRUD tools per entity |
+| 4 | map-ui-to-tools | Create parity map (UI action → MCP tool) |
+| 5 | design-agent-features | Identify 2-5 prompt-defined capabilities |
+| 6 | specify-shared-workspace | Define agent/user shared data patterns |
+| 7 | specify-dynamic-context | Define runtime data injected into prompts |
+| 8 | cross-review | Verify against api-spec, schema, design.md |
+| 9 | parity-verification | Calculate and append parity coverage results |

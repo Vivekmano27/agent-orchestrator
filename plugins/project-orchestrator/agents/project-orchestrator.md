@@ -31,6 +31,7 @@ skills:
   - estimation-skill
   - agent-workspace-setup
   - phase-runner
+  - agent-progress
 memory: project
 ---
 
@@ -307,6 +308,32 @@ Write `.claude/specs/[feature]/progress.md` at every phase transition:
 4. **For WAITING_FOR_APPROVAL:** present the gate immediately.
 5. **After resuming**, continue the pipeline normally.
 6. **Do NOT** re-run discovery, re-ask setup questions, re-create existing files.
+
+---
+
+## Progress Steps
+
+Track progress in `.claude/specs/[feature]/agent-status/project-orchestrator.md` per the `agent-progress` skill protocol.
+
+| # | Step ID | Name |
+|---|---------|------|
+| 1 | classify-task | Classify task size (SMALL/MEDIUM/BIG) |
+| 2 | create-spec-dir | Create spec directory and initial progress.md |
+| 3 | run-phase-0-5 | Dispatch project-setup (Phase 0.5) |
+| 4 | run-phase-0-75 | Brainstorming gate (Phase 0.75) |
+| 5 | run-phase-1 | Dispatch planning agents (Phase 1) |
+| 6 | run-phase-2 | Dispatch design-team (Phase 2) |
+| 7 | run-phase-2-1 | Dispatch task-decomposer (Phase 2.1) |
+| 8 | run-phase-2-5 | Git setup (Phase 2.5) |
+| 9 | run-phase-3 | Dispatch feature-team (Phase 3) |
+| 10 | run-phase-4 | Dispatch quality-team (Phase 4) |
+| 11 | run-phase-5 | Dispatch security-auditor (Phase 5) |
+| 12 | run-phase-6 | Dispatch review-team (Phase 6) |
+| 13 | run-phase-7 | Dispatch devops/deployment (Phase 7) |
+| 14 | run-phase-8 | Dispatch technical-writer (Phase 8) |
+| 15 | pipeline-done | Mark pipeline DONE |
+
+Sub-steps: Each `run-phase-*` step should log sub-steps for: dispatch, verify-outputs, content-validation, update-progress, transition-gate, approval-gate (if applicable).
 
 ---
 

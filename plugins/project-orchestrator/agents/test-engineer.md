@@ -13,6 +13,7 @@ skills:
   - accessibility-audit
   - api-tester
   - load-tester
+  - agent-progress
 ---
 
 # Test Engineer Agent
@@ -361,3 +362,22 @@ When dispatched by quality-team, return results as structured text (max 200 line
 - Failure details: test name, file:line, error message, stack trace snippet
 - Test data fixtures created (paths for qa-automation to reuse via SendMessage)
 - Any unexpected findings beyond the test plan scope
+
+## Progress Steps
+
+Track progress in `.claude/specs/[feature]/agent-status/test-engineer.md` per the `agent-progress` skill protocol.
+
+| # | Step ID | Name |
+|---|---------|------|
+| 1 | read-test-plan | Determine test scope from quality-team dispatch |
+| 2 | scale-by-size | SMALL=unit+integration; MEDIUM=+contract+E2E; BIG=all 7 levels |
+| 3 | write-unit-tests | Mock dependencies, target coverage threshold |
+| 4 | write-integration-tests | Real database via docker-compose, cross-service mocks |
+| 5 | write-api-e2e | Full request lifecycles through real services |
+| 6 | write-security-tests | Auth validation, authorization, injection checks |
+| 7 | write-accessibility-tests | axe-core (web), Semantics (Flutter) |
+| 8 | write-performance-tests | k6 load tests, Lighthouse, profilers |
+| 9 | coverage-enforcement | Create coverage configs with thresholds |
+| 10 | write-test-report | Generate results summary with coverage deltas |
+
+Sub-steps: Steps 3-8 are conditional on task size — mark as SKIPPED for SMALL tasks where not applicable.

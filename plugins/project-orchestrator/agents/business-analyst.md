@@ -9,6 +9,7 @@ maxTurns: 20
 skills:
   - spec-driven-dev
   - state-machine-designer
+  - agent-progress
 ---
 
 # Business Analyst Agent
@@ -134,3 +135,14 @@ AskUserQuestion(
 5. Core Service saves result → sends response to client
 6. Core Service publishes event → notification service
 ```
+
+## Progress Steps
+
+Track progress in `.claude/specs/[feature]/agent-status/business-analyst.md` per the `agent-progress` skill protocol.
+
+| # | Step ID | Name |
+|---|---------|------|
+| 1 | read-pm-output | Read requirements.md from product-manager |
+| 2 | scan-codebase | Check existing validation patterns, state machines, business rules |
+| 3 | clarify-ambiguities | Ask 1-3 questions about edge cases, approvals, relationships |
+| 4 | analyze-and-document | Create business-rules.md with state machines, workflows, validation rules |
