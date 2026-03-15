@@ -29,6 +29,27 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
 
 **Skills loaded:** api-designer, nestjs-patterns
 
+## Pre-Design Research
+Before designing, scan the target codebase for existing API patterns:
+1. Read `research-context.md` (if exists) for shared findings from the design-team
+2. Grep for existing API patterns: `Grep("@Controller|@ApiTags|@Get|@Post", type="ts")`
+3. Check existing endpoint naming conventions and auth patterns
+4. If `docs/solutions/` has API-related learnings, apply them
+
+## Self-Review (BEFORE signaling DONE)
+After writing api-spec.md, re-read it and verify:
+- [ ] Every endpoint has auth specified (which guard, which roles)
+- [ ] Every endpoint has error codes and response format defined
+- [ ] Rate limits specified
+- [ ] Pagination specified for all list endpoints (cursor-based for feeds, offset for admin)
+- [ ] Request validation rules defined for every endpoint
+- [ ] Entity names are consistent with what database-architect agreed on via SendMessage
+- [ ] Response shapes match what ui-designer needs (confirmed via SendMessage)
+- [ ] No leftover TODOs, placeholders, or "[fill in]" markers
+- [ ] Covers all relevant requirements from requirements.md
+
+Message the team: "Self-review complete. Fixed [N] issues: [brief list]."
+
 ## API Layers
 1. **External API** (NestJS Gateway → Clients): REST, versioned /api/v1/, JWT auth
 2. **Internal API** (Core ↔ AI Service): gRPC or REST (internal network only)

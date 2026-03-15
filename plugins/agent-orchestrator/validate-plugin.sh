@@ -24,8 +24,8 @@ echo ""
 # 1. Count agents
 AGENT_COUNT=$(ls "$SCRIPT_DIR"/agents/*.md 2>/dev/null | wc -l | tr -d ' ')
 echo -e "Agents: $AGENT_COUNT files"
-if [ "$AGENT_COUNT" -lt 26 ]; then
-  echo -e "  ${RED}ERROR: Expected 26 agents (22 + 4 teams), found $AGENT_COUNT${NC}"
+if [ "$AGENT_COUNT" -lt 28 ]; then
+  echo -e "  ${RED}ERROR: Expected 28 agents (23 + 4 teams + design-reviewer), found $AGENT_COUNT${NC}"
   ERRORS=$((ERRORS + 1))
 else
   echo -e "  ${GREEN}OK${NC}"

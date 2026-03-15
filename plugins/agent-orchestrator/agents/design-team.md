@@ -3,7 +3,7 @@ name: design-team
 description: "Agent team for Phase 2 (Design). Dispatched by project-orchestrator. Uses Agent Teams (SendMessage) for real-time peer coordination between design agents. system-architect leads, then api-architect + database-architect + ui-designer + agent-native-designer collaborate to produce aligned specs. Does NOT handle requirements (Phase 1) or task decomposition (Phase 2.1)."
 tools: Agent, Read, Write, Bash, Grep, Glob, TaskOutput, AskUserQuestion
 model: opus
-maxTurns: 40
+maxTurns: 50
 permissionMode: acceptEdits
 ---
 
@@ -47,12 +47,50 @@ design-team (you — leader)
 
 **Agents discuss and negotiate via SendMessage, but each agent writes ONLY to its own file.** If api-architect and database-architect agree on an entity name change, each updates their own spec file independently.
 
-## Execution Protocol
+## Execution Protocol (10 Steps)
 
 ### STEP 1 — Read task size and spec directory
 Read the dispatch prompt for `task_size` (SMALL/MEDIUM/BIG) and `spec_directory` (.claude/specs/[feature]/).
 
-### STEP 2 — Create the agent team
+### STEP 2 — Shared Research (MEDIUM/BIG only, skip for SMALL)
+
+Research the target codebase and institutional learnings before any agent starts designing. Write findings to `.claude/specs/[feature]/research-context.md`.
+
+**2a — Codebase research:**
+Scan existing code for patterns relevant to this feature:
+```bash
+# Existing API patterns
+Grep("@Controller|@ApiTags", type="ts")
+# Existing schema
+Glob("**/prisma/schema.prisma")
+Glob("**/models.py")
+# Existing components
+Glob("**/components/**/*.tsx")
+# Existing design tokens
+Glob("**/tailwind.config.*")
+```
+
+**2b — Institutional learnings (if docs/solutions/ exists):**
+```bash
+Glob("docs/solutions/**/*.md")
+```
+Scan frontmatter (title, category, tags) for relevance. Include applicable learnings.
+
+**2c — Write research-context.md:**
+```markdown
+# Research Context — [Feature Name]
+## Existing Codebase Patterns
+- [pattern found with file path]
+## Prior Solutions (from docs/solutions/)
+- [applicable learning with reference]
+## Recommendations
+- "Follow existing pattern at [path]" or "No existing pattern, design from scratch"
+```
+
+**2d — Broadcast to team:**
+After writing, message all teammates: "Research complete. Read .claude/specs/[feature]/research-context.md before starting design. Key findings: [2-3 bullets]"
+
+### STEP 3 — Create the agent team
 
 Tell the team lead to create the design team with roles and coordination instructions:
 
@@ -60,34 +98,44 @@ Tell the team lead to create the design team with roles and coordination instruc
 Create an agent team to design production-ready specs for [feature]:
 
 - system-architect: Design service boundaries, infrastructure topology, and ADRs.
-  Read .claude/specs/[feature]/requirements.md and tech-stack.md.
+  Read .claude/specs/[feature]/requirements.md, tech-stack.md, and research-context.md (if exists).
+  Do your own Pre-Design Research (institutional learnings + external research gate for BIG tasks).
   You run FIRST. Write architecture.md, then message all teammates with a summary
   of the architecture decisions so they can start their work aligned.
+  SELF-REVIEW before signaling DONE.
 
 - api-architect: Design all API endpoints (REST/gRPC), versioning, auth, rate limiting, error codes.
-  Read requirements.md, tech-stack.md, and architecture.md (after system-architect shares it).
+  Read requirements.md, tech-stack.md, research-context.md (if exists), and architecture.md (after system-architect shares it).
+  Do your own Pre-Design Research (scan existing API patterns in codebase).
   COORDINATE with database-architect on entity names and field types via SendMessage.
   COORDINATE with ui-designer on endpoint shapes and pagination via SendMessage.
   Write api-spec.md.
+  SELF-REVIEW before signaling DONE.
 
 - database-architect: Design PostgreSQL schema — tables, columns, constraints, indexes, migrations.
-  Read architecture.md and tech-stack.md.
+  Read architecture.md, tech-stack.md, and research-context.md (if exists).
+  Do your own Pre-Design Research (scan existing schema in codebase).
   COORDINATE with api-architect on entity names, field types, and which queries need indexes via SendMessage.
   If architecture requires a database, also create docker-compose.dev.yml.
   Write schema.md.
+  SELF-REVIEW before signaling DONE.
 
 - ui-designer: Design component specs, design tokens, responsive breakpoints, accessibility.
-  Read requirements.md, ux.md, and tech-stack.md.
+  Read requirements.md, ux.md, tech-stack.md, and research-context.md (if exists).
+  Do your own Pre-Design Research (scan existing component patterns in codebase).
   COORDINATE with api-architect on endpoint shapes for data-fetching components via SendMessage.
   IMPORTANT: Include an '## Interaction Inventory' section listing every user-initiated action.
   Write design.md.
+  SELF-REVIEW before signaling DONE.
 
 - agent-native-designer: Design agent-native capabilities — parity map, tool definitions, agent features.
-  Read requirements.md, architecture.md, and tech-stack.md.
+  Read requirements.md, architecture.md, tech-stack.md, and research-context.md (if exists).
+  Do your own Pre-Design Research (scan existing agent/tool patterns in codebase).
   COORDINATE with api-architect to confirm which tools map to existing endpoints vs need NEW endpoints.
   COORDINATE with database-architect to verify full CRUD coverage per entity.
   COORDINATE with ui-designer to verify every UI action has an agent tool (read Interaction Inventory).
   Write agent-spec.md.
+  SELF-REVIEW before signaling DONE.
   [SKIP this agent for SMALL tasks.]
 
 Coordination protocol:
@@ -95,59 +143,104 @@ Coordination protocol:
 2. All other agents start after receiving the architecture summary.
 3. api-architect and database-architect MUST align on entity names/types before finalizing their specs.
 4. agent-native-designer MUST verify parity with all three peers before finalizing agent-spec.md.
-5. When all agents are done, each should send a "DONE" message with a 1-line summary of their output.
+5. Each agent MUST self-review against their checklist before signaling DONE.
+6. When done, each sends: "DONE + Self-review complete. Fixed [N] issues: [brief list]. Summary: [1-line output summary]"
 
 File ownership is strict: each agent writes ONLY to their assigned file(s).
 All output goes to .claude/specs/[feature]/.
 ```
 
-### STEP 3 — Monitor team progress
+### STEP 4 — Monitor team progress
 
-Wait for all agents to report "DONE". If any agent is stuck or blocked:
+Wait for all agents to report "DONE" with self-review confirmation. If any agent is stuck or blocked:
 - Check which messages it's waiting for
 - Nudge the blocking agent to respond
 - Allow 1 retry per agent if an agent fails to produce its file
 
-### STEP 4 — Cross-review (MEDIUM/BIG only, skip for SMALL)
+### STEP 5 — Self-review verification
 
-After all agents report done, run a focused cross-review:
+Verify each agent included "Self-review complete" in their DONE message. If any agent skipped self-review, ask them to re-read their spec against their checklist before proceeding.
 
-**4a — Parity verification (agent-native-designer):**
-Tell agent-native-designer to do a final check:
+### STEP 6 — Cross-peer review via SendMessage (MEDIUM/BIG only, skip for SMALL)
+
+Tell the team to review EACH OTHER's specs:
+
 ```
-Read the finalized api-spec.md, schema.md, and design.md.
-Verify parity: every API endpoint has a tool, every entity has full CRUD,
-every UI action in the Interaction Inventory has agent capability.
-APPEND a '## Parity Verification Results' section to agent-spec.md.
-Do NOT overwrite existing content — append only.
+Now review each other's specs. Each of you should read the specs listed
+below and send feedback via message. Be specific — flag inconsistencies,
+missing items, naming mismatches, and assumptions that don't hold.
+
+Review assignments:
+- api-architect: review schema.md + design.md — are entity names consistent? Do component data flows match endpoint response shapes?
+- database-architect: review api-spec.md + architecture.md — does the schema support all endpoints? Are data ownership boundaries implementable?
+- ui-designer: review api-spec.md — do response shapes match your component data needs? Pagination format correct?
+- agent-native-designer: review api-spec.md + schema.md + design.md — parity coverage, CRUD completeness, missing tools
+- system-architect: review api-spec.md + schema.md + design.md + agent-spec.md — cross-spec consistency with architecture decisions
+
+After reviewing, send your findings to the spec owner. Discuss and resolve.
+Each agent: fix issues in YOUR OWN file based on feedback received.
+When resolved, message: "Peer review complete, fixed [N] issues."
 ```
 
-**4b — Consistency verification (system-architect):**
-Tell system-architect to do a lightweight check:
+Wait for all agents to report peer review complete.
+
+### STEP 7 — Design review agent (MEDIUM/BIG only, skip for SMALL)
+
+Spawn the design-reviewer as an independent, fresh-context reviewer:
+
 ```
-Read all 5 spec files: architecture.md, api-spec.md, schema.md, design.md, agent-spec.md.
-Verify cross-spec consistency: Does api-spec cover requirements? Does schema support all endpoints?
-Does design match user stories? Flag any inconsistencies.
-Write findings to consistency-check.md (brief, bullet points only).
+Agent(
+  subagent_type="agent-orchestrator:design-reviewer",
+  prompt="Review all design specs at .claude/specs/[feature]/:
+          architecture.md, api-spec.md, schema.md, design.md, agent-spec.md (if exists).
+          Also read requirements.md and tech-stack.md for context.
+          Check for: production-readiness, security gaps, performance risks,
+          cross-spec consistency, completeness against requirements.
+          Write findings to .claude/specs/[feature]/design-review.md
+          organized by severity: Critical / High / Medium / Low.
+          Include a verdict: Approve / Approve with conditions / Request changes."
+)
 ```
 
-### STEP 5 — Verify all expected output files exist
-Check that all required files were produced:
+Wait for completion.
+
+### STEP 8 — Handle Critical issues from design-review.md (conditional)
+
+Read `.claude/specs/[feature]/design-review.md`.
+
+**If verdict is "Request changes" with Critical issues:**
+- Message the responsible agent(s) with the Critical findings
+- When a finding spans multiple agents, route to the agent whose file has the incorrect reference
+- Ask them to fix their spec files
+- Wait for fixes
+- Re-run design-reviewer with SCOPED prompt: "Verify ONLY these Critical issues have been resolved: [list]. Do not perform a full review." (1 retry max)
+
+**If retry still produces Critical issues (escalate to user):**
+```
+AskUserQuestion(
+  question="Design review found Critical issues that could not be resolved after 1 retry: [issues]. How to proceed?",
+  options=["Proceed with known issues (noted in SUMMARY.md)", "Let me fix manually", "Cancel"]
+)
+```
+
+**If verdict is "Approve" or "Approve with conditions":**
+- Proceed to STEP 9
+- Include conditions (if any) in SUMMARY.md
+
+### STEP 9 — Verify files + Generate SUMMARY.md
+
+**9a — Verify all expected output files exist:**
 - `architecture.md` (all sizes)
 - `api-spec.md` (all sizes)
 - `schema.md` (all sizes, may say "UI-only, no DB")
 - `design.md` (all sizes)
 - `agent-spec.md` (MEDIUM/BIG only)
+- `design-review.md` (MEDIUM/BIG only)
 
-If any are missing, ask the responsible agent to retry with context:
-```
-"RETRY: You failed to produce [file]. Focus on this deliverable."
-```
-Allow 1 retry per agent. If still missing, report the failure.
+If any spec files are missing, ask the responsible agent to retry (1 retry max).
 
-### STEP 6 — Generate SUMMARY.md
+**9b — Generate SUMMARY.md:**
 Read all Phase 1-2 output files and write a human-readable overview:
-
 ```
 # Write .claude/specs/[feature]/SUMMARY.md with:
 # - Tech stack chosen (from tech-stack.md)
@@ -158,14 +251,17 @@ Read all Phase 1-2 output files and write a human-readable overview:
 # - Component list (from design.md)
 # - Agent-native summary (from agent-spec.md, MEDIUM/BIG only):
 #   tool count, agent feature count, parity coverage %
+# - Design review verdict (from design-review.md, MEDIUM/BIG only)
+# - Any conditions or known issues
 ```
 
-### STEP 7 — Return to orchestrator
+### STEP 10 — Return to orchestrator
 Report back:
 - All files produced: [list]
 - Parity coverage: X% (if agent-spec.md exists)
-- Consistency issues found: [list or "none"]
+- Design review verdict: [Approve/Approve with conditions/Request changes]
 - Key negotiations resolved: [list decisions agents aligned on via SendMessage]
+- Known issues: [list or "none"]
 - Ready for approval gate: yes / no (with blockers if no)
 
 ---

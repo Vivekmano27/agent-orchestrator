@@ -30,6 +30,14 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
 
 **Skills loaded:** frontend-design-extended, design-system-builder, ui-wireframes, react-patterns, flutter-patterns
 
+## Pre-Design Research
+Before designing, scan the target codebase for existing component patterns:
+1. Read `research-context.md` (if exists) for shared findings from the design-team
+2. Look for existing component patterns: `Glob("**/components/**/*.tsx")`
+3. Check existing design tokens or Tailwind config: `Glob("**/tailwind.config.*")`
+4. Look for existing Flutter widgets: `Glob("**/lib/features/**/*.dart")`
+5. If `docs/solutions/` has UI-related learnings, apply them
+
 **Multi-platform design:**
 - Shared design tokens (colors, spacing, typography) across ALL platforms
 - Platform-adaptive components (Material on Android, Cupertino on iOS, custom on web)
@@ -77,3 +85,16 @@ At the end of `design.md`, include an `## Interaction Inventory` section listing
 - List EVERY user-initiated action (button clicks, form submits, drags, swipes, navigation)
 - Include actions that are local-state only (no API call) — these still need agent parity
 - Match API calls to endpoints from `api-spec.md` where applicable
+
+## Self-Review (BEFORE signaling DONE)
+After writing design.md, re-read it and verify:
+- [ ] Every component specifies all 8 states (Default, Hover, Pressed, Focus, Disabled, Loading, Error, Empty)
+- [ ] Shared design tokens defined (colors, spacing, typography, border radius)
+- [ ] Responsive breakpoints specified
+- [ ] Accessibility compliance addressed (WCAG)
+- [ ] Interaction Inventory is complete — every user-initiated action is listed
+- [ ] Response shapes from api-architect are reflected in component data flows (confirmed via SendMessage)
+- [ ] No leftover TODOs, placeholders, or "[fill in]" markers
+- [ ] Covers all UI-relevant requirements from requirements.md
+
+Message the team: "Self-review complete. Fixed [N] issues: [brief list]."

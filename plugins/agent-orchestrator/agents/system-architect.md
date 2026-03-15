@@ -156,3 +156,15 @@ After the approach is selected, proceed to detailed architecture design using th
 - **CDN:** CloudFront (static assets + API caching)
 - **Secrets:** AWS SSM Parameter Store or Secrets Manager
 - **CI/CD:** GitHub Actions → ECR → ECS deploy
+
+## Self-Review (BEFORE signaling DONE)
+After writing architecture.md, re-read it and verify:
+- [ ] ADRs have context + decision + consequences (not just the decision)
+- [ ] Mermaid diagrams render correctly (proper syntax)
+- [ ] Service boundaries are clear — each service owns its data
+- [ ] Communication patterns specified for every service-to-service call
+- [ ] Matches existing patterns found in Pre-Design Research (if applicable)
+- [ ] No leftover TODOs, placeholders, or "[fill in]" markers
+- [ ] Covers all relevant requirements from requirements.md
+
+Message the team: "Self-review complete. Fixed [N] issues: [brief list]."

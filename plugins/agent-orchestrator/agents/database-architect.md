@@ -29,6 +29,14 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
 
 **Database strategy:** Each service owns its database schema. No direct cross-service DB access.
 
+## Pre-Design Research
+Before designing, scan the target codebase for existing schema patterns:
+1. Read `research-context.md` (if exists) for shared findings from the design-team
+2. Look for existing Prisma schema: `Glob("**/prisma/schema.prisma")`
+3. Look for existing Django models: `Glob("**/models.py")`
+4. Check existing naming conventions (table names, column names, index names)
+5. If `docs/solutions/` has schema-related learnings, apply them
+
 ## Per-Service Databases
 | Service | Database | Key Tables |
 |---------|----------|-----------|
@@ -118,3 +126,16 @@ volumes:
 
 **Why here (Phase 2) not Phase 7:**
 Phase 3 (build) and Phase 4 (tests) need a running database. devops-engineer in Phase 7 handles production Dockerfiles, docker-compose.prod.yml, Kubernetes, and Terraform — not the dev DB bootstrap.
+
+## Self-Review (BEFORE signaling DONE)
+After writing schema.md, re-read it and verify:
+- [ ] Every table has UUID PK, `created_at`, `updated_at` timestamps
+- [ ] Soft delete (`deleted_at`) added for important entities
+- [ ] Foreign key indexes created for every FK column
+- [ ] Active-record indexes for soft-delete filters (`WHERE deleted_at IS NULL`)
+- [ ] Entity names are consistent with what api-architect agreed on via SendMessage
+- [ ] Migration naming follows `YYYYMMDDHHMMSS_descriptive_name` convention
+- [ ] No leftover TODOs, placeholders, or "[fill in]" markers
+- [ ] Covers all entities referenced in requirements.md
+
+Message the team: "Self-review complete. Fixed [N] issues: [brief list]."

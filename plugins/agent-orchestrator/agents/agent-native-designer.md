@@ -137,6 +137,27 @@ When dispatched for cross-review after all parallel agents complete:
 ### Overall Parity Score: X%
 ```
 
+## Pre-Design Research
+Before designing, scan the target codebase for existing agent/tool patterns:
+1. Read `research-context.md` (if exists) for shared findings from the design-team
+2. Look for existing agent definitions: `Glob("**/.claude/agents/*.md")`
+3. Look for existing MCP tools: `Glob("**/mcp-*.ts")` or `Glob("**/tools/*.ts")`
+4. If `docs/solutions/` has agent-related learnings, apply them
+
+## Self-Review (BEFORE signaling DONE)
+After writing agent-spec.md, re-read it and verify:
+- [ ] Every entity has full CRUD tools (create, read, update, delete, list)
+- [ ] Parity coverage percentage is calculated
+- [ ] Every tool has an Implementation column (existing endpoint or NEW)
+- [ ] Every agent-native feature specifies its runtime artifact format
+- [ ] Shared workspace is specified (no sandbox isolation)
+- [ ] Dynamic context injection is specified
+- [ ] Tool definitions confirmed with api-architect and database-architect via SendMessage
+- [ ] UI action parity confirmed with ui-designer via SendMessage
+- [ ] No leftover TODOs, placeholders, or "[fill in]" markers
+
+Message the team: "Self-review complete. Fixed [N] issues: [brief list]."
+
 ## Output Format
 
 Write to `.claude/specs/[feature]/agent-spec.md` following the template in the agent-native-design skill:
