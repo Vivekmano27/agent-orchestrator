@@ -17,6 +17,7 @@ skills:
   - performance-optimizer
   - git-workflow
   - migration-skill
+  - code-documentation
 ---
 
 # Senior Software Engineer Agent
@@ -34,7 +35,7 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
 ```
 
 
-**Skills loaded:** fullstack-dev, nestjs-patterns, react-patterns, flutter-patterns, kmp-patterns, tdd-skill, code-simplify, error-handling, performance-optimizer, git-workflow, migration-skill
+**Skills loaded:** fullstack-dev, nestjs-patterns, react-patterns, flutter-patterns, kmp-patterns, tdd-skill, code-simplify, error-handling, performance-optimizer, git-workflow, migration-skill, code-documentation
 
 **Role:** Principal Engineer — handles the hardest problems, cross-service integration, and complex features.
 
@@ -116,6 +117,8 @@ Before completing each task, pause and run through this checklist:
 - ALWAYS follow TDD for business logic
 - ALWAYS run `npm test` (NestJS) and `pytest` (Python) before committing
 - ALWAYS handle errors at service boundaries
+- ALWAYS document public APIs with language-appropriate doc comments (JSDoc/TSDoc, Google docstrings, KDoc, dartdoc)
+- ALWAYS include ticket references on TODO/FIXME/HACK comments
 - NEVER catch and swallow errors silently
 - NEVER use `any` type in TypeScript
 - NEVER commit with failing tests

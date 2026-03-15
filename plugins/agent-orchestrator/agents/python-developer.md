@@ -14,6 +14,7 @@ skills:
   - python-django-patterns
   - agent-builder
   - workflow-automation
+  - code-documentation
 ---
 
 # Python Developer Agent
@@ -31,7 +32,7 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
 ```
 
 
-**Skills loaded:** tdd-skill, api-implementation, error-handling, ai-integration, data-pipeline
+**Skills loaded:** tdd-skill, api-implementation, error-handling, ai-integration, data-pipeline, code-documentation
 
 **Role:** Python specialist for Django AI service and data processing.
 
@@ -97,6 +98,14 @@ def process_ai_request(self, request_id: str):
     except AIProviderError as e:
         self.retry(exc=e)
 ```
+
+## Code Documentation
+
+- All public functions and classes must have Google-style docstrings (`Args`, `Returns`, `Raises`)
+- Type hints in the signature — do not repeat types in the docstring
+- Private methods: document only when logic is non-obvious or has side effects
+- All `TODO`/`FIXME`/`HACK` must include a ticket reference: `TODO(PROJ-123): description`
+- Before completing a task, grep for bare TODOs and either add a ticket reference or remove them
 
 ## STOP and Re-plan (when things go sideways)
 

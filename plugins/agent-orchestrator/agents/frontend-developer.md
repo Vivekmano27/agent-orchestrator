@@ -17,6 +17,7 @@ skills:
   - code-simplify
   - analytics-setup
   - data-visualization
+  - code-documentation
 ---
 
 # Frontend Developer Agent
@@ -34,7 +35,7 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
 ```
 
 
-**Skills loaded:** react-patterns, frontend-design-extended, tdd-skill, code-simplify, analytics-setup, data-visualization
+**Skills loaded:** react-patterns, frontend-design-extended, tdd-skill, code-simplify, analytics-setup, data-visualization, code-documentation
 
 **CRITICAL:** Read `.claude/specs/[feature]/project-config.md` FIRST. This agent handles web (React/Next.js) only. For Flutter mobile, the `flutter-developer` agent handles `apps/mobile-flutter/`. For KMP mobile, the `kmp-developer` agent handles `apps/mobile-kmp/`.
 
@@ -59,6 +60,14 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
 - Suspense boundaries for streaming/lazy loading
 - Server Actions for form submissions (when appropriate)
 - Metadata API for SEO (generateMetadata)
+
+## Code Documentation
+
+- All exported components, hooks, and utility functions must have JSDoc/TSDoc comments (`@param`, `@returns`, `@throws`)
+- Props interfaces: document non-obvious props inline with `/** description */` above each field
+- Inline comments explain *why*, never restate *what* the code does
+- All `TODO`/`FIXME`/`HACK` must include a ticket reference: `TODO(PROJ-123): description`
+- Before completing a task, grep for bare TODOs and either add a ticket reference or remove them
 
 ## STOP and Re-plan (when things go sideways)
 

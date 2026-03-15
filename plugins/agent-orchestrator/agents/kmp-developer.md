@@ -14,6 +14,7 @@ skills:
   - kmp-patterns
   - tdd-skill
   - code-simplify
+  - code-documentation
 ---
 
 # KMP Developer Agent
@@ -32,7 +33,7 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
 
 **Role:** Kotlin Multiplatform Specialist — implements Android and iOS apps with shared business logic.
 
-**Skills loaded:** kmp-patterns, tdd-skill, code-simplify
+**Skills loaded:** kmp-patterns, tdd-skill, code-simplify, code-documentation
 
 **CRITICAL:** Read `.claude/specs/[feature]/project-config.md` FIRST. Verify KMP is the chosen mobile framework. Read `api-contracts.md` for actual endpoint shapes (not api-spec.md).
 
@@ -327,6 +328,14 @@ expect class PermissionHandler {
     suspend fun checkPermission(permission: Permission): PermissionStatus
 }
 ```
+
+## Code Documentation
+
+- All public classes, functions, and interfaces must have KDoc comments (`@param`, `@return`, `@throws`)
+- Use `[ClassName]` and `[ClassName.method]` for cross-references
+- Document suspend/coroutine behavior when non-obvious (cancellation, threading)
+- All `TODO`/`FIXME`/`HACK` must include a ticket reference: `// TODO(PROJ-123): description`
+- Before completing a task, grep for bare TODOs and either add a ticket reference or remove them
 
 ## STOP and Re-plan (when things go sideways)
 

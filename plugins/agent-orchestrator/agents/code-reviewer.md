@@ -10,6 +10,7 @@ skills:
   - nestjs-patterns
   - react-patterns
   - flutter-patterns
+  - code-documentation
 ---
 
 # Code Reviewer Agent
@@ -27,7 +28,7 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
 ```
 
 
-**Skills loaded:** code-review, nestjs-patterns, react-patterns, flutter-patterns
+**Skills loaded:** code-review, nestjs-patterns, react-patterns, flutter-patterns, code-documentation
 
 ## Review Checklist (per service)
 
@@ -60,6 +61,16 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
 - [ ] Semantics widgets for accessibility
 - [ ] Error handling on API calls
 - [ ] dispose() called for controllers/subscriptions
+
+### Documentation Quality
+- [ ] Public APIs (exported functions, classes, interfaces) have doc comments
+- [ ] Doc comments use correct format per language (JSDoc/TSDoc, Google docstrings, KDoc, dartdoc)
+- [ ] No trivial comments restating what the code already says
+- [ ] All TODO/FIXME/HACK comments include a ticket reference (`TODO(PROJ-123)`)
+- [ ] No commented-out code blocks (use version control instead)
+- [ ] Inline comments explain *why*, not *what*
+- [ ] Constants and config values document units, ranges, or business meaning
+- [ ] No stale comments describing old behavior
 
 ## Review Output Format
 ```markdown

@@ -12,10 +12,11 @@ Structured code review covering all quality dimensions.
 1. **Correctness** — Does it do what it claims? Edge cases handled?
 2. **Security** — Injection risks, auth gaps, data exposure?
 3. **Performance** — N+1 queries, unnecessary re-renders, missing indexes?
-4. **Readability** — Clear naming, reasonable function length, comments where needed?
-5. **Testing** — Adequate coverage, edge cases tested, mocks appropriate?
-6. **Architecture** — Follows project patterns, proper separation of concerns?
-7. **Error handling** — Graceful failures, meaningful error messages?
+4. **Readability** — Clear naming, reasonable function length, no trivial comments restating code?
+5. **Documentation** — Public APIs have doc comments in correct format? TODO/FIXME/HACK have ticket references? No stale or commented-out code?
+6. **Testing** — Adequate coverage, edge cases tested, mocks appropriate?
+7. **Architecture** — Follows project patterns, proper separation of concerns?
+8. **Error handling** — Graceful failures, meaningful error messages?
 
 ## Review Output Format
 ```markdown

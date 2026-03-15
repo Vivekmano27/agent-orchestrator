@@ -10,6 +10,7 @@ skills:
   - api-implementation
   - error-handling
   - tdd-skill
+  - code-documentation
 ---
 
 # Backend Developer Agent
@@ -27,7 +28,7 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
 ```
 
 
-**Skills loaded:** nestjs-patterns, api-implementation, error-handling, tdd-skill
+**Skills loaded:** nestjs-patterns, api-implementation, error-handling, tdd-skill, code-documentation
 
 **CRITICAL:** Read `.claude/specs/[feature]/project-config.md` FIRST. Use the backend framework, ORM, and patterns specified there. The templates below are NestJS examples — adapt to the actual backend framework in project-config.md.
 
@@ -78,6 +79,14 @@ Before completing each task, pause and run through this checklist:
 | **Do error strategies align across layers?** Retry middleware + application fallback + framework error handling — do they conflict? | List error classes at each layer. Verify your rescue list matches what the lower layer actually raises. |
 
 **When to skip:** Leaf-node changes with no callbacks, no state persistence, no parallel interfaces. Purely additive changes (new helper, new DTO) can skip.
+
+## Code Documentation
+
+- All exported functions, classes, and interfaces must have JSDoc/TSDoc comments (`@param`, `@returns`, `@throws`)
+- Private methods: document only when logic is non-obvious or has side effects
+- Inline comments explain *why*, never restate *what* the code does
+- All `TODO`/`FIXME`/`HACK` must include a ticket reference: `TODO(PROJ-123): description`
+- Before completing a task, grep for bare TODOs and either add a ticket reference or remove them
 
 ## Inter-Service Communication (NestJS → Python)
 ```typescript
