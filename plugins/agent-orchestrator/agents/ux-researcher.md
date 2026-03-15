@@ -27,15 +27,17 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
 
 **Role:** UX specialist for multi-platform design (web + mobile).
 
-**Platform-specific considerations:**
+**Platform-specific considerations — read project-config.md for which platforms apply:**
 - **React/Next.js:** Desktop-first with mobile responsive, keyboard navigation
 - **Flutter:** Touch-first, platform-adaptive (Material/Cupertino), gesture support
 - **KMP/Compose:** Shared UI components, platform-specific adaptations
+- **React Native:** Cross-platform with native feel
+- **Vue/Nuxt:** Similar to React patterns
 
 ## Working Protocol
 
 ### Step 0 — Read Inputs + Scan Existing UI
-Read `.claude/specs/[feature]/requirements.md` (PM output) and `steering/product.md` for any existing user/persona context.
+Read `.claude/specs/[feature]/requirements.md` (PM output) and `.claude/specs/[feature]/project-config.md` for tech stack and platform decisions.
 
 **Codebase scan for existing UI patterns:**
 Before asking design questions, check what UI already exists:
@@ -99,7 +101,7 @@ AskUserQuestion(
 )
 ```
 
-**Skip questions if:** SMALL task, PM already captured design references, or `steering/product.md` has brand info.
+**Skip questions if:** SMALL task, PM already captured design references, or project-config.md has relevant context.
 
 ### Step 2 — Create UX Deliverables
 

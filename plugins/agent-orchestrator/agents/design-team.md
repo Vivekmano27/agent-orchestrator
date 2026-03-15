@@ -99,14 +99,14 @@ Tell the team lead to create the design team with roles and coordination instruc
 Create an agent team to design production-ready specs for [feature]:
 
 - system-architect: Design service boundaries, infrastructure topology, and ADRs.
-  Read .claude/specs/[feature]/requirements.md, tech-stack.md, and research-context.md (if exists).
+  Read .claude/specs/[feature]/requirements.md, project-config.md, and research-context.md (if exists).
   Do your own Pre-Design Research (institutional learnings + external research gate for BIG tasks).
   You run FIRST. Write architecture.md, then message all teammates with a summary
   of the architecture decisions so they can start their work aligned.
   SELF-REVIEW before signaling DONE.
 
 - api-architect: Design all API endpoints (REST/gRPC), versioning, auth, rate limiting, error codes.
-  Read requirements.md, tech-stack.md, research-context.md (if exists), and architecture.md (after system-architect shares it).
+  Read requirements.md, project-config.md, research-context.md (if exists), and architecture.md (after system-architect shares it).
   Do your own Pre-Design Research (scan existing API patterns in codebase).
   COORDINATE with database-architect on entity names and field types via SendMessage.
   COORDINATE with ui-designer on endpoint shapes and pagination via SendMessage.
@@ -114,7 +114,7 @@ Create an agent team to design production-ready specs for [feature]:
   SELF-REVIEW before signaling DONE.
 
 - database-architect: Design PostgreSQL schema — tables, columns, constraints, indexes, migrations.
-  Read architecture.md, tech-stack.md, and research-context.md (if exists).
+  Read architecture.md, project-config.md, and research-context.md (if exists).
   Do your own Pre-Design Research (scan existing schema in codebase).
   COORDINATE with api-architect on entity names, field types, and which queries need indexes via SendMessage.
   If architecture requires a database, also create docker-compose.dev.yml.
@@ -124,7 +124,7 @@ Create an agent team to design production-ready specs for [feature]:
 - ui-designer (LEAD): Create design.md, scaffold the Next.js project, build shared
   components (src/components/ui/), and build the /design-system page with component
   library + design tokens + platform mapping table.
-  Read requirements.md, ux.md, tech-stack.md, and research-context.md (if exists).
+  Read requirements.md, ux.md, project-config.md, and research-context.md (if exists).
   Do your own Pre-Design Research (scan existing component patterns in codebase).
   COORDINATE with api-architect on endpoint shapes via SendMessage.
   IMPORTANT: Include an '## Interaction Inventory' section listing every user-initiated action.
@@ -153,7 +153,7 @@ Create an agent team to design production-ready specs for [feature]:
   agents collaborate on pages with the protocol above.
 
 - agent-native-designer: Design agent-native capabilities — parity map, tool definitions, agent features.
-  Read requirements.md, architecture.md, tech-stack.md, and research-context.md (if exists).
+  Read requirements.md, architecture.md, project-config.md, and research-context.md (if exists).
   Do your own Pre-Design Research (scan existing agent/tool patterns in codebase).
   COORDINATE with api-architect to confirm which tools map to existing endpoints vs need NEW endpoints.
   COORDINATE with database-architect to verify full CRUD coverage per entity.
@@ -217,7 +217,7 @@ Agent(
   subagent_type="agent-orchestrator:design-reviewer",
   prompt="Review all design specs at .claude/specs/[feature]/:
           architecture.md, api-spec.md, schema.md, design.md, agent-spec.md (if exists).
-          Also read requirements.md and tech-stack.md for context.
+          Also read requirements.md and project-config.md for context.
           Check for: production-readiness, security gaps, performance risks,
           cross-spec consistency, completeness against requirements.
           Write findings to .claude/specs/[feature]/design-review.md
@@ -267,7 +267,7 @@ If any spec files are missing, ask the responsible agent to retry (1 retry max).
 Read all Phase 1-2 output files and write a human-readable overview:
 ```
 # Write .claude/specs/[feature]/SUMMARY.md with:
-# - Tech stack chosen (from tech-stack.md)
+# - Tech stack chosen (from project-config.md)
 # - Feature list (from requirements.md)
 # - Architecture overview (from architecture.md)
 # - Key API endpoints (from api-spec.md)

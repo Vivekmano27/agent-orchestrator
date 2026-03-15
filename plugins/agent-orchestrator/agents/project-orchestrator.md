@@ -35,24 +35,25 @@ Proceed directly to Phase 0 execution, then Phase 1.
 
 ## The Full Pipeline — ALWAYS All 9 Phases
 
-Every request — no matter how small — goes through ALL 9 phases with ALL 21 agents:
+Every request — no matter how small — goes through ALL 9 phases with ALL agents:
 
 ```
 PHASE 0: SPEC SETUP (always — YOU do this directly, no agent needed)
   └── project-orchestrator → create spec directory for planning output (NO questions asked)
+
+PHASE 0.5: PROJECT SETUP (always — before planning)
+  └── project-setup        → infrastructure, tech stack, auth, CI/CD, testing, code quality decisions
+                             → outputs project-config.md (replaces steering files)
 
 PHASE 1: PLANNING (always)
   ├── product-manager      → PRD, user stories, acceptance criteria, feature list
   ├── business-analyst     → business rules, workflows, state machines, data flows
   └── ux-researcher        → personas, user journeys, wireframes, IA
 
-PHASE 1.5: TECH STACK DECISION (always — after requirements are understood)
-  └── project-orchestrator → recommend tech stack based on requirements, user approves
-
 PHASE 2: DESIGN — PRODUCTION-READY (always — design for production, not prototype)
   ├── system-architect     → production architecture, ADRs, Mermaid diagrams, infra topology
   ├── api-architect        → API spec with versioning, rate limiting, auth, error handling
-  ├── database-architect   → PostgreSQL schema, ER diagrams, indexes, migrations, constraints
+  ├── database-architect   → schema design, ER diagrams, indexes, migrations, constraints
   └── ui-designer          → design system, component specs, tokens, responsive
 
 PHASE 2.1: TASK DECOMPOSITION (always — reads specs, produces ordered task list)
@@ -193,8 +194,8 @@ When user selects "Cancel":
 ### Subagent Failure Detection
 After each phase completes, verify expected output files exist:
 
+**After Phase 0.5:** project-config.md
 **After Phase 1:** requirements.md, business-rules.md, ux.md
-**After Phase 1.5:** tech-stack.md
 **After Phase 2:** architecture.md, api-spec.md, schema.md, design.md, agent-spec.md (MEDIUM/BIG only), SUMMARY.md
 **After Phase 2.1:** tasks.md
 **After Phase 3:** api-contracts.md
@@ -223,7 +224,7 @@ For Phase 3 (Build) and Phase 6 (Review), agent teams let teammates message each
 
 ### Phase 0: Spec Setup — YOU do this directly (no subagent needed)
 
-**This runs before any agent. It must complete before Phase 1 starts.**
+**This runs before any agent. It must complete before Phase 0.5 starts.**
 Phase 0 only creates the spec directory for planning output. Git initialization happens later in Phase 2.5 (before code is written).
 
 0a. Create the spec directory for this feature:
@@ -233,6 +234,28 @@ mkdir -p .claude/specs/[feature-name]
 
 **Phase 0 checklist before proceeding:**
 - [ ] `.claude/specs/[feature-name]/` directory exists
+
+---
+
+### Phase 0.5: Project Setup — dispatched subagent
+
+**This runs AFTER spec setup (Phase 0) and BEFORE planning (Phase 1).** The project-setup agent interviews the user about ALL infrastructure and tech stack decisions — architecture type, backend/frontend/mobile frameworks, database, auth, CI/CD, testing strategy, code quality tools, cloud provider, naming conventions, and more. It outputs `project-config.md` which ALL downstream agents read instead of hardcoded steering files.
+
+0.5a. Spawn project-setup:
+```
+Agent(
+  subagent_type="agent-orchestrator:project-setup",
+  prompt="Interview the user about project infrastructure and tech stack decisions for: [ORIGINAL USER REQUEST].
+          Offer presets or custom configuration.
+          Cover: architecture, backend, frontend, mobile, database, auth, CI/CD, testing, code quality, cloud, naming conventions.
+          Output to .claude/specs/[feature]/project-config.md"
+)
+```
+0.5b. Wait for completion. Verify `.claude/specs/[feature]/project-config.md` exists.
+
+**Phase 0.5 checklist before proceeding:**
+- [ ] `.claude/specs/[feature]/project-config.md` exists
+- [ ] User approved the configuration
 
 ---
 
@@ -246,8 +269,9 @@ Agent(
   subagent_type="agent-orchestrator:product-manager",
   prompt="Write a complete PRD for: [ORIGINAL USER REQUEST].
           Task size: [SMALL/MEDIUM/BIG].
-          Tech stack is NOT decided yet — do NOT assume any specific tech stack.
-          Focus on WHAT to build, not HOW. Tech stack will be decided after requirements.
+          Tech stack and infrastructure are already decided — see .claude/specs/[feature]/project-config.md.
+          Focus on WHAT to build (features, user stories, acceptance criteria).
+          Do NOT ask about tech stack, auth strategy, CI/CD, or infrastructure — those are in project-config.md.
           Run your adaptive requirements discovery, then output to .claude/specs/[feature]/requirements.md"
 )
 ```
@@ -269,58 +293,9 @@ Agent(
 
 ---
 
-### Phase 1.5: Tech Stack Decision — YOU do this directly
-
-**This runs AFTER requirements are understood (Phase 1) and BEFORE design (Phase 2).** Tech stack should be informed by what the app actually needs — not decided upfront before anyone knows what's being built.
-
-1.5a. Read `.claude/specs/[feature]/requirements.md` to understand what the app needs.
-
-1.5b. Based on the requirements, recommend a tech stack and ask the user to approve:
-```
-AskUserQuestion(
-  question="Based on the requirements, here's the recommended tech stack:
-
-  Backend: [recommendation based on requirements — e.g., 'NestJS + PostgreSQL' for standard CRUD, or 'NestJS + Django + PostgreSQL' if AI features are needed]
-  Frontend: [recommendation — e.g., 'React/Next.js' for web-only, or '+ Flutter' if mobile is needed]
-  Infrastructure: [recommendation — e.g., 'Docker Compose for local, AWS ECS for production']
-
-  Reasoning: [brief — e.g., 'AI features in the PRD require a Python service. Mobile app requires Flutter.']
-
-  Approve or customize?",
-  options=[
-    "Approve this stack",
-    "Use full stack from steering/tech.md (NestJS + Django + React + Flutter + KMP + PostgreSQL + Redis + Docker)",
-    "I want a simpler stack — suggest alternatives",
-    "Let me specify my own stack"
-  ]
-)
-```
-
-If user selects "simpler stack", recommend a lighter alternative (e.g., SQLite instead of PostgreSQL, no Docker).
-If user selects "specify my own", ask with free text.
-
-1.5c. Also ask how to run locally:
-```
-AskUserQuestion(
-  question="How do you want to run the app locally?",
-  options=[
-    "Docker Compose — one command, no setup",
-    "Direct start — npm start / python manage.py runserver",
-    "Both options"
-  ]
-)
-```
-
-1.5d. Write the tech stack decision to `.claude/specs/[feature]/tech-stack.md` so all Phase 2 agents can read it.
-
-**Phase 1.5 checklist before proceeding:**
-- [ ] Tech stack approved by user
-- [ ] Run method decided
-- [ ] `.claude/specs/[feature]/tech-stack.md` exists
-
----
-
 ### Phase 2: Design — PRODUCTION-READY, via design-team
+
+**NOTE:** Tech stack decisions were already made in Phase 0.5 (project-setup agent) and are in `project-config.md`. There is no Phase 1.5 — all infrastructure decisions happen before planning starts.
 
 **CRITICAL: Always design for production. Not prototype, not MVP.** Feature scoping (v1 vs v2) determines WHAT we build — but everything we build is production-grade: proper schema constraints, proper error handling, proper auth, proper monitoring. No shortcuts that need rewriting later.
 
@@ -331,7 +306,8 @@ Agent(
   prompt="Design PRODUCTION-READY specs for: [feature].
           Task size: [SMALL/MEDIUM/BIG].
           Spec directory: .claude/specs/[feature]/
-          Input files already present: requirements.md, business-rules.md, ux.md, tech-stack.md
+          Input files already present: project-config.md, requirements.md, business-rules.md, ux.md
+          Read project-config.md for tech stack, architecture, and infrastructure decisions.
           Expected outputs: architecture.md, api-spec.md, schema.md, design.md,
                            agent-spec.md (MEDIUM/BIG only), SUMMARY.md"
 )
@@ -348,7 +324,7 @@ Agent(
 ```
 Agent(
   subagent_type="agent-orchestrator:task-decomposer",
-  prompt="Read all specs in .claude/specs/[feature]/: requirements.md, business-rules.md, architecture.md, api-spec.md, schema.md, design.md, agent-spec.md (if exists), tech-stack.md.
+  prompt="Read all specs in .claude/specs/[feature]/: project-config.md, requirements.md, business-rules.md, architecture.md, api-spec.md, schema.md, design.md, agent-spec.md (if exists).
           Decompose into ordered, dependency-aware implementation tasks with agent assignments.
           Output to .claude/specs/[feature]/tasks.md"
 )
@@ -491,15 +467,15 @@ Phase 0 — Spec Setup (orchestrator does this directly, NO questions):
   mkdir -p .claude/specs/craft-marketplace
   ✅ Spec directory ready
 
-Phase 1 — Planning (PM asks product questions, no tech stack yet):
+Phase 0.5 — Project Setup (project-setup agent asks infrastructure questions):
+  project-setup → offers presets or custom config
+  User picks "Startup Lean" preset → NestJS + Next.js + PostgreSQL + Tailwind + GitHub Actions
+  User modifies: adds Stripe for payments → writes project-config.md
+
+Phase 1 — Planning (PM asks PRODUCT questions only — tech stack already decided):
   product-manager → adaptive discovery (6-10 questions), writes PRD with user stories
   business-analyst → business rules (payment flows, order states, seller rules)
   ux-researcher → 2 personas, wireframes, design system choice
-
-Phase 1.5 — Tech Stack Decision (orchestrator recommends based on requirements):
-  Orchestrator reads PRD → "App needs payments, search, seller dashboard.
-  Recommending: NestJS + React + PostgreSQL. No AI service needed for v1."
-  User approves → writes tech-stack.md
 
 Phase 2 — Design (PRODUCTION-READY — not prototype):
   system-architect → production architecture with proper service boundaries

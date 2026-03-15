@@ -33,7 +33,9 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
 
 **Skills loaded:** ci-cd-setup, docker-skill, aws-deployment, terraform-skills, k8s-skill, monitoring-setup, release-manager
 
-## Docker Compose (Local Development)
+**CRITICAL:** Read `.claude/specs/[feature]/project-config.md` FIRST. Use the CI/CD tool, cloud provider, container strategy, orchestration, and monitoring specified there. The templates below are illustrative examples — adapt to the actual infrastructure in project-config.md. Do NOT assume AWS, GitHub Actions, or Docker unless project-config.md says so.
+
+## Docker Compose (Local Development) — Example template, adapt to project-config.md
 ```yaml
 version: '3.8'
 services:

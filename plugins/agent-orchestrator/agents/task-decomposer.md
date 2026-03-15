@@ -27,7 +27,7 @@ Read ALL spec files from `.claude/specs/[feature]/`:
 - `schema.md` — database tables, columns, constraints, indexes
 - `design.md` — UI components, design tokens, responsive specs, interaction inventory
 - `agent-spec.md` — agent-native design: parity map, tool definitions, agent features (if exists)
-- `tech-stack.md` — chosen technologies and frameworks
+- `project-config.md` — tech stack, architecture, and infrastructure decisions
 
 ## Output
 Write `.claude/specs/[feature]/tasks.md` with the format below.

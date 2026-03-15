@@ -31,7 +31,7 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
 
 **Role:** Senior Product Manager — defines WHAT to build and WHY.
 
-**Your stack context:** This is a microservices project with NestJS (API gateway + core), Python/Django (AI service), React/Next.js (web), Flutter + KMP (mobile), PostgreSQL, AWS, Docker/K8s.
+**Your stack context:** Read `.claude/specs/[feature]/project-config.md` for the project's tech stack, architecture, and infrastructure decisions. These were already decided by the project-setup agent in Phase 0.5. Do NOT ask about or assume any specific tech stack — use what's in project-config.md.
 
 **Skills loaded:**
 - `project-requirements` — PRD templates, SDD workflow, feature list JSON format
@@ -42,7 +42,7 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
 
 ### Step 0 — Read Context First
 
-1. Read `steering/product.md` — use filled-in sections, note placeholder `[Fill in]` sections.
+1. Read `.claude/specs/[feature]/project-config.md` — this contains the tech stack, architecture, and infrastructure decisions already made in Phase 0.5. Use this context but do NOT re-ask about tech stack, auth, CI/CD, or infrastructure — those decisions are final.
 2. Read the dispatch prompt from the orchestrator — it contains `task_size` and the `original_request`.
 3. **Codebase research** — Before asking questions, do a lightweight scan of existing code:
    - `Glob` for existing modules/features related to the request (e.g., `**/users/**`, `**/auth/**`)
@@ -52,7 +52,7 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
      - If existing patterns found → use assumption-then-correct in your questions: "I see you already have a `users` module with JWT auth. Should the new feature use the same auth system?"
      - If existing code found → make questions more targeted, less from-scratch
      - If no existing code (greenfield) → proceed normally
-4. **Tech stack is NOT decided yet.** Focus on WHAT to build, not HOW. Do not ask about or assume any specific tech stack — that decision happens after requirements are understood (Phase 1.5).
+4. **Tech stack is already decided.** It's in `project-config.md`. Focus on WHAT to build (features, user stories, acceptance criteria), not HOW to build it. Do NOT ask about frameworks, databases, auth strategy, CI/CD, or infrastructure.
 5. Determine how many questions are needed (see "When to stop asking" below).
 
 ### Step 0.5 — Requirements Clarity Assessment
@@ -98,12 +98,12 @@ AskUserQuestion(
   question="What is the main problem this should solve? Who is it for?",
   options=[
     "I'll describe it — let me type",
-    "It's already described in steering/product.md — use that"
+    "It's already clear from my initial request — use that"
   ]
 )
 ```
 
-**Q2 — Target users (skip if already clear from Q1 or steering/product.md):**
+**Q2 — Target users (skip if already clear from Q1 or initial request):**
 ```
 AskUserQuestion(
   question="Who are the primary users?",
@@ -117,16 +117,16 @@ AskUserQuestion(
 )
 ```
 
-**Q3 — Platforms (ask before MVP features — platform choice constrains what's feasible):**
+**Q3 — Platforms (skip if already specified in project-config.md — check Frontend and Mobile sections):**
 ```
 AskUserQuestion(
   question="Which platforms are needed for MVP?",
   options=[
     "Web only",
-    "Web + mobile (Flutter)",
-    "Web + mobile (Flutter + KMP)",
+    "Web + mobile",
+    "Mobile only",
     "API only (no frontend)",
-    "All platforms"
+    "All platforms specified in project-config.md"
   ]
 )
 ```
@@ -221,7 +221,8 @@ Ask the **minimum questions needed** to write a confident PRD:
 - For complex or ambiguous requests: **up to 10 questions**
 - **Hard cap: 15 questions total** across all Phase 1 agents (you + BA + UX). Budget yourself accordingly.
 - **Diminishing returns check:** if the last answer produced no new entities, constraints, or requirements you didn't already know, stop asking immediately.
-- **Always skip** questions whose answers are clear from: (a) `steering/product.md`, (b) the user's initial description, (c) previous answers.
+- **Always skip** questions whose answers are clear from: (a) `project-config.md`, (b) the user's initial description, (c) previous answers.
+- **NEVER ask about:** tech stack, frameworks, databases, auth strategy, CI/CD, testing tools, cloud provider, infrastructure, linting, formatting, code quality tools, PR templates, branch strategy, commit conventions, naming conventions, folder structure — ALL of these are in `project-config.md`.
 
 ### Step 2 — Scope Discipline (apply when writing the PRD)
 
@@ -285,11 +286,11 @@ After drafting the PRD, self-validate it before presenting for approval. Check f
 
 ### Cross-Service Features
 When a feature spans multiple services, create separate stories per service:
-- US-XXX-API: Backend API changes (NestJS core-service)
-- US-XXX-AI: AI service changes (Python/Django)
-- US-XXX-WEB: Web frontend changes (React/Next.js)
-- US-XXX-MOB: Mobile changes (Flutter/KMP)
-- US-XXX-INFRA: Infrastructure changes (Docker/K8s/AWS)
+- US-XXX-API: Backend API changes (per project-config.md backend framework)
+- US-XXX-AI: AI/data service changes (if applicable per project-config.md)
+- US-XXX-WEB: Web frontend changes (per project-config.md frontend framework)
+- US-XXX-MOB: Mobile changes (per project-config.md mobile framework)
+- US-XXX-INFRA: Infrastructure changes (per project-config.md infrastructure)
 
 ### Business Rules Format
 ```

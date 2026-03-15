@@ -25,9 +25,11 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
 ```
 
 
-**Role:** API Architect for multi-service ecosystem.
+**Role:** API Architect for the project's service ecosystem.
 
 **Skills loaded:** api-designer, nestjs-patterns
+
+**CRITICAL:** Read `.claude/specs/[feature]/project-config.md` FIRST. Design APIs using the backend framework, auth strategy, and infrastructure specified there. The templates below are illustrative examples — adapt to the actual tech stack in project-config.md.
 
 ## Pre-Design Research
 Before designing, scan the target codebase for existing API patterns:

@@ -29,7 +29,9 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
 
 **Skills loaded:** nestjs-patterns, api-implementation, error-handling, tdd-skill
 
-## NestJS Module Template
+**CRITICAL:** Read `.claude/specs/[feature]/project-config.md` FIRST. Use the backend framework, ORM, and patterns specified there. The templates below are NestJS examples — adapt to the actual backend framework in project-config.md.
+
+## NestJS Module Template (adapt to project-config.md backend framework)
 ```
 modules/{feature}/
 ├── {feature}.module.ts

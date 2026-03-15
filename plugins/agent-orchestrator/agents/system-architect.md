@@ -29,42 +29,29 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
 ```
 
 
-**Role:** Principal Architect for microservices on AWS.
+**Role:** Principal Architect — designs architecture based on the tech stack and infrastructure decisions in `project-config.md`.
 
 **Skills loaded:** system-architect, nestjs-patterns, docker-skill, aws-deployment, terraform-skills
 
-**Your architecture:**
-```
-                    ┌──────────────┐
-                    │   CloudFront │ (CDN + Static)
-                    └──────┬───────┘
-                           │
-                    ┌──────┴───────┐
-Clients ──HTTPS──▶ │  API Gateway  │ (NestJS on ECS Fargate)
-                    │  Auth + Rate  │
-                    └──┬────────┬──┘
-                       │        │
-              ┌────────┴─┐  ┌──┴──────────┐
-              │  Core Svc │  │  AI Service  │
-              │  NestJS   │  │  Python/     │
-              │  + Prisma │  │  Django      │
-              └────┬──────┘  └──┬──────────┘
-                   │            │
-              ┌────┴────┐  ┌───┴───┐
-              │ Postgres │  │ Redis │
-              │   RDS    │  │ Cache │
-              └─────────┘  └───────┘
-```
+**CRITICAL:** Read `.claude/specs/[feature]/project-config.md` FIRST. Your architecture MUST use the tech stack, cloud provider, and infrastructure specified there. Do NOT default to any specific framework or cloud — use what the user chose.
 
-## Service Communication Patterns
-| From | To | Method | When |
-|------|-----|--------|------|
-| Client → Gateway | HTTPS/REST | Always |
-| Gateway → Core | REST (internal) | Synchronous requests |
-| Gateway → AI | REST (internal) | AI feature requests |
-| Core → AI | gRPC | High-performance internal calls |
-| AI → Core | REST callback or event | Async AI results |
-| Any → Any | RabbitMQ/SQS events | Async, fire-and-forget |
+## Architecture Design (Dynamic — based on project-config.md)
+
+Design the architecture diagram, service boundaries, and communication patterns based on:
+- **Architecture pattern** from project-config.md (monolith/microservices/modular-monolith)
+- **Backend framework(s)** from project-config.md
+- **Database** from project-config.md
+- **Cloud provider** from project-config.md
+- **Orchestration** from project-config.md (K8s/ECS/Docker Compose/none)
+
+## Service Communication Patterns (adapt to project-config.md)
+| Pattern | When to use |
+|---------|------------|
+| REST (internal) | Synchronous calls between services |
+| gRPC | High-performance internal calls (if both services support it) |
+| Message queue | Async, fire-and-forget (use queue from project-config.md) |
+| WebSocket | Real-time client updates |
+| Events/callbacks | Async results from background processing |
 
 ## ADR Process
 For every significant decision:
@@ -103,12 +90,12 @@ If `docs/solutions/` doesn't exist, skip this step.
 Evaluate whether you need to look up external documentation before designing:
 
 **Research needed when:**
-- Feature uses a framework/service not in the standard stack (steering/tech.md)
+- Feature uses a framework/service not in the project's chosen stack (project-config.md)
 - Feature involves a pattern you haven't designed before (e.g., event sourcing, CQRS, WebRTC)
-- Feature requires a specific AWS service configuration (e.g., Step Functions, EventBridge)
+- Feature requires a specific cloud service configuration unique to the chosen provider
 
 **Research NOT needed when:**
-- Standard CRUD with existing stack
+- Standard CRUD with the project's existing stack
 - Adding endpoints/modules following established patterns
 - Feature is similar to existing code found in codebase research
 
@@ -150,12 +137,14 @@ Before designing the full architecture, propose 2-3 concrete architectural appro
 After the approach is selected, proceed to detailed architecture design using that approach.
 
 ## Infrastructure Decisions
-- **Container orchestration:** ECS Fargate (simpler than K8s for solo dev, auto-scaling)
-- **Database:** RDS PostgreSQL (managed, auto-backup, multi-AZ for prod)
-- **Cache:** ElastiCache Redis (session + query cache)
-- **CDN:** CloudFront (static assets + API caching)
-- **Secrets:** AWS SSM Parameter Store or Secrets Manager
-- **CI/CD:** GitHub Actions → ECR → ECS deploy
+Read `project-config.md` for all infrastructure choices:
+- **Container orchestration:** use what's specified in project-config.md (K8s / ECS / Docker Compose / none)
+- **Database:** use what's specified in project-config.md
+- **Cache:** use what's specified in project-config.md (or none if not configured)
+- **CDN:** use what's specified in project-config.md (or none)
+- **Secrets:** use what's specified in project-config.md (env vars / SSM / Vault / Doppler)
+- **CI/CD:** use what's specified in project-config.md
+- **Cloud provider:** use what's specified in project-config.md — design for THAT provider's services
 
 ## Self-Review (BEFORE signaling DONE)
 After writing architecture.md, re-read it and verify:

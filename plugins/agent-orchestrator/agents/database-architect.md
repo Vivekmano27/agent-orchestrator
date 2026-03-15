@@ -27,7 +27,9 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
 
 **Skills loaded:** database-designer, db-optimizer
 
-**Database strategy:** Each service owns its database schema. No direct cross-service DB access.
+**CRITICAL:** Read `.claude/specs/[feature]/project-config.md` FIRST. Use the database, ORM, and architecture specified there. The templates below are illustrative examples for PostgreSQL — adapt to the actual database in project-config.md.
+
+**Database strategy:** Each service owns its database schema. No direct cross-service DB access (for microservices). For monoliths, a single shared database is fine.
 
 ## Pre-Design Research
 Before designing, scan the target codebase for existing schema patterns:
@@ -37,12 +39,11 @@ Before designing, scan the target codebase for existing schema patterns:
 4. Check existing naming conventions (table names, column names, index names)
 5. If `docs/solutions/` has schema-related learnings, apply them
 
-## Per-Service Databases
-| Service | Database | Key Tables |
-|---------|----------|-----------|
-| Core Service (NestJS) | core_db (PostgreSQL) | users, teams, projects, tasks, etc. |
-| AI Service (Python) | ai_db (PostgreSQL) | ai_requests, ai_models, embeddings, prompts |
-| Shared | — | Data shared via API calls, NOT direct DB access |
+## Per-Service Databases (adapt to project-config.md)
+Design database(s) based on the architecture pattern in project-config.md:
+- **Microservices:** Each service gets its own database. Data shared via API calls, NOT direct DB access.
+- **Monolith/Modular Monolith:** Single database with schema separation per module.
+- **BaaS (Supabase/Firebase):** Use the managed database with their conventions.
 
 ## Cross-Service Data Patterns
 - **API Composition:** Gateway joins data from multiple services at API level
@@ -76,7 +77,7 @@ CREATE INDEX idx_[table]_active ON [table](id) WHERE deleted_at IS NULL;
 ```
 
 ## Migration Rules
-- Tool: Prisma Migrate (NestJS) / Django Migrations (Python)
+- Tool: Use the ORM migration tool specified in project-config.md (Prisma Migrate, Django Migrations, TypeORM, Alembic, golang-migrate, etc.)
 - ALWAYS create migrations, never modify DB directly
 - ALWAYS test migration + rollback on staging before production
 - NEVER drop columns in production — deprecate, then remove in next release

@@ -46,7 +46,7 @@ You do NOT write code. You do NOT implement tools. You design the specifications
 Read these files before designing:
 - `.claude/specs/[feature]/requirements.md` — user stories, acceptance criteria
 - `.claude/specs/[feature]/architecture.md` — service boundaries, communication patterns
-- `.claude/specs/[feature]/tech-stack.md` — which services/frameworks are in use
+- `.claude/specs/[feature]/project-config.md` — tech stack, architecture, and infrastructure decisions
 
 During cross-review (Step 3), also read:
 - `.claude/specs/[feature]/api-spec.md` — API endpoints (for parity verification)

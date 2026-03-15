@@ -35,9 +35,7 @@ maxTurns: 30
 skills:
   - nestjs-patterns
   - react-patterns
-memory:
-  - steering/tech.md
-  - docs/ARCHITECTURE.md
+memory: project
 permissionMode: auto
 ---
 

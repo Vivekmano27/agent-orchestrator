@@ -2,7 +2,7 @@
 
 ## Document Dependency Graph
 ```
-steering docs → PRD → design docs → task breakdown → implementation
+project-config.md → PRD → design docs → task breakdown → implementation
                  ↓
           user stories + feature_list.json + business rules
 ```
@@ -31,4 +31,4 @@ steering docs → PRD → design docs → task breakdown → implementation
 |------|-----------------|
 | Weekend project | CLAUDE.md + app_spec.txt + feature_list.json |
 | 1-4 week | Above + PRD + ARCHITECTURE.md + tasks.md |
-| Multi-month | Full SDD: all steering + per-feature specs |
+| Multi-month | Full SDD: project-config + per-feature specs |

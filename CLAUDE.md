@@ -1,9 +1,9 @@
-# Project — Microservices Application
+# Solo Dev Orchestrator — Claude Code Plugin
 
 ## About This Repository
 This repo is the **Solo Dev Orchestrator** — a Claude Code plugin (all markdown files).
-It contains 24 agents, 25 commands, 63 skills, hooks, and steering docs that orchestrate
-microservices application development.
+It contains agents, commands, skills, and hooks that orchestrate
+application development for ANY tech stack.
 
 ### Working on This Plugin
 - There is no application code to build or test in this repo.
@@ -15,43 +15,33 @@ microservices application development.
 
 ## Target Project Configuration
 > The sections below apply to the **project where this plugin is installed**, not this plugin repo itself.
-> When the orchestrator generates a project, these are the conventions it follows.
+> Tech stack, architecture, and infrastructure are NOT hardcoded — the project-setup agent
+> (Phase 0.5) interviews the user and generates `project-config.md` per project.
 
 ## Project Overview
-Microservices application with NestJS backend, Python/Django AI service, React/Next.js web frontend, Flutter + KMP mobile apps, deployed on AWS with Docker/K8s.
-
-## Tech Stack
-- Backend: NestJS 10+, Python 3.12 / Django 5, PostgreSQL 16, Redis 7
-- Frontend: React 18 / Next.js 14+, TypeScript 5+, Tailwind CSS
-- Mobile: Flutter 3.x, Kotlin Multiplatform 2.0+
-- Infrastructure: Docker, AWS (ECS Fargate, RDS, S3, CloudFront), Terraform
-- CI/CD: GitHub Actions
-- Testing: Jest, Pytest, Playwright, Flutter Test
-
-## Architecture
-Microservices: API Gateway (NestJS) -> Core Service (NestJS+PostgreSQL) <-> AI Service (Python/Django)
-For details see @steering/tech.md and @docs/ARCHITECTURE.md
+Configurable per project. The project-setup agent asks about architecture pattern (monolith/microservices),
+tech stack (backend, frontend, mobile, database), infrastructure, CI/CD, testing, and code quality.
+All decisions are stored in `.claude/specs/[feature]/project-config.md`.
 
 ## Build & Run
-- All services: `docker-compose up`
-- NestJS: `cd services/core-service && npm run start:dev`
-- Python: `cd services/ai-service && python manage.py runserver`
-- Web: `cd apps/web && npm run dev`
-- Flutter: `cd apps/mobile-flutter && flutter run`
+Build and run commands are determined by the project's tech stack (see project-config.md).
+Common patterns:
+- Docker: `docker-compose up`
+- Node.js: `npm run dev` or `npm start`
+- Python: `python manage.py runserver` or `uvicorn main:app`
+- Flutter: `flutter run`
 
 ## Test Commands
-- NestJS: `cd services/core-service && npm test`
-- Python: `cd services/ai-service && pytest`
-- Web: `cd apps/web && npm test`
-- Flutter: `cd apps/mobile-flutter && flutter test`
-- E2E: `cd apps/web && npx playwright test`
+Test commands are determined by the project's tech stack (see project-config.md).
+Common patterns:
+- Node.js: `npm test`
+- Python: `pytest`
+- Flutter: `flutter test`
+- E2E: `npx playwright test` or `npx cypress run`
 - All: `/run-tests` (custom command)
 
 ## Lint & Format
-- NestJS: `npm run lint && npm run format:check`
-- Python: `ruff check . && ruff format --check . && mypy .`
-- Web: `npm run lint && npx prettier --check .`
-- Flutter: `flutter analyze && dart format --set-exit-if-changed .`
+Linting and formatting tools are configured per project in project-config.md.
 
 ## Rules (VIOLATIONS ARE BUGS)
 - NEVER commit to main directly — use feature branches
@@ -84,11 +74,6 @@ For details see @steering/tech.md and @docs/ARCHITECTURE.md
 ## Compact Instructions
 When compacting, preserve: modified file list, active branch, test commands, current task from tasks.md, which services are affected.
 
-## References
-@steering/product.md
-@steering/tech.md
-@steering/structure.md
-
 ## Agent Routing Rules (IMPORTANT)
 
 ALWAYS route through the project-orchestrator agent for ANY of these:
@@ -103,6 +88,7 @@ The project-orchestrator MUST be the entry point. It classifies the task
 gates determined by task size.
 
 Pipeline dispatch model (hybrid):
+- Phase 0.5 (Project Setup): orchestrator dispatches project-setup agent
 - Phases 1-2 (Planning/Design): orchestrator dispatches specialist agents directly
 - Phase 3 (Build): orchestrator dispatches feature-team (Agent Teams peer-to-peer)
 - Phases 4-5 (Testing/Security): orchestrator dispatches agents directly

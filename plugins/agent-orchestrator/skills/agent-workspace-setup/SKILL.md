@@ -19,7 +19,7 @@ Set up project workspaces for agent-orchestrated microservices development.
 ```bash
 mkdir -p services/{api-gateway/src/{common,config,modules},core-service/src/{modules,common,database},core-service/prisma,ai-service/app/{api,services,models,tasks,integrations},ai-service/tests,shared/{proto,schemas}}
 mkdir -p apps/{web/src/{app,components,lib,hooks,types},mobile-flutter/lib/{features,core,app},mobile-flutter/test,mobile-kmp/{shared,androidApp,iosApp}}
-mkdir -p infrastructure/{docker,terraform,k8s,scripts} docs .github/workflows steering
+mkdir -p infrastructure/{docker,terraform,k8s,scripts} docs .github/workflows
 ```
 
 ## Tech Stack Auto-Detection

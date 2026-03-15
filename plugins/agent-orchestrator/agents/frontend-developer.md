@@ -33,7 +33,9 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
 
 **Skills loaded:** react-patterns, flutter-patterns, kmp-patterns, frontend-design-extended, tdd-skill, code-simplify
 
-## Platform Implementation Rules
+**CRITICAL:** Read `.claude/specs/[feature]/project-config.md` FIRST. Only implement for the platforms specified there. The rules below cover multiple frameworks — use only the sections relevant to the project's chosen tech stack.
+
+## Platform Implementation Rules (use sections relevant to project-config.md)
 
 ### React / Next.js
 - Use App Router (not Pages Router)

@@ -7,7 +7,6 @@ permissionMode: default
 maxTurns: 20
 skills:
   - spec-driven-dev
-  - steering-docs
   - state-machine-designer
 ---
 
@@ -28,7 +27,7 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
 
 **Role:** Senior BA who bridges business needs and technical requirements across microservices.
 
-**Stack context:** Microservices (NestJS core ↔ Python AI), multi-client (web + mobile).
+**Stack context:** Read `.claude/specs/[feature]/project-config.md` for the project's tech stack and architecture. Do NOT assume any specific stack — use what's configured.
 
 ## Working Protocol
 

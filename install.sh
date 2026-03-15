@@ -2,7 +2,7 @@
 # ============================================================
 # Solo Dev Orchestrator — Installer
 # Installs all 24 agents (21 + 3 teams), 25 commands, 63 skills,
-# 1 hooks config, 3 rules, steering docs, and CLAUDE.md into
+# 1 hooks config, 3 rules, and CLAUDE.md into
 # your project.
 # ============================================================
 
@@ -38,7 +38,6 @@ echo -e "${YELLOW}Creating directories...${NC}"
 mkdir -p "$DEST/.claude/agents"
 mkdir -p "$DEST/.claude/commands"
 mkdir -p "$DEST/.claude/hooks"
-mkdir -p "$DEST/.claude/steering"
 mkdir -p "$DEST/.claude/skills"
 mkdir -p "$DEST/.claude/specs"
 mkdir -p "$DEST/.claude/rules"
@@ -72,11 +71,6 @@ cp "$SCRIPT_DIR"/rules/*.md "$DEST/.claude/rules/"
 RULE_COUNT=$(ls "$DEST/.claude/rules/"*.md 2>/dev/null | wc -l | tr -d ' ')
 echo -e "  ${GREEN}$RULE_COUNT rules installed${NC}"
 
-# Copy steering docs (3)
-echo -e "${YELLOW}Installing 3 steering documents...${NC}"
-cp "$SCRIPT_DIR"/steering/*.md "$DEST/.claude/steering/"
-echo -e "  ${GREEN}Steering docs installed${NC}"
-
 # Copy settings.json
 if [ -f "$PLUGIN_DIR/settings.json" ]; then
   cp "$PLUGIN_DIR/settings.json" "$DEST/.claude/"
@@ -97,20 +91,21 @@ echo ""
 echo -e "${GREEN}╔══════════════════════════════════════════════════╗${NC}"
 echo -e "${GREEN}║          INSTALLATION COMPLETE                   ║${NC}"
 echo -e "${GREEN}╠══════════════════════════════════════════════════╣${NC}"
-printf "${GREEN}║  Agents:   %-3s (21 agents + 3 teams)            ║${NC}\n" "$AGENT_COUNT"
+printf "${GREEN}║  Agents:   %-3s (incl. project-setup + 3 teams)  ║${NC}\n" "$AGENT_COUNT"
 printf "${GREEN}║  Commands: %-3s                                  ║${NC}\n" "$CMD_COUNT"
 printf "${GREEN}║  Skills:   %-3s                                  ║${NC}\n" "$SKILL_COUNT"
 printf "${GREEN}║  Hooks:    1 (hooks.json)                        ║${NC}\n"
 printf "${GREEN}║  Rules:    %-3s                                  ║${NC}\n" "$RULE_COUNT"
-printf "${GREEN}║  Steering: 3 docs                                ║${NC}\n"
 printf "${GREEN}║  CLAUDE.md: installed                             ║${NC}\n"
 echo -e "${GREEN}╚══════════════════════════════════════════════════╝${NC}"
 echo ""
 echo "Next steps:"
 echo "  1. cd $DEST"
-echo "  2. Edit .claude/steering/product.md with your product vision"
-echo "  3. Edit .claude/steering/tech.md if your stack differs"
-echo "  4. Run: claude"
-echo "  5. Try: /check-agents  (verify everything loaded)"
-echo "  6. Try: /status        (project dashboard)"
-echo "  7. Try: /build-feature \"Add user authentication with JWT\""
+echo "  2. Run: claude"
+echo "  3. Try: /check-agents  (verify everything loaded)"
+echo "  4. Try: /status        (project dashboard)"
+echo "  5. Try: /build-feature \"Add user authentication with JWT\""
+echo ""
+echo "Note: No steering files needed! The project-setup agent will"
+echo "interview you about tech stack, CI/CD, testing, and infrastructure"
+echo "at the start of every new project."
