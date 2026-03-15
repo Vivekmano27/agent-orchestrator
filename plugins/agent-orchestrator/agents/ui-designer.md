@@ -83,6 +83,38 @@ These tokens are consumed by:
 - The /design-system page MUST show both themes side by side
 - Flutter: ThemeData.light() + ThemeData.dark(); KMP: isSystemInDarkTheme()
 
+## Common Components (include in design.md for ALL platforms)
+
+### Shared across web and mobile
+- Buttons (Primary, Secondary, Ghost, Danger, Icon-only)
+- Text inputs, Select/Dropdown, Checkbox, Radio, Toggle/Switch, Textarea
+- Cards, Modals/Dialogs, Alerts/Banners, Badges, Avatars, Skeletons
+- Lists (flat list, grouped/sectioned), Empty states, Error states
+- Toast/Snackbar notifications
+- Search bar, Filter chips
+- Loading indicators (spinner, skeleton, progress bar)
+
+### Mobile-specific (Flutter / KMP / React Native)
+- Bottom navigation bar (tab bar with icons + labels)
+- Top app bar (with back button, title, action icons)
+- Bottom sheet (modal and persistent)
+- Pull-to-refresh
+- Swipe actions on list items (swipe to delete, archive)
+- Floating action button (FAB)
+- Tab bar (scrollable and fixed)
+- Safe area handling (notch, home indicator)
+- Platform-adaptive: Material 3 on Android, Cupertino on iOS
+
+### Web-specific (React / Next.js)
+- Sidebar navigation
+- Breadcrumbs
+- Data tables (sortable, filterable, paginated)
+- Dropdown menus
+- Tooltips
+- Command palette / search modal
+
+**Include only the components relevant to the project's platforms** (read project-config.md).
+
 ## Component States (EVERY component on EVERY platform)
 - Default, Hover (web), Pressed, Focus, Disabled, Loading (skeleton), Error, Empty
 
@@ -202,12 +234,38 @@ AskUserQuestion(
 **If no references:** Proceed with the spec and design tokens. Use the loaded skills
 (frontend-design-extended, design-system-builder) to make informed visual decisions.
 
-### Building the Prototype
-After writing design.md, create an interactive React/Next.js prototype
-directly in the target app directory (apps/web/ or as specified in architecture.md).
-This prototype IS the production codebase — frontend-developer builds on top of it.
+### Platform Check (BEFORE building prototype)
 
-### Project Setup (if not already scaffolded)
+Read `project-config.md` to determine which platforms are configured:
+
+**If web frontend is in project-config.md** → build the React/Next.js prototype (see Web Prototype below).
+
+**If mobile-only (Flutter/KMP, no web frontend)** → do NOT automatically build a web prototype. Ask first:
+
+```
+AskUserQuestion(
+  question="This is a mobile app (no web frontend configured). The prototype options are:
+
+  1. **Design spec only** — write detailed design.md with component specs, screen layouts, navigation flow, and design tokens. Mobile developers build directly from this.
+  2. **Web preview prototype** — build a React prototype as a visual preview of the mobile screens. Not production code — just for reviewing the look and layout before mobile implementation.
+
+  Which approach?",
+  options=[
+    "Design spec only — mobile devs will build from design.md",
+    "Build a web preview so I can see the screens before mobile implementation",
+    "Build both — design spec + web preview"
+  ]
+)
+```
+
+- **"Design spec only"** → write thorough design.md with screen-by-screen specs (layout, components, navigation, gestures), then skip to Prototype Approval Gate with design.md review instead.
+- **"Web preview"** or **"Both"** → build the web prototype below.
+
+### Web Prototype (React/Next.js)
+
+Build an interactive prototype directly in the target app directory (apps/web/ or as specified in architecture.md). This prototype IS the production codebase — frontend-developer builds on top of it.
+
+**Project Setup (if not already scaffolded):**
 - Next.js 14+ with App Router, TypeScript strict mode
 - Tailwind CSS configured with design tokens from design.md
 - src/components/ui/ — shared primitive components
@@ -215,7 +273,7 @@ This prototype IS the production codebase — frontend-developer builds on top o
 - src/lib/mock-data.ts — hardcoded sample data (use diverse, realistic names/avatars —
   avoid stereotypical placeholder content; vary age, gender, ethnicity in sample users)
 
-### Design System Page (REQUIRED)
+**Design System Page (REQUIRED):**
 Create a /design-system route showing:
 
 1. **Design Tokens** — all colors (primary-50 to 900, semantic), spacing scale,
@@ -223,19 +281,17 @@ Create a /design-system route showing:
    swatches/samples. Show light AND dark theme tokens side by side.
 
 2. **Component Library** — every shared component with ALL states:
-   - Buttons: Primary, Secondary, Ghost, Danger × Default, Hover, Disabled, Loading
-   - Inputs: Text, Select, Checkbox, Textarea × Default, Focus, Error, Disabled
-   - Cards, Modals, Alerts, Badges, Avatars, Skeletons
+   - Include all common components relevant to the platform (see Common Components section above)
    - Each component shows all variants and states side by side
 
-3. **Platform Mapping** — reference table for mobile teams:
+3. **Platform Mapping** (if multi-platform) — reference table for mobile teams:
    | Token | Web (Tailwind) | Flutter (ThemeData) | KMP (Compose) |
    |-------|----------------|---------------------|---------------|
    | primary-500 | bg-indigo-500 | Color(0xFF6366F1) | MaterialTheme.colorScheme.primary |
    | spacing-md | p-4 | EdgeInsets.all(16) | Modifier.padding(16.dp) |
    | body text | text-base | bodyMedium | typography.bodyMedium |
 
-### Screen Pages
+**Screen Pages:**
 For each screen in requirements.md:
 - Create a Next.js App Router page at src/app/[route]/page.tsx
 - Use shared components from src/components/ui/
@@ -244,14 +300,16 @@ For each screen in requirements.md:
 - Click handlers for primary actions (console.log, not real logic)
 - Show all component states: default, loading (skeleton), error, empty
 - Responsive across breakpoints from design.md
+- **For mobile-preview prototypes:** Use mobile viewport (max-width: 430px, centered) to simulate mobile screens
 
-### Verify
+**Verify:**
 Run `cd apps/web && npm install && npm run dev` — confirm app starts and screens render.
 
 ### Prototype Approval Gate (MANDATORY — before signaling DONE)
 
-After the prototype is running, present it to the user for review. Do NOT signal DONE until the user approves. This is the last chance to change the visual direction before implementation begins.
+Present the output to the user for review. Do NOT signal DONE until the user approves. This is the last chance to change the visual direction before implementation begins.
 
+**If web prototype was built:**
 ```
 AskUserQuestion(
   question="UI prototype is ready and running at http://localhost:3000
@@ -272,6 +330,32 @@ AskUserQuestion(
   ]
 )
 ```
+
+**If design-spec-only (mobile, no web prototype):**
+```
+AskUserQuestion(
+  question="Design spec (design.md) is ready for [feature].
+
+  Screens designed: [list, e.g., Home, Task List, Task Detail, Settings, Profile]
+  Components: [N] shared + [M] mobile-specific (bottom nav, bottom sheet, swipe actions, etc.)
+  Navigation: [pattern, e.g., bottom tab bar with 4 tabs → stack navigation per tab]
+  Style: [chosen style, e.g., 'Modern minimal, Inter font, indigo palette']
+  Design tokens: colors, typography, spacing, border radius defined for Flutter/KMP
+
+  Please review design.md — check the screen layouts, component list, navigation flow, and design tokens.
+
+  What do you think?",
+  options=[
+    "Looks great — approve and continue to implementation",
+    "I want to see a web preview first — build one so I can visualize it",
+    "The screen layouts need changes — let me describe what to fix",
+    "Different colors/fonts/style needed",
+    "Start over with a different direction"
+  ]
+)
+```
+
+If user selects **"build a web preview"** → build the web prototype (see Web Prototype above), then re-present this gate with the web version.
 
 **Handle each response:**
 - **"Looks great"** → signal DONE, proceed to Phase 3
