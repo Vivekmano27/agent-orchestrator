@@ -60,10 +60,12 @@ cp -r "$PLUGIN_DIR"/skills/* "$DEST/.claude/skills/"
 SKILL_COUNT=$(ls -d "$DEST/.claude/skills/"*/ 2>/dev/null | wc -l | tr -d ' ')
 echo -e "  ${GREEN}$SKILL_COUNT skills installed${NC}"
 
-# Copy hooks (JSON config)
-echo -e "${YELLOW}Installing hooks config...${NC}"
+# Copy hooks (JSON config + scripts)
+echo -e "${YELLOW}Installing hooks...${NC}"
 cp "$PLUGIN_DIR"/hooks/hooks.json "$DEST/.claude/hooks/"
-echo -e "  ${GREEN}hooks.json installed${NC}"
+cp "$PLUGIN_DIR"/hooks/pre-commit-lint.sh "$DEST/.claude/hooks/"
+chmod +x "$DEST/.claude/hooks/pre-commit-lint.sh"
+echo -e "  ${GREEN}hooks.json + pre-commit-lint.sh installed${NC}"
 
 # Copy rules (3)
 echo -e "${YELLOW}Installing 3 rules...${NC}"
@@ -94,7 +96,7 @@ echo -e "${GREEN}╠════════════════════
 printf "${GREEN}║  Agents:   %-3s (incl. project-setup + 3 teams)  ║${NC}\n" "$AGENT_COUNT"
 printf "${GREEN}║  Commands: %-3s                                  ║${NC}\n" "$CMD_COUNT"
 printf "${GREEN}║  Skills:   %-3s                                  ║${NC}\n" "$SKILL_COUNT"
-printf "${GREEN}║  Hooks:    1 (hooks.json)                        ║${NC}\n"
+printf "${GREEN}║  Hooks:    hooks.json + pre-commit-lint.sh        ║${NC}\n"
 printf "${GREEN}║  Rules:    %-3s                                  ║${NC}\n" "$RULE_COUNT"
 printf "${GREEN}║  CLAUDE.md: installed                             ║${NC}\n"
 echo -e "${GREEN}╚══════════════════════════════════════════════════╝${NC}"

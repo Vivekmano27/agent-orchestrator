@@ -10,6 +10,8 @@ skills:
   - nestjs-patterns
   - react-patterns
   - flutter-patterns
+  - python-django-patterns
+  - kmp-patterns
   - code-documentation
 ---
 
@@ -28,7 +30,7 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
 ```
 
 
-**Skills loaded:** code-review, nestjs-patterns, react-patterns, flutter-patterns, code-documentation
+**Skills loaded:** code-review, nestjs-patterns, react-patterns, flutter-patterns, python-django-patterns, kmp-patterns, code-documentation
 
 ## Review Checklist (per service)
 
@@ -61,6 +63,14 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
 - [ ] Semantics widgets for accessibility
 - [ ] Error handling on API calls
 - [ ] dispose() called for controllers/subscriptions
+
+### KMP Code
+- [ ] Business logic in commonMain (not platform-specific)
+- [ ] expect/actual only for platform concerns (DB driver, secure storage, notifications)
+- [ ] Coroutines use structured concurrency (no GlobalScope)
+- [ ] StateFlow for UI state (not mutable variables)
+- [ ] Koin modules properly scoped
+- [ ] SQLDelight queries are parameterized
 
 ### Documentation Quality
 - [ ] Public APIs (exported functions, classes, interfaces) have doc comments

@@ -107,7 +107,7 @@ Agent(
 You will be notified as each reviewer finishes. Do NOT poll.
 
 ### STEP 3 — Compile combined report
-After all 3 complete, merge findings into a single report:
+After all reviewers complete, merge findings into a single report:
 
 ```markdown
 # Code Review Report — [feature/branch]

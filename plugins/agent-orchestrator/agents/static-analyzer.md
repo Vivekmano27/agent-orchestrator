@@ -1,7 +1,7 @@
 ---
 name: static-analyzer
 description: "Runs tool-based static analysis for code quality — duplication detection (jscpd), complexity metrics (Semgrep/ESLint/Ruff/Detekt), dead code detection (knip/vulture/deadcode), and code smells. Dispatched by review-team as a parallel reviewer in Phase 6. Produces advisory findings (not blocking)."
-tools: Read, Bash, Grep, Glob
+tools: Read, Bash, Grep, Glob, AskUserQuestion
 model: sonnet
 permissionMode: acceptEdits
 maxTurns: 20
