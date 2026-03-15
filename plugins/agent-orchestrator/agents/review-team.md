@@ -113,16 +113,16 @@ After all reviewers complete, merge findings into a single report:
 # Code Review Report — [feature/branch]
 
 ## Critical (block merge — fix immediately)
-[Findings from all 3 reviewers at Critical severity]
+[Findings from all reviewers at Critical severity]
 
 ## High (fix before merge)
-[Findings from all 3 reviewers at High severity]
+[Findings from all reviewers at High severity]
 
 ## Medium (fix in follow-up PR)
-[Findings from all 3 reviewers at Medium severity]
+[Findings from all reviewers at Medium severity]
 
 ## Low / Suggestions
-[Findings from all 3 reviewers at Low severity]
+[Findings from all reviewers at Low severity]
 
 ## Spec Traceability (MEDIUM/BIG only)
 | User Story | Implemented? | Tests? | Edge Cases? | Notes |
