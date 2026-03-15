@@ -369,11 +369,42 @@ Then wait for Pass 1 → spawn backend wave → verify → dispatch Pass 2 → s
 
 ## Agent Teams Mode (experimental — when CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1)
 
-When Agent Teams mode is enabled, teammates can message each other via `SendMessage` for real-time coordination. This is especially useful for API contract negotiation between backend and frontend.
+When Agent Teams mode is enabled, all 7 agents can communicate via `SendMessage` for real-time coordination. This eliminates file-wait staggering and enables live negotiation between agents.
 
-Benefits over subagent mode:
-- Backend can SendMessage API contracts to frontend in real-time (no file-wait stagger)
-- Frontend can ask backend questions about endpoint shapes directly
-- Agents can resolve integration issues through peer-to-peer discussion
+The file ownership matrix above still applies — agents negotiate via messages but write ONLY to their own files.
 
-The file ownership matrix above still applies in Agent Teams mode.
+### Backend Wave Coordination
+
+| Sender | Receiver(s) | Message | Purpose |
+|--------|------------|---------|---------|
+| backend-developer | all frontend agents | "API contracts ready: [endpoint list with shapes]" | Frontend agents start immediately without waiting for api-contracts.md file |
+| backend-developer | agent-native-developer | "Endpoints implemented: [list]. These map to tools: [tool names]" | Pass 2 wiring can start for completed endpoints while others are still building |
+| senior-engineer | backend-developer | "Auth middleware pattern: [details]. Use this guard on protected endpoints" | Align auth patterns before both agents finish independently |
+| python-developer | backend-developer | "AI service endpoints: [list with shapes]" | Backend can wire inter-service calls immediately |
+| agent-native-developer | all | "Agent-native scaffolds ready at .claude/agents/, .claude/skills/, .claude/commands/. Key tools: [list]" | Implementation agents can see the agent structure and ensure endpoints are tool-compatible |
+
+### Frontend Wave Coordination
+
+| Sender | Receiver(s) | Message | Purpose |
+|--------|------------|---------|---------|
+| frontend-developer | flutter-developer, kmp-developer | "Shared design tokens: [token list]. API client pattern: [pattern]" | Mobile agents follow the same design token mapping and API call patterns as web |
+| flutter-developer | kmp-developer | "Feature parity check: I implemented [screens]. Do you have equivalents?" | Cross-platform consistency — both mobile agents should cover the same features |
+| kmp-developer | flutter-developer | "Shared business logic patterns: [patterns]. Equivalent in Dart would be [suggestion]" | Knowledge sharing between mobile platforms |
+| any frontend agent | backend-developer | "Endpoint [X] returns [shape] but I expected [different shape]. Can you check?" | Real-time shape mismatch resolution (instead of waiting for Phase 6 review) |
+
+### Agent-Native Coordination
+
+| Sender | Receiver(s) | Message | Purpose |
+|--------|------------|---------|---------|
+| agent-native-developer | all frontend agents | "Capability map ready. These UI actions need parity: [list]" | Frontend agents can verify their screens cover all parity requirements |
+| any frontend agent | agent-native-developer | "I added a new UI action [action] that's not in capability-map.md" | Agent-native-developer adds the tool immediately, keeping parity up-to-date |
+| agent-native-developer | backend-developer | "These tool endpoints need to exist: [NEW endpoints from agent-spec.md]" | Backend knows which endpoints are for agent tools vs UI |
+| backend-developer | agent-native-developer | "Endpoint [X] has a different shape than designed: [actual shape]" | Pass 2 wiring uses the correct shape without waiting for api-contracts.md |
+
+### Benefits Over Subagent Mode
+
+- **No file-wait stagger:** Backend sends API contracts via message → frontend starts immediately (saves 2-5 minutes)
+- **Real-time shape negotiation:** Frontend catches endpoint mismatches during implementation, not in Phase 6 review
+- **Cross-platform consistency:** Flutter and KMP agents can peer-verify feature parity directly
+- **Agent-native parity:** New UI actions are immediately communicated to agent-native-developer
+- **Reduced duplicate work:** Agents share patterns and findings instead of each discovering them independently
