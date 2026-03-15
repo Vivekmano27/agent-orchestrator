@@ -44,7 +44,7 @@ Before designing, scan the target codebase for existing component patterns:
 - Shared design tokens (colors, spacing, typography) across ALL platforms
 - Platform-adaptive components (Material on Android, Cupertino on iOS, custom on web)
 
-## Shared Design Tokens
+## Shared Design Tokens (defaults — override with user's Design Preferences)
 ```json
 {
   "colors": {
@@ -123,18 +123,68 @@ Message the team: "Self-review complete. Fixed [N] issues: [brief list]."
 
 ## Prototype Generation (MEDIUM/BIG tasks only, skip for SMALL)
 
-### Visual Reference Gate (BEFORE building prototype)
-Ask the user for visual references before starting the prototype. This is the single
-most impactful input for getting the design right on the first pass.
+### Design Preferences Gate (BEFORE designing — MANDATORY)
+
+Before writing design.md or building the prototype, ask the user about their design preferences. These choices drive every downstream decision (tokens, components, layout).
 
 ```
 AskUserQuestion(
-  question="Before I build the prototype, do you have any visual references to guide the design?",
+  question="Before I design the UI, I need to understand your preferences:
+
+1. **App type:** What kind of app is this?
+   (e.g., dashboard, e-commerce, social, SaaS tool, landing page, mobile-first)
+
+2. **Visual style:** What feel are you going for?
+   - Modern/minimal (clean lines, lots of whitespace, subtle shadows)
+   - Bold/vibrant (strong colors, large typography, dynamic)
+   - Corporate/professional (neutral tones, structured, data-dense)
+   - Playful/creative (rounded corners, illustrations, bright accents)
+
+3. **Typography:** Any font preference?
+   - System fonts (fast, no external deps)
+   - Inter / Plus Jakarta Sans (modern SaaS look)
+   - Custom font (specify name)
+   - No preference — pick something that fits the style
+
+4. **Color palette:** Any brand colors or preference?
+   - I have brand colors (share hex codes)
+   - Cool tones (blue/purple/teal)
+   - Warm tones (orange/red/amber)
+   - Neutral (gray/slate)
+   - No preference",
+  options=[
+    "Let me answer those questions",
+    "Modern minimal with system fonts — just go",
+    "Dashboard-heavy with data tables — professional look",
+    "I'll share a reference app/screenshot instead",
+    "Use your best judgment based on the requirements"
+  ]
+)
+```
+
+**Apply the user's answers to:**
+- `design.md` — design tokens (colors, typography, spacing, border radius)
+- Tailwind config — font family, color palette
+- Component styling — rounded vs sharp, dense vs spacious, shadow depth
+- Layout patterns — sidebar nav vs top nav, card-based vs table-based
+
+If the user says "use your best judgment", infer from the app type:
+- Dashboard/SaaS → modern minimal, Inter font, sidebar nav, data tables
+- E-commerce → vibrant, image-heavy, card grid, large CTAs
+- Social → playful, rounded, mobile-first, feed layout
+- Landing page → bold typography, hero sections, scroll-based
+
+### Visual Reference Gate (AFTER design preferences)
+Ask the user for visual references to further guide the prototype.
+
+```
+AskUserQuestion(
+  question="Do you have any visual references to guide the design?",
   options=[
     "Yes — I'll share wireframes/mockups (paste image paths or drop files)",
     "Yes — I have a reference app/website to match (share URL or screenshots)",
-    "No references — design from the spec using your best judgment",
-    "Use a specific style: [minimal/corporate/playful/dashboard-heavy/other]"
+    "No references — design from the preferences above",
+    "Skip — the preferences are enough"
   ]
 )
 ```
