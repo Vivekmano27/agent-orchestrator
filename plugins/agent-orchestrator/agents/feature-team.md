@@ -39,10 +39,86 @@ feature-team (you — orchestrator)
 
 ## Execution Protocol
 
-### STEP 1 — Read the feature spec
-Read `.claude/specs/[feature]/api-spec.md`, `schema.md`, `design.md`, and `architecture.md`.
+### STEP 1 — Read the feature spec and task list
+Read `.claude/specs/[feature]/api-spec.md`, `schema.md`, `design.md`, `architecture.md`, and `tasks.md`.
 
-### STEP 2 — Spawn backend + senior + python IN PARALLEL (same response)
+**If `tasks.md` exists:** Use task-driven dispatch (Steps 2-5 below). Each agent receives its specific task IDs.
+**If `tasks.md` does NOT exist:** Fall back to spec-driven dispatch (Step 2-fallback below).
+
+### STEP 2 — Group tasks by agent
+Read `tasks.md` and group tasks by their `**Agent:**` field:
+- `backend-developer` tasks → dispatched to backend-developer
+- `senior-engineer` tasks → dispatched to senior-engineer
+- `python-developer` tasks → dispatched to python-developer
+- `frontend-developer` tasks → dispatched to frontend-developer (starts after backend contracts ready)
+
+### STEP 3 — Spawn backend + senior + python IN PARALLEL (same response)
+```
+Agent(
+  subagent_type="agent-orchestrator:backend-developer",
+  run_in_background=True,
+  prompt="Implement your assigned tasks for [feature].
+          Read .claude/specs/[feature]/tasks.md — execute these tasks IN ORDER: [TASK-NNN, TASK-NNN, ...].
+          Each task has Description, Files, Verification, and Commit message — follow them exactly.
+          FILE OWNERSHIP: You own services/core-service/ (except src/common/) and prisma/.
+          Do NOT touch services/api-gateway/ or services/shared/.
+          Follow TDD. When all endpoints are implemented, write actual API contracts
+          (routes, request/response shapes) to .claude/specs/[feature]/api-contracts.md"
+)
+
+Agent(
+  subagent_type="agent-orchestrator:senior-engineer",
+  run_in_background=True,
+  prompt="Implement your assigned tasks for [feature].
+          Read .claude/specs/[feature]/tasks.md — execute these tasks IN ORDER: [TASK-NNN, TASK-NNN, ...].
+          Each task has Description, Files, Verification, and Commit message — follow them exactly.
+          FILE OWNERSHIP: You own services/core-service/src/common/, services/api-gateway/, services/shared/.
+          Do NOT touch services/core-service/src/modules/.
+          Handle service boundaries, auth middleware, error handling, timeouts."
+)
+
+Agent(
+  subagent_type="agent-orchestrator:python-developer",
+  run_in_background=True,
+  prompt="Implement your assigned tasks for [feature].
+          Read .claude/specs/[feature]/tasks.md — execute these tasks IN ORDER: [TASK-NNN, TASK-NNN, ...].
+          Each task has Description, Files, Verification, and Commit message — follow them exactly.
+          FILE OWNERSHIP: You own services/ai-service/ only.
+          Follow TDD."
+)
+```
+
+### STEP 4 — Wait for backend-developer to complete, then spawn frontend
+You will be notified when each background agent completes. Do NOT poll.
+When backend-developer completes, `.claude/specs/[feature]/api-contracts.md` is ready.
+
+```
+Agent(
+  subagent_type="agent-orchestrator:frontend-developer",
+  prompt="Implement your assigned tasks for [feature].
+          Read .claude/specs/[feature]/tasks.md — execute these tasks IN ORDER: [TASK-NNN, TASK-NNN, ...].
+          Each task has Description, Files, Verification, and Commit message — follow them exactly.
+          Read .claude/specs/[feature]/api-contracts.md for exact backend API routes and shapes.
+          FILE OWNERSHIP: You own apps/web/, apps/mobile-flutter/, apps/mobile-kmp/.
+          Do NOT touch services/.
+          Follow TDD."
+)
+```
+
+### STEP 5 — Wait for all implementation agents to complete
+Verify all tasks from tasks.md are completed. Cross-check agent reports against task list.
+
+### STEP 6 — Report results back to orchestrator
+Return to the project-orchestrator:
+- What was implemented (backend + frontend + AI service)
+- Files changed per agent
+- Any issues encountered
+- Whether api-contracts.md was successfully written
+
+Do NOT run testing or review — the orchestrator handles those in Phases 4 and 6.
+
+### STEP 2-fallback — Spec-driven dispatch (when tasks.md doesn't exist)
+If `tasks.md` is missing, fall back to dispatching agents with spec files directly:
 ```
 Agent(
   subagent_type="agent-orchestrator:backend-developer",
@@ -71,34 +147,7 @@ Agent(
           Follow TDD."
 )
 ```
-
-### STEP 3 — Wait for backend-developer to complete
-You will be notified when each background agent completes. Do NOT poll.
-When backend-developer completes, `.claude/specs/[feature]/api-contracts.md` is ready.
-
-### STEP 4 — Spawn frontend-developer (synchronous — needs backend contracts)
-```
-Agent(
-  subagent_type="agent-orchestrator:frontend-developer",
-  prompt="Implement React/Next.js web and Flutter mobile UI for [feature].
-          Read .claude/specs/[feature]/design.md for component specs.
-          Read .claude/specs/[feature]/api-contracts.md for exact backend API routes and shapes.
-          FILE OWNERSHIP: You own apps/web/, apps/mobile-flutter/, apps/mobile-kmp/.
-          Do NOT touch services/.
-          Follow TDD."
-)
-```
-
-### STEP 5 — Wait for all implementation agents to complete
-
-### STEP 6 — Report results back to orchestrator
-Return to the project-orchestrator:
-- What was implemented (backend + frontend + AI service)
-- Files changed per agent
-- Any issues encountered
-- Whether api-contracts.md was successfully written
-
-Do NOT run testing or review — the orchestrator handles those in Phases 4 and 6.
+Then wait for backend-developer → spawn frontend-developer with spec files → wait for all → report.
 
 ---
 

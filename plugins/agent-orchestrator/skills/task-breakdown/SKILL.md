@@ -13,6 +13,7 @@ Convert features and designs into ordered, atomic implementation tasks that an A
 ```markdown
 ## TASK-[NNN]: [Descriptive title]
 **Description:** [Detailed instructions — what files to create/modify, what logic to implement, patterns to follow]
+**Agent:** backend-developer | senior-engineer | python-developer | frontend-developer
 **Module:** [which part of the app]
 **Effort:** S (< 30min) | M (30min-2hr) | L (2-4hr) | XL (4hr+)
 **Dependencies:**

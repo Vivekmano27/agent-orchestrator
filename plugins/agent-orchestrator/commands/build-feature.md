@@ -20,6 +20,7 @@ Size classification determines approval gates only:
 ## Agents triggered (ALWAYS ALL):
 Planning: product-manager, business-analyst, ux-researcher
 Design: system-architect, api-architect, database-architect, ui-designer
+Task Decomposition: task-decomposer → ordered task list with agent assignments
 Build: senior-engineer, backend-developer, frontend-developer, python-developer
 Test: test-engineer, qa-automation
 Security: security-auditor

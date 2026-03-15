@@ -55,6 +55,9 @@ PHASE 2: DESIGN — PRODUCTION-READY (always — design for production, not prot
   ├── database-architect   → PostgreSQL schema, ER diagrams, indexes, migrations, constraints
   └── ui-designer          → design system, component specs, tokens, responsive
 
+PHASE 2.1: TASK DECOMPOSITION (always — reads specs, produces ordered task list)
+  └── task-decomposer → tasks.md with dependencies, effort, agent assignments
+
 PHASE 2.5: GIT SETUP (always — YOU do this directly, before code is written)
   └── project-orchestrator → git init, .gitignore, feature branch, initial commit
 
@@ -98,20 +101,22 @@ Task size determines HOW MUCH you interact, not WHICH agents run:
 
 ### MEDIUM (4-10 files, 1-2 services)
 - ALL 21 agents still run
-- ONE approval gate after Phase 2 (design) — **STOP, read SUMMARY.md, and call the tool:**
+- ONE approval gate after Phase 2.1 (design + tasks) — **STOP, read SUMMARY.md and tasks.md, and call the tool:**
   ```
-  1. Read .claude/specs/[feature]/SUMMARY.md
+  1. Read .claude/specs/[feature]/SUMMARY.md and .claude/specs/[feature]/tasks.md
   2. Include key decisions in the question:
   AskUserQuestion(
-    question="Planning & design complete for [feature]:
+    question="Planning, design & task decomposition complete for [feature]:
     - [X] user stories with acceptance criteria
     - Architecture: [monolith/microservices], [tech stack]
     - [Y] API endpoints designed
     - Database: [Z] tables
+    - Implementation: [N] tasks across [M] services, estimated [effort]
     Proceed with implementation?",
-    options=["Yes, proceed", "Request changes", "Cancel"]
+    options=["Yes, proceed", "Modify tasks", "Request changes to design", "Cancel"]
   )
   ```
+  If "Modify tasks": ask for feedback via AskUserQuestion (free text), re-run task-decomposer with feedback appended.
 
 ### BIG (10+ files, multiple services)
 - ALL 21 agents still run
@@ -132,10 +137,26 @@ Task size determines HOW MUCH you interact, not WHICH agents run:
   ```
   AskUserQuestion(
     question="Design complete: [architecture type], [X] endpoints, [Y] tables, [Z] components.
-    Tech: [stack]. Approve to proceed to implementation?",
-    options=["Approve — proceed to implementation", "Request changes", "Cancel"]
+    Tech: [stack]. Approve to proceed to task decomposition?",
+    options=["Approve — proceed to task decomposition", "Request changes", "Cancel"]
   )
   ```
+
+  **Gate 2.1 — after task decomposition (Phase 2.1):**
+  Read tasks.md. Summarize task count, agent workload, phases.
+  ```
+  AskUserQuestion(
+    question="Implementation plan ready: [N] tasks across [M] services.
+    Workload: backend=[X], frontend=[Y], senior=[Z], python=[W].
+    Estimated effort: [total]. [P] implementation phases.
+    Approve to proceed to implementation?",
+    options=["Approve — proceed to implementation", "Modify tasks", "Simplify", "Add detail", "Go back to design", "Cancel"]
+  )
+  ```
+  If "Modify tasks": ask for feedback via AskUserQuestion (free text), re-run task-decomposer with feedback.
+  If "Simplify": re-run task-decomposer with "REVISION: User wants fewer/simpler tasks. Reduce scope."
+  If "Add detail": re-run task-decomposer with "REVISION: User wants more granular tasks. Break down further."
+  If "Go back to design": return to Phase 2 gate.
 
   **Gate 3 — after implementation (Phase 3):**
   Read feature-team report. Summarize files changed.
@@ -175,6 +196,7 @@ After each phase completes, verify expected output files exist:
 **After Phase 1:** requirements.md, business-rules.md, ux.md
 **After Phase 1.5:** tech-stack.md
 **After Phase 2:** architecture.md, api-spec.md, schema.md, design.md, SUMMARY.md
+**After Phase 2.1:** tasks.md
 **After Phase 3:** api-contracts.md
 **After Phase 5:** security-audit.md
 **After Phase 8:** Check that at least one documentation file was created (README.md, docs/API.md, or CHANGELOG.md)
@@ -353,6 +375,32 @@ Agent(
 # This summary is shown to the user at approval gates.
 ```
 
+### Phase 2.1: Task Decomposition — spawned subagent
+
+**This runs AFTER design (Phase 2) and BEFORE git setup (Phase 2.5).** The task-decomposer reads all specs and produces an ordered, dependency-aware implementation task list.
+
+2.1a. Spawn task-decomposer:
+```
+Agent(
+  subagent_type="agent-orchestrator:task-decomposer",
+  prompt="Read all specs in .claude/specs/[feature]/: requirements.md, business-rules.md, architecture.md, api-spec.md, schema.md, design.md, tech-stack.md.
+          Decompose into ordered, dependency-aware implementation tasks with agent assignments.
+          Output to .claude/specs/[feature]/tasks.md"
+)
+```
+2.1b. Wait for completion. Verify `.claude/specs/[feature]/tasks.md` exists.
+
+2.1c. Present approval gate (size-dependent):
+- **SMALL:** Auto-approve — no gate.
+- **MEDIUM:** Merged with Phase 2 gate (single gate showing design + tasks). See MEDIUM gate above.
+- **BIG:** Separate Gate 2.1. Read tasks.md summary. Present options: Approve / Modify tasks / Simplify / Add detail / Go back to design / Cancel.
+  - "Modify tasks" → AskUserQuestion for free-text feedback → re-run task-decomposer with: "REVISION: User requested these changes: [feedback]. Previous output at .claude/specs/[feature]/tasks.md. Update accordingly."
+  - "Simplify" → re-run task-decomposer with simplification instruction.
+  - "Add detail" → re-run task-decomposer with granularity instruction.
+  - "Go back to design" → return to Phase 2 gate.
+
+---
+
 ### Phase 2.5: Git Setup — YOU do this directly (no subagent needed)
 
 **This runs AFTER planning/design and BEFORE any code is written.** Git is initialized here — not at the start — because Phases 1-2 only produce spec files. There's no reason to set up a repo until code is about to be written.
@@ -494,11 +542,15 @@ Phase 2 — Design (PRODUCTION-READY — not prototype):
   database-architect → products, orders, users tables with constraints, indexes, audit columns
   ui-designer → Shadcn/ui component specs with all states (loading, error, empty)
 
+Phase 2.1 — Task Decomposition:
+  task-decomposer → 28 tasks across 3 services, 6 implementation phases
+  Agent workload: backend=12, frontend=10, senior=4, python=2
+
 Phase 2.5 — Git Setup (orchestrator does this directly):
   git init → main branch → feature/craft-marketplace
   ✅ Repo ready, on feature branch
 
-Phase 3 — Build (production-quality code):
+Phase 3 — Build (production-quality code — each agent gets specific tasks from tasks.md):
   backend-developer → NestJS with proper validation, error handling, Stripe integration
   frontend-developer → React/Next.js with server components, proper auth
 

@@ -21,15 +21,18 @@ Task size (SMALL/MEDIUM/BIG) only determines approval gates, NOT which agents ru
 4. ALL 9 phases execute with ALL 21 agents:
 
 ```
-Phase 1: product-manager + business-analyst + ux-researcher
-Phase 2: system-architect + api-architect + database-architect + ui-designer
-Phase 3: senior-engineer + backend-developer + frontend-developer + python-developer
-Phase 4: test-engineer + qa-automation
-Phase 5: security-auditor
-Phase 6: code-reviewer + performance-reviewer
-Phase 7: devops-engineer + deployment-engineer
-Phase 8: technical-writer
-Phase 9: project-orchestrator + task-executor (coordination)
+Phase 1:   product-manager + business-analyst + ux-researcher
+Phase 1.5: tech stack decision
+Phase 2:   system-architect + api-architect + database-architect + ui-designer
+Phase 2.1: task-decomposer → ordered task list with agent assignments
+Phase 2.5: git setup
+Phase 3:   senior-engineer + backend-developer + frontend-developer + python-developer
+Phase 4:   test-engineer + qa-automation
+Phase 5:   security-auditor
+Phase 6:   code-reviewer + performance-reviewer
+Phase 7:   devops-engineer + deployment-engineer
+Phase 8:   technical-writer
+Coordination: project-orchestrator + task-executor
 ```
 
 No agents are ever skipped. A "local todo app" gets the same agent coverage as a "production SaaS".

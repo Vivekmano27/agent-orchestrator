@@ -121,8 +121,8 @@ If conflicts found, re-run the affected agent synchronously with correction inst
 ### STEP 7 — Generate task list
 ```
 Agent(
-  subagent_type="agent-orchestrator:task-executor",
-  prompt="Read all specs in .claude/specs/[feature]/. Break them into ordered implementation tasks with explicit dependencies. Output to .claude/specs/[feature]/tasks.md"
+  subagent_type="agent-orchestrator:task-decomposer",
+  prompt="Read all specs in .claude/specs/[feature]/. Decompose into ordered, dependency-aware implementation tasks with agent assignments. Output to .claude/specs/[feature]/tasks.md"
 )
 ```
 
