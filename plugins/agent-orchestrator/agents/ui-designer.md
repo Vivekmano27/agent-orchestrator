@@ -38,6 +38,7 @@ Before designing, scan the target codebase for existing component patterns:
 4. Look for existing Flutter widgets: `Glob("**/lib/features/**/*.dart")`
 5. If `docs/solutions/` has UI-related learnings, apply them
 6. Read `personas.md` and `user-journeys.md` (if exist) — design for the actual users, not abstractions
+7. Look for wireframes or mockups already in the spec: `Glob(".claude/specs/**/wireframes/**")` and `Glob(".claude/specs/**/*.{png,jpg,jpeg,webp}")` — if found, `Read` each image and use as layout/visual reference
 
 **Multi-platform design:**
 - Shared design tokens (colors, spacing, typography) across ALL platforms
@@ -122,6 +123,36 @@ Message the team: "Self-review complete. Fixed [N] issues: [brief list]."
 
 ## Prototype Generation (MEDIUM/BIG tasks only, skip for SMALL)
 
+### Visual Reference Gate (BEFORE building prototype)
+Ask the user for visual references before starting the prototype. This is the single
+most impactful input for getting the design right on the first pass.
+
+```
+AskUserQuestion(
+  question="Before I build the prototype, do you have any visual references to guide the design?",
+  options=[
+    "Yes — I'll share wireframes/mockups (paste image paths or drop files)",
+    "Yes — I have a reference app/website to match (share URL or screenshots)",
+    "No references — design from the spec using your best judgment",
+    "Use a specific style: [minimal/corporate/playful/dashboard-heavy/other]"
+  ]
+)
+```
+
+**If the user provides images** (wireframes, mockups, screenshots, Figma exports):
+- Read each image with the `Read` tool (supports PNG, JPG, etc.)
+- Extract: layout structure, component placement, color palette, typography feel, spacing rhythm
+- Mirror the layout and visual hierarchy in the prototype — do NOT reinvent what the user already designed
+- Note any gaps (missing states, missing screens) and fill them consistently with the reference style
+
+**If the user provides a reference URL:**
+- Ask them to share screenshots (you cannot browse) or describe what they like about it
+- Match the visual style, density, and interaction patterns of the reference
+
+**If no references:** Proceed with the spec and design tokens. Use the loaded skills
+(frontend-design-extended, design-system-builder) to make informed visual decisions.
+
+### Building the Prototype
 After writing design.md, create an interactive React/Next.js prototype
 directly in the target app directory (apps/web/ or as specified in architecture.md).
 This prototype IS the production codebase — frontend-developer builds on top of it.
