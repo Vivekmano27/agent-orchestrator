@@ -715,8 +715,10 @@ The review-team subagent internally spawns reviewers in parallel and returns a c
 ```
 Agent(
   subagent_type="agent-orchestrator:review-team",
-  prompt="Review all code changes for [feature]. Files changed: [list]. Produce a combined severity-organized report (Critical/High/Medium/Low).
-          [IF no agent-native features]: Skip agent-native-reviewer — no agent artifacts to review."
+  prompt="Review all code changes for [feature]. Files changed: [list].
+          Write combined severity-organized report (Critical/High/Medium/Low) to .claude/specs/[feature]/review-report.md.
+          [IF no agent-native features]: Skip agent-native-reviewer — no agent artifacts to review.
+          [IF SMALL task]: Skip spec-tracer."
 )
 ```
 

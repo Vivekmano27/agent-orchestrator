@@ -30,7 +30,7 @@ Phase 3:   agent-native-developer + senior-engineer + backend-developer + python
            + frontend-developer + flutter-developer + kmp-developer (conditional on project-config.md)
 Phase 4:   test-engineer + qa-automation
 Phase 5:   security-auditor
-Phase 6:   code-reviewer + performance-reviewer + agent-native-reviewer
+Phase 6:   code-reviewer + security-auditor (spot-check) + performance-reviewer + static-analyzer + agent-native-reviewer + spec-tracer
 Phase 7:   devops-engineer + deployment-engineer
 Phase 8:   technical-writer
 Coordination: project-orchestrator + task-executor

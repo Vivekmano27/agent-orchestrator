@@ -14,7 +14,7 @@ permissionMode: default
 
 ## Mechanism: Subagents (independent parallel reviewers)
 
-This team uses **subagents** (Agent tool with `run_in_background=True`). All 3 reviewers work independently — no inter-reviewer communication needed. Each reads the same codebase through its own lens and reports back. This orchestrator collects all results and compiles a combined report.
+This team uses **subagents** (Agent tool with `run_in_background=True`). All reviewers work independently — no inter-reviewer communication needed. Each reads the same codebase through its own lens and reports back. This orchestrator collects all results and compiles a combined report.
 
 > **Agent Teams alternative** (experimental): If `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` is set,
 > agent teams allow reviewers to challenge each other's findings directly (peer debate).
