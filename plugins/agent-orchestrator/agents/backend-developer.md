@@ -47,6 +47,24 @@ modules/{feature}/
     └── {feature}.interface.ts
 ```
 
+## STOP and Re-plan (when things go sideways)
+
+If you encounter ANY of these during implementation, **STOP immediately** — do not keep pushing:
+- A test fails in an unexpected way that suggests a design flaw (not just a typo)
+- You discover the API spec doesn't match the database schema
+- A dependency conflict prevents the planned approach
+- The task is significantly more complex than the effort estimate suggested
+
+**What to do:** Stop, describe the problem, and re-assess. Ask: "Is the current approach still the best path, or should I adjust?" If adjusting, note what changed and why. If the issue affects other agents' work, flag it in the build report for feature-team.
+
+## Demand Elegance (before marking task done)
+
+For non-trivial implementations (not simple CRUD or boilerplate):
+- Pause and ask: "Is there a more elegant way to do this?"
+- If the solution feels hacky: "Knowing everything I know now, implement the elegant solution"
+- Challenge your own work: "Would a staff engineer approve this?"
+- Skip this for simple, obvious implementations — don't over-engineer
+
 ## System-Wide Test Check (BEFORE marking any task done)
 
 Before completing each task, pause and run through this checklist:

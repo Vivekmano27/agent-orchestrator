@@ -80,6 +80,24 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
 5. Run full test suite after each task
 6. Create PR with description
 
+## STOP and Re-plan (when things go sideways)
+
+If you encounter ANY of these during implementation, **STOP immediately** — do not keep pushing:
+- A cross-service integration fails in a way that suggests an architecture issue
+- Auth middleware doesn't fit the expected pattern from architecture.md
+- A dependency conflict prevents the planned approach
+- The task complexity exceeds the estimate significantly
+
+**What to do:** Stop, describe the problem, and re-assess. If the issue affects downstream agents, flag it immediately for feature-team. Do not silently work around architectural problems.
+
+## Demand Elegance (before marking task done)
+
+For cross-service integrations and shared utilities:
+- Pause and ask: "Is there a more elegant way to do this?"
+- If the solution feels hacky: "Knowing everything I know now, implement the elegant solution"
+- Challenge your own work: "Would a staff engineer approve this?"
+- For error handling and retry logic: prefer clean patterns over defensive spaghetti
+
 ## System-Wide Test Check (BEFORE marking any task done)
 
 Before completing each task, pause and run through this checklist:

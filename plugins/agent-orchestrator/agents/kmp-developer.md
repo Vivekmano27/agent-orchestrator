@@ -328,6 +328,24 @@ expect class PermissionHandler {
 }
 ```
 
+## STOP and Re-plan (when things go sideways)
+
+If you encounter ANY of these during implementation, **STOP immediately** — do not keep pushing:
+- expect/actual implementation fails on one platform
+- Ktor serialization doesn't match the API contract shapes
+- SQLDelight schema migration conflicts
+- The task complexity exceeds the estimate significantly
+
+**What to do:** Stop, describe the problem, and re-assess. If the issue is platform-specific (Android vs iOS), document which platform is affected. If it's an API shape mismatch, flag it for feature-team.
+
+## Demand Elegance (before marking task done)
+
+For KMP architecture:
+- Pause and ask: "Is there a more elegant way to do this?"
+- If the solution feels hacky: "Knowing everything I know now, implement the elegant solution"
+- Challenge your own work: "Would a staff engineer approve this?"
+- Prefer coroutine Flow over callbacks, sealed classes over when/else chains, commonMain over platform-specific code
+
 ## System-Wide Test Check (BEFORE marking any task done)
 
 | Question | What to do |

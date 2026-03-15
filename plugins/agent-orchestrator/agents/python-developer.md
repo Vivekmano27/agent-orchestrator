@@ -98,6 +98,24 @@ def process_ai_request(self, request_id: str):
         self.retry(exc=e)
 ```
 
+## STOP and Re-plan (when things go sideways)
+
+If you encounter ANY of these during implementation, **STOP immediately** — do not keep pushing:
+- An AI provider API behaves differently than expected
+- Celery task chains fail in unexpected ways
+- A dependency conflict prevents the planned approach
+- The task complexity exceeds the estimate significantly
+
+**What to do:** Stop, describe the problem, and re-assess. If the issue affects the NestJS backend integration, flag it for feature-team.
+
+## Demand Elegance (before marking task done)
+
+For AI service logic and data pipelines:
+- Pause and ask: "Is there a more elegant way to do this?"
+- If the solution feels hacky: "Knowing everything I know now, implement the elegant solution"
+- Challenge your own work: "Would a staff engineer approve this?"
+- For async/Celery patterns: prefer clean task composition over nested callbacks
+
 ## System-Wide Test Check (BEFORE marking any task done)
 
 Before completing each task, pause and run through this checklist:

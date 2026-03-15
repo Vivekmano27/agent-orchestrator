@@ -531,6 +531,25 @@ Phase 8 — Docs:
 
 Result: Every app gets production-grade quality — properly architected, tested, secured, and deployable.
 
+## Self-Improvement Loop (Pipeline-Wide)
+
+After Phase 6 (Review) identifies issues that required fixes, or after any user correction at an approval gate:
+
+1. **Capture the lesson:** Write to `.claude/specs/[feature]/lessons.md`:
+   ```markdown
+   ## Lesson — [date]
+   **What went wrong:** [description of the mistake]
+   **Root cause:** [why the agent made this mistake]
+   **Rule to prevent recurrence:** [specific, actionable rule]
+   **Affected phase:** [which phase/agent]
+   ```
+
+2. **Apply immediately:** If the same pattern could affect other specs in this pipeline run, proactively check and fix them before continuing.
+
+3. **Review at start:** At the beginning of each pipeline run (Phase 0), check if `lessons.md` exists from prior runs in this spec directory. If so, read it and distribute relevant lessons to affected agents in their dispatch prompts: "LESSONS FROM PRIOR RUNS: [lesson]. Apply this to avoid repeating the mistake."
+
+This creates a feedback loop: mistakes → lessons → rules → prevention.
+
 ## Escalation Rules
 - If ANY agent fails → retry once, then report to user
 - If agents produce conflicting outputs → resolve based on PRD (product-manager wins)

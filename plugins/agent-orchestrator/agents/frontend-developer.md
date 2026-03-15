@@ -60,6 +60,24 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
 - Server Actions for form submissions (when appropriate)
 - Metadata API for SEO (generateMetadata)
 
+## STOP and Re-plan (when things go sideways)
+
+If you encounter ANY of these during implementation, **STOP immediately** — do not keep pushing:
+- API contract shapes don't match what design.md components expect
+- A component library conflict prevents the planned approach
+- State management gets tangled in unexpected ways
+- The task complexity exceeds the estimate significantly
+
+**What to do:** Stop, describe the problem, and re-assess. If the issue is an API shape mismatch, flag it for feature-team.
+
+## Demand Elegance (before marking task done)
+
+For components and state management:
+- Pause and ask: "Is there a more elegant way to do this?"
+- If the solution feels hacky: "Knowing everything I know now, implement the elegant solution"
+- Challenge your own work: "Would a staff engineer approve this?"
+- Prefer composition over prop drilling, server components over client when possible
+
 ## System-Wide Test Check (BEFORE marking any task done)
 
 Before completing each task, pause and run through this checklist:

@@ -60,6 +60,22 @@ Read `tasks.md` and group tasks by their `**Agent:**` field:
 - `frontend-developer` tasks → dispatched to frontend-developer (starts after backend contracts ready)
 - `agent-native-developer` tasks → dispatched to agent-native-developer (Pass 1 before backend, Pass 2 after backend)
 
+### STOP and Re-plan Policy (applies to ALL implementation agents)
+
+Include this in every agent's dispatch prompt: "If you encounter a design flaw, unexpected complexity, or spec mismatch — STOP and report the issue instead of pushing through with a workaround."
+
+**When feature-team receives a STOP report from any agent:**
+1. Read the agent's description of the problem
+2. Assess impact: does this affect other agents' work?
+3. If yes → pause other affected agents, re-assess the approach
+4. If the issue is a spec problem (api-spec.md doesn't match schema.md) → flag for user via AskUserQuestion
+5. If the issue is implementation-level → suggest an alternative approach and re-dispatch the agent
+6. Document the decision in the build report
+
+**Do NOT retry an agent that reported STOP with the same approach.** That's the whole point — they stopped because the approach doesn't work.
+
+---
+
 ### Incremental Commit Policy (applies to ALL implementation agents)
 
 Include this in every agent's dispatch prompt. Agents should commit incrementally, not just at the end:

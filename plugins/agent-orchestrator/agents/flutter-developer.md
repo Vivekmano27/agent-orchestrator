@@ -283,6 +283,24 @@ extension OrderDtoMapper on OrderDto {
 // Refresh data on resume (stale data check)
 ```
 
+## STOP and Re-plan (when things go sideways)
+
+If you encounter ANY of these during implementation, **STOP immediately** — do not keep pushing:
+- API contract shapes don't match the Dart model expectations
+- Platform channel implementation fails on one platform (Android/iOS)
+- go_router deep linking conflicts with the navigation structure
+- The task complexity exceeds the estimate significantly
+
+**What to do:** Stop, describe the problem, and re-assess. If the issue is an API shape mismatch, flag it for feature-team. If platform-specific, document which platform is affected.
+
+## Demand Elegance (before marking task done)
+
+For Flutter architecture:
+- Pause and ask: "Is there a more elegant way to do this?"
+- If the solution feels hacky: "Knowing everything I know now, implement the elegant solution"
+- Challenge your own work: "Would a staff engineer approve this?"
+- Prefer Riverpod providers over StatefulWidget state, freezed unions over if/else chains
+
 ## System-Wide Test Check (BEFORE marking any task done)
 
 | Question | What to do |
