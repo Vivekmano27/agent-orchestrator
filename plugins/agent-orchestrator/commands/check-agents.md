@@ -55,7 +55,7 @@ Check team definitions exist:
 - [ ] feature-team.md (up to 7 members: agent-native-developer, backend, senior, python, frontend, flutter, kmp)
 - [ ] design-team.md (5 members: system-architect, api-architect, database-architect, ui-designer, agent-native-designer)
 - [ ] review-team.md (6 reviewers: code-reviewer, security-auditor, performance-reviewer, static-analyzer, agent-native-reviewer, spec-tracer via code-reviewer reuse)
-- [ ] planning-team.md (product-manager + architects + designer)
+- [ ] planning-team.md (7 members: product-manager, business-analyst, ux-researcher, system-architect, api-architect, database-architect, ui-designer)
 
 ## Output Format
 ```
@@ -75,7 +75,7 @@ Check team definitions exist:
 ║  ✅ feature-team    (7 members)              ║
 ║  ✅ design-team     (5 members)              ║
 ║  ✅ review-team     (6 reviewers)             ║
-║  ✅ planning-team   (4 members)              ║
+║  ✅ planning-team   (7 members)              ║
 ║                                              ║
 ║  COMMANDS (N available)                      ║
 ║  ✅ All commands loaded                      ║

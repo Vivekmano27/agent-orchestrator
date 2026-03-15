@@ -1,5 +1,5 @@
 ---
-description: "Build a feature end-to-end using the FULL 21-agent pipeline. Classifies size for approval gates only — all agents always run."
+description: "Build a feature end-to-end using the full 9-phase pipeline (35 agents, 5 teams). Smart dispatch skips agents not in the project's tech stack."
 argument-hint: "<feature description>"
 disable-model-invocation: true
 ---
@@ -9,21 +9,22 @@ When confirmation, clarification, or approval is needed, **always use the `AskUs
 
 
 ## Mission
-Route to project-orchestrator which runs ALL agents for this feature.
+Route to project-orchestrator which runs the full 9-phase pipeline for this feature.
 
-## CRITICAL: Full Pipeline Always
-Size classification determines approval gates only:
-- SMALL: auto-approve, all agents still run
-- MEDIUM: 1 gate, all agents still run
-- BIG: 4 gates, all agents still run
+## Pipeline Behavior
+- Task size (SMALL/MEDIUM/BIG) determines approval gates
+- Smart dispatch skips agents whose tech stack is absent from project-config.md (e.g., flutter-developer skipped if no Flutter)
+- Verification phases (security, review) always run regardless of task size
 
-## Agents triggered (ALWAYS ALL):
+## Agents by Phase:
 Planning: product-manager, business-analyst, ux-researcher
-Design: system-architect, api-architect, database-architect, ui-designer
+Design: system-architect, api-architect, database-architect, ui-designer, agent-native-designer [C]
 Task Decomposition: task-decomposer → ordered task list with agent assignments
-Build: agent-native-developer, senior-engineer, backend-developer, python-developer, frontend-developer, flutter-developer, kmp-developer
-Test: test-engineer, qa-automation
+Build: backend-developer, frontend-developer [C], python-developer [C], flutter-developer [C], kmp-developer [C], senior-engineer [C], agent-native-developer [C]
+Test: test-engineer, qa-automation [C]
 Security: security-auditor
-Review: code-reviewer, security-auditor (spot-check), performance-reviewer, static-analyzer, agent-native-reviewer, spec-tracer
-DevOps: devops-engineer, deployment-engineer
+Review: code-reviewer, security-auditor (spot-check), performance-reviewer, static-analyzer, agent-native-reviewer [C], spec-tracer [C]
+DevOps: devops-engineer, deployment-engineer [C — skip if no cloud]
 Docs: technical-writer
+
+[C] = conditional on project-config.md tech stack

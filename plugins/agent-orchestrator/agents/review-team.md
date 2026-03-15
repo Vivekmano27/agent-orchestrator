@@ -31,7 +31,7 @@ review-team (you — orchestrator)
 ├── performance-reviewer   → N+1 queries, re-renders, indexes, bundle size
 ├── static-analyzer        → tool-based: duplication, complexity, dead code, code smells (advisory)
 ├── agent-native-reviewer  → agent definitions, skills, commands, MCP tools, parity coverage
-└── spec-tracer            → requirements coverage, acceptance criteria, task completion
+└── spec-tracer (role)     → requirements coverage, acceptance criteria (performed by code-reviewer with specialized prompt)
 ```
 
 **Note:** spec-tracer runs for MEDIUM and BIG tasks only. agent-native-reviewer runs when agent-native artifacts exist (`.claude/agents/` is present). static-analyzer always runs (produces advisory findings). For SMALL tasks without agent-native artifacts, skip spec-tracer and agent-native-reviewer (4 reviewers are sufficient).

@@ -450,7 +450,7 @@ After each phase completes, verify expected output files exist:
 **After Phase 5:** security-audit.md
 **After Phase 6:** review-report.md
 **After Phase 7:** deploy-monitoring.md, deployment-plan.md (skip check if Phase 7 was skipped)
-**After Phase 8:** Check that at least one documentation file was created (README.md, docs/API.md, or CHANGELOG.md)
+**After Phase 8:** README.md exists. Spot-check for docs/API.md, docs/DEPLOYMENT.md, and CHANGELOG.md (at least 2 of 3 should exist for MEDIUM/BIG tasks)
 
 If ANY file is missing:
 1. Retry the SPECIFIC FAILED AGENT once with context: "RETRY: Previous attempt failed to produce [file]. Focus on this deliverable."
