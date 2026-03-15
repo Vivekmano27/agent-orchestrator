@@ -88,10 +88,40 @@ Agent(
 )
 ```
 
-### STEP 4 — Wait for backend-developer to complete, then spawn frontend
+### STEP 4 — Verify backend wave, then spawn frontend
 You will be notified when each background agent completes. Do NOT poll.
-When backend-developer completes, `.claude/specs/[feature]/api-contracts.md` is ready.
 
+**4a — Verify backend wave before proceeding:**
+When all backend agents (backend-developer, senior-engineer, python-developer) complete, run a quick verification:
+```bash
+# Lint affected services
+cd services/core-service && npm run lint
+cd services/api-gateway && npm run lint
+cd services/ai-service && ruff check .
+
+# Type check
+cd services/core-service && npx tsc --noEmit
+cd services/ai-service && mypy .
+
+# Unit tests on changed files
+cd services/core-service && npm test
+cd services/ai-service && pytest -x
+```
+
+If verification fails:
+- Re-dispatch the failing agent with the error output appended to its prompt
+- Allow **1 retry** per agent
+- If still failing after retry, stop the build and report the failure to the orchestrator
+
+**4b — API contract drift check:**
+When backend-developer completes and writes `api-contracts.md`, diff it against `api-spec.md` from Phase 2:
+- Read both `.claude/specs/[feature]/api-contracts.md` (actual) and `.claude/specs/[feature]/api-spec.md` (designed)
+- Flag any endpoints that were designed but not implemented
+- Flag any endpoints that were implemented but not in the original spec (scope creep)
+- Flag any request/response shape mismatches
+- If drift is found, note it in the build report — review-team will check it in Phase 6
+
+**4c — Spawn frontend:**
 ```
 Agent(
   subagent_type="agent-orchestrator:frontend-developer",
@@ -105,8 +135,12 @@ Agent(
 )
 ```
 
-### STEP 5 — Wait for all implementation agents to complete
-Verify all tasks from tasks.md are completed. Cross-check agent reports against task list.
+### STEP 5 — Verify frontend wave
+When frontend-developer completes, run frontend verification:
+```bash
+cd apps/web && npm run lint && npx tsc --noEmit && npm test
+```
+If verification fails, re-dispatch with error output (1 retry). Cross-check agent reports against task list.
 
 ### STEP 6 — Report results back to orchestrator
 Return to the project-orchestrator:

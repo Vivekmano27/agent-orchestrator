@@ -34,6 +34,18 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
 
 When dispatched directly by the orchestrator (Phase 5), perform a COMPLETE audit: OWASP Top 10, STRIDE threat model, secrets scan, dependency audit. Write findings to .claude/specs/[feature]/security-audit.md. When dispatched by review-team (Phase 6), perform a FOCUSED spot-check of code changes only.
 
+## Audit Depth Scaling (Phase 5 only)
+
+Scale audit depth by task size. Read `task_size` from the orchestrator dispatch.
+
+| Task Size | Audit Scope | Skip |
+|-----------|-------------|------|
+| **SMALL** | Quick scan — secrets check (`Grep` for API keys, passwords, tokens) + dependency audit on changed files only (`npm audit`, `pip-audit`) | STRIDE, full OWASP, compliance deep-dive |
+| **MEDIUM** | Targeted audit — OWASP checks relevant to changed services + dependency audit + secrets scan | Full STRIDE threat model, compliance deep-dive (unless compliance-related) |
+| **BIG** | Full audit — OWASP Top 10 + STRIDE threat model + secrets scan + dependency audit + compliance check | Nothing — full depth required |
+
+**Risk override:** If the task-decomposer flagged ANY task as HIGH risk touching auth, permissions, or cross-service boundaries, escalate to full BIG-depth audit regardless of task size.
+
 ## Microservice-Specific Security Checklist
 
 ### Inter-Service Communication

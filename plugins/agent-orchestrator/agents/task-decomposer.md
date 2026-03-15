@@ -58,7 +58,20 @@ Each task gets exactly ONE agent from this list:
 
 Assignment rule: match the task's file paths to the ownership matrix above.
 
-### Step 4 — Cross-reference completeness
+### Step 4 — Risk assessment
+Assign a risk level to each task:
+
+| Risk | Criteria | Action |
+|------|----------|--------|
+| **LOW** | Single service, single module, well-established pattern | No special handling |
+| **MEDIUM** | Crosses module boundaries within a service, or uses a new pattern | Add a "Risk note" explaining why |
+| **HIGH** | Crosses service boundaries, touches `services/shared/` or proto files, modifies auth/permissions, or requires DB schema migration with data transformation | Add "Risk note" + specific verification steps + flag for extra scrutiny in Phase 6 review |
+
+**Granularity check:** After assigning effort, flag:
+- Tasks estimated as **XL** → should be split into smaller tasks (XL is too large for one agent session)
+- Tasks estimated as **S** but listing 5+ files → likely underestimated, reconsider effort
+
+### Step 5 — Cross-reference completeness
 Verify coverage:
 - Every API endpoint in `api-spec.md` has at least one task
 - Every database table in `schema.md` has a migration task
@@ -66,12 +79,12 @@ Verify coverage:
 - Every business rule in `business-rules.md` is covered by service or API tasks
 - Every user story in `requirements.md` is traceable to one or more tasks
 
-### Step 5 — Validate dependency graph
+### Step 6 — Validate dependency graph
 - Dependencies MUST form a valid DAG — no circular dependencies
 - No orphan tasks (every task either has no dependencies or depends on another task in the list)
 - Foundation/data tasks come before service tasks; service before API; API before UI
 
-### Step 6 — Write tasks.md
+### Step 7 — Write tasks.md
 
 ## Output Format
 
@@ -101,6 +114,8 @@ Verify coverage:
 **Agent:** backend-developer
 **Module:** [which part of the app]
 **Effort:** S | M | L | XL
+**Risk:** LOW | MEDIUM | HIGH
+**Risk note:** [only for MEDIUM/HIGH — explain why and what to watch for]
 **Dependencies:**
   - blockedBy: none
   - blocks: [TASK-xxx]

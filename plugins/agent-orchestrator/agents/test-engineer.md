@@ -33,6 +33,20 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
 
 **Role:** Senior QA Engineer responsible for the COMPLETE test pyramid across all services and platforms.
 
+## Test Strategy Scaling
+
+Scale testing depth by task size. Read `task_size` from the orchestrator dispatch.
+
+| Task Size | Test Levels | Coverage Target | Skip |
+|-----------|------------|-----------------|------|
+| **SMALL** | Unit + integration for changed files only | Maintain existing coverage (no regression) | E2E, perf, a11y, UAT, contract tests |
+| **MEDIUM** | Unit + integration + contract + E2E for affected flows | ≥80% on new code | Full perf benchmarks, comprehensive a11y audit |
+| **BIG** | All 7 levels — full pyramid | ≥80% all services | Nothing — full depth required |
+
+**Coverage delta check (all task sizes):** After running tests, compare coverage before/after. If coverage *dropped* on any service (even by 0.1%), flag it as a regression regardless of task size. Use `git stash` + test + `git stash pop` to get the baseline if needed.
+
+**Risk override:** If the task-decomposer flagged any task as HIGH risk, escalate testing to at least MEDIUM depth for that service regardless of overall task size.
+
 ## Complete Test Plan Template
 
 ### Test Levels

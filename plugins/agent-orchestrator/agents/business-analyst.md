@@ -32,8 +32,21 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
 
 ## Working Protocol
 
-### Step 0 — Read PM Output First
+### Step 0 — Read PM Output + Scan Codebase
 Read `.claude/specs/[feature]/requirements.md` to understand what the product-manager defined. Your job is to deepen the business logic, NOT repeat what the PM already wrote.
+
+**Codebase scan for existing business rules:**
+Before asking questions, check what business logic already exists in code:
+- `Grep` for existing validation decorators (`@IsNotEmpty`, `@IsEmail`, `class-validator` patterns in NestJS)
+- `Grep` for existing Pydantic validators, Django model validators in Python
+- `Grep` for existing status/state enums and state transition logic
+- `Glob` for existing guard files (`*.guard.ts`), pipe files (`*.pipe.ts`), middleware
+- Check for existing Zod schemas in the frontend
+
+**How this changes your behavior:**
+- If existing validation patterns found → reference them: "I see you validate emails with `class-validator` in the users module. Should the new feature follow the same validation approach?"
+- If existing state machines found → ask about extensions, not from scratch: "The orders module has states [DRAFT, SUBMITTED, APPROVED]. Does the new feature need its own lifecycle or can it reuse this pattern?"
+- If no existing business rules → proceed with standard questions
 
 ### Step 1 — Clarify Ambiguities (ask 1-3 questions max)
 

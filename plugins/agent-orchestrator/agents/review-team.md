@@ -28,8 +28,11 @@ This team uses **subagents** (Agent tool with `run_in_background=True`). All 3 r
 review-team (you — orchestrator)
 ├── code-reviewer         → code correctness, patterns, test coverage
 ├── security-auditor      → OWASP Top 10, auth, secrets, dependencies
-└── performance-reviewer  → N+1 queries, re-renders, indexes, bundle size
+├── performance-reviewer  → N+1 queries, re-renders, indexes, bundle size
+└── spec-tracer           → requirements coverage, acceptance criteria, task completion
 ```
+
+**Note:** spec-tracer runs for MEDIUM and BIG tasks only. For SMALL tasks, skip it (3 reviewers are sufficient).
 
 ## Execution Protocol (SUBAGENT MODE — default)
 
@@ -53,9 +56,31 @@ Agent(
   run_in_background=True,
   prompt="Review [feature/files] for performance issues. Check: N+1 queries, unnecessary re-renders, missing indexes, bundle size, memory leaks, API latency. Output findings organized by severity: Critical / High / Medium / Low."
 )
+
+# MEDIUM/BIG only — skip for SMALL tasks:
+Agent(
+  subagent_type="agent-orchestrator:code-reviewer",
+  run_in_background=True,
+  prompt="SPEC TRACEABILITY REVIEW for [feature].
+          You are reviewing whether the implementation matches the requirements.
+
+          1. Read .claude/specs/[feature]/requirements.md (user stories + acceptance criteria)
+          2. Read .claude/specs/[feature]/tasks.md (task list with status)
+          3. For each user story, verify:
+             - Is there code implementing this? (Grep for relevant endpoints, components, handlers)
+             - Do tests exist covering the acceptance criteria?
+             - Are edge cases from the PRD handled in code?
+          4. For each task in tasks.md:
+             - Was the task completed? (check for expected files/changes)
+          5. Check .claude/specs/[feature]/api-contracts.md vs api-spec.md for drift (if feature-team flagged drift)
+
+          Output a traceability matrix:
+          | User Story | Implemented? | Tests? | Edge Cases? | Notes |
+          Flag any story that is NOT fully covered as Critical."
+)
 ```
 
-### STEP 2 — Wait for all 3 to complete
+### STEP 2 — Wait for all reviewers to complete
 You will be notified as each reviewer finishes. Do NOT poll.
 
 ### STEP 3 — Compile combined report
@@ -76,10 +101,14 @@ After all 3 complete, merge findings into a single report:
 ## Low / Suggestions
 [Findings from all 3 reviewers at Low severity]
 
+## Spec Traceability (MEDIUM/BIG only)
+| User Story | Implemented? | Tests? | Edge Cases? | Notes |
+
 ## Reviewer Summary
-- Quality:     [pass/fail] — [key issues]
-- Security:    [pass/fail] — [key issues]
-- Performance: [pass/fail] — [key issues]
+- Quality:      [pass/fail] — [key issues]
+- Security:     [pass/fail] — [key issues]
+- Performance:  [pass/fail] — [key issues]
+- Traceability: [pass/fail] — [stories not fully covered]
 
 ## Recommendation
 [ ] Approve — no critical/high issues

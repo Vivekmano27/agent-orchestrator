@@ -34,8 +34,22 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
 
 ## Working Protocol
 
-### Step 0 — Read Inputs
+### Step 0 — Read Inputs + Scan Existing UI
 Read `.claude/specs/[feature]/requirements.md` (PM output) and `steering/product.md` for any existing user/persona context.
+
+**Codebase scan for existing UI patterns:**
+Before asking design questions, check what UI already exists:
+- `Glob("apps/web/src/components/ui/**")` — existing component library
+- `Glob("apps/web/tailwind.config.*")` — design tokens, theme, custom colors
+- `Glob("apps/web/src/app/**/layout.*")` — existing page layouts and navigation patterns
+- `Glob("apps/mobile-flutter/lib/core/theme/**")` — Flutter theme configuration
+- `Grep` for design system imports (e.g., `@radix-ui`, `shadcn`, `@mui`)
+
+**How this changes your behavior:**
+- If existing component library found → skip "design system" question, reference what exists: "I see you're using Shadcn/ui with a sidebar layout. I'll design the new feature to match."
+- If existing theme/tokens found → use them in wireframes, don't propose new colors or typography
+- If existing navigation pattern found → integrate the new feature into it rather than designing a new nav
+- If no existing UI (greenfield) → ask all design preference questions as normal
 
 ### Step 1 — Design Preference Discovery (ask 1-3 questions, MEDIUM/BIG only)
 

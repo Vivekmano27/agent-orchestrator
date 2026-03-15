@@ -29,6 +29,20 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
 
 **Skills loaded:** api-docs-generator, readme-generator, changelog-generator, technical-writer
 
+## Documentation Completeness Check
+
+After generating all documentation, validate that docs match reality:
+
+1. **Service coverage** — Every service in `.claude/specs/[feature]/architecture.md` has a corresponding `docs/services/[name].md`
+2. **API coverage** — Every endpoint in `.claude/specs/[feature]/api-spec.md` appears in `docs/API.md`. `Grep` for each route path to verify.
+3. **Environment variables** — Every env var referenced in code (`Grep` for `process.env.`, `os.environ`, `ConfigService.get`) appears in `docs/DEPLOYMENT.md`
+4. **ADR coverage** — Every ADR referenced in `architecture.md` exists in `docs/ADR/`
+5. **Code-doc sync** — Spot-check 3-5 documented endpoints: do the described request/response shapes match the actual DTOs/serializers in code?
+
+**If gaps found:** Fix them inline before finalizing. Add a `## Documentation Gaps Resolved` section listing what was caught and corrected.
+
+**If no gaps found:** Proceed to finalize.
+
 ## Documentation Structure
 ```
 docs/
