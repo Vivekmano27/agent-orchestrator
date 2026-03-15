@@ -643,7 +643,7 @@ Write the approved configuration to `.claude/specs/[feature]/project-config.md`:
 - **Secrets Management:** [env vars / AWS SSM / Vault / Doppler]
 
 ## Infrastructure
-- **Cloud Provider:** [AWS / GCP / Azure / Vercel / Railway / Render / DigitalOcean / self-hosted / not decided]
+- **Cloud Provider:** [AWS / GCP / Azure / Vercel / Railway / Render / DigitalOcean / self-hosted / none (local development only) / not decided]
 - **Containers:** [Docker / Podman / none]
 - **Orchestration:** [Kubernetes / ECS Fargate / Docker Compose only / none]
 - **CDN:** [CloudFront / Cloudflare / Vercel Edge / none]

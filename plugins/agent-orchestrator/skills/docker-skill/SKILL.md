@@ -38,6 +38,154 @@ HEALTHCHECK --interval=30s --timeout=3s CMD wget -qO- http://localhost:3000/heal
 CMD ["node", "dist/main.js"]
 ```
 
+## Multi-Stage Dockerfile (Python)
+```dockerfile
+# Stage 1: Build
+FROM python:3.12-slim-bookworm AS builder
+WORKDIR /app
+RUN pip install --no-cache-dir --upgrade pip
+COPY requirements.txt .
+RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
+
+# Stage 2: Production
+FROM python:3.12-slim-bookworm AS runner
+WORKDIR /app
+RUN groupadd -g 1001 appgroup && useradd -u 1001 -g appgroup -s /bin/false appuser
+COPY --from=builder /install /usr/local
+COPY . .
+RUN chown -R appuser:appgroup /app
+USER appuser
+EXPOSE 8000
+HEALTHCHECK --interval=30s --timeout=3s CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')" || exit 1
+CMD ["gunicorn", "main:app", "--bind", "0.0.0.0:8000", "--workers", "4", "--worker-class", "uvicorn.workers.UvicornWorker"]
+```
+
+## Multi-Stage Dockerfile (Go)
+```dockerfile
+# Stage 1: Build
+FROM golang:1.22-alpine AS builder
+WORKDIR /src
+RUN apk add --no-cache git ca-certificates
+COPY go.mod go.sum ./
+RUN go mod download
+COPY . .
+RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o /app/server ./cmd/server
+
+# Stage 2: Production
+FROM gcr.io/distroless/static-debian12:nonroot AS runner
+COPY --from=builder /app/server /server
+EXPOSE 8080
+HEALTHCHECK --interval=30s --timeout=3s CMD ["/server", "healthcheck"]
+USER nonroot:nonroot
+ENTRYPOINT ["/server"]
+```
+
+## Multi-Stage Dockerfile (Flutter Web)
+```dockerfile
+# Stage 1: Build
+FROM ghcr.io/cirruslabs/flutter:stable AS builder
+WORKDIR /app
+COPY pubspec.yaml pubspec.lock ./
+RUN flutter pub get
+COPY . .
+RUN flutter build web --release --tree-shake-icons
+
+# Stage 2: Production
+FROM nginx:1.25-alpine AS runner
+RUN addgroup -g 1001 -S appgroup && adduser -S appuser -u 1001 -G appgroup
+COPY --from=builder /app/build/web /usr/share/nginx/html
+COPY <<'NGINX' /etc/nginx/conf.d/default.conf
+server {
+    listen 80;
+    root /usr/share/nginx/html;
+    index index.html;
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff2?)$ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+    }
+}
+NGINX
+EXPOSE 80
+HEALTHCHECK --interval=30s --timeout=3s CMD wget -qO- http://localhost:80/ || exit 1
+USER appuser
+CMD ["nginx", "-g", "daemon off;"]
+```
+
+## Dockerfile Best Practices
+
+### Non-Root User
+```dockerfile
+# Debian-based
+RUN groupadd -g 1001 appgroup && useradd -u 1001 -g appgroup -s /bin/false appuser
+USER appuser
+
+# Alpine-based
+RUN addgroup -g 1001 -S appgroup && adduser -S appuser -u 1001 -G appgroup
+USER appuser
+
+# Distroless (built-in)
+USER nonroot:nonroot
+```
+
+### .dockerignore
+```
+node_modules
+.git
+.env
+*.md
+dist
+build
+__pycache__
+*.pyc
+.venv
+.idea
+.vscode
+Dockerfile
+docker-compose*.yml
+```
+
+### Layer Caching
+```dockerfile
+# GOOD: copy dependency manifests first, install, then copy source
+COPY package.json package-lock.json ./
+RUN npm ci
+COPY . .
+
+# BAD: invalidates cache on every source change
+COPY . .
+RUN npm ci
+```
+
+### Health Checks
+```dockerfile
+# HTTP health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
+  CMD wget -qO- http://localhost:3000/health || exit 1
+
+# TCP health check
+HEALTHCHECK --interval=30s --timeout=3s \
+  CMD nc -z localhost 8080 || exit 1
+
+# Custom binary health check (Go)
+HEALTHCHECK --interval=30s --timeout=3s \
+  CMD ["/server", "healthcheck"]
+```
+
+### Security Scanning
+```bash
+# Scan image for vulnerabilities
+docker scout cves myimage:latest
+
+# Trivy scan
+trivy image --severity HIGH,CRITICAL myimage:latest
+
+# Lint Dockerfile
+hadolint Dockerfile
+```
+
 ## Docker Compose
 ```yaml
 version: '3.8'

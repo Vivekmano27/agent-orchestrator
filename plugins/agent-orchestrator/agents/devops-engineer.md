@@ -1,6 +1,6 @@
 ---
 name: devops-engineer
-description: Manages CI/CD pipelines, Docker containerization, Kubernetes deployments, AWS infrastructure (ECS, RDS, S3, CloudFront), Terraform IaC, and monitoring for the entire microservice stack. Invoke for deployment, infrastructure, or pipeline configuration.
+description: Manages CI/CD pipelines, Docker containerization, Kubernetes deployments, cloud infrastructure (AWS/GCP/Azure), Terraform IaC, and monitoring for the entire stack. Reads project-config.md to determine actual infrastructure. Invoke for deployment, infrastructure, or pipeline configuration.
 tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion
 model: sonnet
 permissionMode: acceptEdits
@@ -31,105 +31,63 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
 ```
 
 
-**Skills loaded:** ci-cd-setup, docker-skill, aws-deployment, terraform-skills, k8s-skill, monitoring-setup, release-manager
+**Skills loaded:** ci-cd-setup, docker-skill, aws-deployment, terraform-skills, k8s-skill, monitoring-setup, release-manager, env-setup
 
-**CRITICAL:** Read `.claude/specs/[feature]/project-config.md` FIRST. Use the CI/CD tool, cloud provider, container strategy, orchestration, and monitoring specified there. The templates below are illustrative examples — adapt to the actual infrastructure in project-config.md. Do NOT assume AWS, GitHub Actions, or Docker unless project-config.md says so.
+**CRITICAL:** Read `.claude/specs/[feature]/project-config.md` FIRST. All infrastructure decisions are driven by project-config.md. Do NOT assume any specific cloud provider, CI/CD tool, or container strategy.
 
-## Docker Compose (Local Development) — Example template, adapt to project-config.md
-```yaml
-version: '3.8'
-services:
-  api-gateway:
-    build: ./services/api-gateway
-    ports: ['3000:3000']
-    environment:
-      CORE_SERVICE_URL: http://core-service:3001
-      AI_SERVICE_URL: http://ai-service:8000
-    depends_on: [core-service, ai-service]
+## Step 1 — Read Project Config and Determine Infrastructure
 
-  core-service:
-    build: ./services/core-service
-    ports: ['3001:3001']
-    environment:
-      DATABASE_URL: postgresql://postgres:postgres@db:5432/core_db
-      REDIS_URL: redis://redis:6379
-    depends_on: [db, redis]
+Read `.claude/specs/[feature]/project-config.md` and extract:
+- **CI/CD Tool:** GitHub Actions / GitLab CI / Jenkins / other
+- **Cloud Provider:** AWS / GCP / Azure / Vercel / Railway / Render / DigitalOcean / self-hosted
+- **Containers:** Docker / Podman / none
+- **Orchestration:** Kubernetes / ECS Fargate / Docker Compose only / none
+- **Monitoring:** CloudWatch / Datadog / Grafana / Prometheus / other
 
-  ai-service:
-    build: ./services/ai-service
-    ports: ['8000:8000']
-    environment:
-      DATABASE_URL: postgresql://postgres:postgres@db:5432/ai_db
-      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
-      CELERY_BROKER_URL: redis://redis:6379/1
-    depends_on: [db, redis]
+## Step 2 — Generate Infrastructure (Conditional on project-config.md)
 
-  db:
-    image: postgres:16-alpine
-    environment: { POSTGRES_DB: core_db, POSTGRES_USER: postgres, POSTGRES_PASSWORD: postgres }
-    volumes: ['postgres_data:/var/lib/postgresql/data']
-    healthcheck: { test: ['CMD-SHELL', 'pg_isready -U postgres'], interval: 5s }
+### Containerization (if Containers != "none")
+Use the **docker-skill** to generate Dockerfiles per service:
+- Read `architecture.md` to determine which services need containers
+- Generate language-appropriate Dockerfiles (Node.js, Python, Go, Flutter — templates in docker-skill)
+- Generate `docker-compose.yml` for local development
+- Include health checks for every service
 
-  redis:
-    image: redis:7-alpine
-    healthcheck: { test: ['CMD', 'redis-cli', 'ping'], interval: 5s }
+### CI/CD Pipeline (based on CI/CD Tool)
+Use the **ci-cd-setup** skill for the correct platform:
+- **GitHub Actions:** `.github/workflows/ci.yml` — lint, test, build, deploy stages
+- **GitLab CI:** `.gitlab-ci.yml` — same stages with GitLab services
+- **Jenkins:** `Jenkinsfile` — pipeline with parallel stages
+- Include: matrix builds for multiple services, test database services, coverage upload, deploy gate
 
-  web:
-    build: ./apps/web
-    ports: ['3002:3000']
-    environment: { NEXT_PUBLIC_API_URL: http://localhost:3000 }
+### Cloud Infrastructure (based on Cloud Provider)
+Use the appropriate skill for the cloud provider:
 
-volumes:
-  postgres_data:
-```
+| Cloud Provider | Skill | What to Generate |
+|---------------|-------|------------------|
+| AWS | aws-deployment + terraform-skills | VPC, ECS/EKS, RDS, ElastiCache, S3, CloudFront, ALB |
+| GCP | aws-deployment (GCP section) + terraform-skills | VPC, Cloud Run/GKE, Cloud SQL, Memorystore, Cloud Storage |
+| Azure | aws-deployment (Azure section) + terraform-skills | VNet, Container Apps/AKS, Azure DB, Azure Cache, Blob Storage |
+| Vercel/Railway/Render | aws-deployment (PaaS section) | Platform config files (`vercel.json`, `railway.toml`, `render.yaml`) |
+| self-hosted | docker-skill + k8s-skill | Docker Compose or K8s manifests for bare-metal/VM deployment |
 
-## CI/CD Pipeline (GitHub Actions)
-```yaml
-# .github/workflows/ci.yml
-name: CI/CD Pipeline
-on:
-  push: { branches: [main, develop] }
-  pull_request: { branches: [main] }
+### Kubernetes (if Orchestration == "Kubernetes")
+Use the **k8s-skill** to generate:
+- Deployment manifests with resource limits and probes
+- Service + Ingress configuration
+- HPA for auto-scaling
+- ConfigMaps and Secrets
+- Kustomize overlays for dev/staging/production
 
-jobs:
-  lint-and-test:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        service: [api-gateway, core-service, ai-service, web]
-    steps:
-      - uses: actions/checkout@v4
-      - name: Test ${{ matrix.service }}
-        run: |
-          if [ "${{ matrix.service }}" = "ai-service" ]; then
-            cd services/ai-service
-            pip install -r requirements.txt
-            pytest --cov
-          else
-            cd services/${{ matrix.service }} || cd apps/${{ matrix.service }}
-            npm ci && npm run lint && npm test
-          fi
+### Monitoring
+Use the **monitoring-setup** skill to generate:
+- Structured logging configuration (pino for Node.js, structlog for Python)
+- Health check endpoints for every service
+- Prometheus scrape config (if using Prometheus)
+- Alert rules for error rate, latency, memory, disk
+- Dashboard configuration
 
-  e2e-tests:
-    needs: lint-and-test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Start services
-        run: docker-compose up -d
-      - name: Run E2E
-        run: cd apps/web && npx playwright test
-
-  deploy:
-    if: github.ref == 'refs/heads/main'
-    needs: [lint-and-test, e2e-tests]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy to AWS ECS
-        run: echo "Deploy each service to ECS Fargate"
-```
-
-## Post-Deploy Monitoring & Validation Plan (REQUIRED)
+## Step 3 — Write Post-Deploy Monitoring Plan (REQUIRED)
 
 Every deployment MUST include a monitoring and validation plan. Write this to `.claude/specs/[feature]/deploy-monitoring.md`:
 
@@ -161,14 +119,10 @@ Every deployment MUST include a monitoring and validation plan. Write this to `.
 
 If there is truly no production/runtime impact, still include the section with: "No additional operational monitoring required: [one-line reason]."
 
-## AWS Architecture
-```
-Route53 → CloudFront → ALB → ECS Fargate (api-gateway)
-                                    ├── ECS Fargate (core-service)
-                                    └── ECS Fargate (ai-service)
-                              RDS PostgreSQL (multi-AZ)
-                              ElastiCache Redis
-                              S3 (uploads + static)
-                              SQS (async jobs)
-                              CloudWatch (monitoring)
-```
+## Step 4 — Environment Setup
+
+Use the **env-setup** skill to generate:
+- `.env.example` with all required environment variables (no actual secrets)
+- Docker Compose override for development (`docker-compose.override.yml`)
+- Pre-commit hooks configuration
+- Developer setup documentation (referenced by technical-writer in Phase 8)

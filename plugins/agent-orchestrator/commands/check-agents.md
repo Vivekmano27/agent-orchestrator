@@ -46,7 +46,8 @@ agent-native-developer → needs: agent-native-design, agent-builder, mcp-builde
 agent-native-reviewer → needs: agent-native-design, agent-builder, mcp-builder-extended
 test-engineer → needs: test-writer, webapp-testing, web-quality, accessibility-audit
 security-auditor → needs: security-reviewer, dependency-audit, secrets-scanner
-devops-engineer → needs: ci-cd-setup, docker-skill, aws-deployment, terraform-skills
+devops-engineer → needs: ci-cd-setup, docker-skill, aws-deployment, terraform-skills, k8s-skill, monitoring-setup, release-manager, env-setup
+deployment-engineer → needs: release-manager, docker-skill, aws-deployment, monitoring-setup
 ```
 
 ### 4. Agent Team Verification

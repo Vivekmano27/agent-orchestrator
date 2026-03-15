@@ -39,6 +39,8 @@ After generating all documentation, validate that docs match reality:
 3. **Environment variables** — Every env var referenced in code (`Grep` for `process.env.`, `os.environ`, `ConfigService.get`) appears in `docs/DEPLOYMENT.md`
 4. **ADR coverage** — Every ADR referenced in `architecture.md` exists in `docs/ADR/`
 5. **Code-doc sync** — Spot-check 3-5 documented endpoints: do the described request/response shapes match the actual DTOs/serializers in code?
+   - If `.claude/specs/[feature]/deploy-monitoring.md` exists, use it as source material for `docs/DEPLOYMENT.md` monitoring section
+   - If `.claude/specs/[feature]/deployment-plan.md` exists, use it as source material for `docs/DEPLOYMENT.md` deployment procedure and rollback sections
 6. **Inline documentation** — Spot-check public APIs for doc comments (JSDoc/TSDoc, Google docstrings, KDoc, dartdoc). Use inline docs as source material for API reference sections. Flag missing or stale doc comments for implementation agents to fix.
 
 **If gaps found:** Fix them inline before finalizing. Add a `## Documentation Gaps Resolved` section listing what was caught and corrected.

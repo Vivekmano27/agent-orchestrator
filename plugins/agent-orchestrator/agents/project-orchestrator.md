@@ -449,6 +449,7 @@ After each phase completes, verify expected output files exist:
 **After Phase 4:** test-plan.md, test-report.md
 **After Phase 5:** security-audit.md
 **After Phase 6:** review-report.md
+**After Phase 7:** deploy-monitoring.md, deployment-plan.md (skip check if Phase 7 was skipped)
 **After Phase 8:** Check that at least one documentation file was created (README.md, docs/API.md, or CHANGELOG.md)
 
 If ANY file is missing:
@@ -813,7 +814,7 @@ For SMALL tasks, the Phase 6→3 feedback loop triggers automatically (no user g
 ### Phase 7: DevOps — parallel (conditional on cloud deployment)
 
 Read project-config.md "Infrastructure > Cloud Provider".
-If Cloud Provider is "none" or "local-only", **skip Phase 7 entirely** and log:
+If Cloud Provider is "none", "local-only", or "not decided", **skip Phase 7 entirely** and log:
 "Skipping Phase 7: no cloud deployment configured in project-config.md."
 
 Otherwise, spawn devops-engineer + deployment-engineer IN PARALLEL (same response):
@@ -832,11 +833,27 @@ Agent(
 ```
 Wait for both to complete.
 
+7b. Verify output files exist: `deploy-monitoring.md` (devops-engineer) and `deployment-plan.md` (deployment-engineer).
+7c. If either agent failed or output is missing, retry the specific failed agent once with context: "RETRY: Previous attempt failed to produce [file]. Focus on this deliverable."
+7d. If still failing after retry, escalate to user:
+```
+AskUserQuestion(
+  question="Phase 7 agent [name] failed to produce [file] after retry.
+  The deployment configuration may be incomplete.",
+  options=[
+    "Skip and proceed to docs (deployment config incomplete)",
+    "Retry with different approach",
+    "Cancel feature"
+  ]
+)
+```
+
 ### Phase 8: Documentation — single agent
 ```
 Agent(
   subagent_type="agent-orchestrator:technical-writer",
-  prompt="Generate README, API docs, architecture docs, changelog, and deployment runbook for [feature]. All specs are in .claude/specs/[feature]/."
+  prompt="Generate README, API docs, architecture docs, changelog, and deployment runbook for [feature]. All specs are in .claude/specs/[feature]/.
+          IMPORTANT: Read deploy-monitoring.md and deployment-plan.md (if they exist) and use them as source material for docs/DEPLOYMENT.md."
 )
 ```
 
@@ -934,3 +951,5 @@ This creates a feedback loop: mistakes → lessons → rules → prevention.
 - If Phase 4→3 loop exhausts retries or detects stuck/regression → present failures to user with manual fix option
 - If review-team finds CRITICAL/HIGH issues → trigger Phase 6→3 Feedback Loop (max 1 round-trip, then escalate to user)
 - For SMALL tasks: Phase 6→3 auto-triggers on CRITICAL findings; if fix succeeds proceed silently, if fails escalate to user
+- If Phase 7 agent fails to produce output → retry once with error context, then escalate to user (skip/retry/cancel)
+- Phase 7 is skipped entirely when Cloud Provider is "none", "local-only", or "not decided"
