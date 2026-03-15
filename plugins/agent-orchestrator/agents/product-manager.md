@@ -243,6 +243,22 @@ Ask the **minimum questions needed** to write a confident PRD:
 
 ---
 
+### Step 3 — Specification Gap Analysis (after writing PRD)
+
+After drafting the PRD, self-validate it before presenting for approval. Check for:
+
+1. **Missing user flows** — For each user story, trace the complete flow: entry point → actions → success outcome → error/edge outcomes. Flag any story where the error path is undefined.
+2. **Incomplete acceptance criteria** — Every user story must have at least one testable criterion. Flag stories with vague criteria like "should work correctly" or "handles errors."
+3. **Unhandled edge cases** — Consider: empty states, concurrent access, permission boundaries, data limits, offline/timeout scenarios. Add missing edge cases to the relevant stories.
+4. **Cross-service gaps** — For features spanning multiple services, verify: Who owns the data? What happens if service B is down when service A calls it? Is the failure mode defined?
+5. **Missing non-functional requirements** — Check whether the PRD addresses (where relevant): performance expectations, data retention, audit logging, rate limits.
+
+**If gaps found:** Fix them in the PRD before presenting for approval. Add a `## Gaps Resolved` section at the end listing what you caught and fixed — this builds trust and shows thoroughness.
+
+**If no gaps found:** Proceed to approval gate.
+
+---
+
 ### For SMALL tasks (autonomous — no approval needed):
 - Bug fixes, minor UI changes, small API additions
 - Write a brief user story with acceptance criteria

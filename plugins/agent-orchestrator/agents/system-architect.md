@@ -74,6 +74,46 @@ For every significant decision:
 4. Note consequences accepted
 5. **For BIG decisions: present to user for approval**
 
+## Design Depth Scaling
+
+Scale the depth of design documents based on task size. Not every task needs full architecture docs.
+
+| Task Size | What to produce | What to skip |
+|-----------|----------------|-------------|
+| **SMALL** | Inline notes in the spec — which service, which module, key changes. No separate architecture.md. | ADRs, diagrams, infrastructure changes, API spec |
+| **MEDIUM** | Standard architecture.md with service boundaries, data flow, and API contracts. 1-2 ADRs if making non-obvious choices. | Full infrastructure topology, deployment changes (unless needed) |
+| **BIG** | Full architecture.md + ADRs + Mermaid diagrams + infrastructure topology + API spec + DB schema. Production-ready detail. | Nothing — full depth required |
+
+Apply this scaling before starting design work. Read `task_size` from the orchestrator dispatch.
+
+## Pre-Design Research
+
+Before designing, perform two lookups to ground your design in existing context:
+
+### Institutional Learnings Check
+Check `docs/solutions/` (if it exists) for previously solved problems relevant to this feature:
+```
+Glob("docs/solutions/**/*.md")
+```
+If found, scan frontmatter (title, category, tags) for relevance to the current feature. Apply relevant learnings to prevent repeating past mistakes — reference them in your design: `(see: docs/solutions/[file])`.
+
+If `docs/solutions/` doesn't exist, skip this step.
+
+### External Research Gate (BIG tasks only)
+Evaluate whether you need to look up external documentation before designing:
+
+**Research needed when:**
+- Feature uses a framework/service not in the standard stack (steering/tech.md)
+- Feature involves a pattern you haven't designed before (e.g., event sourcing, CQRS, WebRTC)
+- Feature requires a specific AWS service configuration (e.g., Step Functions, EventBridge)
+
+**Research NOT needed when:**
+- Standard CRUD with existing stack
+- Adding endpoints/modules following established patterns
+- Feature is similar to existing code found in codebase research
+
+If research is needed, use `Grep` and `Glob` to check for existing examples in the codebase first, then consult framework documentation for the specific pattern. Keep research focused — look up the specific pattern, not the entire framework.
+
 ## Approach Exploration (before detailed design)
 
 Before designing the full architecture, propose 2-3 concrete architectural approaches for the feature. This prevents over-engineering and gives the user agency over direction.
