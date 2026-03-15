@@ -68,5 +68,7 @@ Create the complete project structure from scratch.
 - devops-engineer → creates Docker + CI + infrastructure
 - backend-developer → scaffolds NestJS services
 - python-developer → scaffolds Django service
-- frontend-developer → scaffolds React + Flutter + KMP
+- frontend-developer → scaffolds React/Next.js web
+- flutter-developer → scaffolds Flutter mobile app (if Flutter in project-config.md)
+- kmp-developer → scaffolds KMP mobile app (if KMP in project-config.md)
 - technical-writer → creates README + docs templates

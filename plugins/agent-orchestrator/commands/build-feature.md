@@ -9,19 +9,20 @@ When confirmation, clarification, or approval is needed, **always use the `AskUs
 
 
 ## Mission
-Route to project-orchestrator which runs ALL 21 agents for this feature.
+Route to project-orchestrator which runs ALL agents for this feature.
 
 ## CRITICAL: Full Pipeline Always
 Size classification determines approval gates only:
-- SMALL: auto-approve, all 21 agents still run
-- MEDIUM: 1 gate, all 21 agents still run
-- BIG: 4 gates, all 21 agents still run
+- SMALL: auto-approve, all agents still run
+- MEDIUM: 1 gate, all agents still run
+- BIG: 4 gates, all agents still run
 
 ## Agents triggered (ALWAYS ALL):
 Planning: product-manager, business-analyst, ux-researcher
 Design: system-architect, api-architect, database-architect, ui-designer
 Task Decomposition: task-decomposer → ordered task list with agent assignments
-Build: senior-engineer, backend-developer, frontend-developer, python-developer
+Build: agent-native-developer, senior-engineer, backend-developer, python-developer, frontend-developer, flutter-developer, kmp-developer
+Review: code-reviewer, performance-reviewer, agent-native-reviewer
 Test: test-engineer, qa-automation
 Security: security-auditor
 Review: code-reviewer, performance-reviewer

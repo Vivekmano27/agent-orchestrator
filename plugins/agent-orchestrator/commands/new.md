@@ -5,10 +5,10 @@ disable-model-invocation: true
 ---
 
 ## Mission
-Route to the project-orchestrator agent which runs the FULL 9-phase pipeline with ALL 21 agents.
+Route to the project-orchestrator agent which runs the FULL 9-phase pipeline with ALL agents.
 
 ## CRITICAL: Full Pipeline Always
-Every request gets ALL 21 agents — even "simple" or "local" projects.
+Every request gets ALL agents — even "simple" or "local" projects.
 Task size (SMALL/MEDIUM/BIG) only determines approval gates, NOT which agents run.
 
 ## Steps
@@ -18,7 +18,7 @@ Task size (SMALL/MEDIUM/BIG) only determines approval gates, NOT which agents ru
    - SMALL (1-3 files): all agents run, no approval needed
    - MEDIUM (4-10 files): all agents run — **AskUserQuestion**: "Plan looks good. Proceed?" → [Proceed / Request changes]
    - BIG (10+ files): all agents run — **AskUserQuestion** at each of 4 gates → [Approve / Request changes / Cancel]
-4. ALL 9 phases execute with ALL 21 agents:
+4. ALL 9 phases execute with ALL agents:
 
 ```
 Phase 1:   product-manager + business-analyst + ux-researcher
@@ -26,10 +26,11 @@ Phase 1.5: tech stack decision
 Phase 2:   system-architect + api-architect + database-architect + ui-designer
 Phase 2.1: task-decomposer → ordered task list with agent assignments
 Phase 2.5: git setup
-Phase 3:   senior-engineer + backend-developer + frontend-developer + python-developer
+Phase 3:   agent-native-developer + senior-engineer + backend-developer + python-developer
+           + frontend-developer + flutter-developer + kmp-developer (conditional on project-config.md)
 Phase 4:   test-engineer + qa-automation
 Phase 5:   security-auditor
-Phase 6:   code-reviewer + performance-reviewer
+Phase 6:   code-reviewer + performance-reviewer + agent-native-reviewer
 Phase 7:   devops-engineer + deployment-engineer
 Phase 8:   technical-writer
 Coordination: project-orchestrator + task-executor

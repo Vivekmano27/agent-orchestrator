@@ -84,7 +84,7 @@ ALWAYS route through the project-orchestrator agent for ANY of these:
 - Any new feature or application request
 
 The project-orchestrator MUST be the entry point. It classifies the task
-(SMALL/MEDIUM/BIG), then runs the full 21-agent pipeline with approval
+(SMALL/MEDIUM/BIG), then runs the full agent pipeline with approval
 gates determined by task size.
 
 Pipeline dispatch model (hybrid):

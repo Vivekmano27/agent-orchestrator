@@ -7,7 +7,7 @@ When confirmation, clarification, or approval is needed, **always use the `AskUs
 
 
 ## Mission
-Check that all 21 agents + 3 teams (24 total) in the solo-dev-orchestrator plugin are properly installed and functional, along with all 25 commands and 63 skills.
+Check that all agents in the solo-dev-orchestrator plugin are properly installed and functional, along with all commands and skills. Run `validate-plugin.sh` for the automated check, then verify agent details below.
 
 ## Checks to Perform
 
@@ -20,14 +20,17 @@ For each expected agent, verify:
 ### 2. Expected Agents List
 ```
 PLANNING:        product-manager, business-analyst, ux-researcher
-DESIGN:          system-architect, api-architect, database-architect, ui-designer
-IMPLEMENTATION:  senior-engineer, backend-developer, frontend-developer, python-developer
+DESIGN:          system-architect, api-architect, database-architect, ui-designer, agent-native-designer
+TASK DECOMP:     task-decomposer
+IMPLEMENTATION:  agent-native-developer, senior-engineer, backend-developer, python-developer,
+                 frontend-developer, flutter-developer, kmp-developer
 TESTING:         test-engineer, qa-automation
 SECURITY:        security-auditor
-REVIEW:          code-reviewer, performance-reviewer
+REVIEW:          code-reviewer, performance-reviewer, agent-native-reviewer, design-reviewer
 DEVOPS:          devops-engineer, deployment-engineer
 DOCUMENTATION:   technical-writer
 ORCHESTRATION:   project-orchestrator, task-executor
+TEAMS:           design-team, feature-team, review-team, planning-team
 ```
 
 ### 3. Skill Dependency Check
@@ -36,7 +39,11 @@ For each agent, verify its referenced skills are available:
 product-manager → needs: project-requirements, user-story-writer, estimation-skill
 backend-developer → needs: nestjs-patterns, api-implementation, error-handling, tdd-skill
 python-developer → needs: tdd-skill, ai-integration, data-pipeline
-frontend-developer → needs: react-patterns, flutter-patterns, kmp-patterns
+frontend-developer → needs: react-patterns, frontend-design-extended, tdd-skill
+flutter-developer → needs: flutter-patterns, tdd-skill
+kmp-developer → needs: kmp-patterns, tdd-skill
+agent-native-developer → needs: agent-native-design, agent-builder, mcp-builder-extended
+agent-native-reviewer → needs: agent-native-design, agent-builder, mcp-builder-extended
 test-engineer → needs: test-writer, webapp-testing, web-quality, accessibility-audit
 security-auditor → needs: security-reviewer, dependency-audit, secrets-scanner
 devops-engineer → needs: ci-cd-setup, docker-skill, aws-deployment, terraform-skills
@@ -44,8 +51,9 @@ devops-engineer → needs: ci-cd-setup, docker-skill, aws-deployment, terraform-
 
 ### 4. Agent Team Verification
 Check team definitions exist:
-- [ ] feature-team.md (backend + frontend + tester + reviewer)
-- [ ] review-team.md (code-reviewer + security + performance)
+- [ ] feature-team.md (up to 7 members: agent-native-developer, backend, senior, python, frontend, flutter, kmp)
+- [ ] design-team.md (5 members: system-architect, api-architect, database-architect, ui-designer, agent-native-designer)
+- [ ] review-team.md (5 members: code-reviewer, security-auditor, performance-reviewer, agent-native-reviewer, spec-tracer)
 - [ ] planning-team.md (product-manager + architects + designer)
 
 ## Output Format
@@ -54,35 +62,21 @@ Check team definitions exist:
 ║           AGENT HEALTH CHECK                 ║
 ╠══════════════════════════════════════════════╣
 ║                                              ║
-║  AGENTS (21/21 loaded)                       ║
-║  ✅ product-manager      [opus]  3 skills    ║
-║  ✅ business-analyst      [sonnet] 2 skills  ║
-║  ✅ ux-researcher         [sonnet] 2 skills  ║
-║  ✅ system-architect      [opus]  5 skills   ║
-║  ✅ api-architect         [opus]  2 skills   ║
-║  ✅ database-architect    [opus]  2 skills   ║
-║  ✅ ui-designer           [sonnet] 5 skills  ║
-║  ✅ senior-engineer       [opus]  9 skills   ║
-║  ✅ backend-developer     [sonnet] 4 skills  ║
-║  ✅ frontend-developer    [sonnet] 6 skills  ║
-║  ✅ python-developer      [sonnet] 5 skills  ║
-║  ✅ test-engineer         [sonnet] 6 skills  ║
-║  ✅ qa-automation         [sonnet] 3 skills  ║
-║  ✅ security-auditor      [opus]  5 skills   ║
-║  ✅ code-reviewer         [opus]  4 skills   ║
-║  ✅ performance-reviewer  [sonnet] 3 skills  ║
-║  ✅ devops-engineer       [sonnet] 7 skills  ║
-║  ✅ deployment-engineer   [sonnet] 3 skills  ║
-║  ✅ technical-writer      [sonnet] 4 skills  ║
-║  ✅ project-orchestrator  [opus]  4 skills   ║
-║  ✅ task-executor         [sonnet] 5 skills  ║
+║  AGENTS (N/N loaded — run validate-plugin.sh) ║
+║  [List all agents found with model + skills] ║
+║  Include: agent-native-developer [opus]      ║
+║           flutter-developer [sonnet]         ║
+║           kmp-developer [sonnet]             ║
+║           agent-native-reviewer [opus]       ║
+║           ... and all other agents           ║
 ║                                              ║
-║  TEAMS (3/3 configured)                      ║
-║  ✅ feature-team    (4 members)              ║
-║  ✅ review-team     (3 members)              ║
+║  TEAMS (4/4 configured)                      ║
+║  ✅ feature-team    (7 members)              ║
+║  ✅ design-team     (5 members)              ║
+║  ✅ review-team     (5 members)              ║
 ║  ✅ planning-team   (4 members)              ║
 ║                                              ║
-║  COMMANDS (25 available)                     ║
+║  COMMANDS (N available)                      ║
 ║  ✅ All commands loaded                      ║
 ║                                              ║
 ║  SKILLS DEPENDENCIES                         ║

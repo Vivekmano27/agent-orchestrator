@@ -4,10 +4,10 @@
 
 | Component | Count | Included? |
 |-----------|-------|-----------|
-| Agents | 21 | YES |
-| Agent Teams | 3 | YES |
-| Commands | 25 | YES |
-| Skills | 63 | YES |
+| Agents | 33 | YES |
+| Agent Teams | 4 | YES |
+| Commands | 26 | YES |
+| Skills | 64 | YES |
 | Hooks | 1 (hooks.json) | YES |
 | Rules | 3 | YES |
 | Steering Docs | 3 | YES |
@@ -58,7 +58,7 @@ cp /path/to/solo-dev-orchestrator/CLAUDE.md your-project/
 ## Verify Installation
 ```bash
 cd your-project && claude
-> /check-agents      # All 21 agents + 3 teams loaded?
+> /check-agents      # All agents + teams loaded?
 > /status            # Project dashboard
 > /pending           # Any tasks waiting?
 ```
@@ -85,13 +85,14 @@ The orchestrator will:
 - Docker + Kubernetes
 - GitHub Actions (CI/CD)
 
-## All 25 Commands
+## All 26 Commands
 
 ### Core Workflow
 | Command | Description |
 |---------|-------------|
 | `/build-feature <desc>` | End-to-end feature (auto-classifies SMALL/MEDIUM/BIG) |
-| `/new <desc>` | Start new project or feature — full 21-agent pipeline |
+| `/new <desc>` | Start new project or feature — full agent pipeline |
+| `/add-feature <desc>` | Add feature to in-progress pipeline (smart cascade) |
 | `/start <desc>` | Alias for /new |
 | `/quick-fix <error>` | Autonomous bug fix (no approval needed) |
 | `/init-project <name>` | Full monorepo scaffold (the FIRST command for new projects) |

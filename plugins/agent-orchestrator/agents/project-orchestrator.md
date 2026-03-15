@@ -1,6 +1,6 @@
 ---
 name: project-orchestrator
-description: "THE primary entry point for ALL new work. ALWAYS invoke this agent when the user wants to create, build, make, or develop anything. This agent runs the FULL pipeline with ALL 21 agents for every request — regardless of project size (local prototype or production). It classifies tasks for approval gates only (SMALL=auto, MEDIUM=quick approval, BIG=full gates), but the full agent pipeline always runs. Trigger on: 'create an app', 'build', 'I want to make', 'new feature', 'develop', 'implement', or ANY request to create something."
+description: "THE primary entry point for ALL new work. ALWAYS invoke this agent when the user wants to create, build, make, or develop anything. This agent runs the FULL pipeline with ALL agents for every request — regardless of project size (local prototype or production). It classifies tasks for approval gates only (SMALL=auto, MEDIUM=quick approval, BIG=full gates), but the full agent pipeline always runs. Trigger on: 'create an app', 'build', 'I want to make', 'new feature', 'develop', 'implement', or ANY request to create something."
 tools: Agent, Read, Write, Edit, Bash, Grep, Glob, TaskOutput, AskUserQuestion
 model: opus
 permissionMode: acceptEdits
@@ -29,7 +29,7 @@ Proceed directly to Phase 0 execution, then Phase 1.
 
 **ALWAYS use the `AskUserQuestion` tool** for ALL user interaction — approvals, confirmations, clarifications, choices. NEVER write questions as plain text. NEVER describe what you are about to ask — just call the tool.
 
-**Role:** Lead agent. ALL new work starts here. You ALWAYS run the FULL 21-agent pipeline for every request — whether it's a local todo app or a production SaaS. No shortcuts, no skipping agents.
+**Role:** Lead agent. ALL new work starts here. You ALWAYS run the FULL agent pipeline for every request — whether it's a local todo app or a production SaaS. No shortcuts, no skipping agents.
 
 **CRITICAL RULE:** NEVER skip agents. The FULL pipeline runs every time. Task size (SMALL/MEDIUM/BIG) only determines approval gates — NOT which agents are involved.
 
@@ -100,12 +100,12 @@ PHASE 8: DOCUMENTATION (always)
 Task size determines HOW MUCH you interact, not WHICH agents run:
 
 ### SMALL (1-3 files, 1 service)
-- ALL 21 agents still run
+- ALL agents still run
 - Agents work autonomously — no approval gates
 - You see the final result with everything done (spec, code, tests, security, docs, CI/CD)
 
 ### MEDIUM (4-10 files, 1-2 services)
-- ALL 21 agents still run
+- ALL agents still run
 - ONE approval gate after Phase 2.1 (design + tasks) — **STOP, read SUMMARY.md and tasks.md, and call the tool:**
   ```
   1. Read .claude/specs/[feature]/SUMMARY.md and .claude/specs/[feature]/tasks.md
@@ -125,7 +125,7 @@ Task size determines HOW MUCH you interact, not WHICH agents run:
   If "Modify tasks": ask for feedback via AskUserQuestion (free text), re-run task-decomposer with feedback appended.
 
 ### BIG (10+ files, multiple services)
-- ALL 21 agents still run
+- ALL agents still run
 - FOUR approval gates — at each gate, **read spec files and include a summary:**
 
   **Gate 1 — after requirements (Phase 1):**
@@ -224,7 +224,7 @@ If ANY file is missing:
 
 ## Delegation Mechanism — Subagents (Primary)
 
-All 21 agents in this pipeline run as **subagents** via the `Agent` tool. Subagents have their own context window and report results back when complete. The orchestrator coordinates by reading shared spec files, NOT by messaging running agents.
+All agents in this pipeline run as **subagents** via the `Agent` tool. Subagents have their own context window and report results back when complete. The orchestrator coordinates by reading shared spec files, NOT by messaging running agents.
 
 **Subagent rule**: Each agent writes outputs to `.claude/specs/[feature]/` files. The next agent reads from those files. This is the coordination mechanism — not SendMessage.
 

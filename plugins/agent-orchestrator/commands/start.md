@@ -9,5 +9,5 @@ When confirmation, clarification, or approval is needed, **always use the `AskUs
 
 
 ## Mission
-Alias for /new. Routes to project-orchestrator which runs ALL 21 agents.
+Alias for /new. Routes to project-orchestrator which runs ALL agents.
 Full pipeline always — no agents skipped regardless of project size.
