@@ -1,6 +1,6 @@
 ---
 name: readme-generator
-description: Create comprehensive README.md — project description, installation, usage, API reference, contributing guide, license. Use when the user needs documentation, technical writing, or API docs. Trigger on related keywords.
+description: Create comprehensive README.md — project description, installation, usage, API reference, contributing guide, license. Use when the user says "create README", "write README", "project README", "document setup instructions", or needs a README.md for their repository.
 allowed-tools: Read, Write, Edit, Grep, Glob
 ---
 

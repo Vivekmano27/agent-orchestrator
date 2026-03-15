@@ -1,6 +1,7 @@
 ---
 name: workflow-automation
 description: Automate CI/CD pipelines and async workflows — GitHub Actions for lint/test/build/deploy, Celery tasks for async processing, event-driven patterns with RabbitMQ/SQS, scheduled jobs with Celery Beat. Use when building pipelines, automating deployments, or creating background job systems.
+allowed-tools: Read, Write, Edit, Bash, Grep, Glob
 ---
 
 # Workflow Automation Skill

@@ -1,6 +1,7 @@
 ---
 name: agent-builder
 description: Build Claude Code agents — .md agent definitions, frontmatter configuration, tool selection, model routing, subagent dispatch, and multi-agent coordination. Use when creating or modifying agents, configuring agent teams, or designing orchestration flows.
+allowed-tools: Read, Write, Edit, Bash, Grep, Glob
 ---
 
 # Agent Builder Skill

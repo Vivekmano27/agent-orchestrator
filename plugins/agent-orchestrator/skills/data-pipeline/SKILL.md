@@ -1,6 +1,7 @@
 ---
 name: data-pipeline
 description: Build ETL/ELT pipelines — extraction from APIs, transformation with Pydantic models, loading to PostgreSQL, batch processing with Django management commands, streaming with async generators, data validation, checkpointing, and idempotent operations. Use when working with data ingestion, processing, or batch jobs.
+allowed-tools: Read, Write, Edit, Bash, Grep, Glob
 ---
 
 # Data Pipeline Skill

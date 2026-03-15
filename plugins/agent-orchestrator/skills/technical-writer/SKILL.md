@@ -1,6 +1,6 @@
 ---
 name: technical-writer
-description: Write clear technical documentation — guides, tutorials, architecture docs, and runbooks with proper structure and examples. Use when the user needs documentation, technical writing, or API docs. Trigger on related keywords.
+description: Write clear technical documentation — guides, tutorials, architecture docs, and runbooks with proper structure and examples. Use when the user says "write a guide", "architecture doc", "ADR", "runbook", "deployment guide", "tutorial", or needs long-form technical documentation beyond a README.
 allowed-tools: Read, Write, Edit, Grep, Glob
 ---
 

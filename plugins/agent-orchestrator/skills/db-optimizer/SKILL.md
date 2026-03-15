@@ -1,6 +1,6 @@
 ---
 name: db-optimizer
-description: Optimize database queries -- EXPLAIN analysis, index recommendations, query rewriting, connection pooling, N+1 detection. Supports PostgreSQL with TypeORM/Prisma and Django ORM. Use when working with data, databases, analytics, or visualization.
+description: Optimize database queries — EXPLAIN analysis, index recommendations, query rewriting, connection pooling, N+1 detection. Supports PostgreSQL with TypeORM/Prisma and Django ORM. Use when the user says "slow query", "optimize queries", "EXPLAIN ANALYZE", "N+1 problem", "database performance", "index recommendations", or needs to tune database performance.
 allowed-tools: Read, Bash, Grep, Glob
 ---
 
