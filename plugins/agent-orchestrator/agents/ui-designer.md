@@ -58,3 +58,22 @@ These tokens are consumed by:
 
 ## Component States (EVERY component on EVERY platform)
 - Default, Hover (web), Pressed, Focus, Disabled, Loading (skeleton), Error, Empty
+
+## Interaction Inventory (REQUIRED in design.md)
+
+At the end of `design.md`, include an `## Interaction Inventory` section listing every user-initiated action. This is consumed by the agent-native-designer during cross-review for parity verification.
+
+```markdown
+## Interaction Inventory
+| UI Action | Component | Trigger | Data Change | API Call |
+|-----------|-----------|---------|-------------|---------|
+| Create task | NewTaskForm | Form submit | Creates Task entity | POST /api/v1/tasks |
+| Move task to column | TaskCard | Drag-drop | Updates Task.status | PATCH /api/v1/tasks/:id |
+| Toggle filter | FilterPanel | Click | Local state only | None |
+| Delete task | TaskCard menu | Click + confirm | Soft-deletes Task | DELETE /api/v1/tasks/:id |
+```
+
+**Rules:**
+- List EVERY user-initiated action (button clicks, form submits, drags, swipes, navigation)
+- Include actions that are local-state only (no API call) — these still need agent parity
+- Match API calls to endpoints from `api-spec.md` where applicable

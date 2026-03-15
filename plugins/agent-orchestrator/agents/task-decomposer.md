@@ -25,7 +25,8 @@ Read ALL spec files from `.claude/specs/[feature]/`:
 - `architecture.md` — system architecture, service boundaries
 - `api-spec.md` — API endpoints, request/response schemas
 - `schema.md` — database tables, columns, constraints, indexes
-- `design.md` — UI components, design tokens, responsive specs
+- `design.md` — UI components, design tokens, responsive specs, interaction inventory
+- `agent-spec.md` — agent-native design: parity map, tool definitions, agent features (if exists)
 - `tech-stack.md` — chosen technologies and frameworks
 
 ## Output
@@ -58,6 +59,13 @@ Each task gets exactly ONE agent from this list:
 
 Assignment rule: match the task's file paths to the ownership matrix above.
 
+**Agent/Tool tasks (when agent-spec.md exists):**
+When `agent-spec.md` is present, generate additional tasks for agent-native implementation:
+- Tool endpoints marked `(NEW)` in the parity map → assign to `backend-developer` (NestJS) or `python-developer` (Python) in the **API layer**
+- Tool endpoints marked `(in api-spec.md)` → no additional task (already covered by API layer tasks)
+- Agent definition files (`.claude/agents/*.md` in target project) → assign to `senior-engineer` in the **Integration** layer
+- Parity test tasks (1 per entity: verify CRUD tools work) → assign to `test-engineer` in the **Quality** layer (note: Phase 4 handles full testing, but parity verification tasks should be listed for traceability)
+
 ### Step 4 — Risk assessment
 Assign a risk level to each task:
 
@@ -78,6 +86,7 @@ Verify coverage:
 - Every UI component in `design.md` has a task
 - Every business rule in `business-rules.md` is covered by service or API tasks
 - Every user story in `requirements.md` is traceable to one or more tasks
+- If `agent-spec.md` exists: every tool marked `(NEW)` has an implementation task, every agent feature has a definition task
 
 ### Step 6 — Validate dependency graph
 - Dependencies MUST form a valid DAG — no circular dependencies

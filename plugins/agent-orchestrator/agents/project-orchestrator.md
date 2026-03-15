@@ -195,7 +195,7 @@ After each phase completes, verify expected output files exist:
 
 **After Phase 1:** requirements.md, business-rules.md, ux.md
 **After Phase 1.5:** tech-stack.md
-**After Phase 2:** architecture.md, api-spec.md, schema.md, design.md, SUMMARY.md
+**After Phase 2:** architecture.md, api-spec.md, schema.md, design.md, agent-spec.md (MEDIUM/BIG only), SUMMARY.md
 **After Phase 2.1:** tasks.md
 **After Phase 3:** api-contracts.md
 **After Phase 5:** security-audit.md
@@ -320,60 +320,25 @@ AskUserQuestion(
 
 ---
 
-### Phase 2: Design — PRODUCTION-READY, sequential then parallel
+### Phase 2: Design — PRODUCTION-READY, via design-team
 
 **CRITICAL: Always design for production. Not prototype, not MVP.** Feature scoping (v1 vs v2) determines WHAT we build — but everything we build is production-grade: proper schema constraints, proper error handling, proper auth, proper monitoring. No shortcuts that need rewriting later.
 
-2a. Spawn system-architect FIRST (synchronous — others need the architecture):
+2a. Dispatch design-team (single dispatch — it manages internal sequencing):
 ```
 Agent(
-  subagent_type="agent-orchestrator:system-architect",
-  prompt="Design PRODUCTION-READY system architecture for: .claude/specs/[feature]/requirements.md.
-          Tech stack: read .claude/specs/[feature]/tech-stack.md.
-          Design for production — proper service boundaries, fault tolerance, monitoring, scaling.
-          Output to .claude/specs/[feature]/architecture.md"
+  subagent_type="agent-orchestrator:design-team",
+  prompt="Design PRODUCTION-READY specs for: [feature].
+          Task size: [SMALL/MEDIUM/BIG].
+          Spec directory: .claude/specs/[feature]/
+          Input files already present: requirements.md, business-rules.md, ux.md, tech-stack.md
+          Expected outputs: architecture.md, api-spec.md, schema.md, design.md,
+                           agent-spec.md (MEDIUM/BIG only), SUMMARY.md"
 )
 ```
-2b. Wait for completion. Then spawn ALL THREE IN PARALLEL (same response):
-```
-Agent(
-  subagent_type="agent-orchestrator:api-architect",
-  run_in_background=True,
-  prompt="Design PRODUCTION-READY API. Read .claude/specs/[feature]/requirements.md, architecture.md, and tech-stack.md.
-          Include: versioning (v1), rate limiting, authentication, proper error codes, pagination, OpenAPI spec.
-          Output to .claude/specs/[feature]/api-spec.md"
-)
-
-Agent(
-  subagent_type="agent-orchestrator:database-architect",
-  run_in_background=True,
-  prompt="Read .claude/specs/[feature]/architecture.md and tech-stack.md first. If the architecture requires a database:
-          (1) Design PRODUCTION-READY schema — proper constraints, indexes, foreign keys, cascades, audit columns (created_at, updated_at). Output to .claude/specs/[feature]/schema.md.
-          (2) Create docker-compose.dev.yml with required DB services for local development.
-          If architecture.md indicates UI-only with no backend database, skip both and note this in schema.md."
-)
-
-Agent(
-  subagent_type="agent-orchestrator:ui-designer",
-  run_in_background=True,
-  prompt="Create PRODUCTION-READY design system and component specs. Read .claude/specs/[feature]/requirements.md, ux.md, and tech-stack.md.
-          Include: responsive breakpoints, accessibility compliance, loading/error/empty states, design tokens.
-          Output to .claude/specs/[feature]/design.md"
-)
-```
-2c. Wait for all three to complete.
-
-2d. Generate SUMMARY.md — Read all Phase 1-2 output files and write a human-readable overview:
-```bash
-# Write .claude/specs/[feature]/SUMMARY.md with:
-# - Tech stack chosen
-# - Feature list (from requirements.md)
-# - Architecture overview (from architecture.md)
-# - Key API endpoints (from api-spec.md)
-# - Database tables (from schema.md)
-# - Component list (from design.md)
-# This summary is shown to the user at approval gates.
-```
+2b. Wait for design-team to complete.
+2c. Verify `.claude/specs/[feature]/SUMMARY.md` exists.
+2d. Proceed to approval gate (unchanged — see gate logic below).
 
 ### Phase 2.1: Task Decomposition — spawned subagent
 
@@ -383,7 +348,7 @@ Agent(
 ```
 Agent(
   subagent_type="agent-orchestrator:task-decomposer",
-  prompt="Read all specs in .claude/specs/[feature]/: requirements.md, business-rules.md, architecture.md, api-spec.md, schema.md, design.md, tech-stack.md.
+  prompt="Read all specs in .claude/specs/[feature]/: requirements.md, business-rules.md, architecture.md, api-spec.md, schema.md, design.md, agent-spec.md (if exists), tech-stack.md.
           Decompose into ordered, dependency-aware implementation tasks with agent assignments.
           Output to .claude/specs/[feature]/tasks.md"
 )

@@ -35,12 +35,13 @@ feature-team (you — orchestrator)
 |                    | services/shared/                                       |                             |
 | python-developer   | services/ai-service/                                   | services/core-service/      |
 | frontend-developer | apps/web/, apps/mobile-flutter/, apps/mobile-kmp/      | services/                   |
+| senior-engineer    | .claude/agents/ (target project agent definitions)      |                             |
 | (none)             |                                                        | infrastructure/             |
 
 ## Execution Protocol
 
 ### STEP 1 — Read the feature spec and task list
-Read `.claude/specs/[feature]/api-spec.md`, `schema.md`, `design.md`, `architecture.md`, and `tasks.md`.
+Read `.claude/specs/[feature]/api-spec.md`, `schema.md`, `design.md`, `architecture.md`, `agent-spec.md` (if exists), and `tasks.md`.
 
 **If `tasks.md` exists:** Use task-driven dispatch (Steps 2-5 below). Each agent receives its specific task IDs.
 **If `tasks.md` does NOT exist:** Fall back to spec-driven dispatch (Step 2-fallback below).
@@ -63,7 +64,9 @@ Agent(
           FILE OWNERSHIP: You own services/core-service/ (except src/common/) and prisma/.
           Do NOT touch services/api-gateway/ or services/shared/.
           Follow TDD. When all endpoints are implemented, write actual API contracts
-          (routes, request/response shapes) to .claude/specs/[feature]/api-contracts.md"
+          (routes, request/response shapes) to .claude/specs/[feature]/api-contracts.md
+          If .claude/specs/[feature]/agent-spec.md exists, read it for tool endpoint definitions
+          that need implementation."
 )
 
 Agent(
@@ -72,9 +75,10 @@ Agent(
   prompt="Implement your assigned tasks for [feature].
           Read .claude/specs/[feature]/tasks.md — execute these tasks IN ORDER: [TASK-NNN, TASK-NNN, ...].
           Each task has Description, Files, Verification, and Commit message — follow them exactly.
-          FILE OWNERSHIP: You own services/core-service/src/common/, services/api-gateway/, services/shared/.
+          FILE OWNERSHIP: You own services/core-service/src/common/, services/api-gateway/, services/shared/, .claude/agents/.
           Do NOT touch services/core-service/src/modules/.
-          Handle service boundaries, auth middleware, error handling, timeouts."
+          Handle service boundaries, auth middleware, error handling, timeouts.
+          If .claude/specs/[feature]/agent-spec.md exists, read it for agent definition files to create."
 )
 
 Agent(

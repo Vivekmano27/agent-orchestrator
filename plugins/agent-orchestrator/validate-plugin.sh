@@ -24,8 +24,8 @@ echo ""
 # 1. Count agents
 AGENT_COUNT=$(ls "$SCRIPT_DIR"/agents/*.md 2>/dev/null | wc -l | tr -d ' ')
 echo -e "Agents: $AGENT_COUNT files"
-if [ "$AGENT_COUNT" -lt 24 ]; then
-  echo -e "  ${RED}ERROR: Expected 24 agents (21 + 3 teams), found $AGENT_COUNT${NC}"
+if [ "$AGENT_COUNT" -lt 26 ]; then
+  echo -e "  ${RED}ERROR: Expected 26 agents (22 + 4 teams), found $AGENT_COUNT${NC}"
   ERRORS=$((ERRORS + 1))
 else
   echo -e "  ${GREEN}OK${NC}"
@@ -44,8 +44,8 @@ fi
 # 3. Count skills
 SKILL_COUNT=$(ls -d "$SCRIPT_DIR"/skills/*/ 2>/dev/null | wc -l | tr -d ' ')
 echo -e "Skills: $SKILL_COUNT directories"
-if [ "$SKILL_COUNT" -lt 63 ]; then
-  echo -e "  ${RED}ERROR: Expected 63 skills, found $SKILL_COUNT${NC}"
+if [ "$SKILL_COUNT" -lt 64 ]; then
+  echo -e "  ${RED}ERROR: Expected 64 skills, found $SKILL_COUNT${NC}"
   ERRORS=$((ERRORS + 1))
 else
   echo -e "  ${GREEN}OK${NC}"
