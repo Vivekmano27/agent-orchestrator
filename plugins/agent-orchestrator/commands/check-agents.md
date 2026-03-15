@@ -26,7 +26,7 @@ IMPLEMENTATION:  agent-native-developer, senior-engineer, backend-developer, pyt
                  frontend-developer, flutter-developer, kmp-developer
 TESTING:         test-engineer, qa-automation
 SECURITY:        security-auditor
-REVIEW:          code-reviewer, performance-reviewer, agent-native-reviewer, design-reviewer
+REVIEW:          code-reviewer, performance-reviewer, static-analyzer, agent-native-reviewer, design-reviewer
 DEVOPS:          devops-engineer, deployment-engineer
 DOCUMENTATION:   technical-writer
 ORCHESTRATION:   project-orchestrator, task-executor
@@ -53,7 +53,7 @@ devops-engineer → needs: ci-cd-setup, docker-skill, aws-deployment, terraform-
 Check team definitions exist:
 - [ ] feature-team.md (up to 7 members: agent-native-developer, backend, senior, python, frontend, flutter, kmp)
 - [ ] design-team.md (5 members: system-architect, api-architect, database-architect, ui-designer, agent-native-designer)
-- [ ] review-team.md (5 members: code-reviewer, security-auditor, performance-reviewer, agent-native-reviewer, spec-tracer)
+- [ ] review-team.md (6 reviewers: code-reviewer, security-auditor, performance-reviewer, static-analyzer, agent-native-reviewer, spec-tracer via code-reviewer reuse)
 - [ ] planning-team.md (product-manager + architects + designer)
 
 ## Output Format
@@ -73,7 +73,7 @@ Check team definitions exist:
 ║  TEAMS (4/4 configured)                      ║
 ║  ✅ feature-team    (7 members)              ║
 ║  ✅ design-team     (5 members)              ║
-║  ✅ review-team     (5 members)              ║
+║  ✅ review-team     (6 reviewers)             ║
 ║  ✅ planning-team   (4 members)              ║
 ║                                              ║
 ║  COMMANDS (N available)                      ║

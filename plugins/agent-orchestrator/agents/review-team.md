@@ -97,9 +97,10 @@ Agent(
              - Was the task completed? (check for expected files/changes)
           5. Check .claude/specs/[feature]/api-contracts.md vs api-spec.md for drift (if feature-team flagged drift)
 
-          Output a traceability matrix:
+          Output a traceability matrix to .claude/specs/[feature]/spec-traceability.md:
           | User Story | Implemented? | Tests? | Edge Cases? | Notes |
-          Flag any story that is NOT fully covered as Critical."
+          Flag any story that is NOT fully covered as Critical.
+          IMPORTANT: Write to spec-traceability.md, NOT code-review.md."
 )
 ```
 
@@ -107,7 +108,7 @@ Agent(
 You will be notified as each reviewer finishes. Do NOT poll.
 
 ### STEP 3 — Compile combined report
-After all reviewers complete, merge findings into a single report:
+After all reviewers complete, merge findings into a single report and **write to `.claude/specs/[feature]/review-report.md`**:
 
 ```markdown
 # Code Review Report — [feature/branch]
@@ -151,9 +152,13 @@ Tell the lead to create a review team:
 ```
 Create an agent team to review [feature/branch]:
 - code-reviewer: review for code quality, correctness, and test coverage
-- security-auditor: audit for OWASP Top 10, auth vulnerabilities, and secrets
+- security-auditor: focused spot-check of code changes for injection, auth bypass, secrets
 - performance-reviewer: check for N+1 queries, re-renders, and missing indexes
+- static-analyzer: tool-based duplication, complexity, dead code analysis (advisory)
+- agent-native-reviewer: agent definitions, skills, MCP tools, parity coverage (if .claude/agents/ exists)
+- spec-tracer: requirements coverage, acceptance criteria traceability (MEDIUM/BIG only)
 
 After each reviewer forms their findings, have them challenge each other's conclusions.
-The finding that survives peer challenge is most likely real. Produce a final consensus report.
+The finding that survives peer challenge is most likely real. Produce a final consensus report
+and write to .claude/specs/[feature]/review-report.md.
 ```

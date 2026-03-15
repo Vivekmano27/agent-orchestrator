@@ -448,6 +448,7 @@ After each phase completes, verify expected output files exist:
 **After Phase 3:** api-contracts.md, `.claude/agents/` directory exists (when agent-spec.md was present in Phase 2)
 **After Phase 4:** test-plan.md, test-report.md
 **After Phase 5:** security-audit.md
+**After Phase 6:** review-report.md
 **After Phase 8:** Check that at least one documentation file was created (README.md, docs/API.md, or CHANGELOG.md)
 
 If ANY file is missing:
@@ -719,6 +720,94 @@ Agent(
 )
 ```
 
+6b. Read `.claude/specs/[feature]/review-report.md`. Check recommendation:
+- **APPROVE** → proceed to Phase 7
+- **APPROVE WITH CONDITIONS** → proceed to Phase 7 (conditions logged for follow-up)
+- **REQUEST CHANGES (CRITICAL/HIGH found)** → trigger Phase 6→3 Feedback Loop below
+- **BLOCK** → escalate to user immediately
+
+### Phase 6→3 Feedback Loop (Review Fix Routing)
+When review-team reports CRITICAL or HIGH findings:
+
+**Step 1 — Read finding list:**
+Structured list with stable IDs (REV-NNN), severity, file:line, description, reviewer source, recommended fix from `review-report.md`.
+
+**Step 2 — Re-dispatch feature-team:**
+```
+Agent(
+  subagent_type="agent-orchestrator:feature-team",
+  prompt="PHASE 6→3 FEEDBACK: Code review found CRITICAL/HIGH issues.
+  Feature: [feature-name]. Spec directory: .claude/specs/[feature]/
+
+  REVIEW FINDINGS TO FIX:
+  [structured finding list from review-report.md — REV-NNN IDs with file:line]
+
+  RULES:
+  - Fix ONLY the identified review findings
+  - Follow file ownership matrix
+  - Surgical fixes — minimum code change necessary
+  - Do NOT bundle refactoring with review fixes
+  - Run tests locally before marking done
+  - Commit as: fix(review): [description]
+  - This is a TARGETED REVIEW FIX, not a full re-implementation
+
+  Previous review-report.md: .claude/specs/[feature]/review-report.md"
+)
+```
+
+**Step 3 — Scoped re-review:**
+Only re-run code-reviewer + performance-reviewer on changed files (skip static-analyzer, spec-tracer, agent-native-reviewer):
+```
+Agent(
+  subagent_type="agent-orchestrator:review-team",
+  prompt="PHASE 6→3 SCOPED RE-REVIEW for [feature].
+  Spec directory: .claude/specs/[feature]/
+  Round-trip: 1
+
+  ORIGINAL FINDINGS ROUTED FOR FIX: [REV-NNN list with file:line]
+  FILES CHANGED BY FIX: [list]
+
+  SCOPED RE-REVIEW PROTOCOL (do NOT run full review):
+  1. Spawn ONLY code-reviewer + performance-reviewer (skip static-analyzer, spec-tracer, agent-native-reviewer)
+  2. VERIFY FIXES: Re-check each routed finding at original location. Mark RESOLVED or PERSISTS.
+  3. REGRESSION SCAN: Review ALL changed files for new issues introduced by the fix.
+  4. UPDATE review-report.md with Round-trip: 1 and Fix History.
+  5. RETURN: per-finding status, new findings count, regression detected Y/N,
+     overall: CLEAN / PARTIAL / REGRESSION / STUCK."
+)
+```
+
+**Step 4 — Regression detection:**
+After scoped re-review, compare results:
+
+| Condition | Signal | Action |
+|---|---|---|
+| All findings resolved, no new findings | CLEAN | Proceed to Phase 7 |
+| Some resolved, no new findings | PARTIAL | Escalate to user (round-trip exhausted) |
+| New CRITICAL/HIGH findings appeared | REGRESSION | Hard stop — fix made things worse. Escalate immediately. |
+| Original findings persist unchanged | STUCK | Escalate to user immediately |
+
+**Step 5 — Max retries:**
+- Allow **1 Phase 6→3 round-trip** maximum (review fixes should be surgical)
+- If still CRITICAL/HIGH after 1 loop → escalate to user:
+  ```
+  AskUserQuestion(
+    question="Review issues persist after 1 fix attempt.
+    Remaining: [finding list from review-report.md].
+    These issues should be resolved before deployment.",
+    options=[
+      "Let me fix manually — show me the findings",
+      "Accept and proceed (documents acceptance in review-report.md)",
+      "Re-review with different approach",
+      "Cancel feature"
+    ]
+  )
+  ```
+  If "Accept and proceed": write permanent record to review-report.md with user acknowledgment, findings accepted, and timestamp.
+
+**SMALL tasks — auto-fix flow:**
+For SMALL tasks, the Phase 6→3 feedback loop triggers automatically (no user gate). If the scoped re-review returns CLEAN, proceed silently to Phase 7. If PARTIAL/REGRESSION/STUCK, escalate to user with the same AskUserQuestion as above.
+
 ### Phase 7: DevOps — parallel (conditional on cloud deployment)
 
 Read project-config.md "Infrastructure > Cloud Provider".
@@ -800,7 +889,9 @@ Phase 5 — Security (always runs):
   security-auditor → OWASP audit, payment security, secrets scan
 
 Phase 6 — Review (always runs):
-  code-reviewer + performance-reviewer → combined severity report
+  code-reviewer + security-auditor (spot-check) + performance-reviewer → combined severity report
+  static-analyzer → duplication, complexity, dead code (advisory)
+  spec-tracer → requirements coverage (MEDIUM/BIG only)
   ⏭ agent-native-reviewer skipped (no agent artifacts)
 
 Phase 7 — DevOps (cloud = GitHub Actions → runs):
@@ -839,4 +930,5 @@ This creates a feedback loop: mistakes → lessons → rules → prevention.
 - If security-auditor reports STOP → halt pipeline immediately, present STOP handler to user
 - If quality-team reports coverage below project-config.md thresholds → trigger Phase 4→3 Feedback Loop (max 2 round-trips, stuck/regression detection may terminate early)
 - If Phase 4→3 loop exhausts retries or detects stuck/regression → present failures to user with manual fix option
-- If review-team finds CRITICAL issues → route back to owning agent before proceeding to Phase 7
+- If review-team finds CRITICAL/HIGH issues → trigger Phase 6→3 Feedback Loop (max 1 round-trip, then escalate to user)
+- For SMALL tasks: Phase 6→3 auto-triggers on CRITICAL findings; if fix succeeds proceed silently, if fails escalate to user
