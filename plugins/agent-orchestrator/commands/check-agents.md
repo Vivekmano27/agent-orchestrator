@@ -26,7 +26,9 @@ IMPLEMENTATION:  agent-native-developer, senior-engineer, backend-developer, pyt
                  frontend-developer, flutter-developer, kmp-developer
 TESTING:         test-engineer, qa-automation
 SECURITY:        security-auditor
-REVIEW:          code-reviewer, performance-reviewer, static-analyzer, agent-native-reviewer, design-reviewer
+DESIGN REVIEW:   design-reviewer (dispatched by design-team in Phase 2 for MEDIUM/BIG)
+REVIEW:          code-reviewer, performance-reviewer, static-analyzer, agent-native-reviewer
+REVIEW ROLES:    spec-tracer (NOT a standalone agent — role performed by code-reviewer with specialized prompt)
 DEVOPS:          devops-engineer, deployment-engineer
 DOCUMENTATION:   technical-writer
 ORCHESTRATION:   project-orchestrator, task-executor
@@ -48,13 +50,18 @@ test-engineer → needs: test-writer, webapp-testing, web-quality, accessibility
 security-auditor → needs: security-reviewer, dependency-audit, secrets-scanner, threat-modeling, compliance-checker
 devops-engineer → needs: ci-cd-setup, docker-skill, aws-deployment, terraform-skills, k8s-skill, monitoring-setup, release-manager, env-setup
 deployment-engineer → needs: release-manager, docker-skill, aws-deployment, monitoring-setup
+design-reviewer → needs: system-architect, api-designer, database-designer, security-reviewer
+task-decomposer → needs: task-breakdown, estimation-skill, spec-driven-dev
+system-architect → needs: system-architect, nestjs-patterns, docker-skill, aws-deployment, terraform-skills, monorepo-manager
+senior-engineer → needs: fullstack-dev, nestjs-patterns, react-patterns, flutter-patterns, kmp-patterns, tdd-skill, code-simplify, error-handling, performance-optimizer, git-workflow, migration-skill, code-documentation
+code-reviewer → needs: code-review, nestjs-patterns, react-patterns, flutter-patterns, python-django-patterns, kmp-patterns, code-documentation
 ```
 
 ### 4. Agent Team Verification
 Check team definitions exist:
 - [ ] feature-team.md (up to 7 members: agent-native-developer, backend, senior, python, frontend, flutter, kmp)
-- [ ] design-team.md (5 members: system-architect, api-architect, database-architect, ui-designer, agent-native-designer)
-- [ ] review-team.md (6 reviewers: code-reviewer, security-auditor, performance-reviewer, static-analyzer, agent-native-reviewer, spec-tracer via code-reviewer reuse)
+- [ ] design-team.md (5 designers + 1 reviewer: system-architect, api-architect, database-architect, ui-designer, agent-native-designer, design-reviewer)
+- [ ] review-team.md (5 reviewers + 1 role: code-reviewer, security-auditor, performance-reviewer, static-analyzer, agent-native-reviewer; spec-tracer is a role performed by code-reviewer with specialized prompt — NOT a standalone agent)
 - [ ] planning-team.md (7 members: product-manager, business-analyst, ux-researcher, system-architect, api-architect, database-architect, ui-designer)
 - [ ] quality-team.md (2 members: test-engineer, qa-automation)
 
@@ -74,8 +81,8 @@ Check team definitions exist:
 ║                                              ║
 ║  TEAMS (5/5 configured)                      ║
 ║  ✅ feature-team    (7 members)              ║
-║  ✅ design-team     (5 members)              ║
-║  ✅ review-team     (6 reviewers)             ║
+║  ✅ design-team     (5 designers + 1 reviewer) ║
+║  ✅ review-team     (5 reviewers + 1 role)    ║
 ║  ✅ planning-team   (7 members)              ║
 ║  ✅ quality-team    (2 members)              ║
 ║                                              ║

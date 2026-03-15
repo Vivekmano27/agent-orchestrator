@@ -55,7 +55,8 @@ PHASE 2: DESIGN — PRODUCTION-READY (design for production, not prototype)
   ├── api-architect           → API spec with versioning, rate limiting, auth, error handling
   ├── database-architect      → schema design, ER diagrams, indexes, migrations, constraints
   ├── ui-designer          [C] → design system, component specs (skip if no frontend AND no mobile)
-  └── agent-native-designer [C] → agent parity, tool specs (skip if no agent-native features)
+  ├── agent-native-designer [C] → agent parity, tool specs (skip if no agent-native features)
+  └── design-reviewer      [C] → cross-spec consistency, production-readiness (MEDIUM/BIG only)
 
 PHASE 2.1: TASK DECOMPOSITION (reads specs, produces ordered task list)
   └── task-decomposer → tasks.md with dependencies, effort, agent assignments
@@ -86,7 +87,7 @@ PHASE 6: REVIEW (always runs — verification phase)
   ├── performance-reviewer   → N+1 queries, re-renders, indexes, bundle size
   ├── static-analyzer        → tool-based: duplication, complexity, dead code, code smells (advisory)
   ├── agent-native-reviewer [C] → agent definitions, skills, commands, parity (skip if no agent-native)
-  └── spec-tracer [C]        → requirements coverage, acceptance criteria (MEDIUM/BIG only)
+  └── spec-tracer (role)  [C] → requirements coverage, acceptance criteria (MEDIUM/BIG only; role performed by code-reviewer with specialized prompt, not a standalone agent)
 
 PHASE 7: DEVOPS & DEPLOYMENT [C] (skip entire phase if no cloud deployment)
   ├── devops-engineer      → CI/CD pipeline, Docker, Terraform, K8s, monitoring
@@ -108,6 +109,7 @@ When a tech stack component is absent, skip these agents across ALL phases:
 | Cloud: none/local-only | — | — | — | — (Phase 7 skipped entirely) |
 | Python service: none | — | python-developer | — | — |
 | Single service | — | senior-engineer | — | — |
+| SMALL task | design-reviewer | — | — | spec-tracer (role) |
 
 **Orchestration layer** (manages everything — this agent):
 - project-orchestrator → coordination, progress tracking, approval gates
@@ -441,9 +443,10 @@ When user selects "Cancel":
 ### Subagent Failure Detection
 After each phase completes, verify expected output files exist:
 
+**After Phase 0:** progress.md
 **After Phase 0.5:** project-config.md
 **After Phase 1:** requirements.md, business-rules.md, ux.md
-**After Phase 2:** architecture.md, api-spec.md, schema.md, design.md, agent-spec.md (MEDIUM/BIG only), SUMMARY.md, docker-compose.test.yml (if database required)
+**After Phase 2:** architecture.md, api-spec.md, schema.md, design.md, agent-spec.md (MEDIUM/BIG only), design-review.md (MEDIUM/BIG only), SUMMARY.md, docker-compose.test.yml (if database required)
 **After Phase 2.1:** tasks.md
 **After Phase 3:** api-contracts.md, `.claude/agents/` directory exists (when agent-spec.md was present in Phase 2)
 **After Phase 4:** test-plan.md, test-report.md
@@ -470,6 +473,82 @@ For Phase 3 (Build) and Phase 6 (Review), agent teams let teammates message each
 
 ---
 
+## Runtime Progress Tracking
+
+Write `.claude/specs/[feature]/progress.md` at every phase transition so monitoring commands (`/status`, `/check-teams`, `/pending`) can report real-time pipeline state. This file is the single source of truth for pipeline progress.
+
+**Write progress.md at Phase 0 (initial creation):**
+```markdown
+# Pipeline Progress — [feature-name]
+
+## Current State
+- **Phase:** 0 — Spec Setup
+- **Status:** IN_PROGRESS
+- **Task Size:** [pending classification]
+- **Started:** [ISO timestamp]
+- **Last Updated:** [ISO timestamp]
+
+## Phase History
+| Phase | Name | Status | Started | Completed | Agents Dispatched | Notes |
+|---|---|---|---|---|---|---|
+| 0 | Spec Setup | COMPLETE | [time] | [time] | — | Spec directory created |
+```
+
+**Update progress.md at each phase transition:**
+Before dispatching the first agent in a new phase, update `progress.md`:
+1. Mark the previous phase as `COMPLETE` with completion timestamp
+2. Set `Current State > Phase` to the new phase number and name
+3. Add a new row to `Phase History` with status `IN_PROGRESS`
+4. List agents being dispatched (including which are conditional/skipped)
+5. Update `Last Updated` timestamp
+
+**Update progress.md when agents complete:**
+When a background agent completes (you receive notification), update the agent's entry:
+```markdown
+## Active Agents
+| Agent | Phase | Status | Dispatched | Completed | Result |
+|---|---|---|---|---|---|
+| backend-developer | 3 | COMPLETE | [time] | [time] | 8 files, 3 commits |
+| frontend-developer | 3 | IN_PROGRESS | [time] | — | — |
+| flutter-developer | 3 | IN_PROGRESS | [time] | — | — |
+```
+
+**Update progress.md at approval gates:**
+```markdown
+## Current State
+- **Phase:** 2.1 — Task Decomposition
+- **Status:** WAITING_FOR_APPROVAL
+- **Gate:** Gate 2.1 — Task decomposition approval
+- **Waiting Since:** [ISO timestamp]
+```
+
+**Update progress.md on feedback loops:**
+```markdown
+## Feedback Loops
+| Loop | Round | Phase From | Phase To | Trigger | Status |
+|---|---|---|---|---|---|
+| Phase 4→3 | 1 | 4 (Testing) | 3 (Build) | 3 test failures | IN_PROGRESS |
+```
+
+**Update progress.md on completion:**
+```markdown
+## Current State
+- **Phase:** COMPLETE
+- **Status:** DONE
+- **Completed:** [ISO timestamp]
+- **Total Duration:** [calculated]
+
+## Summary
+- Phases completed: 9/9
+- Agents dispatched: [N]
+- Approval gates passed: [N]
+- Feedback loops: [N] (all resolved)
+- Files changed: [N]
+- Commits: [N]
+```
+
+---
+
 ## How to Execute Each Phase
 
 ### Phase 0: Spec Setup — YOU do this directly (no subagent needed)
@@ -482,8 +561,14 @@ Phase 0 only creates the spec directory for planning output. Git initialization 
 mkdir -p .claude/specs/[feature-name]
 ```
 
+0b. Create initial `progress.md`:
+```bash
+# Write the initial progress.md file with Phase 0 complete, Phase 0.5 next
+```
+
 **Phase 0 checklist before proceeding:**
 - [ ] `.claude/specs/[feature-name]/` directory exists
+- [ ] `.claude/specs/[feature-name]/progress.md` exists
 
 ---
 
@@ -563,7 +648,7 @@ Agent(
           Input files already present: project-config.md, requirements.md, business-rules.md, ux.md
           Read project-config.md for tech stack, architecture, and infrastructure decisions.
           Expected outputs: architecture.md, api-spec.md, schema.md, design.md,
-                           agent-spec.md (MEDIUM/BIG only), SUMMARY.md
+                           agent-spec.md (MEDIUM/BIG only), design-review.md (MEDIUM/BIG only), SUMMARY.md
           [IF no frontend AND no mobile]: Skip ui-designer — no UI components to design.
           [IF no agent-native features]: Skip agent-native-designer — no agent artifacts to design."
 )
@@ -888,6 +973,7 @@ Phase 2 — Design (PRODUCTION-READY):
   database-architect → products, orders, users tables with constraints, indexes
   ui-designer → Shadcn/ui component specs with all states
   ⏭ agent-native-designer skipped (no agent features)
+  design-reviewer → cross-spec consistency check, production-readiness review
 
 Phase 2.1 — Task Decomposition:
   task-decomposer → 18 tasks (fewer agents = fewer tasks)

@@ -32,7 +32,8 @@ design-team (you — leader)
 ├── api-architect         → API contracts, endpoints, auth, error handling
 ├── database-architect    → PostgreSQL schema, indexes, migrations, docker-compose.dev.yml
 ├── ui-designer           → design system, components, tokens, interaction inventory
-└── agent-native-designer → parity map, tool definitions, agent-native features
+├── agent-native-designer → parity map, tool definitions, agent-native features
+└── design-reviewer       → cross-spec consistency, production-readiness review (MEDIUM/BIG only, STEP 7)
 ```
 
 ## File Ownership Matrix (ENFORCE — each agent writes ONLY to its own files)
