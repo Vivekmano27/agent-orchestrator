@@ -105,6 +105,7 @@ The correct flow is ALWAYS:
 For quick tasks, use these commands instead of free-form prompts:
 - /build-feature "description" -> orchestrated feature build
 - /new "description" -> full pipeline for new project/feature
+- /add-feature "description" -> add a feature to an in-progress pipeline (smart cascade updates all affected specs)
 - /quick-fix "error" -> autonomous bug fix
 - /setup-service name type -> new microservice scaffold
 - /init-project name -> scaffold full monorepo from scratch

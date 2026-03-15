@@ -116,9 +116,10 @@ Task size determines HOW MUCH you interact, not WHICH agents run:
     - Database: [Z] tables
     - Implementation: [N] tasks across [M] services, estimated [effort]
     Proceed with implementation?",
-    options=["Yes, proceed", "Modify tasks", "Request changes to design", "Cancel"]
+    options=["Yes, proceed", "Add a feature", "Modify tasks", "Request changes to design", "Cancel"]
   )
   ```
+  If "Add a feature": run the `/add-feature` command flow — ask for the new feature description, run smart cascade to update affected specs, then re-present this gate.
   If "Modify tasks": ask for feedback via AskUserQuestion (free text), re-run task-decomposer with feedback appended.
 
 ### BIG (10+ files, multiple services)
@@ -131,7 +132,7 @@ Task size determines HOW MUCH you interact, not WHICH agents run:
   AskUserQuestion(
     question="Requirements complete: [X] user stories, [Y] business rules, [Z] personas.
     Key scope: [brief description]. Approve to proceed to design?",
-    options=["Approve — proceed to design", "Request changes", "Cancel"]
+    options=["Approve — proceed to design", "Add a feature", "Request changes", "Cancel"]
   )
   ```
 
@@ -141,7 +142,7 @@ Task size determines HOW MUCH you interact, not WHICH agents run:
   AskUserQuestion(
     question="Design complete: [architecture type], [X] endpoints, [Y] tables, [Z] components.
     Tech: [stack]. Approve to proceed to task decomposition?",
-    options=["Approve — proceed to task decomposition", "Request changes", "Cancel"]
+    options=["Approve — proceed to task decomposition", "Add a feature", "Request changes", "Cancel"]
   )
   ```
 
@@ -153,7 +154,7 @@ Task size determines HOW MUCH you interact, not WHICH agents run:
     Workload: backend=[X], frontend=[Y], senior=[Z], python=[W].
     Estimated effort: [total]. [P] implementation phases.
     Approve to proceed to implementation?",
-    options=["Approve — proceed to implementation", "Modify tasks", "Simplify", "Add detail", "Go back to design", "Cancel"]
+    options=["Approve — proceed to implementation", "Add a feature", "Modify tasks", "Simplify", "Add detail", "Go back to design", "Cancel"]
   )
   ```
   If "Modify tasks": ask for feedback via AskUserQuestion (free text), re-run task-decomposer with feedback.
@@ -167,7 +168,7 @@ Task size determines HOW MUCH you interact, not WHICH agents run:
   AskUserQuestion(
     question="Implementation complete: [X] files across [Y] services.
     Backend: [done/issues]. Frontend: [done/issues]. Proceed to testing?",
-    options=["Approve — proceed to testing", "Request changes", "Cancel"]
+    options=["Approve — proceed to testing", "Add a feature", "Request changes", "Cancel"]
   )
   ```
 
@@ -176,9 +177,20 @@ Task size determines HOW MUCH you interact, not WHICH agents run:
   AskUserQuestion(
     question="Testing + security + review complete. Coverage: [X]%.
     Security: [findings]. Review: [findings]. Proceed to DevOps + deploy?",
-    options=["Proceed to DevOps + docs", "More testing needed", "Cancel"]
+    options=["Proceed to DevOps + docs", "Add a feature", "More testing needed", "Cancel"]
   )
   ```
+
+### Handling "Add a feature" at any gate
+When user selects "Add a feature":
+1. Ask for the new feature description (use AskUserQuestion with free text)
+2. Run the `/add-feature` smart cascade flow:
+   a. Analyze which specs are affected by the new feature
+   b. Present the impact analysis to the user for confirmation
+   c. Re-run affected agents in dependency order (requirements → business-rules/ux → architecture/api/schema/design/agent-spec → tasks)
+   d. Each agent receives: "REVISION: Add this new feature: [description]. Previous output at [path]. ADD new content — do NOT remove existing content. Tag additions as [ADDED]."
+3. After cascade completes, re-present the SAME gate with updated summary (counts will have changed)
+4. If the pipeline is already past Phase 3 (code written), flag that new implementation tasks are needed and ask how to handle them (see `/add-feature` mid-implementation section)
 
 ### Handling "Request changes" at any gate
 When user selects "Request changes":
