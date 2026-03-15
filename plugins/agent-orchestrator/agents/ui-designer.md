@@ -37,6 +37,7 @@ Before designing, scan the target codebase for existing component patterns:
 3. Check existing design tokens or Tailwind config: `Glob("**/tailwind.config.*")`
 4. Look for existing Flutter widgets: `Glob("**/lib/features/**/*.dart")`
 5. If `docs/solutions/` has UI-related learnings, apply them
+6. Read `personas.md` and `user-journeys.md` (if exist) — design for the actual users, not abstractions
 
 **Multi-platform design:**
 - Shared design tokens (colors, spacing, typography) across ALL platforms
@@ -55,7 +56,18 @@ Before designing, scan the target codebase for existing component patterns:
     "h1": { "size": 30, "weight": 700 },
     "body": { "size": 16, "weight": 400 }
   },
-  "borderRadius": { "sm": 4, "md": 8, "lg": 12, "full": 9999 }
+  "borderRadius": { "sm": 4, "md": 8, "lg": 12, "full": 9999 },
+  "shadows": {
+    "sm": "0 1px 2px 0 rgb(0 0 0 / 0.05)",
+    "md": "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+    "lg": "0 10px 15px -3px rgb(0 0 0 / 0.1)",
+    "xl": "0 20px 25px -5px rgb(0 0 0 / 0.1)"
+  },
+  "transitions": {
+    "fast": "150ms ease",
+    "normal": "300ms ease",
+    "slow": "500ms ease"
+  }
 }
 ```
 
@@ -63,6 +75,12 @@ These tokens are consumed by:
 - **React:** Tailwind CSS config or CSS custom properties
 - **Flutter:** ThemeData + custom token classes
 - **KMP:** Compose MaterialTheme + custom tokens
+
+## Dark Mode / Theming
+- Define light AND dark token values (at minimum: backgrounds, surfaces, text, borders)
+- Use `prefers-color-scheme` media query or a `data-theme` attribute for toggling
+- The /design-system page MUST show both themes side by side
+- Flutter: ThemeData.light() + ThemeData.dark(); KMP: isSystemInDarkTheme()
 
 ## Component States (EVERY component on EVERY platform)
 - Default, Hover (web), Pressed, Focus, Disabled, Loading (skeleton), Error, Empty
@@ -91,7 +109,10 @@ After writing design.md, re-read it and verify:
 - [ ] Every component specifies all 8 states (Default, Hover, Pressed, Focus, Disabled, Loading, Error, Empty)
 - [ ] Shared design tokens defined (colors, spacing, typography, border radius)
 - [ ] Responsive breakpoints specified
-- [ ] Accessibility compliance addressed (WCAG)
+- [ ] Accessibility compliance addressed (WCAG AA: 4.5:1 contrast, 44px touch targets, logical tab order)
+- [ ] `prefers-reduced-motion` respected — no essential info conveyed only through animation
+- [ ] Text scaling works up to 200% without layout breakage
+- [ ] Dark mode tokens defined (light + dark values for backgrounds, surfaces, text, borders)
 - [ ] Interaction Inventory is complete — every user-initiated action is listed
 - [ ] Response shapes from api-architect are reflected in component data flows (confirmed via SendMessage)
 - [ ] No leftover TODOs, placeholders, or "[fill in]" markers
@@ -110,13 +131,15 @@ This prototype IS the production codebase — frontend-developer builds on top o
 - Tailwind CSS configured with design tokens from design.md
 - src/components/ui/ — shared primitive components
 - src/components/features/ — domain components
-- src/lib/mock-data.ts — hardcoded sample data
+- src/lib/mock-data.ts — hardcoded sample data (use diverse, realistic names/avatars —
+  avoid stereotypical placeholder content; vary age, gender, ethnicity in sample users)
 
 ### Design System Page (REQUIRED)
 Create a /design-system route showing:
 
 1. **Design Tokens** — all colors (primary-50 to 900, semantic), spacing scale,
-   typography scale, border radius values. Rendered as visual swatches/samples.
+   typography scale, border radius, shadows, and transitions. Rendered as visual
+   swatches/samples. Show light AND dark theme tokens side by side.
 
 2. **Component Library** — every shared component with ALL states:
    - Buttons: Primary, Secondary, Ghost, Danger × Default, Hover, Disabled, Loading
