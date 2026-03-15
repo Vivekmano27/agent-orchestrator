@@ -106,9 +106,14 @@ fi
 ╚════════════════════════════════════════════╝
 ```
 
-## Coverage Below Threshold → Return to Agent
-If any service is below threshold, the project-orchestrator sends that agent back:
-- NestJS below 80% → back to backend-developer
-- Python below 80% → back to python-developer
-- React/Flutter/KMP below 75% → back to frontend-developer
-- Any service below → DO NOT proceed to Phase 5 (Security)
+## Coverage Below Threshold → Phase 4→3 Feedback Loop
+If any service is below threshold, the project-orchestrator triggers the Phase 4→3 Feedback Loop
+(see project-orchestrator.md "Phase 4→3 Feedback Loop" section):
+- NestJS / backend business logic below 80% → back to backend-developer
+- Python / AI service below 80% → back to python-developer
+- React / Next.js frontend below 75% → back to frontend-developer
+- Flutter below 75% → back to flutter-developer
+- KMP shared below 75% → back to kmp-developer
+- API gateway / shared libs below 80% → back to senior-engineer
+- Any service below threshold → DO NOT proceed to Phase 5 (Security)
+- Max 2 round-trips before escalating to user

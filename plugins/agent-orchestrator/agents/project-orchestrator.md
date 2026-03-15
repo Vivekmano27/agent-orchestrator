@@ -202,6 +202,87 @@ When user selects "Request changes":
 4. **Cascade rule for Gate 1:** If PM revises requirements.md, BA and UX MUST re-run — their outputs (business-rules.md, ux.md) depend on the PRD and are now stale.
 5. Re-present the gate with updated summary
 
+### Handling "More testing needed" at Gate 4
+When user selects "More testing needed":
+1. Ask what's needed (use AskUserQuestion with options):
+   ```
+   AskUserQuestion(
+     question="What additional testing is needed?",
+     options=[
+       "Coverage too low — send back to implementation agents to add tests",
+       "Specific tests failing — fix implementation bugs",
+       "Need more E2E/integration tests",
+       "Re-run all tests (no code changes needed)",
+       "Other (describe)"
+     ]
+   )
+   ```
+2. **Route based on response:**
+   - **Coverage too low / Tests failing / More tests needed** → triggers Phase 4→3 Feedback Loop (see below)
+   - **Re-run all tests** → re-dispatch Phase 4 agents (test-engineer + qa-automation)
+   - **Other** → ask for details, dispatch appropriate agent
+
+### Phase 4→3 Feedback Loop (Test Failure Recovery)
+When Phase 4 testing reveals failures or insufficient coverage, the orchestrator loops work back to Phase 3:
+
+**Step 1 — Identify failures:**
+Read test-engineer and qa-automation reports. Categorize failures by service:
+- Which services have coverage < 80%?
+- Which specific tests are failing?
+- Which files need changes?
+
+**Step 2 — Map failures to agents** (using the file ownership matrix from feature-team):
+
+| Service/Path | Route to |
+|---|---|
+| `services/core-service/`, backend business logic | backend-developer |
+| `services/api-gateway/`, `services/shared/` | senior-engineer |
+| `services/ai-service/`, Python code | python-developer |
+| `services/web-app/`, React/Next.js frontend | frontend-developer |
+| `services/flutter-app/` | flutter-developer |
+| `services/kmp-shared/` | kmp-developer |
+| `.claude/agents/`, agent specs | agent-native-developer |
+
+**Step 3 — Re-dispatch to Phase 3 agents:**
+```
+Agent(
+  subagent_type="agent-orchestrator:[agent-name]",
+  prompt="PHASE 4→3 FEEDBACK: Tests failed or coverage insufficient.
+  Feature: [feature-name]. Spec directory: .claude/specs/[feature]/
+
+  FAILURES TO FIX:
+  [list of failing tests or coverage gaps from test-engineer report]
+
+  RULES:
+  - Fix ONLY the identified failures — do not refactor unrelated code
+  - Add tests to bring coverage above 80% for your service
+  - Run tests locally before marking done
+  - Commit fixes as: fix(scope): [description of fix]
+
+  Previous implementation files: [list from Phase 3 report]"
+)
+```
+
+**Step 4 — Re-run Phase 4:**
+After all re-dispatched agents complete, re-run Phase 4 (test-engineer + qa-automation) to verify fixes.
+
+**Step 5 — Max retries:**
+- Allow **2 Phase 4→3 round-trips** maximum
+- If still failing after 2 loops → escalate to user:
+  ```
+  AskUserQuestion(
+    question="Tests still failing after 2 fix attempts.
+    Remaining failures: [list].
+    Coverage: [X]% (target: 80%).",
+    options=[
+      "Let me fix manually — show me the failures",
+      "Lower coverage threshold for this feature",
+      "Skip failing tests and proceed (not recommended)",
+      "Cancel feature"
+    ]
+  )
+  ```
+
 ### Handling "Cancel" at any gate
 When user selects "Cancel":
 1. Confirm: AskUserQuestion("Cancel this feature? Spec files and feature branch will be cleaned up.", options=["Yes, cancel and clean up", "No, go back"])
@@ -554,4 +635,6 @@ This creates a feedback loop: mistakes → lessons → rules → prevention.
 - If ANY agent fails → retry once, then report to user
 - If agents produce conflicting outputs → resolve based on PRD (product-manager wins)
 - If security-auditor finds CRITICAL → block deployment, report immediately
-- If test-engineer reports < 80% coverage → send back to implementation agents
+- If test-engineer reports < 80% coverage → trigger Phase 4→3 Feedback Loop (max 2 round-trips, then escalate to user)
+- If Phase 4→3 loop exhausts retries → present failures to user with manual fix option
+- If review-team finds CRITICAL issues → route back to owning agent before proceeding to Phase 7
