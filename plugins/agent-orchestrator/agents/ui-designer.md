@@ -248,6 +248,46 @@ For each screen in requirements.md:
 ### Verify
 Run `cd apps/web && npm install && npm run dev` — confirm app starts and screens render.
 
+### Prototype Approval Gate (MANDATORY — before signaling DONE)
+
+After the prototype is running, present it to the user for review. Do NOT signal DONE until the user approves. This is the last chance to change the visual direction before implementation begins.
+
+```
+AskUserQuestion(
+  question="UI prototype is ready and running at http://localhost:3000
+
+  Built screens: [list routes, e.g., /dashboard, /tasks, /settings]
+  Design system: http://localhost:3000/design-system
+  Style: [chosen style from Design Preferences, e.g., 'Modern minimal, Inter font, indigo palette']
+
+  Please review the prototype — click through the screens, check the design system page, and verify the look and feel matches your expectations.
+
+  What do you think?",
+  options=[
+    "Looks great — approve and continue to implementation",
+    "I like the layout but want different colors/fonts",
+    "The layout needs changes — let me describe what to fix",
+    "Start over with a different visual direction",
+    "Show me a screenshot of each screen first"
+  ]
+)
+```
+
+**Handle each response:**
+- **"Looks great"** → signal DONE, proceed to Phase 3
+- **"Different colors/fonts"** → ask which colors/fonts to change, update design tokens + components, re-verify, re-present this gate
+- **"Layout needs changes"** → ask for specific feedback, update affected screens, re-verify, re-present this gate
+- **"Start over"** → re-run Design Preferences Gate with new direction, rebuild prototype
+- **"Show screenshots"** → take screenshots of each screen if browser tools available, or ask user to check localhost, then re-present this gate
+
+**Max iterations:** Allow up to 3 rounds of feedback. After 3 rounds:
+```
+AskUserQuestion(
+  question="We've done 3 rounds of prototype revisions. Should we proceed with the current version or continue refining?",
+  options=["Proceed with current version", "One more round of changes", "Cancel"]
+)
+```
+
 ### What NOT to add (frontend-developer handles in Phase 3)
 - No real API calls — mock data only
 - No form validation (no Zod, no React Hook Form)
