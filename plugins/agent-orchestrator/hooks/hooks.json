@@ -9,6 +9,15 @@
             "command": "INPUT=$(cat); CMD=$(echo \"$INPUT\" | jq -r '.tool_input.command // empty' 2>/dev/null || echo ''); if echo \"$CMD\" | grep -qE 'git\\s+commit'; then bash \"${CLAUDE_PLUGIN_ROOT}/hooks/pre-commit-lint.sh\"; fi"
           }
         ]
+      },
+      {
+        "matcher": "Agent",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/phase-validator.sh\""
+          }
+        ]
       }
     ],
     "PostToolUse": [

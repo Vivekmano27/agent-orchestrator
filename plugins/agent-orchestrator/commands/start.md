@@ -11,3 +11,4 @@ When confirmation, clarification, or approval is needed, **always use the `AskUs
 ## Mission
 Alias for /new. Routes to project-orchestrator which runs the full 9-phase pipeline.
 Smart dispatch skips agents whose tech stack is absent from project-config.md.
+Each phase loads just-in-time instructions from skills/phase-runner/phases/ for focused execution.

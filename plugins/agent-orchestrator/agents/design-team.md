@@ -15,15 +15,18 @@ permissionMode: acceptEdits
 ## Role
 You are dispatched by the project-orchestrator for **Phase 2 (Design)** of the pipeline. You manage 5 design agents that **communicate with each other in real-time** via SendMessage to negotiate and align their specs. You do NOT handle requirements (Phase 1), tech stack (Phase 0.5), or task decomposition (Phase 2.1).
 
-## Mechanism: Agent Teams with peer-to-peer coordination
+## Dispatch Mechanism
 
-This team uses **Agent Teams** — agents communicate via `SendMessage` for real-time negotiation. This is critical because design specs are interdependent:
+This team dispatches design agents as **subagents** by default. If Agent Teams (SendMessage) is available, it adds real-time peer negotiation as an enhancement.
+
+Design specs are interdependent:
 - api-architect needs database-architect to confirm entity shapes before defining request/response DTOs
 - database-architect needs api-architect to confirm which queries will be needed before designing indexes
 - ui-designer needs api-architect to confirm endpoint shapes before specifying component data flows
 - agent-native-designer needs all three to confirm the tool surface before mapping parity
 
-**File-based coordination alone cannot capture this.** Without SendMessage, each agent makes independent assumptions that may conflict. With SendMessage, they negotiate in real-time and produce aligned specs.
+In **subagent mode**, each agent reads shared files and makes independent decisions. The cross-review step (STEP 6) catches misalignments after the fact.
+In **Agent Teams mode**, agents negotiate in real-time via SendMessage AND cross-review confirms alignment.
 
 ## Team Composition
 ```
@@ -92,99 +95,104 @@ Scan frontmatter (title, category, tags) for relevance. Include applicable learn
 **2d — Broadcast to team:**
 After writing, message all teammates: "Research complete. Read .claude/specs/[feature]/research-context.md before starting design. Key findings: [2-3 bullets]"
 
-### STEP 3 — Create the agent team
+### STEP 3 — Dispatch design agents
 
-Tell the team lead to create the design team with roles and coordination instructions:
+**3a. Dispatch system-architect FIRST (synchronous — everyone depends on it):**
 
 ```
-Create an agent team to design production-ready specs for [feature]:
-
-- system-architect: Design service boundaries, infrastructure topology, and ADRs.
-  Read .claude/specs/[feature]/requirements.md, project-config.md, and research-context.md (if exists).
-  Do your own Pre-Design Research (institutional learnings + external research gate for BIG tasks).
-  You run FIRST. Write architecture.md, then message all teammates with a summary
-  of the architecture decisions so they can start their work aligned.
-  SELF-REVIEW before signaling DONE.
-
-- api-architect: Design all API endpoints (REST/gRPC), versioning, auth, rate limiting, error codes.
-  Read requirements.md, project-config.md, research-context.md (if exists), and architecture.md (after system-architect shares it).
-  Do your own Pre-Design Research (scan existing API patterns in codebase).
-  COORDINATE with database-architect on entity names and field types via SendMessage.
-  COORDINATE with ui-designer on endpoint shapes and pagination via SendMessage.
-  Write api-spec.md.
-  SELF-REVIEW before signaling DONE.
-
-- database-architect: Design PostgreSQL schema — tables, columns, constraints, indexes, migrations.
-  Read architecture.md, project-config.md, and research-context.md (if exists).
-  Do your own Pre-Design Research (scan existing schema in codebase).
-  COORDINATE with api-architect on entity names, field types, and which queries need indexes via SendMessage.
-  If architecture requires a database, also create docker-compose.dev.yml.
-  Write schema.md.
-  SELF-REVIEW before signaling DONE.
-
-- ui-designer (LEAD): Create design.md, scaffold the Next.js project, build shared
-  components (src/components/ui/), and build the /design-system page with component
-  library + design tokens + platform mapping table.
-  Read requirements.md, ux.md, project-config.md, and research-context.md (if exists).
-  Do your own Pre-Design Research (scan existing component patterns in codebase).
-  COORDINATE with api-architect on endpoint shapes via SendMessage.
-  IMPORTANT: Include an '## Interaction Inventory' section listing every user-initiated action.
-  Write design.md, then scaffold prototype (MEDIUM/BIG only — see Prototype Generation in agent).
-  After shared components are ready, broadcast: "Shared components ready at
-  src/components/ui/. Screen agents can now build pages."
-  SELF-REVIEW the /design-system page before signaling DONE.
-
-- ui-designer (SCREEN AGENTS — BIG tasks only, spawn 2-3 based on screen count):
-  Build specific screen pages using shared components from ui-designer lead.
-  Each screen agent gets assigned screens: "Build pages: /home, /dashboard" or
-  "Build pages: /tasks, /tasks/:id" or "Build pages: /settings, /profile".
-
-  COLLABORATION RULES (enforced via SendMessage):
-  1. BEFORE building, list components you need → message the team
-  2. If a shared component exists in src/components/ui/ → IMPORT it, don't recreate
-  3. If you need a NEW component others might use → propose it via message, wait for
-     agreement, ONE agent builds it in ui/, others import
-  4. AFTER building, share your screen summary with the team
-  5. PEER REVIEW: read each other's screens for visual consistency
-     Flag inconsistencies (custom components vs shared, different spacing, etc.)
-     Agree on fixes before signaling DONE
-
-  For MEDIUM tasks: lead builds ALL screens (no parallel screen agents).
-  For BIG tasks: lead builds shared components + /design-system, then 2-3 screen
-  agents collaborate on pages with the protocol above.
-
-- agent-native-designer: Design agent-native capabilities — parity map, tool definitions, agent features.
-  Read requirements.md, architecture.md, project-config.md, and research-context.md (if exists).
-  Do your own Pre-Design Research (scan existing agent/tool patterns in codebase).
-  COORDINATE with api-architect to confirm which tools map to existing endpoints vs need NEW endpoints.
-  COORDINATE with database-architect to verify full CRUD coverage per entity.
-  COORDINATE with ui-designer to verify every UI action has an agent tool (read Interaction Inventory).
-  Write agent-spec.md.
-  SELF-REVIEW before signaling DONE.
-  [SKIP this agent for SMALL tasks.]
-
-Coordination protocol:
-1. system-architect runs first and broadcasts architecture decisions to all teammates.
-2. All other agents start after receiving the architecture summary.
-3. api-architect and database-architect MUST align on entity names/types before finalizing their specs.
-4. agent-native-designer MUST verify parity with all three peers before finalizing agent-spec.md.
-5. Each agent MUST self-review against their checklist before signaling DONE.
-6. When done, each sends: "DONE + Self-review complete. Fixed [N] issues: [brief list]. Summary: [1-line output summary]"
-
-File ownership is strict: each agent writes ONLY to their assigned file(s).
-All output goes to .claude/specs/[feature]/.
+Agent(
+  subagent_type="agent-orchestrator:system-architect",
+  prompt="Design service boundaries, infrastructure topology, and ADRs for [feature].
+          Read .claude/specs/[feature]/requirements.md, project-config.md, and research-context.md (if exists).
+          Do your own Pre-Design Research (institutional learnings + external research gate for BIG tasks).
+          Write architecture.md to .claude/specs/[feature]/architecture.md.
+          SELF-REVIEW before completing."
+)
 ```
 
-### STEP 4 — Monitor team progress
+Wait for architecture.md to be written.
 
-Wait for all agents to report "DONE" with self-review confirmation. If any agent is stuck or blocked:
-- Check which messages it's waiting for
-- Nudge the blocking agent to respond
-- Allow 1 retry per agent if an agent fails to produce its file
+**3b. Dispatch remaining agents IN PARALLEL (all read architecture.md):**
+
+```
+Agent(
+  subagent_type="agent-orchestrator:api-architect",
+  run_in_background=True,
+  prompt="Design all API endpoints (REST/gRPC), versioning, auth, rate limiting, error codes for [feature].
+          Read requirements.md, project-config.md, research-context.md (if exists), and architecture.md.
+          Do your own Pre-Design Research (scan existing API patterns in codebase).
+          Write api-spec.md to .claude/specs/[feature]/api-spec.md.
+          SELF-REVIEW before completing."
+)
+
+Agent(
+  subagent_type="agent-orchestrator:database-architect",
+  run_in_background=True,
+  prompt="Design PostgreSQL schema — tables, columns, constraints, indexes, migrations for [feature].
+          Read architecture.md, project-config.md, and research-context.md (if exists).
+          Do your own Pre-Design Research (scan existing schema in codebase).
+          If architecture requires a database, also create docker-compose.dev.yml.
+          Write schema.md to .claude/specs/[feature]/schema.md.
+          SELF-REVIEW before completing."
+)
+
+Agent(
+  subagent_type="agent-orchestrator:ui-designer",
+  run_in_background=True,
+  prompt="Create design.md, scaffold the Next.js project, build shared components (src/components/ui/),
+          and build the /design-system page with component library + design tokens + platform mapping table.
+          Read requirements.md, ux.md, project-config.md, and research-context.md (if exists).
+          Do your own Pre-Design Research (scan existing component patterns in codebase).
+          IMPORTANT: Include an '## Interaction Inventory' section listing every user-initiated action.
+          Write design.md, then scaffold prototype (MEDIUM/BIG only — see Prototype Generation in agent).
+          For BIG tasks: after shared components, build screen pages.
+          SELF-REVIEW the /design-system page before completing."
+)
+```
+
+**Conditional: agent-native-designer (MEDIUM/BIG only, skip for SMALL):**
+```
+Agent(
+  subagent_type="agent-orchestrator:agent-native-designer",
+  run_in_background=True,
+  prompt="Design agent-native capabilities — parity map, tool definitions, agent features for [feature].
+          Read requirements.md, architecture.md, project-config.md, and research-context.md (if exists).
+          Do your own Pre-Design Research (scan existing agent/tool patterns in codebase).
+          Write agent-spec.md to .claude/specs/[feature]/agent-spec.md.
+          SELF-REVIEW before completing."
+)
+```
+
+Wait for all background agents to complete.
+
+**3c. IF Agent Teams available — run peer negotiation:**
+
+If `SendMessage` is available, use it to coordinate entity name alignment between agents:
+- api-architect ↔ database-architect: align entity names, field types, enum values
+- api-architect ↔ ui-designer: align endpoint shapes with component data flows
+- agent-native-designer ↔ api-architect: confirm tool-to-endpoint mappings
+
+If SendMessage is NOT available, proceed directly to cross-review (STEP 6).
+
+### STEP 4 — Verify all agents produced their files
+
+Check that each dispatched agent produced its expected output file:
+- `architecture.md` — system-architect
+- `api-spec.md` — api-architect
+- `schema.md` — database-architect
+- `design.md` — ui-designer (if dispatched)
+- `agent-spec.md` — agent-native-designer (if dispatched)
+
+If any file is missing, retry the specific agent once.
 
 ### STEP 5 — Self-review verification
 
-Verify each agent included "Self-review complete" in their DONE message. If any agent skipped self-review, ask them to re-read their spec against their checklist before proceeding.
+Read each spec file and verify it has substantive content (not just headers or stubs):
+- `api-spec.md` should define endpoints with HTTP methods, paths, and shapes
+- `schema.md` should define tables with columns and types
+- `design.md` should define components with props and states
+
+If any spec is a stub → re-dispatch that agent with: "Your [file] output is incomplete — it contains only headers/stubs. Write the full spec with detailed content."
 
 ### STEP 6 — Cross-peer review via SendMessage (MEDIUM/BIG only, skip for SMALL)
 
@@ -329,16 +337,3 @@ Report back:
 - Communication patterns (REST vs gRPC vs WebSocket)
 - Shared infrastructure decisions (cache, queue, CDN)
 
----
-
-## Fallback: Subagent Mode (when Agent Teams is unavailable)
-
-If Agent Teams (`SendMessage`) is not available, fall back to subagent dispatch:
-
-1. Spawn system-architect synchronously → writes architecture.md
-2. Spawn api-architect + database-architect + ui-designer + agent-native-designer in parallel via `Agent(run_in_background=True)`
-3. Wait for all to complete
-4. Run cross-review (Step 4 above)
-5. Generate SUMMARY.md
-
-In this mode, agents cannot negotiate. Each reads shared files and makes independent decisions. The cross-review step catches misalignments after the fact.

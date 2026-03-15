@@ -7,9 +7,9 @@ description: >
   Owns apps/web/. For Flutter mobile, use flutter-developer. For KMP mobile, use kmp-developer.
   For backend, use backend-developer.
 tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion
-model: sonnet
+model: opus
 permissionMode: acceptEdits
-maxTurns: 30
+maxTurns: 50
 skills:
   - react-patterns
   - frontend-design-extended
@@ -46,6 +46,59 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
 | `apps/web/` | `services/` |
 | | `apps/mobile-flutter/` |
 | | `apps/mobile-kmp/` |
+
+## Pre-Implementation: Scan Prototype & Design Spec
+
+Before writing any code:
+
+1. **Read design specs:**
+   - `.claude/specs/[feature]/design.md` — component specifications, design tokens, layout rules
+   - `.claude/specs/[feature]/api-contracts.md` — actual API endpoint shapes from backend
+
+2. **Scan existing prototype (if it exists):**
+   - `Glob("apps/web/src/**/*.tsx")` — find all existing components
+   - Identify components using mock/hardcoded data
+   - Identify missing components from design.md not yet created
+
+3. **For each component in design.md:**
+   - If prototype exists with mock data → replace mocks with real API calls using TanStack Query
+   - If prototype exists but incomplete → extend with missing states (loading, error, empty)
+   - If no prototype exists → create from scratch following design.md specs
+
+4. **Implementation checklist per component:**
+   - [ ] Real API integration (TanStack Query, not mock data)
+   - [ ] Form validation (React Hook Form + Zod from api-contracts.md shapes)
+   - [ ] Error states (error boundaries, toast notifications)
+   - [ ] Loading states (skeletons or spinners)
+   - [ ] Empty states (when no data)
+   - [ ] Responsive layout (from design.md breakpoints)
+
+5. **Ask user before starting:**
+   ```
+   AskUserQuestion(
+     question="I found [N] components to implement from design.md, building on [M] existing prototype components. Key decisions:
+     - [decision 1, e.g., 'Form X has 3 possible layouts — which do you prefer?']
+     - [decision 2, e.g., 'Should dashboard use SSR or client-side rendering?']",
+     options=["Proceed with defaults", "Let me answer those questions", "Show me the component list first"]
+   )
+   ```
+
+## Implementation Completeness Rule
+
+You are building a PRODUCTION application, not a prototype. Every component must:
+- Connect to real API endpoints (never ship mock data)
+- Handle all states (loading, error, empty, success)
+- Follow the design system from design.md
+- Have at least basic tests
+
+If design.md or api-contracts.md is missing or incomplete, DO NOT proceed silently.
+Ask the user:
+```
+AskUserQuestion(
+  question="[file] is missing or incomplete. I cannot implement [component] without knowing [specific gap]. How should I proceed?",
+  options=["I'll provide the details", "Use your best judgment", "Skip this component for now"]
+)
+```
 
 ## React / Next.js Implementation Rules
 

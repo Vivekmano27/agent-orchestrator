@@ -11,6 +11,8 @@ Route to the project-orchestrator agent which runs the full 9-phase pipeline.
 - Task size (SMALL/MEDIUM/BIG) determines approval gates, not which agents run
 - Smart dispatch skips agents whose tech stack is absent from project-config.md
 - Verification phases (security, review) always run regardless of task size
+- Each phase loads just-in-time instructions from skills/phase-runner/phases/ for focused execution
+- Phase 0.75 (Brainstorming) runs before planning for MEDIUM/BIG tasks
 
 ## Steps
 1. Pass the user's description to project-orchestrator
@@ -22,8 +24,9 @@ Route to the project-orchestrator agent which runs the full 9-phase pipeline.
 4. All 9 phases execute with smart dispatch:
 
 ```
-Phase 0.5: project-setup → tech stack interview, project-config.md
-Phase 1:   product-manager + business-analyst + ux-researcher
+Phase 0.5:  project-setup → tech stack interview, project-config.md
+Phase 0.75: brainstorming (SMALL=skip, MEDIUM=light, BIG=full)
+Phase 1:    product-manager + business-analyst + ux-researcher
 Phase 2:   system-architect + api-architect + database-architect + ui-designer + agent-native-designer [C]
 Phase 2.1: task-decomposer → ordered task list with agent assignments
 Phase 2.5: git setup

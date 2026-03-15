@@ -41,7 +41,30 @@ quality-team (you — orchestrator)
 
 ## Execution Protocol
 
-### STEP 1 — Create test-plan.md
+### STEP 1 — Requirements Traceability Check (before test-plan.md)
+
+Cross-check that every acceptance criterion in requirements.md has corresponding implementation and test coverage.
+
+**Process:**
+1. Read `.claude/specs/[feature]/requirements.md` — extract all acceptance criteria
+2. Read `.claude/specs/[feature]/api-contracts.md` (or fall back to `api-spec.md`) — extract all implemented endpoints
+3. For each acceptance criterion:
+   - Map to API endpoint(s) that fulfill it
+   - If NO endpoint maps → flag as "UNIMPLEMENTED REQUIREMENT"
+4. Write traceability matrix to test-plan.md (STEP 1.5 output feeds into test-plan):
+   ```
+   ## Requirements Traceability
+   | Requirement | Acceptance Criterion | API Endpoint | Status |
+   |-------------|---------------------|--------------|--------|
+   | US-001 | User can create task | POST /tasks | COVERED |
+   | US-002 | User can assign task | PATCH /tasks/:id | COVERED |
+   | US-003 | User gets email on assignment | — | MISSING |
+   ```
+5. If ANY requirement is MISSING → report to orchestrator for Phase 4→3 feedback loop. Include the missing requirements in the test-report.md as "UNIMPLEMENTED" — these are not test failures, they are implementation gaps.
+
+**On Phase 4→3 re-runs:** SKIP this step. Traceability has not changed.
+
+### STEP 1.5 — Create test-plan.md
 
 Read these spec files from `.claude/specs/[feature]/`:
 - `requirements.md` — user stories and acceptance criteria
@@ -100,7 +123,7 @@ this plan, write them and include them in your report.
 
 **On Phase 4→3 re-runs:** SKIP this step. The test plan has not changed — only the code changed. Proceed directly to STEP 3.
 
-### STEP 2 — Gate 3.5: User approves test plan
+### STEP 2 — Gate 3.5: User approves test plan (includes traceability results)
 
 ```
 AskUserQuestion(

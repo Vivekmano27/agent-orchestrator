@@ -131,7 +131,57 @@ for agent_file in "$SCRIPT_DIR"/agents/*.md; do
 done
 echo -e "  ${GREEN}Skill reference check done${NC}"
 
-# 8. Check agents that write output have Write tool
+# 8. Check phase-runner skill and phase files
+echo -e "Phase runner check:"
+PHASE_DIR="$SCRIPT_DIR/skills/phase-runner/phases"
+if [ -f "$SCRIPT_DIR/skills/phase-runner/SKILL.md" ]; then
+  echo -e "  ${GREEN}phase-runner/SKILL.md exists${NC}"
+else
+  echo -e "  ${RED}ERROR: skills/phase-runner/SKILL.md not found${NC}"
+  ERRORS=$((ERRORS + 1))
+fi
+
+EXPECTED_PHASES=("phase-0.md" "phase-0-5.md" "phase-0-75.md" "phase-1.md" "phase-2.md" "phase-2-1.md" "phase-2-5.md" "phase-3.md" "phase-4.md" "phase-5.md" "phase-6.md" "phase-7.md" "phase-8.md")
+PHASE_COUNT=0
+for phase_file in "${EXPECTED_PHASES[@]}"; do
+  if [ -f "$PHASE_DIR/$phase_file" ]; then
+    PHASE_COUNT=$((PHASE_COUNT + 1))
+  else
+    echo -e "  ${RED}ERROR: Missing phase file: phases/$phase_file${NC}"
+    ERRORS=$((ERRORS + 1))
+  fi
+done
+echo -e "  Phase files: $PHASE_COUNT/13"
+if [ "$PHASE_COUNT" -eq 13 ]; then
+  echo -e "  ${GREEN}All phase files present${NC}"
+fi
+
+# Check orchestrator references phase-runner skill
+if grep -q "phase-runner" "$SCRIPT_DIR/agents/project-orchestrator.md"; then
+  echo -e "  ${GREEN}Orchestrator references phase-runner${NC}"
+else
+  echo -e "  ${RED}ERROR: Orchestrator does not reference phase-runner skill${NC}"
+  ERRORS=$((ERRORS + 1))
+fi
+echo -e "  ${GREEN}Phase runner check done${NC}"
+
+# 9. Check phase-validator hook exists
+echo -e "Phase validator hook check:"
+if [ -f "$SCRIPT_DIR/hooks/phase-validator.sh" ]; then
+  echo -e "  ${GREEN}phase-validator.sh exists${NC}"
+  if grep -q "Agent" "$SCRIPT_DIR/hooks/hooks.json" | grep -q "phase-validator" 2>/dev/null || grep -q "phase-validator" "$SCRIPT_DIR/hooks/hooks.json"; then
+    echo -e "  ${GREEN}Registered in hooks.json${NC}"
+  else
+    echo -e "  ${YELLOW}WARNING: phase-validator.sh may not be registered in hooks.json${NC}"
+    WARNINGS=$((WARNINGS + 1))
+  fi
+else
+  echo -e "  ${YELLOW}WARNING: hooks/phase-validator.sh not found${NC}"
+  WARNINGS=$((WARNINGS + 1))
+fi
+echo -e "  ${GREEN}Phase validator check done${NC}"
+
+# 10. Check agents that write output have Write tool
 echo -e "Write tool check for output-producing agents:"
 for agent_name in business-analyst security-auditor code-reviewer performance-reviewer review-team; do
   agent_file="$SCRIPT_DIR/agents/$agent_name.md"
