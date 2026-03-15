@@ -56,6 +56,7 @@ Each task gets exactly ONE agent from this list:
 | `senior-engineer` | `services/core-service/src/common/`, `services/api-gateway/`, `services/shared/` |
 | `python-developer` | `services/ai-service/` |
 | `frontend-developer` | `apps/web/`, `apps/mobile-flutter/`, `apps/mobile-kmp/` |
+| `agent-native-developer` | `.claude/agents/`, `.claude/skills/`, `.claude/commands/`, `packages/mcp-server/` |
 
 Assignment rule: match the task's file paths to the ownership matrix above.
 
@@ -63,7 +64,10 @@ Assignment rule: match the task's file paths to the ownership matrix above.
 When `agent-spec.md` is present, generate additional tasks for agent-native implementation:
 - Tool endpoints marked `(NEW)` in the parity map → assign to `backend-developer` (NestJS) or `python-developer` (Python) in the **API layer**
 - Tool endpoints marked `(in api-spec.md)` → no additional task (already covered by API layer tasks)
-- Agent definition files (`.claude/agents/*.md` in target project) → assign to `senior-engineer` in the **Integration** layer
+- Agent definition files (`.claude/agents/*.md` in target project) → assign to `agent-native-developer` in the **Integration** layer
+- Skill files (`.claude/skills/*/SKILL.md` in target project) → assign to `agent-native-developer` in the **Integration** layer
+- Command files (`.claude/commands/*.md` in target project) → assign to `agent-native-developer` in the **Integration** layer
+- MCP server implementation (`packages/mcp-server/`) → assign to `agent-native-developer` in the **Integration** layer
 - Parity test tasks (1 per entity: verify CRUD tools work) → assign to `test-engineer` in the **Quality** layer (note: Phase 4 handles full testing, but parity verification tasks should be listed for traceability)
 
 ### Step 4 — Risk assessment
@@ -86,7 +90,7 @@ Verify coverage:
 - Every UI component in `design.md` has a task
 - Every business rule in `business-rules.md` is covered by service or API tasks
 - Every user story in `requirements.md` is traceable to one or more tasks
-- If `agent-spec.md` exists: every tool marked `(NEW)` has an implementation task, every agent feature has a definition task
+- If `agent-spec.md` exists: every tool marked `(NEW)` has an implementation task, every agent feature has a definition task, every skill/command/MCP tool has a task assigned to `agent-native-developer`
 
 ### Step 6 — Validate dependency graph
 - Dependencies MUST form a valid DAG — no circular dependencies
@@ -113,6 +117,7 @@ Verify coverage:
 | senior-engineer | N | [total effort] |
 | python-developer | N | [total effort] |
 | frontend-developer | N | [total effort] |
+| agent-native-developer | N | [total effort] |
 
 ---
 

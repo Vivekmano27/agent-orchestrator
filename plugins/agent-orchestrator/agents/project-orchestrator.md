@@ -63,6 +63,7 @@ PHASE 2.5: GIT SETUP (always — YOU do this directly, before code is written)
   └── project-orchestrator → git init, .gitignore, feature branch, initial commit
 
 PHASE 3: IMPLEMENTATION (always)
+  ├── agent-native-developer → agent definitions, skills, commands, MCP servers (two-pass: scaffold + wire)
   ├── senior-engineer      → cross-service features, complex integration
   ├── backend-developer    → NestJS modules, API endpoints, middleware
   ├── frontend-developer   → React components, Flutter widgets, KMP UI
@@ -76,8 +77,9 @@ PHASE 5: SECURITY (always)
   └── security-auditor     → OWASP audit, STRIDE, secrets scan, dependency audit
 
 PHASE 6: REVIEW (always)
-  ├── code-reviewer        → correctness, patterns, testing, architecture
-  └── performance-reviewer → N+1 queries, re-renders, indexes, bundle size
+  ├── code-reviewer          → correctness, patterns, testing, architecture
+  ├── performance-reviewer   → N+1 queries, re-renders, indexes, bundle size
+  └── agent-native-reviewer  → agent definitions, skills, commands, MCP tools, parity
 
 PHASE 7: DEVOPS & DEPLOYMENT (always)
   ├── devops-engineer      → CI/CD pipeline, Docker, Terraform, K8s, monitoring
@@ -198,7 +200,7 @@ After each phase completes, verify expected output files exist:
 **After Phase 1:** requirements.md, business-rules.md, ux.md
 **After Phase 2:** architecture.md, api-spec.md, schema.md, design.md, agent-spec.md (MEDIUM/BIG only), SUMMARY.md
 **After Phase 2.1:** tasks.md
-**After Phase 3:** api-contracts.md
+**After Phase 3:** api-contracts.md, `.claude/agents/` directory exists (when agent-spec.md was present in Phase 2)
 **After Phase 5:** security-audit.md
 **After Phase 8:** Check that at least one documentation file was created (README.md, docs/API.md, or CHANGELOG.md)
 

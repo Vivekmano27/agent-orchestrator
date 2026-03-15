@@ -26,13 +26,14 @@ This team uses **subagents** (Agent tool with `run_in_background=True`). All 3 r
 ## Team Composition
 ```
 review-team (you — orchestrator)
-├── code-reviewer         → code correctness, patterns, test coverage
-├── security-auditor      → OWASP Top 10, auth, secrets, dependencies
-├── performance-reviewer  → N+1 queries, re-renders, indexes, bundle size
-└── spec-tracer           → requirements coverage, acceptance criteria, task completion
+├── code-reviewer          → code correctness, patterns, test coverage
+├── security-auditor       → OWASP Top 10, auth, secrets, dependencies
+├── performance-reviewer   → N+1 queries, re-renders, indexes, bundle size
+├── agent-native-reviewer  → agent definitions, skills, commands, MCP tools, parity coverage
+└── spec-tracer            → requirements coverage, acceptance criteria, task completion
 ```
 
-**Note:** spec-tracer runs for MEDIUM and BIG tasks only. For SMALL tasks, skip it (3 reviewers are sufficient).
+**Note:** spec-tracer runs for MEDIUM and BIG tasks only. agent-native-reviewer runs when agent-native artifacts exist (`.claude/agents/` is present). For SMALL tasks without agent-native artifacts, skip both (3 reviewers are sufficient).
 
 ## Execution Protocol (SUBAGENT MODE — default)
 
@@ -55,6 +56,19 @@ Agent(
   subagent_type="agent-orchestrator:performance-reviewer",
   run_in_background=True,
   prompt="Review [feature/files] for performance issues. Check: N+1 queries, unnecessary re-renders, missing indexes, bundle size, memory leaks, API latency. Output findings organized by severity: Critical / High / Medium / Low."
+)
+
+# When agent-native artifacts exist (.claude/agents/ is present):
+Agent(
+  subagent_type="agent-orchestrator:agent-native-reviewer",
+  run_in_background=True,
+  prompt="Review all agent-native artifacts for [feature]. Check: agent definition quality,
+          skill/command completeness, MCP server best practices, parity coverage against
+          agent-spec.md, CRUD completeness, tech-stack alignment with project-config.md,
+          and identify missing artifacts that should exist.
+          Spec directory: .claude/specs/[feature]/
+          Output findings to .claude/specs/[feature]/agent-native-review.md
+          organized by severity: Critical / High / Medium / Low."
 )
 
 # MEDIUM/BIG only — skip for SMALL tasks:
@@ -105,10 +119,11 @@ After all 3 complete, merge findings into a single report:
 | User Story | Implemented? | Tests? | Edge Cases? | Notes |
 
 ## Reviewer Summary
-- Quality:      [pass/fail] — [key issues]
-- Security:     [pass/fail] — [key issues]
-- Performance:  [pass/fail] — [key issues]
-- Traceability: [pass/fail] — [stories not fully covered]
+- Quality:       [pass/fail] — [key issues]
+- Security:      [pass/fail] — [key issues]
+- Performance:   [pass/fail] — [key issues]
+- Agent-Native:  [pass/fail] — parity X%, [key issues] (if artifacts exist)
+- Traceability:  [pass/fail] — [stories not fully covered]
 
 ## Recommendation
 [ ] Approve — no critical/high issues

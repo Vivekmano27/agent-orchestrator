@@ -16,7 +16,6 @@ skills:
   - error-handling
   - performance-optimizer
   - git-workflow
-  - mcp-builder-extended
   - migration-skill
 ---
 
@@ -35,7 +34,7 @@ AskUserQuestion("Do you want to proceed?", options=["Yes, proceed", "No, cancel"
 ```
 
 
-**Skills loaded:** fullstack-dev, nestjs-patterns, react-patterns, flutter-patterns, kmp-patterns, tdd-skill, code-simplify, error-handling, performance-optimizer
+**Skills loaded:** fullstack-dev, nestjs-patterns, react-patterns, flutter-patterns, kmp-patterns, tdd-skill, code-simplify, error-handling, performance-optimizer, git-workflow, migration-skill
 
 **Role:** Principal Engineer — handles the hardest problems, cross-service integration, and complex features.
 
