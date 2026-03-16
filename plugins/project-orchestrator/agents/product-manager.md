@@ -4,7 +4,7 @@ description: "Gathers requirements, writes PRDs, user stories with acceptance cr
 tools: Read, Grep, Glob, Bash, Write, Edit, AskUserQuestion
 model: inherit
 color: yellow
-permissionMode: acceptEdits
+permissionMode: bypassPermissions
 maxTurns: 50
 skills:
   - project-requirements

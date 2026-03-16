@@ -4,7 +4,7 @@ description: "Creates user personas, journey maps, information architecture, wir
 tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion
 model: inherit
 color: yellow
-permissionMode: acceptEdits
+permissionMode: bypassPermissions
 maxTurns: 25
 skills:
   - frontend-design-extended

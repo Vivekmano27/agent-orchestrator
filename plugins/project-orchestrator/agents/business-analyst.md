@@ -4,7 +4,7 @@ description: "Analyzes business processes, documents workflows, creates business
 tools: Read, Grep, Glob, Bash, Write, AskUserQuestion
 model: inherit
 color: yellow
-permissionMode: default
+permissionMode: bypassPermissions
 maxTurns: 20
 skills:
   - spec-driven-dev
