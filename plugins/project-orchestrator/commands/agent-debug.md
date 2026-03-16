@@ -102,10 +102,11 @@ When showing all agents for a feature:
 |    AGENT DEBUG — water-delivery (all agents)      |
 +==================================================+
 |                                                   |
-|  PHASE 1 — Planning                               |
+|  PHASE 1 — Planning (via planning-team)              |
 |  [x] product-manager    DONE      (8m 12s)       |
 |  [x] business-analyst   DONE      (3m 45s)       |
 |  [x] ux-researcher      DONE      (5m 20s)       |
+|  [x] requirements-reviewer DONE   (2m 10s)       |
 |                                                   |
 |  PHASE 2 — Design                                 |
 |  [x] system-architect   DONE      (6m 30s)       |
@@ -185,8 +186,9 @@ If user asks for timeline view:
 14:34:10  product-manager     scope-discipline     START
 ...
 14:38:13  product-manager     DONE (8m12s)
-14:38:15  business-analyst    START
-14:38:15  ux-researcher       START (parallel)
+14:38:15  business-analyst    START (via planning-team)
+14:41:50  business-analyst    DONE (3m35s)
+14:41:52  ux-researcher       START (via planning-team)
 ...
 ```
 

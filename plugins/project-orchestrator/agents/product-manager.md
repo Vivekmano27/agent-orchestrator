@@ -61,7 +61,8 @@ Bash: echo "Do you want to proceed?"
      - If existing code found → make questions more targeted, less from-scratch
      - If no existing code (greenfield) → proceed normally
 4. **Tech stack is already decided.** It's in `project-config.md`. Focus on WHAT to build (features, user stories, acceptance criteria), not HOW to build it. Do NOT ask about frameworks, databases, auth strategy, CI/CD, or infrastructure.
-5. Determine how many questions are needed (see "When to stop asking" below).
+5. **Research context** — If `.claude/specs/[feature]/research-context.md` exists (written by planning-team), read it for codebase patterns and institutional learnings. Use these to make your questions more targeted.
+6. Determine how many questions are needed (see "When to stop asking" below).
 
 ### Step 0.5 — Requirements Clarity Assessment
 

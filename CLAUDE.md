@@ -140,7 +140,7 @@ gates determined by task size.
 
 Pipeline dispatch model (hybrid):
 - Phase 0.5 (Project Setup): orchestrator dispatches project-setup agent
-- Phase 1 (Planning): orchestrator dispatches specialist agents directly
+- Phase 1 (Planning): orchestrator dispatches planning-team (sequential coordinator)
 - Phase 2 (Design): orchestrator dispatches design-team (Agent Teams peer-to-peer)
 - Phase 3 (Build): orchestrator dispatches feature-team (Agent Teams peer-to-peer)
 - Phase 4 (Testing): orchestrator dispatches quality-team (Agent Teams peer-to-peer)

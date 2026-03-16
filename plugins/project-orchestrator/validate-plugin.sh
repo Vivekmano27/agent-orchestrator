@@ -183,7 +183,7 @@ echo -e "  ${GREEN}Phase validator check done${NC}"
 
 # 10. Check agents that write output have Write tool
 echo -e "Write tool check for output-producing agents:"
-for agent_name in business-analyst security-auditor code-reviewer performance-reviewer review-team; do
+for agent_name in business-analyst security-auditor code-reviewer performance-reviewer review-team requirements-reviewer; do
   agent_file="$SCRIPT_DIR/agents/$agent_name.md"
   if [ -f "$agent_file" ]; then
     if ! head -20 "$agent_file" | grep "^tools:" | grep -q "Write"; then

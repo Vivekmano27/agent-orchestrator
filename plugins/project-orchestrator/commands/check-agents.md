@@ -19,7 +19,7 @@ For each expected agent, verify:
 
 ### 2. Expected Agents List
 ```
-PLANNING:        product-manager, business-analyst, ux-researcher
+PLANNING:        product-manager, business-analyst, ux-researcher (managed by planning-team in Phase 1)
 DESIGN:          system-architect, api-architect, database-architect, ui-designer, agent-native-designer
 TASK DECOMP:     task-decomposer
 IMPLEMENTATION:  agent-native-developer, senior-engineer, backend-developer, python-developer,
@@ -62,7 +62,7 @@ Check team definitions exist:
 - [ ] feature-team.md (up to 7 members: agent-native-developer, backend, senior, python, frontend, flutter, kmp)
 - [ ] design-team.md (5 designers + 1 reviewer: system-architect, api-architect, database-architect, ui-designer, agent-native-designer, design-reviewer)
 - [ ] review-team.md (5 reviewers + 1 role: code-reviewer, security-auditor, performance-reviewer, static-analyzer, agent-native-reviewer; spec-tracer is a role performed by code-reviewer with specialized prompt — NOT a standalone agent)
-- [ ] planning-team.md (7 members: product-manager, business-analyst, ux-researcher, system-architect, api-architect, database-architect, ui-designer)
+- [ ] planning-team.md (4 members: product-manager, business-analyst, ux-researcher, requirements-reviewer)
 - [ ] quality-team.md (2 members: test-engineer, qa-automation)
 
 ## Output Format
@@ -83,7 +83,7 @@ Check team definitions exist:
 ║  ✅ feature-team    (7 members)              ║
 ║  ✅ design-team     (5 designers + 1 reviewer) ║
 ║  ✅ review-team     (5 reviewers + 1 role)    ║
-║  ✅ planning-team   (7 members)              ║
+║  ✅ planning-team   (4 members)              ║
 ║  ✅ quality-team    (2 members)              ║
 ║                                              ║
 ║  COMMANDS (N available)                      ║

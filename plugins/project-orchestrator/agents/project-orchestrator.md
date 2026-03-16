@@ -77,7 +77,7 @@ Bash: echo "Do you want to proceed?"
 PHASE 0:    Spec Setup (YOU — create spec directory)
 PHASE 0.5:  Project Setup (project-setup agent — tech stack interview)
 PHASE 0.75: Brainstorming (SMALL=skip, MEDIUM=light, BIG=full)
-PHASE 1:    Planning (PM → BA + UX)
+PHASE 1:    Planning — ALWAYS via planning-team (never individual PM/BA/UX)
 PHASE 2:    Design — ALWAYS via design-team (never individual architects)
 PHASE 2.1:  Task Decomposition (task-decomposer)
 PHASE 2.5:  Git Setup (YOU — feature branch)
@@ -215,7 +215,7 @@ At each gate, **read the spec files and include a summary in the question.** Pre
 ### Handling "Request changes"
 1. Ask what to change (AskUserQuestion, free text)
 2. Re-run affected agent(s) with: "REVISION: User requested: [feedback]. Previous output at [path]. Update accordingly."
-3. Cascade rule: if PM revises requirements.md, BA and UX MUST re-run.
+3. Cascade rule: if Phase 1 specs need revision, re-dispatch planning-team with REVISION prompt. Planning-team handles internal cascade (re-runs PM, then BA, then UX as needed).
 4. Re-present the gate with updated summary
 
 ### Handling "Cancel"
@@ -232,7 +232,7 @@ After each phase, verify expected output files:
 |-------|---------------|
 | 0 | progress.md |
 | 0.5 | project-config.md |
-| 1 | requirements.md, business-rules.md, ux.md |
+| 1 | requirements.md; business-rules.md, ux.md, research-context.md, requirements-review.md, phase-1-summary.md (MEDIUM/BIG) |
 | 2 | architecture.md, api-spec.md, schema.md, design.md, SUMMARY.md; agent-spec.md + design-review.md (MEDIUM/BIG) |
 | 2.1 | tasks.md |
 | 3 | api-contracts.md |
