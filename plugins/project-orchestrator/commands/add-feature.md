@@ -94,36 +94,38 @@ Agent(
 ```
 Wait for completion.
 
-**Wave 2 — Affected Phase 1 agents (parallel, only if marked affected):**
+**Wave 2 — Affected Phase 1 agents (sequential — NOT background, so AskUserQuestion calls reach user):**
 
 If business rules affected:
 ```
 Agent(
   subagent_type="project-orchestrator:business-analyst",
-  run_in_background=True,
   prompt="REVISION: New feature added to requirements.md.
           New feature: [user's description]
           Previous output at .claude/specs/[feature]/business-rules.md — read it first.
           Read updated requirements.md for the new user stories tagged [ADDED].
           ADD new business rules, state machines, and workflows for the new feature.
-          Do NOT remove existing rules. Append new rules continuing from the last BR-NNN number."
+          Do NOT remove existing rules. Append new rules continuing from the last BR-NNN number.
+          Ask 1-2 clarifying questions if business rules are ambiguous (use AskUserQuestion)."
 )
 ```
+Wait for completion.
 
 If UX affected:
 ```
 Agent(
   subagent_type="project-orchestrator:ux-researcher",
-  run_in_background=True,
   prompt="REVISION: New feature added to requirements.md.
           New feature: [user's description]
           Previous output at .claude/specs/[feature]/ux.md — read it first.
           Read updated requirements.md for the new user stories tagged [ADDED].
+          Read updated business-rules.md for new state machines and workflows.
           ADD new user journeys, wireframes, and interaction inventory items for the new feature.
-          Do NOT remove existing content."
+          Do NOT remove existing content.
+          Ask 1-2 design preference questions if needed (use AskUserQuestion)."
 )
 ```
-Wait for Wave 2 to complete.
+Wait for completion.
 
 **Wave 3 — Affected Phase 2 agents (parallel, only if marked affected):**
 

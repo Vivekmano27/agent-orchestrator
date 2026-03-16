@@ -17,7 +17,7 @@ Route to project-orchestrator which runs the full 9-phase pipeline for this feat
 - Verification phases (security, review) always run regardless of task size
 
 ## Agents by Phase:
-Planning: product-manager, business-analyst, ux-researcher
+Planning: planning-team (product-manager, business-analyst, ux-researcher, requirements-reviewer)
 Design: system-architect, api-architect, database-architect, ui-designer, agent-native-designer [C]
 Task Decomposition: task-decomposer → ordered task list with agent assignments
 Build: backend-developer, frontend-developer [C], python-developer [C], flutter-developer [C], kmp-developer [C], senior-engineer [C], agent-native-developer [C]

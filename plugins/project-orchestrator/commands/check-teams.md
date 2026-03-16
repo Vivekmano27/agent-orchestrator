@@ -29,7 +29,7 @@ Report on agent team activity and health by reading pipeline progress files.
    |---|---|---|
    | 0 | project-orchestrator (direct) | — |
    | 0.5 | project-setup | — |
-   | 1 | Planning agents | product-manager, business-analyst, ux-researcher |
+   | 1 | planning-team | product-manager, business-analyst, ux-researcher, requirements-reviewer |
    | 2 | design-team | system-architect, api-architect, database-architect, ui-designer, agent-native-designer, design-reviewer |
    | 2.1 | task-decomposer | — |
    | 2.5 | project-orchestrator (direct) | — |
@@ -123,7 +123,7 @@ Report on agent team activity and health by reading pipeline progress files.
 |  | feature-team  (up to 7 members) Ready     |
 |  | quality-team  (2 members) Ready            |
 |  | review-team   (5 reviewers) Ready          |
-|  | planning-team (7 members) Ready            |
+|  | planning-team (4 members) Ready            |
 |                                              |
 |  Run /new or /start to begin a pipeline.     |
 |                                              |

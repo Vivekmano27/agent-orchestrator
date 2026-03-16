@@ -23,14 +23,12 @@ Show a timeline of agent activity in the current session.
 ║                                                  ║
 ║ 10:15 AM │ project-orchestrator                  ║
 ║          │ Classified request as MEDIUM           ║
-║          │ Spawned planning agents                ║
+║          │ Dispatched planning-team (Phase 1)     ║
 ║                                                  ║
-║ 10:17 AM │ product-manager                       ║
-║          │ Created PRD.md (12 user stories)       ║
-║          │ Created feature_list.json              ║
-║                                                  ║
-║ 10:19 AM │ business-analyst                      ║
-║          │ Created business-rules.md (8 rules)    ║
+║ 10:16 AM │ planning-team                         ║
+║          │ Coordinating: PM → BA → UX → reviewer  ║
+║          │ Created PRD.md, business-rules.md,     ║
+║          │ ux-research.md, requirements-review.md ║
 ║                                                  ║
 ║ 10:22 AM │ system-architect                      ║
 ║          │ Created ARCHITECTURE.md                ║

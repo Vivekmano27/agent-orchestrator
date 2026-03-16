@@ -47,6 +47,10 @@ Bash: echo "Do you want to proceed?"
 ### Step 0 — Read Inputs + Scan Existing UI
 Read `.claude/specs/[feature]/requirements.md` (PM output) and `.claude/specs/[feature]/project-config.md` for tech stack and platform decisions.
 
+Also read `.claude/specs/[feature]/business-rules.md` for state machines and workflows that need UI representation.
+
+If `.claude/specs/[feature]/research-context.md` exists (written by planning-team), read it for existing UI patterns and domain context.
+
 **Codebase scan for existing UI patterns:**
 Before asking design questions, check what UI already exists:
 - `Glob("apps/web/src/components/ui/**")` — existing component library

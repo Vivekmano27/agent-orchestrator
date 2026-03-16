@@ -16,7 +16,7 @@ Route to the project-orchestrator agent which runs the full 9-phase pipeline.
 
 ## Steps
 1. Pass the user's description to project-orchestrator
-2. Orchestrator creates spec directory (Phase 0, no questions), then runs Phase 0.5 (project-setup agent for tech stack decisions), then dispatches product-manager for requirements discovery (Phase 1).
+2. Orchestrator creates spec directory (Phase 0, no questions), then runs Phase 0.5 (project-setup agent for tech stack decisions), then dispatches planning-team as the Phase 1 coordinator (manages PM, BA, UX, requirements-reviewer sequentially).
 3. Orchestrator classifies size and uses **AskUserQuestion tool** for approval gates:
    - SMALL (1-3 files): auto-approve
    - MEDIUM (4-10 files): **AskUserQuestion**: "Plan looks good. Proceed?" → [Proceed / Request changes]
@@ -26,7 +26,7 @@ Route to the project-orchestrator agent which runs the full 9-phase pipeline.
 ```
 Phase 0.5:  project-setup → tech stack interview, project-config.md
 Phase 0.75: brainstorming (SMALL=skip, MEDIUM=light, BIG=full)
-Phase 1:    product-manager + business-analyst + ux-researcher
+Phase 1:    planning-team (product-manager → business-analyst → ux-researcher → requirements-reviewer)
 Phase 2:   system-architect + api-architect + database-architect + ui-designer + agent-native-designer [C]
 Phase 2.1: task-decomposer → ordered task list with agent assignments
 Phase 2.5: git setup

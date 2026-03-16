@@ -39,8 +39,10 @@ Bash: echo "Do you want to proceed?"
 
 ## Working Protocol
 
-### Step 0 — Read PM Output + Scan Codebase
+### Step 0 — Read PM Output + Research Context + Scan Codebase
 Read `.claude/specs/[feature]/requirements.md` to understand what the product-manager defined. Your job is to deepen the business logic, NOT repeat what the PM already wrote.
+
+If `.claude/specs/[feature]/research-context.md` exists (written by planning-team), read it for existing domain patterns and institutional learnings.
 
 **Codebase scan for existing business rules:**
 Before asking questions, check what business logic already exists in code:
@@ -106,6 +108,9 @@ AskUserQuestion(
 **Skip questions entirely if:** the PRD is detailed enough, the feature is SMALL, or business rules are straightforward.
 
 ### Step 2 — Analyze and Document
+
+### Checkpointing (prevent incomplete specs)
+If you are running low on turns, immediately write whatever you have to `.claude/specs/{feature}/business-rules.md` with a `## Status: INCOMPLETE — resume from [section]` header at the top. This lets the planning-team resume you or hand off to another agent.
 
 **Output format — business-rules.md must contain:**
 1. Data ownership map (entity → owner service → consumers → sync method)

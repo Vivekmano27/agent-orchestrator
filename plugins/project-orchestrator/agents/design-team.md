@@ -95,7 +95,11 @@ Read the dispatch prompt for `task_size` (SMALL/MEDIUM/BIG) and `spec_directory`
 
 ### STEP 2 — Shared Research (MEDIUM/BIG only, skip for SMALL)
 
-Research the target codebase and institutional learnings before any agent starts designing. Write findings to `.claude/specs/[feature]/research-context.md`.
+Research the target codebase and institutional learnings before any agent starts designing.
+
+**Check for existing research-context.md:** If `.claude/specs/[feature]/research-context.md` already exists (written by planning-team in Phase 1), read it first. Append your design-specific findings under a `## Phase 2 — Design Patterns` header. Do NOT overwrite the Phase 1 domain patterns.
+
+If no existing file, create `.claude/specs/[feature]/research-context.md` from scratch.
 
 **2a — Codebase research:**
 Scan existing code for patterns relevant to this feature:

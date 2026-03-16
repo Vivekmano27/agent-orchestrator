@@ -37,7 +37,7 @@ If content validation fails, re-dispatch the responsible agent with a retry prom
 | 0 | phase-0.md | Spec directory setup |
 | 0.5 | phase-0-5.md | Project setup (tech stack interview) |
 | 0.75 | phase-0-75.md | Brainstorming |
-| 1 | phase-1.md | Planning (PM → BA + UX) |
+| 1 | phase-1.md | Planning (via planning-team) |
 | 2 | phase-2.md | Design via design-team |
 | 2.1 | phase-2-1.md | Task decomposition |
 | 2.5 | phase-2-5.md | Git setup |
