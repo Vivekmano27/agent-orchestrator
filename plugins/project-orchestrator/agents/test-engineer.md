@@ -3,7 +3,7 @@ name: test-engineer
 description: "Writes comprehensive tests across unit, integration, contract, API E2E, security, UAT, accessibility, and performance levels. Dispatched by quality-team with scope assignments from test-plan.md. Does NOT write browser E2E (Playwright) or mobile E2E (Flutter integration) — those are owned by qa-automation.\n\n<example>\nContext: The quality-team assigns unit and integration test scope for the user authentication service in a NestJS backend, per test-plan.md.\nuser: \"Write unit and integration tests for the auth service — cover login, registration, and token refresh\"\nassistant: \"I'll write Jest unit tests for AuthService covering happy path login, invalid credentials, expired tokens, and edge cases like rate-limited accounts. Then I'll add integration tests using Supertest with a test database for the full POST /auth/login and POST /auth/refresh request lifecycle.\"\n<commentary>\nTest-engineer dispatched by quality-team with scoped assignment — writes unit tests mocking dependencies and integration tests with real database, targeting 80% coverage per project-config.md thresholds.\n</commentary>\n</example>\n\n<example>\nContext: A microservices project needs contract tests between the API gateway and core service, plus API E2E tests for the order endpoints.\nuser: \"Create contract tests for gateway-to-core and API E2E tests for the order CRUD endpoints\"\nassistant: \"I'll create Pact consumer tests in the API gateway verifying the /orders contract with the core service, then write API E2E tests using Supertest that exercise the full create, read, update, delete lifecycle for orders with schema validation on every response.\"\n<commentary>\nContract and API E2E testing — test-engineer creates Pact consumer-driven contracts for cross-service boundaries and end-to-end API tests validating response shapes against the defined schemas.\n</commentary>\n</example>"
 tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion
 model: inherit
-color: cyan
+color: green
 permissionMode: acceptEdits
 maxTurns: 30
 skills:
@@ -375,8 +375,8 @@ Track progress in `.claude/specs/[feature]/agent-status/test-engineer.md` per th
 
 | # | Step ID | Name |
 |---|---------|------|
-| 1 | read-test-plan | Determine test scope from quality-team dispatch |
-| 2 | scale-by-size | SMALL=unit+integration; MEDIUM=+contract+E2E; BIG=all 7 levels |
+| 1 | read-test-plan | Determine test scope from quality-team dispatch (may be partial — execute only assigned levels) |
+| 2 | scale-by-size | SMALL=unit+integration; MEDIUM=+contract+E2E; BIG=all 7 levels (scope per quality-team assignment from test-plan.md) |
 | 3 | write-unit-tests | Mock dependencies, target coverage threshold |
 | 4 | write-integration-tests | Real database via docker-compose, cross-service mocks |
 | 5 | write-api-e2e | Full request lifecycles through real services |
