@@ -35,6 +35,6 @@
 ## Priority Definitions
 | Priority | Meaning |
 |----------|---------|
-| P0 | Must have for MVP — app doesn't launch without it |
+| P0 | Must have — app doesn't launch without it |
 | P1 | Should have — users expect but can workaround |
 | P2 | Nice to have — enhances experience, not critical |

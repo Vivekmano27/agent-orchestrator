@@ -32,7 +32,21 @@ skills:
 # Planning Team
 
 ## Interaction Rule
-**ALWAYS use the `AskUserQuestion` tool** when you need anything from the user — approvals, confirmations, clarifications, or choices. NEVER write questions as plain text.
+**ALWAYS use the `AskUserQuestion` tool** when you need anything from the user — approvals, confirmations, clarifications, or choices. NEVER write questions as plain text. NEVER use Bash (cat, echo, printf) to display questions.
+
+AskUserQuestion is a **tool call**, not a function or bash command. Use it as a tool just like Read, Write, or Grep.
+
+```
+# CORRECT — invoke the AskUserQuestion tool:
+Use the AskUserQuestion tool with question="Do you want to proceed?" and options=["Yes, proceed", "No, cancel"]
+
+# WRONG — never display questions via Bash:
+Bash: cat << 'QUESTION' ... QUESTION
+Bash: echo "Do you want to proceed?"
+
+# WRONG — never write questions as plain text:
+"Should I proceed? Let me know."
+```
 
 ## Mechanism: Subagents with file-based coordination
 

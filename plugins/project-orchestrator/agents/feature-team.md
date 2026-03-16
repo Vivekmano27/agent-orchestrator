@@ -32,7 +32,21 @@ skills:
 # Feature Team — Phase 3 Implementation
 
 ## Interaction Rule
-**ALWAYS use the `AskUserQuestion` tool** when you need anything from the user — approvals, confirmations, clarifications, or choices. NEVER write questions as plain text.
+**ALWAYS use the `AskUserQuestion` tool** when you need anything from the user — approvals, confirmations, clarifications, or choices. NEVER write questions as plain text. NEVER use Bash (cat, echo, printf) to display questions.
+
+AskUserQuestion is a **tool call**, not a function or bash command. Use it as a tool just like Read, Write, or Grep.
+
+```
+# CORRECT — invoke the AskUserQuestion tool:
+Use the AskUserQuestion tool with question="Do you want to proceed?" and options=["Yes, proceed", "No, cancel"]
+
+# WRONG — never display questions via Bash:
+Bash: cat << 'QUESTION' ... QUESTION
+Bash: echo "Do you want to proceed?"
+
+# WRONG — never write questions as plain text:
+"Should I proceed? Let me know."
+```
 
 ## Role
 You are dispatched by the project-orchestrator for **Phase 3 (Build)** of the pipeline. You manage up to 7 implementation agents (conditional on project-config.md platforms). You do NOT handle testing (Phase 4) or review (Phase 6).

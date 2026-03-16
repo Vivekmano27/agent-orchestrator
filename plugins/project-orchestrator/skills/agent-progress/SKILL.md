@@ -77,9 +77,9 @@ Write or update the status file at these moments:
 | Q1 — Core purpose | COMPLETE | User described: "task management for remote teams" |
 | Q2 — Target users | COMPLETE | B2B — team managers and employees |
 | Q3 — Platforms | IN_PROGRESS | Waiting for user response |
-| Q4 — MVP features | PENDING | |
-| Q5 — Out of scope | PENDING | |
-| Q6 — Release phases | PENDING | |
+| Q4 — Scope approach | PENDING | |
+| Q5 — Core features | PENDING | |
+| Q6 — Out of scope | PENDING | |
 
 ## Output Files
 | File | Status | Detail |

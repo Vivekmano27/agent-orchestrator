@@ -30,7 +30,7 @@ Invoke the brainstorming skill or conduct a structured exploration:
 - What problem does this solve? Who benefits?
 - What are 2-3 alternative approaches?
 - What are the key trade-offs?
-- What's the MVP vs full vision?
+- What's the scope approach — MVP or production-ready? What are key trade-offs?
 
 Write findings to `.claude/specs/[feature]/brainstorm.md`.
 

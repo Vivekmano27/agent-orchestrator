@@ -77,9 +77,9 @@ When showing one agent:
 |  [x] Q1 — Core purpose (answered)                |
 |  [x] Q2 — Target users (B2B)                     |
 |  [>] Q3 — Platforms (waiting for response)        |
-|  [ ] Q4 — MVP features                            |
-|  [ ] Q5 — Out of scope                            |
-|  [ ] Q6 — Release phases                          |
+|  [ ] Q4 — Scope approach                           |
+|  [ ] Q5 — Core features                           |
+|  [ ] Q6 — Out of scope                            |
 |                                                   |
 |  OUTPUT FILES                                     |
 |  [ ] requirements.md — not started                |

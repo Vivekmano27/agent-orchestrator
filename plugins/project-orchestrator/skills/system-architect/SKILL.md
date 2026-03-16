@@ -22,7 +22,7 @@ Design production-grade system architecture with clear diagrams and rationale.
 | Factor | Monolith | Modular Monolith | Microservices | Serverless |
 |--------|----------|------------------|---------------|------------|
 | Team Size | 1-5 | 3-15 | 10+ | 1-10 |
-| Timeline | Fast MVP | Balanced | Long-term | Fast + scalable |
+| Timeline | Fast delivery | Balanced | Long-term | Fast + scalable |
 | Complexity | Low-Med | Medium | High | Medium |
 | Scale | Thousands | Tens of thousands | Millions | Variable |
 | Deploy | Simple | Simple | Complex | Auto |
