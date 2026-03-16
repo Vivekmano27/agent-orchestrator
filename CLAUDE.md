@@ -7,9 +7,9 @@ application development for ANY tech stack.
 
 ### Working on This Plugin
 - There is no application code to build or test in this repo.
-- To test changes: `claude --plugin-dir plugins/agent-orchestrator`
+- To test changes: `claude --plugin-dir plugins/project-orchestrator`
 - To install into a project: `bash install.sh /path/to/project`
-- To validate: `bash plugins/agent-orchestrator/validate-plugin.sh`
+- To validate: `bash plugins/project-orchestrator/validate-plugin.sh`
 
 ---
 

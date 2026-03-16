@@ -98,7 +98,7 @@ UX Researcher (design questions only, NOT product questions)
 
 ## Technical Approach
 
-### File 1: `plugins/agent-orchestrator/agents/project-orchestrator.md`
+### File 1: `plugins/project-orchestrator/agents/project-orchestrator.md`
 
 **Changes:**
 - Remove Call 2 (feature scope question) — it's hardcoded for todo apps and belongs to PM
@@ -123,7 +123,7 @@ Call 1: Tech stack → Call 2: Run method
 **PM dispatch prompt update:**
 ```
 Agent(
-  subagent_type="agent-orchestrator:product-manager",
+  subagent_type="project-orchestrator:product-manager",
   prompt="Write a complete PRD for: [ORIGINAL USER REQUEST].
           Tech stack chosen: [tech_stack]. Run method: [run_method]. Task size: [SMALL/MEDIUM/BIG].
           Do NOT re-ask about tech stack or run method — those are decided.
@@ -149,7 +149,7 @@ When user selects "Use full stack from steering/tech.md" on Call 1:
 
 ---
 
-### File 2: `plugins/agent-orchestrator/agents/product-manager.md`
+### File 2: `plugins/project-orchestrator/agents/product-manager.md`
 
 **Changes — replace current Step 0 entirely with adaptive system:**
 
@@ -255,7 +255,7 @@ If user selects a category, ask 1-2 focused questions on that topic, then write 
 
 ---
 
-### File 3: `plugins/agent-orchestrator/agents/business-analyst.md`
+### File 3: `plugins/project-orchestrator/agents/business-analyst.md`
 
 **Changes — minimal refinement (current BA is already well-scoped):**
 
@@ -290,7 +290,7 @@ business-rules.md must contain:
 
 ---
 
-### File 4: `plugins/agent-orchestrator/agents/ux-researcher.md`
+### File 4: `plugins/project-orchestrator/agents/ux-researcher.md`
 
 **Changes — add design system + accessibility questions:**
 
@@ -346,7 +346,7 @@ Before asking any question, check requirements.md:
 
 ---
 
-### File 5: `plugins/agent-orchestrator/skills/project-requirements/SKILL.md`
+### File 5: `plugins/project-orchestrator/skills/project-requirements/SKILL.md`
 
 **Changes — convert from competing interview to reference material:**
 
@@ -357,7 +357,7 @@ Before asking any question, check requirements.md:
 
 ---
 
-### File 6: `plugins/agent-orchestrator/agents/planning-team.md` (NEW in scope)
+### File 6: `plugins/project-orchestrator/agents/planning-team.md` (NEW in scope)
 
 **Changes — update PM dispatch prompt for consistency:**
 
@@ -368,14 +368,14 @@ The planning-team is an alternative entry point that also dispatches the product
 
 ---
 
-### File 7: `plugins/agent-orchestrator/commands/new.md` (NEW in scope)
+### File 7: `plugins/project-orchestrator/commands/new.md` (NEW in scope)
 
 **Changes — update question count:**
 - Change "2-3 clarifying questions" to "2 infrastructure questions (tech stack, run method)"
 
 ---
 
-### File 8: `plugins/agent-orchestrator/commands/build-feature.md` (NEW in scope)
+### File 8: `plugins/project-orchestrator/commands/build-feature.md` (NEW in scope)
 
 **Changes — update question count if it references orchestrator questions:**
 - Check for stale references to orchestrator's 3-question flow, update to 2
@@ -430,7 +430,7 @@ The planning-team is an alternative entry point that also dispatches the product
 - [ ] No question is asked twice across orchestrator → PM → BA → UX chain
 
 ### Quality Gates
-- [ ] `bash plugins/agent-orchestrator/validate-plugin.sh` passes with 0 errors
+- [ ] `bash plugins/project-orchestrator/validate-plugin.sh` passes with 0 errors
 - [ ] All modified files have valid frontmatter
 - [ ] Orchestrator example section updated to reflect 2-question Step 0
 - [ ] PM question count: Tier 1 = 5-6, Tier 2 = 2-4 (domain-dependent), Tier 3 = 0-1 optional
@@ -501,13 +501,13 @@ The planning-team is an alternative entry point that also dispatches the product
 - **Brainstorm document:** [docs/brainstorms/2026-03-15-pm-adaptive-discovery-brainstorm.md](docs/brainstorms/2026-03-15-pm-adaptive-discovery-brainstorm.md) — Key decisions carried forward: single PM ownership, adaptive questioning, domain detection, scope discipline, full context handoff
 
 ### Internal References
-- Orchestrator: `plugins/agent-orchestrator/agents/project-orchestrator.md:19-76`
-- Product Manager: `plugins/agent-orchestrator/agents/product-manager.md:43-213`
-- Business Analyst: `plugins/agent-orchestrator/agents/business-analyst.md:33-81`
-- UX Researcher: `plugins/agent-orchestrator/agents/ux-researcher.md:35-84`
-- Project Requirements Skill: `plugins/agent-orchestrator/skills/project-requirements/SKILL.md:19-43`
-- Planning Team: `plugins/agent-orchestrator/agents/planning-team.md`
-- New Command: `plugins/agent-orchestrator/commands/new.md`
+- Orchestrator: `plugins/project-orchestrator/agents/project-orchestrator.md:19-76`
+- Product Manager: `plugins/project-orchestrator/agents/product-manager.md:43-213`
+- Business Analyst: `plugins/project-orchestrator/agents/business-analyst.md:33-81`
+- UX Researcher: `plugins/project-orchestrator/agents/ux-researcher.md:35-84`
+- Project Requirements Skill: `plugins/project-orchestrator/skills/project-requirements/SKILL.md:19-43`
+- Planning Team: `plugins/project-orchestrator/agents/planning-team.md`
+- New Command: `plugins/project-orchestrator/commands/new.md`
 
 ### External References
 - [msitarzewski/agency-agents SeniorProjectManager](https://github.com/msitarzewski/agency-agents/blob/main/project-management/project-manager-senior.md) — scope discipline, anti-gold-plating

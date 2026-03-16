@@ -59,7 +59,7 @@ STEP 10: Return to orchestrator (was STEP 7)
 
 ### Phase 1: Create design-reviewer agent
 
-**File:** `plugins/agent-orchestrator/agents/design-reviewer.md`
+**File:** `plugins/project-orchestrator/agents/design-reviewer.md`
 
 ```yaml
 ---
@@ -106,7 +106,7 @@ skills:
 **Critical issues BLOCK** — design-team must fix before returning to orchestrator.
 
 **Tasks:**
-- [ ] Create `plugins/agent-orchestrator/agents/design-reviewer.md`
+- [ ] Create `plugins/project-orchestrator/agents/design-reviewer.md`
 
 **Estimated effort:** M
 
@@ -114,7 +114,7 @@ skills:
 
 ### Phase 2: Add shared research step to design-team
 
-**File:** `plugins/agent-orchestrator/agents/design-team.md`
+**File:** `plugins/project-orchestrator/agents/design-team.md`
 
 **New STEP 2 — Shared Research:**
 
@@ -262,7 +262,7 @@ After self-review, message the team: "Self-review done. Fixed [N] issues: [brief
 
 ### Phase 5: Add cross-peer review and design-reviewer steps to design-team
 
-**File:** `plugins/agent-orchestrator/agents/design-team.md`
+**File:** `plugins/project-orchestrator/agents/design-team.md`
 
 Replace current Step 4 (cross-review) with the new 3-layer review (Steps 5-8):
 
@@ -304,7 +304,7 @@ Wait for all agents to report peer review complete.
 Spawn the design-reviewer as an independent, fresh-context reviewer:
 
 Agent(
-  subagent_type="agent-orchestrator:design-reviewer",
+  subagent_type="project-orchestrator:design-reviewer",
   prompt="Review all design specs at .claude/specs/[feature]/:
           architecture.md, api-spec.md, schema.md, design.md, agent-spec.md (if exists).
           Also read requirements.md and tech-stack.md for context.
@@ -354,7 +354,7 @@ If verdict is "Approve" or "Approve with conditions":
 
 ### Phase 6: Update validate-plugin.sh
 
-**File:** `plugins/agent-orchestrator/validate-plugin.sh`
+**File:** `plugins/project-orchestrator/validate-plugin.sh`
 
 Update agent count from 27 to 28 (adding design-reviewer).
 
@@ -400,14 +400,14 @@ Update agent count from 27 to 28 (adding design-reviewer).
 
 | Action | File | Effort |
 |--------|------|--------|
-| **Create** | `plugins/agent-orchestrator/agents/design-reviewer.md` | M |
-| **Modify** | `plugins/agent-orchestrator/agents/design-team.md` (restructure to 10 steps) | L |
-| **Modify** | `plugins/agent-orchestrator/agents/api-architect.md` (add research + self-review) | S |
-| **Modify** | `plugins/agent-orchestrator/agents/database-architect.md` (add research + self-review) | S |
-| **Modify** | `plugins/agent-orchestrator/agents/ui-designer.md` (add research + self-review) | S |
-| **Modify** | `plugins/agent-orchestrator/agents/agent-native-designer.md` (add research + self-review) | S |
-| **Modify** | `plugins/agent-orchestrator/agents/system-architect.md` (add self-review only — research already exists) | S |
-| **Modify** | `plugins/agent-orchestrator/validate-plugin.sh` (agent count 26 → 27) | S |
+| **Create** | `plugins/project-orchestrator/agents/design-reviewer.md` | M |
+| **Modify** | `plugins/project-orchestrator/agents/design-team.md` (restructure to 10 steps) | L |
+| **Modify** | `plugins/project-orchestrator/agents/api-architect.md` (add research + self-review) | S |
+| **Modify** | `plugins/project-orchestrator/agents/database-architect.md` (add research + self-review) | S |
+| **Modify** | `plugins/project-orchestrator/agents/ui-designer.md` (add research + self-review) | S |
+| **Modify** | `plugins/project-orchestrator/agents/agent-native-designer.md` (add research + self-review) | S |
+| **Modify** | `plugins/project-orchestrator/agents/system-architect.md` (add self-review only — research already exists) | S |
+| **Modify** | `plugins/project-orchestrator/validate-plugin.sh` (agent count 26 → 27) | S |
 
 **Total: 1 new file, 7 modified files**
 
@@ -419,7 +419,7 @@ Update agent count from 27 to 28 (adding design-reviewer).
 - **Brainstorm document:** [docs/brainstorms/2026-03-15-design-team-research-review-brainstorm.md](docs/brainstorms/2026-03-15-design-team-research-review-brainstorm.md) — Key decisions: shared research step + per-agent research, 3-layer sequential review (self → peer → external), design-reviewer agent
 
 ### Internal References
-- system-architect Pre-Design Research: `plugins/agent-orchestrator/agents/system-architect.md:89-115`
-- review-team cross-review pattern: `plugins/agent-orchestrator/agents/review-team.md`
-- code-reviewer structure: `plugins/agent-orchestrator/agents/code-reviewer.md` (tools, model, permissionMode template)
-- design-team current protocol: `plugins/agent-orchestrator/agents/design-team.md`
+- system-architect Pre-Design Research: `plugins/project-orchestrator/agents/system-architect.md:89-115`
+- review-team cross-review pattern: `plugins/project-orchestrator/agents/review-team.md`
+- code-reviewer structure: `plugins/project-orchestrator/agents/code-reviewer.md` (tools, model, permissionMode template)
+- design-team current protocol: `plugins/project-orchestrator/agents/design-team.md`

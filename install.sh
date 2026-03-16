@@ -24,7 +24,7 @@ echo ""
 
 # Detect script directory (repo root)
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-PLUGIN_DIR="$SCRIPT_DIR/plugins/agent-orchestrator"
+PLUGIN_DIR="$SCRIPT_DIR/plugins/project-orchestrator"
 
 # Verify plugin directory exists
 if [ ! -d "$PLUGIN_DIR/agents" ]; then

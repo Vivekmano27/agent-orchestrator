@@ -75,18 +75,18 @@ STEP 7    — report results
 ## Files to Change
 
 ### Create
-- `plugins/agent-orchestrator/agents/agent-native-developer.md` — new implementation agent
+- `plugins/project-orchestrator/agents/agent-native-developer.md` — new implementation agent
 
 ### Modify
-- `plugins/agent-orchestrator/agents/feature-team.md`:
+- `plugins/project-orchestrator/agents/feature-team.md`:
   - Add agent-native-developer to team composition
   - Add STEP 2.5 (scaffold before implementation wave)
   - Add coverage checks in Steps 4a and 5 verification
   - Add coverage reporting to Step 6 build report
-- `plugins/agent-orchestrator/agents/task-decomposer.md`:
+- `plugins/project-orchestrator/agents/task-decomposer.md`:
   - Add agent-native task categories (agent definitions, skills, commands)
   - Add `agent-native-developer` to agent assignment table
-- `plugins/agent-orchestrator/agents/project-orchestrator.md`:
+- `plugins/project-orchestrator/agents/project-orchestrator.md`:
   - Add agent-native-developer to Phase 3 agent list
 
 ## Resolved Questions

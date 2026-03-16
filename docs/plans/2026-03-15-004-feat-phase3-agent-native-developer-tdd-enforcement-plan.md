@@ -194,7 +194,7 @@ packages/mcp-server/
 **STEP 2.5 — Pass 1 (scaffold):**
 ```
 Agent(
-  subagent_type="agent-orchestrator:agent-native-developer",
+  subagent_type="project-orchestrator:agent-native-developer",
   prompt="PASS 1 — SCAFFOLD agent-native artifacts for [feature].
           Read .claude/specs/[feature]/project-config.md FIRST for tech stack.
           IF .claude/specs/[feature]/agent-spec.md EXISTS: read it for parity map, tool definitions,
@@ -215,7 +215,7 @@ Agent(
 **STEP 4.5 — Pass 2 (wire):**
 ```
 Agent(
-  subagent_type="agent-orchestrator:agent-native-developer",
+  subagent_type="project-orchestrator:agent-native-developer",
   prompt="PASS 2 — WIRE agent-native artifacts for [feature].
           Read .claude/specs/[feature]/project-config.md for tech stack.
           Read .claude/specs/[feature]/api-contracts.md for actual endpoint routes and shapes.
@@ -331,7 +331,7 @@ These were identified by SpecFlow and deepening agents but are separate features
 ## Acceptance Criteria
 
 ### agent-native-developer.md
-- [ ] Agent file exists at `plugins/agent-orchestrator/agents/agent-native-developer.md`
+- [ ] Agent file exists at `plugins/project-orchestrator/agents/agent-native-developer.md`
 - [ ] Frontmatter: name (`agent-native-developer`), description (with trigger words + negative routing: "Does NOT handle architecture design, agent-native specification, or testing"), tools (`Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion`), model (`opus`), maxTurns (`30`), permissionMode (`acceptEdits`), skills (`agent-native-design, agent-builder, mcp-builder-extended`)
 - [ ] `**CRITICAL:** Read project-config.md FIRST` instruction (matches backend-developer and frontend-developer pattern)
 - [ ] `**Skills loaded:**` line in body matching frontmatter skills list
@@ -429,16 +429,16 @@ These were identified by SpecFlow and deepening agents but are separate features
 
 ### Internal References
 
-- `plugins/agent-orchestrator/agents/feature-team.md` — primary modification target
-- `plugins/agent-orchestrator/agents/task-decomposer.md` — agent assignment table update
-- `plugins/agent-orchestrator/agents/project-orchestrator.md` — pipeline diagram + failure detection
-- `plugins/agent-orchestrator/agents/senior-engineer.md` — ownership transfer
-- `plugins/agent-orchestrator/agents/agent-native-designer.md` — upstream producer of agent-spec.md
-- `plugins/agent-orchestrator/skills/agent-native-design/SKILL.md` — skill for the new agent
-- `plugins/agent-orchestrator/skills/agent-builder/SKILL.md` — skill for the new agent
-- `plugins/agent-orchestrator/skills/mcp-builder-extended/SKILL.md` — skill for the new agent (z.enum conflict to resolve)
-- `plugins/agent-orchestrator/agents/test-engineer.md` — coverage config reference (not modified)
-- `plugins/agent-orchestrator/commands/run-tests.md` — existing coverage gate pattern reference
+- `plugins/project-orchestrator/agents/feature-team.md` — primary modification target
+- `plugins/project-orchestrator/agents/task-decomposer.md` — agent assignment table update
+- `plugins/project-orchestrator/agents/project-orchestrator.md` — pipeline diagram + failure detection
+- `plugins/project-orchestrator/agents/senior-engineer.md` — ownership transfer
+- `plugins/project-orchestrator/agents/agent-native-designer.md` — upstream producer of agent-spec.md
+- `plugins/project-orchestrator/skills/agent-native-design/SKILL.md` — skill for the new agent
+- `plugins/project-orchestrator/skills/agent-builder/SKILL.md` — skill for the new agent
+- `plugins/project-orchestrator/skills/mcp-builder-extended/SKILL.md` — skill for the new agent (z.enum conflict to resolve)
+- `plugins/project-orchestrator/agents/test-engineer.md` — coverage config reference (not modified)
+- `plugins/project-orchestrator/commands/run-tests.md` — existing coverage gate pattern reference
 
 ### External References
 

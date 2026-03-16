@@ -95,10 +95,10 @@ project-orchestrator (hybrid dispatch)
 
 ##### Phase 1a: Fix install.sh
 
-**File:** `plugins/agent-orchestrator/install.sh` (move from repo root)
+**File:** `plugins/project-orchestrator/install.sh` (move from repo root)
 
 Changes:
-1. Move `install.sh` from repo root into `plugins/agent-orchestrator/`
+1. Move `install.sh` from repo root into `plugins/project-orchestrator/`
 2. Fix line 56: change `*.sh` to `*.json` for hooks copy
 3. Remove line 57: `chmod +x` is not needed for JSON config files
 4. Update all hardcoded counts:
@@ -111,7 +111,7 @@ Changes:
 7. Add `rules/` copy step (currently missing — rules are not installed)
 
 **Acceptance criteria:**
-- [ ] `install.sh` lives in `plugins/agent-orchestrator/`
+- [ ] `install.sh` lives in `plugins/project-orchestrator/`
 - [ ] Running `bash install.sh /tmp/test-project` successfully copies all agents, commands, skills, hooks, steering docs, and rules
 - [ ] Hooks directory contains `hooks.json` after install
 - [ ] All count displays match actual file counts
@@ -119,7 +119,7 @@ Changes:
 
 ##### Phase 1b: Fix README.md
 
-**File:** `plugins/agent-orchestrator/README.md` (move from repo root or keep copy)
+**File:** `plugins/project-orchestrator/README.md` (move from repo root or keep copy)
 
 Changes:
 1. Update component count table: 21 agents → 21, 3 teams → 3, 17 commands → **25**, 62 skills → **63**
@@ -142,7 +142,7 @@ Changes:
 
 ##### Phase 1c: Fix check-agents command
 
-**File:** `plugins/agent-orchestrator/commands/check-agents.md`
+**File:** `plugins/project-orchestrator/commands/check-agents.md`
 
 Changes:
 1. Update "15 available" commands → "25 available"
@@ -168,8 +168,8 @@ Changes:
 ```markdown
 ## Working on This Plugin
 - This repo is a Claude Code plugin (all markdown). There is no application code to build/test.
-- To test: install into a target project with `bash plugins/agent-orchestrator/install.sh /path/to/project`
-- To validate: `bash plugins/agent-orchestrator/validate-plugin.sh` (see Phase 5)
+- To test: install into a target project with `bash plugins/project-orchestrator/install.sh /path/to/project`
+- To validate: `bash plugins/project-orchestrator/validate-plugin.sh` (see Phase 5)
 
 ## Target Project Commands (Apply AFTER Installation)
 > The following commands apply to the project where this plugin is installed, not this repo itself.
@@ -390,7 +390,7 @@ This is the largest and most critical phase. Each agent is refactored individual
 
 ##### Phase 4b: Wire feature-team into Phase 3 with Agent Teams
 
-**File:** `plugins/agent-orchestrator/agents/project-orchestrator.md`
+**File:** `plugins/project-orchestrator/agents/project-orchestrator.md`
 
 1. **Phases 1-2**: Keep existing direct dispatch (unchanged). Add SUMMARY.md generation after Phase 2 completes.
 
@@ -398,7 +398,7 @@ This is the largest and most critical phase. Each agent is refactored individual
 ```
 Phase 3: Implementation (Agent Teams mode)
   Agent(
-    subagent_type="agent-orchestrator:feature-team",
+    subagent_type="project-orchestrator:feature-team",
     prompt="Implement all features based on specs at .claude/specs/[feature]/.
             Read api-spec.md, schema.md, design.md for contracts.
             Use SendMessage for real-time API contract negotiation between
@@ -414,7 +414,7 @@ Phase 3: Implementation (Agent Teams mode)
 
 3. **Improve prompt templates**: Include failure context. Research shows retry with context succeeds ~65% vs blind retry at ~30%.
 
-**File:** `plugins/agent-orchestrator/agents/feature-team.md`
+**File:** `plugins/project-orchestrator/agents/feature-team.md`
 
 Update to use Agent Teams peer-to-peer mode:
 1. Dispatch backend-developer + senior-engineer + python-developer as teammates
@@ -426,7 +426,7 @@ Update to use Agent Teams peer-to-peer mode:
 
 ##### Phase 4c: Fix planning-team as alternative entry point
 
-**File:** `plugins/agent-orchestrator/agents/planning-team.md`
+**File:** `plugins/project-orchestrator/agents/planning-team.md`
 
 planning-team is NOT part of the main pipeline (Phases 1-2 use direct dispatch for gate placement). Update:
 
@@ -437,7 +437,7 @@ planning-team is NOT part of the main pipeline (Phases 1-2 use direct dispatch f
 
 ##### Phase 4d: Add approval gate flows
 
-**File:** `plugins/agent-orchestrator/agents/project-orchestrator.md`
+**File:** `plugins/project-orchestrator/agents/project-orchestrator.md`
 
 For every approval gate, add:
 
@@ -478,7 +478,7 @@ AskUserQuestion(
 
 ##### Phase 4e: Add subagent failure detection
 
-**File:** `plugins/agent-orchestrator/agents/project-orchestrator.md`
+**File:** `plugins/project-orchestrator/agents/project-orchestrator.md`
 
 After each phase, add output validation:
 
@@ -513,7 +513,7 @@ If ANY file is missing:
 
 ##### Phase 4f: Add "use defaults" fast path
 
-**File:** `plugins/agent-orchestrator/agents/project-orchestrator.md`
+**File:** `plugins/project-orchestrator/agents/project-orchestrator.md`
 
 Update Step 0 AskUserQuestion calls:
 
@@ -625,12 +625,12 @@ python-developer: "Implements Python/Django AI service features... For NestJS ba
 
 ##### Phase 5a: Create validate-plugin.sh
 
-**File:** `plugins/agent-orchestrator/validate-plugin.sh`
+**File:** `plugins/project-orchestrator/validate-plugin.sh`
 
 A bash script that verifies:
 1. All agent `.md` files have valid YAML frontmatter (name, description, tools, model)
 2. All skill references in agent frontmatter resolve to existing directories with SKILL.md
-3. All `Agent(subagent_type="agent-orchestrator:XXX")` strings in agent files match actual agent filenames
+3. All `Agent(subagent_type="project-orchestrator:XXX")` strings in agent files match actual agent filenames
 4. All skill SKILL.md files have >15 lines (flag stubs)
 5. `hooks.json` is valid JSON
 6. All command `.md` files have valid frontmatter
@@ -688,7 +688,7 @@ Document a test procedure:
 
 4. **Reduce pipeline for SMALL tasks** — Rejected by user. All 21 agents always run regardless of task size.
 
-5. **Plugin mode only (remove install.sh)** — Rejected. Install script is secondary but should work. Moving it into `plugins/agent-orchestrator/` fixes the path issues.
+5. **Plugin mode only (remove install.sh)** — Rejected. Install script is secondary but should work. Moving it into `plugins/project-orchestrator/` fixes the path issues.
 
 6. **Cut validate-plugin.sh and simplify plan** — Rejected by user. Full comprehensive plan kept including validation script, TESTING.md, formal revision loops, and failure detection.
 
@@ -717,14 +717,14 @@ Document a test procedure:
 ### API Surface Parity
 
 - All 25 commands remain unchanged in their interface
-- All agent dispatch names (`agent-orchestrator:agent-name`) remain unchanged
+- All agent dispatch names (`project-orchestrator:agent-name`) remain unchanged
 - The internal behavior of orchestrator + team agents changes but the external interface is the same
 
 ## Acceptance Criteria
 
 ### Functional Requirements
 
-- [ ] Install script successfully installs all components from `plugins/agent-orchestrator/`
+- [ ] Install script successfully installs all components from `plugins/project-orchestrator/`
 - [ ] All 25 commands listed in README with descriptions
 - [ ] All 63 skills have substantive content (>15 lines)
 - [ ] project-orchestrator uses hybrid dispatch: 2-tier for planning, feature-team for Phase 3, review-team for Phase 6
@@ -790,11 +790,11 @@ Document a test procedure:
 
 ### Internal References
 
-- [plugins/agent-orchestrator/agents/project-orchestrator.md](plugins/agent-orchestrator/agents/project-orchestrator.md) — main entry point
-- [plugins/agent-orchestrator/agents/planning-team.md](plugins/agent-orchestrator/agents/planning-team.md) — to be integrated
-- [plugins/agent-orchestrator/agents/feature-team.md](plugins/agent-orchestrator/agents/feature-team.md) — to be integrated
-- [plugins/agent-orchestrator/agents/business-analyst.md](plugins/agent-orchestrator/agents/business-analyst.md) — missing Write tool
-- [plugins/agent-orchestrator/hooks/hooks.json](plugins/agent-orchestrator/hooks/hooks.json) — hooks file (not .sh)
+- [plugins/project-orchestrator/agents/project-orchestrator.md](plugins/project-orchestrator/agents/project-orchestrator.md) — main entry point
+- [plugins/project-orchestrator/agents/planning-team.md](plugins/project-orchestrator/agents/planning-team.md) — to be integrated
+- [plugins/project-orchestrator/agents/feature-team.md](plugins/project-orchestrator/agents/feature-team.md) — to be integrated
+- [plugins/project-orchestrator/agents/business-analyst.md](plugins/project-orchestrator/agents/business-analyst.md) — missing Write tool
+- [plugins/project-orchestrator/hooks/hooks.json](plugins/project-orchestrator/hooks/hooks.json) — hooks file (not .sh)
 - [install.sh](install.sh) — to be moved and fixed
 
 ### Research Findings (Initial)

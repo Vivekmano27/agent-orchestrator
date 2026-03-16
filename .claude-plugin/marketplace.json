@@ -1,18 +1,18 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "name": "agent-orchestrator",
+  "name": "project-orchestrator",
   "description": "Complete autonomous development system for agents",
   "owner": {
-    "name": "Agent Orchestrator",
+    "name": "Project Orchestrator",
     "email": "dev@example.com"
   },
   "plugins": [
     {
-      "name": "agent-orchestrator",
-      "description": "30 agents, 5 teams, 26 commands, 66 skills, hooks, and 3 rules for full development",
+      "name": "project-orchestrator",
+      "description": "35 agents, 5 teams, 27 commands, 67 skills, hooks, and 3 rules for full development",
       "version": "2.1.0",
       "strict": false,
-      "source": "./plugins/agent-orchestrator"
+      "source": "./plugins/project-orchestrator"
     }
   ]
 }

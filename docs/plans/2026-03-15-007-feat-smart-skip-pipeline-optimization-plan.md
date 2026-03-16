@@ -56,7 +56,7 @@ This plan implements 4 optimizations (see brainstorm: `docs/brainstorms/2026-03-
 ### Priority 1: Smart-Skip via Inline Guards
 
 **Files to modify:**
-- `plugins/agent-orchestrator/agents/project-orchestrator.md` (lines 32-34, 40-93, dispatch blocks)
+- `plugins/project-orchestrator/agents/project-orchestrator.md` (lines 32-34, 40-93, dispatch blocks)
 
 #### Research Insight: Don't Use a Centralized Lookup Table
 
@@ -168,8 +168,8 @@ When an upstream agent is skipped, downstream agents that depend on its output s
 ### Priority 2: Security-Auditor Deduplication (with Safety Net)
 
 **Files to modify:**
-- `plugins/agent-orchestrator/agents/review-team.md` (lines 30, 49-53)
-- `plugins/agent-orchestrator/agents/project-orchestrator.md` (Phase 6 section, lines 82-85)
+- `plugins/project-orchestrator/agents/review-team.md` (lines 30, 49-53)
+- `plugins/project-orchestrator/agents/project-orchestrator.md` (Phase 6 section, lines 82-85)
 
 #### Research Insight: Naive Removal is NOT Safe
 
@@ -211,7 +211,7 @@ In `review-team.md`, replace the security-auditor dispatch (lines 49-53) with:
 # Check dispatch prompt for Phase 5→3 flag:
 IF task_size = "BIG" OR phase_5_3_triggered = true:
   Agent(
-    subagent_type="agent-orchestrator:security-auditor",
+    subagent_type="project-orchestrator:security-auditor",
     run_in_background=True,
     prompt="SPOT-CHECK mode: review ONLY the Phase 5→3 fix files for new
             vulnerabilities introduced by the fixes. Do NOT repeat full audit.
@@ -233,8 +233,8 @@ Update review-team.md team composition block (line 30): Remove `security-auditor
 ### Priority 3: Dynamic Hooks
 
 **Files to modify:**
-- `plugins/agent-orchestrator/hooks/hooks.json` (entire file)
-- NEW: `plugins/agent-orchestrator/hooks/pre-commit-lint.sh`
+- `plugins/project-orchestrator/hooks/hooks.json` (entire file)
+- NEW: `plugins/project-orchestrator/hooks/pre-commit-lint.sh`
 
 #### Research Insight: Extract to Script File
 
