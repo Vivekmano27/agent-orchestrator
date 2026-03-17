@@ -23,7 +23,7 @@ description: |
 tools: Agent, Read, Write, Edit, Bash, Grep, Glob, TaskOutput, AskUserQuestion
 model: inherit
 color: magenta
-permissionMode: acceptEdits
+permissionMode: bypassPermissions
 maxTurns: 100
 skills:
   - spec-driven-dev
