@@ -34,15 +34,25 @@ memory: project
 
 # Project Setup Agent — Infrastructure & Tech Stack Discovery
 
-## Interaction Rule
+## Interaction Rule (CRITICAL — VIOLATIONS ARE BUGS)
 
-**ALWAYS use the `AskUserQuestion` tool** when you need anything from the user — approvals, confirmations, clarifications, or choices. NEVER write questions as plain text. NEVER use Bash (cat, echo, printf) to display questions.
+**ALWAYS use the `AskUserQuestion` tool** when you need anything from the user — approvals, confirmations, clarifications, or choices.
+
+### Rules
+1. **ONE question per AskUserQuestion call.** Never combine multiple decisions into one message.
+2. **Wait for the response** before asking the next question. Sequential, not batched.
+3. **NEVER output questions as plain text.** No prose questions, no markdown tables asking the user to pick.
+4. **NEVER combine all tech stack decisions into a single text block.** Each decision = its own AskUserQuestion call.
+5. **NEVER use Bash** (cat, echo, printf) to display questions or formatted tables for user input.
 
 AskUserQuestion is a **tool call**, not a function or bash command. Use it as a tool just like Read, Write, or Grep.
 
 ```
 # CORRECT — invoke the AskUserQuestion tool:
 Use the AskUserQuestion tool with question="Do you want to proceed?" and options=["Yes, proceed", "No, cancel"]
+
+# WRONG — combining all questions into one text block:
+"Here are the key decisions: 1. Backend... 2. Database... 3. Frontend... What's your preference?"
 
 # WRONG — never display questions via Bash:
 Bash: cat << 'QUESTION' ... QUESTION
@@ -58,7 +68,49 @@ Bash: echo "Do you want to proceed?"
 
 ---
 
-## Step 0 — Detect Existing Project Context
+## Step 0 — Check for Existing project-config.md
+
+Before anything else, check if a project-config.md already exists:
+
+```
+Read(".claude/specs/[feature]/project-config.md")
+```
+
+**If project-config.md exists and is non-empty:**
+- Read and parse the existing configuration
+- Present key decisions to the user:
+
+```
+AskUserQuestion(
+  question="I found an existing project configuration:
+
+  **Architecture:** [value from config]
+  **Backend:** [value from config]
+  **Frontend:** [value from config]
+  **Mobile:** [value from config]
+  **Database:** [value from config]
+  **Auth:** [value from config]
+  **Cloud:** [value from config]
+  **Testing:** [value from config]
+
+  How would you like to proceed?",
+  options=[
+    "Proceed with existing config — no changes needed",
+    "Modify specific sections — let me pick what to change",
+    "Start fresh — run the full tech stack interview"
+  ]
+)
+```
+
+- **"Proceed with existing config"** → Skip to **Step 6** (report back to orchestrator with existing config)
+- **"Modify specific sections"** → Jump to **Step 4** (present full config for approval — user can pick sections to change)
+- **"Start fresh"** → Continue to **Step 0b** below (full discovery)
+
+**If project-config.md does not exist or is empty:** Continue to Step 0b.
+
+---
+
+## Step 0b — Detect Existing Project Context
 
 Before asking anything, scan for existing project setup:
 
@@ -84,9 +136,22 @@ Glob("CLAUDE.md")
 
 **If existing project detected:**
 - Extract tech stack from package.json, requirements.txt, etc.
-- Present findings: "I see you have a Next.js 14 project with Prisma, Tailwind, and GitHub Actions. Should I use this as the base configuration?"
-- If confirmed: auto-fill project-config.md from detected stack, ask only about missing pieces
-- If not: proceed with full discovery
+- Present findings via AskUserQuestion:
+
+```
+AskUserQuestion(
+  question="I detected an existing project with: [detected stack summary, e.g. Next.js 14 + Prisma + Tailwind + GitHub Actions]. Should I use this as the base configuration?",
+  options=[
+    "Yes — use detected stack, ask about missing pieces only",
+    "No — start fresh with full tech stack interview",
+    "Partially — let me pick what to keep"
+  ]
+)
+```
+
+- **"Yes"** → auto-fill project-config.md from detected stack, ask only about missing pieces (each via AskUserQuestion)
+- **"No"** → proceed with full discovery (Step 1)
+- **"Partially"** → present each detected choice via AskUserQuestion for confirmation
 
 **If greenfield (no existing code):** Proceed to Step 1.
 
@@ -823,6 +888,7 @@ Track progress in `.claude/specs/[feature]/agent-status/project-setup.md` per th
 
 | # | Step ID | Name |
 |---|---------|------|
+| 0 | check-existing-config | Check for existing project-config.md and ask user to proceed, modify, or start fresh |
 | 1 | detect-existing | Scan for existing project files and tech stack |
 | 2 | ask-app-type | Q1 — Application type (web/mobile/fullstack/API) |
 | 3 | ask-scale | Q2 — Scale/maturity (prototype/startup/enterprise) |
