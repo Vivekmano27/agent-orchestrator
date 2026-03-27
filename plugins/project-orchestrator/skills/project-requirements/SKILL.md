@@ -120,3 +120,24 @@ Review happens at phase gates, not during implementation.
 - Include edge cases per story
 - Specific: "tag appears in red" not "tags look nice"
 - Update PRD as decisions change — living document
+
+## Anti-Patterns
+
+- **Vague acceptance criteria** — "it should work well" instead of Given/When/Then; criteria must be testable by an agent
+- **Missing scope boundaries** — no explicit "out of scope" list leads to unbounded feature creep
+- **Assuming MVP without asking** — always ask the user whether they want MVP or production-ready scope
+- **Requirements without priorities** — when everything is P0, nothing is; rank user stories by business impact
+- **No edge cases** — happy path only; every user story needs at least one error/edge case scenario
+- **Mixing requirements with design** — requirements say WHAT, not HOW; "use Redis for caching" is a design decision, not a requirement
+
+## Checklist
+
+- [ ] User stories in "As a / I want / So that" format with IDs (US-001)
+- [ ] Each story has Given/When/Then acceptance criteria
+- [ ] Business rules documented (BR-001) with clear logic
+- [ ] Non-functional requirements specified (performance, security, scale)
+- [ ] Scope boundaries explicit (in-scope AND out-of-scope lists)
+- [ ] Edge cases identified per story
+- [ ] Open questions listed for stakeholder resolution
+- [ ] Feature priority assigned (P0/P1/P2)
+- [ ] Output saved to `.claude/specs/[feature]/requirements.md`

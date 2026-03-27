@@ -193,3 +193,25 @@ Write to `.claude/specs/{feature}/compliance-report.md`:
 - Do not reproduce regulation text. The agent's job is to find code-level evidence, not teach law.
 - PII fields discovered in Step 1 that lack encryption MUST appear as findings, even if the developer says "it's fine." Compliance is binary.
 - If the codebase has no audit logging at all, that is a single critical finding, not one finding per endpoint. Don't inflate the report.
+
+## Anti-Patterns
+
+- **Assumed compliance** — marking requirements as PASS without code evidence; every PASS needs a file:line citation
+- **Copy-pasting regulation text** — reproducing legal language instead of checking code; the agent finds evidence, not teaches law
+- **Inflating findings** — creating one finding per endpoint for a systemic issue; "no audit logging" is one finding, not twenty
+- **Ignoring N/A frameworks** — silently skipping non-applicable regulations; explicitly state why a framework doesn't apply
+- **Compliance without consent** — checking data handling without verifying consent mechanisms exist
+- **No data flow tracing** — checking storage encryption without tracing where PII enters, flows, and exits the system
+
+## Checklist
+
+- [ ] Applicable regulations identified (GDPR, CCPA, HIPAA, PCI-DSS, SOC2)
+- [ ] PII fields discovered and cataloged
+- [ ] Data flow traced (ingress, storage, processing, egress)
+- [ ] Encryption verified for PII at rest and in transit
+- [ ] Consent mechanisms checked (opt-in, opt-out, data deletion)
+- [ ] Audit logging verified for sensitive operations
+- [ ] Data retention policies documented
+- [ ] Every PASS finding cites specific file:line evidence
+- [ ] Non-applicable frameworks explicitly noted with rationale
+- [ ] Report saved to `.claude/specs/[feature]/compliance-report.md`

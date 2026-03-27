@@ -137,3 +137,12 @@ If a story feels bigger than L, split it using these patterns:
 | Input method        | "Upload avatar" -> Upload from file, Upload from URL, Crop avatar |
 | Happy/sad path      | "Submit form" -> Submit valid form, Handle validation errors     |
 | Platform            | "Send notification" -> Email notification, Push notification     |
+
+## Anti-Patterns
+
+- **Stories without acceptance criteria** — "As a user I want to log in" with no Given/When/Then; untestable stories waste implementation time
+- **Technical tasks disguised as stories** — "Set up Redis caching" is a task, not a user story; stories describe user-visible behavior
+- **Stories too large** — if a story takes more than 5 days, split it using the patterns above
+- **Missing personas** — all stories starting with "As a user"; identify specific roles (admin, manager, guest) with different needs
+- **No edge cases** — only happy path acceptance criteria; every story should consider what happens when things go wrong
+- **Dependencies not identified** — stories that can't be implemented without other stories being done first; mark explicit dependencies

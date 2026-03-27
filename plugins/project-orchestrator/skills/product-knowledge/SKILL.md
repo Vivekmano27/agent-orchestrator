@@ -135,3 +135,20 @@ exist so they don't accidentally rebuild something that's already handled.]
 | [REPLACE]      | [REPLACE]                        | [REPLACE: env var names]  | [REPLACE: URL]            |
 | [REPLACE]      | [REPLACE]                        | [REPLACE]                 | [REPLACE]                 |
 ```
+
+## Anti-Patterns
+
+- **Generic placeholder content** — leaving [REPLACE] tags in production; every section must be filled with actual product data
+- **Stale product knowledge** — not updating when features ship or pivot; agents make wrong assumptions from outdated docs
+- **Too technical** — product.md should describe WHAT the product does for users, not HOW it's implemented
+- **Missing user workflows** — listing features without describing the end-to-end user journey
+- **No integration documentation** — agents try to build features that third-party integrations already handle
+
+## Checklist
+
+- [ ] All [REPLACE] placeholders filled with actual product information
+- [ ] Core features listed with user-facing descriptions
+- [ ] Key user workflows documented end-to-end
+- [ ] External integrations listed with config locations
+- [ ] Business rules documented where they affect implementation
+- [ ] Updated when product scope changes

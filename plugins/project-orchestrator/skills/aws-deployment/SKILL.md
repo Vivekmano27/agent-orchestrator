@@ -169,3 +169,23 @@ databases:
   - name: app-db
     plan: starter
 ```
+
+## Anti-Patterns
+
+- **Deploying without health checks** — containers or services without health check endpoints; load balancers can't route traffic correctly
+- **Hardcoded secrets in deployment configs** — putting API keys in task definitions or render.yaml; use secret managers or env var injection
+- **No rollback plan** — deploying without knowing how to revert; every deployment needs a documented rollback procedure
+- **Using :latest tag** — container images tagged :latest are non-deterministic; always pin to a specific version or SHA
+- **No staging environment** — deploying directly to production without a staging test; staging catches integration issues
+- **Manual deployments** — running deploy commands by hand; automate via CI/CD pipeline
+
+## Checklist
+
+- [ ] Dockerfile uses multi-stage build with minimal production image
+- [ ] Health check endpoint exists and is configured in deployment
+- [ ] Secrets injected via environment variables or secret manager (not in code)
+- [ ] Container images tagged with specific version (not :latest)
+- [ ] Staging environment matches production configuration
+- [ ] Rollback procedure documented and tested
+- [ ] CI/CD pipeline handles build, test, and deploy stages
+- [ ] Monitoring and alerting configured for deployed services

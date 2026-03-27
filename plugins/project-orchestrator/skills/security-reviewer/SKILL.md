@@ -124,3 +124,12 @@ trivy fs --scanners misconfig --format json --output trivy-misconfig.json .
 ### [HIGH] [Title]
 [same format]
 ```
+
+## Anti-Patterns
+
+- **Scan-only reviews** — running tools without reading code; tools miss logic flaws and auth bypasses
+- **Reporting false positives** — flagging test files or example keys as findings; verify before reporting
+- **No severity ratings** — issues without Critical/High/Medium/Low can't be prioritized
+- **Ignoring stack context** — flagging SQL injection in ORM-only codebases; understand the stack first
+- **Not checking deps** — reviewing code but ignoring vulnerable packages; delegate to dependency-audit
+- **Security theater** — recommending fixes without showing the actual code change needed

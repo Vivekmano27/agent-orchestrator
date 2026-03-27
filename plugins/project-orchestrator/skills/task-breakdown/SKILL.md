@@ -125,3 +125,14 @@ Tasks that share no file dependencies and no data dependencies can run in parall
 - "Update tests" — which tests? What behavior? What assertions?
 - TASK with no Files section — agent wastes time figuring out where to write code
 - TASK with `Verify: manually check the UI` — agents cannot manually check anything, provide a command
+
+## Checklist
+
+- [ ] Every design element maps to at least one task
+- [ ] Tasks ordered by dependency (no circular deps)
+- [ ] Each task has: Files, Depends On, Verify command, Effort, Commit message
+- [ ] Verify commands are executable (not "manually check")
+- [ ] Task IDs use TASK-NNN format
+- [ ] Effort estimates assigned (S/M/L)
+- [ ] Foundation tasks (models, config) come before feature tasks
+- [ ] Output saved to `.claude/specs/[feature]/tasks.md`

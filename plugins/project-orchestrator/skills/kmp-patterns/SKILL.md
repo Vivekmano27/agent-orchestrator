@@ -137,3 +137,23 @@ fun UserListScreen(viewModel: UserListViewModel = koinViewModel()) {
     }
 }
 ```
+
+## Anti-Patterns
+
+- **Platform code in commonMain** — putting Android/iOS specific code in shared modules; use expect/actual
+- **No expect/actual for platform APIs** — directly referencing platform classes instead of abstracting
+- **Fat ViewModels** — putting business logic in ViewModels; extract into use cases in domain layer
+- **Not testing commonMain** — only testing platform-specific code; shared logic needs comprehensive coverage
+- **Mixing DI frameworks** — using Koin in some modules and manual DI in others; be consistent
+- **Ignoring Kotlin/Native concurrency** — sharing mutable state across threads without proper isolation
+
+## Checklist
+
+- [ ] Shared business logic in commonMain
+- [ ] expect/actual for platform-specific APIs
+- [ ] Ktor client in commonMain with platform engines
+- [ ] SQLDelight schema for local persistence
+- [ ] Koin modules for dependency injection
+- [ ] ViewModels use StateFlow for UI state
+- [ ] commonTest covers shared logic
+- [ ] Platform tests in androidTest/iosTest

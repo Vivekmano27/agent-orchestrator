@@ -174,3 +174,23 @@ describe('UsersService', () => {
   });
 });
 ```
+
+## Anti-Patterns
+
+- **Fat controllers** — putting business logic in controllers; controllers should only parse input, call service, and format response
+- **Skipping DTOs** — accepting raw request bodies without class-validator DTOs; validation must happen at the API boundary
+- **Circular module dependencies** — Module A imports Module B which imports Module A; use forwardRef() or restructure
+- **No global exception filter** — letting NestJS default error handler leak stack traces; always register a GlobalExceptionFilter
+- **Testing with real database** — unit tests hitting PostgreSQL; mock the repository, use integration tests for DB queries
+- **Injecting repositories in controllers** — controllers should depend on services, not repositories; maintain the layer separation
+
+## Checklist
+
+- [ ] Feature organized as a NestJS Module (module, controller, service, DTOs)
+- [ ] DTOs use class-validator decorators for input validation
+- [ ] Controllers are thin — delegate to services
+- [ ] Global exception filter registered in main.ts
+- [ ] Services injected via constructor (NestJS DI)
+- [ ] Unit tests mock repositories with Test.createTestingModule
+- [ ] Integration tests use Supertest with real app instance
+- [ ] Custom domain exceptions extend HttpException

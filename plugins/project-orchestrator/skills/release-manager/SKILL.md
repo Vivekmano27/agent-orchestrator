@@ -185,3 +185,23 @@ Before creating the tag, verify CI status:
 gh run list --branch main --limit 1 --json status,conclusion
 ```
 If the latest run is not `success`, stop and report the failure. Do not create a release from a failing build.
+
+## Anti-Patterns
+
+- **Releasing from a failing build** — creating a release when CI is red; always verify CI passes first
+- **No changelog** — releasing without documenting what changed; users and developers need to know what's in each version
+- **Skipping semver** — bumping versions randomly instead of following semver rules (breaking = major, feature = minor, fix = patch)
+- **No git tag** — releasing without a corresponding git tag; tags are the source of truth for what code is in a release
+- **Manual version bumps** — editing version numbers by hand in multiple files; automate via scripts or CI
+- **No rollback procedure** — releasing without knowing how to revert to the previous version
+
+## Checklist
+
+- [ ] CI passes on the release commit
+- [ ] Version bumped following semver (major/minor/patch)
+- [ ] CHANGELOG.md updated with grouped entries (Added/Changed/Fixed/Security)
+- [ ] Git tag created (v{version})
+- [ ] GitHub release created with release notes
+- [ ] All release artifacts built and published
+- [ ] Rollback procedure documented (which tag to revert to)
+- [ ] Team notified of the release
