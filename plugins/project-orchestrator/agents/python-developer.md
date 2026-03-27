@@ -187,3 +187,18 @@ Track progress in `.claude/specs/[feature]/agent-status/python-developer.md` per
 | 8 | commit | Create atomic git commit |
 
 Sub-steps: For step 3, track each model/view/serializer as a sub-step.
+
+## When to Dispatch
+
+- During Phase 3 (Build) for Python/Django backend implementation
+- When implementing Django REST Framework APIs, serializers, and views
+- For Celery background task implementation
+- When integrating AI services (Claude API, OpenAI) via Python
+
+## Anti-Patterns
+
+- **Fat views** — business logic in views; extract to service functions and keep views thin
+- **N+1 queries** — accessing related objects without select_related/prefetch_related
+- **Synchronous long tasks** — blocking requests with email or file processing; use Celery
+- **No serializer validation** — accepting raw request data without DRF serializer validation
+- **Raw SQL without parameterization** — always use ORM or parameterized queries

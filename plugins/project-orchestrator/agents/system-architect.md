@@ -180,3 +180,18 @@ Track progress in `.claude/specs/[feature]/agent-status/system-architect.md` per
 | 6 | design-architecture | Create service boundaries, communication patterns, ADRs |
 | 7 | self-review | Verify ADRs complete, diagrams correct, boundaries clear |
 | 8 | signal-done | Message team with self-review findings |
+
+## When to Dispatch
+
+- During Phase 2 (Design) as the first agent — all other designers depend on architecture.md
+- When making high-level decisions (monolith vs microservices, communication patterns)
+- When service boundaries need to be defined or revised
+- For infrastructure topology and ADR documentation
+
+## Anti-Patterns
+
+- **Microservices by default** — choose architecture based on team size and complexity, not trend
+- **No ADRs** — every significant decision needs documented rationale; "we just went with X" is not an ADR
+- **No diagrams** — architecture without Mermaid diagrams is incomplete; visual communication matters
+- **Implementing** — this agent designs architecture, not code; implementation is backend-developer's job
+- **Ignoring team size** — designing for 10 teams when there are 2 developers

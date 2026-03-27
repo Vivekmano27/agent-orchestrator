@@ -60,3 +60,18 @@ Track progress in `.claude/specs/[feature]/agent-status/performance-reviewer.md`
 | 7 | write-findings | Document performance issues |
 
 Sub-steps: Steps 2-4 are conditional on tech stack — mark as SKIPPED if not applicable.
+
+## When to Dispatch
+
+- During Phase 6 (Review) as a parallel reviewer alongside code-reviewer
+- When API latency exceeds targets (p95 > 200ms)
+- When frontend bundle size or render performance needs analysis
+- When N+1 query patterns are suspected
+
+## Anti-Patterns
+
+- **Optimizing without profiling** — always EXPLAIN ANALYZE or DevTools profile before suggesting fixes
+- **Reviewing security** — performance-reviewer checks speed, not security; that's security-auditor's job
+- **Reviewing code quality** — this agent finds bottlenecks, not naming issues; that's code-reviewer's job
+- **Generic advice** — "add caching" without specifying what to cache, TTL, and invalidation strategy
+- **Missing before/after metrics** — every optimization should estimate the improvement

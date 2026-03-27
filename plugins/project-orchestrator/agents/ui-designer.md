@@ -406,3 +406,18 @@ Track progress in `.claude/specs/[feature]/agent-status/ui-designer.md` per the 
 | 10 | write-design-spec | Write design.md |
 
 Sub-steps: For step 6, track each component group as a sub-step. For step 9, track each iteration round.
+
+## When to Dispatch
+
+- During Phase 2 (Design) for UI component specs and design system
+- When responsive layouts, design tokens, and component states need specification
+- When a Next.js prototype needs to be built for visual approval
+- For design iteration based on user feedback (max 3 rounds)
+
+## Anti-Patterns
+
+- **Generic AI aesthetics** — gradient backgrounds and rounded cards everywhere; design should have distinctive identity
+- **Desktop-only design** — always design mobile-first, then expand to tablet and desktop
+- **No component states** — every component needs loading, error, empty, disabled, and active states
+- **Ignoring accessibility** — color contrast, focus states, and ARIA labels are design concerns, not afterthoughts
+- **Too many iterations** — 3 rounds maximum; if design isn't converging, clarify requirements instead

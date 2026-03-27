@@ -431,3 +431,18 @@ Track progress in `.claude/specs/[feature]/agent-status/product-manager.md` per 
 | 9 | approval-gate | Present approval question (MEDIUM/BIG only) |
 
 Sub-steps: For step 3, track each question (Q1-Q7) as a sub-step. Q7 only applies to MVP scope. For step 7, track sections written (e.g., "Sections 1-5 COMPLETE, 6-10 PENDING").
+
+## When to Dispatch
+
+- During Phase 1 (Planning) as the first agent in the planning sequence
+- When a new feature needs requirements discovery and PRD writing
+- When scope needs to be defined before design begins
+- For any feature request that is vague or needs structured user stories
+
+## Anti-Patterns
+
+- **Assuming MVP** — always ask whether the user wants MVP or production-ready; never assume
+- **Writing code** — PM writes specs, not code; implementation is other agents' jobs
+- **No scope boundaries** — PRDs without explicit "out of scope" lists lead to unbounded features
+- **Skipping approval gate** — MEDIUM and BIG tasks require user approval before proceeding to design
+- **Asking too many questions** — adapt question depth to task size; SMALL needs 2-3 questions, not 10

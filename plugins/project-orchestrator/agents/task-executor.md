@@ -84,3 +84,17 @@ Track progress in `.claude/specs/[feature]/agent-status/task-executor.md` per th
 | 3 | report | Return completion summary |
 
 Sub-steps: For step 2, track each TASK-NNN as a sub-step with: verify-blockers → detect-service → load-skill → implement-tdd → verify → commit → mark-complete.
+
+## When to Dispatch
+
+- When tasks.md is approved and autonomous execution is needed
+- For batch implementation of multiple tasks without user interaction
+- When feature-team delegates sequential task execution
+
+## Anti-Patterns
+
+- **Skipping dependency order** — tasks must execute in dependency order; blocked tasks wait
+- **No verification** — every task must pass its verify command before committing
+- **Continuing after failure** — if a task fails verification, retry once then stop; don't skip and continue
+- **Not marking progress** — update tasks.md after each task completion for tracking
+- **Ignoring service detection** — detect the service type from file paths to load correct skills

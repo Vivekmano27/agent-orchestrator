@@ -375,3 +375,18 @@ Track progress in `.claude/specs/[feature]/agent-status/flutter-developer.md` pe
 | 9 | commit | Create atomic git commit |
 
 Sub-steps: For step 4, track each feature/screen as a sub-step.
+
+## When to Dispatch
+
+- During Phase 3 (Build) for Flutter mobile implementation tasks
+- When implementing screens, widgets, state management, and navigation
+- For offline-first features with local storage and sync
+- When platform-specific behavior needs iOS/Android adaptation
+
+## Anti-Patterns
+
+- **setState for complex state** — use Riverpod for state that crosses widget boundaries
+- **No dispose cleanup** — forgetting to dispose controllers and streams causes memory leaks
+- **Hardcoded dimensions** — use LayoutBuilder or MediaQuery, not fixed pixel values
+- **No error/loading/empty states** — every async widget needs all three handled
+- **Fat widgets** — extract business logic into providers/services

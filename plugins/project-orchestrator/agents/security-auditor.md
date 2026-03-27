@@ -156,3 +156,18 @@ Track progress in `.claude/specs/[feature]/agent-status/security-auditor.md` per
 |---|---------|------|
 | 1 | review-code-changes | Review only new code changes (not full audit) |
 | 2 | return-findings | Send findings inline to review-team |
+
+## When to Dispatch
+
+- During Phase 5 (Security) for full OWASP + STRIDE audit
+- During Phase 6 (Review) for focused spot-check of new code changes
+- When the security pipeline finds committed secrets (STOP trigger)
+- Before any production deployment to verify security posture
+
+## Anti-Patterns
+
+- **Full audit in Phase 6** — Phase 6 is a spot-check; the full audit happens in Phase 5
+- **Reporting false positives** — verify findings against actual code before flagging; test files and example keys are not real secrets
+- **No severity classification** — every finding needs Critical/High/Medium/Low severity
+- **Skipping secrets scan** — secrets-scanner runs FIRST; committed secrets trigger immediate STOP
+- **Not citing file:line** — vague findings like "auth might be weak" are not actionable

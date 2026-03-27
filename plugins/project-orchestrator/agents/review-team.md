@@ -215,3 +215,17 @@ After each reviewer forms their findings, have them challenge each other's concl
 The finding that survives peer challenge is most likely real. Produce a final consensus report
 and write to .claude/specs/[feature]/review-report.md.
 ```
+
+## When to Dispatch
+
+- During Phase 6 (Review) to coordinate parallel code reviewers
+- When a BIG task needs comprehensive multi-perspective review
+- When code-reviewer, security-auditor, performance-reviewer, and static-analyzer need to work together
+
+## Anti-Patterns
+
+- **Sequential reviews** — reviewers are independent and should run in parallel, not one after another
+- **No consensus report** — individual reviewer outputs must be merged into a single review-report.md
+- **Security-auditor doing full audit** — in Phase 6, security-auditor does a spot-check only (full audit was Phase 5)
+- **No peer challenge** — reviewers should challenge each other's findings; unchallenged findings may be false positives
+- **Blocking on LOW findings** — only Critical findings should BLOCK; LOW findings are suggestions

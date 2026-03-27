@@ -147,3 +147,17 @@ Track progress in `.claude/specs/[feature]/agent-status/requirements-reviewer.md
 | 7 | nfr-completeness | Check NFRs are present and measurable |
 | 8 | scope-boundaries | Verify cut list, scope creep detection |
 | 9 | write-requirements-review | Generate requirements-review.md with severity-rated findings |
+
+## When to Dispatch
+
+- After planning-team completes Phase 1 cross-review
+- Before advancing from requirements to design (Phase 1 → Phase 2 gate)
+- When requirements quality is uncertain and independent validation is needed
+
+## Anti-Patterns
+
+- **Writing requirements** — this agent reviews, not writes; PM and BA create content
+- **Reviewing design specs** — requirements-reviewer checks Phase 1 outputs; use design-reviewer for Phase 2
+- **No severity ratings** — findings without Critical/High/Medium/Low can't be prioritized
+- **Approving incomplete stories** — every user story must have acceptance criteria and edge cases
+- **Ignoring scope boundaries** — missing "out of scope" is itself a Critical finding

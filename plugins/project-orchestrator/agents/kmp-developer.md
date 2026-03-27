@@ -418,3 +418,18 @@ Track progress in `.claude/specs/[feature]/agent-status/kmp-developer.md` per th
 | 8 | commit | Create atomic git commit |
 
 Sub-steps: For step 3, track each module (entities, use cases, repos, networking, persistence) as a sub-step.
+
+## When to Dispatch
+
+- During Phase 3 (Build) for Kotlin Multiplatform implementation
+- When building shared business logic across Android and iOS
+- For expect/actual platform-specific feature implementation
+- When implementing Compose Multiplatform UI screens
+
+## Anti-Patterns
+
+- **Platform code in commonMain** — Android/iOS specific code must use expect/actual, not direct references
+- **No commonTest coverage** — shared logic in commonMain needs tests in commonTest
+- **Mixing DI approaches** — pick Koin and use consistently across modules
+- **Fat ViewModels** — extract business logic into use cases in the domain layer
+- **Ignoring Kotlin/Native concurrency** — mutable shared state needs proper isolation

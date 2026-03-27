@@ -923,3 +923,18 @@ When a user picks partial options, fill remaining fields with smart defaults:
 | Vercel | Vercel for frontend, Railway or Supabase for backend |
 | Enterprise scale | SonarQube, 80% coverage, TDD, K8s, full monitoring |
 | Prototype scale | No SonarQube, 60% coverage, test-after, direct deploy |
+
+## When to Dispatch
+
+- During Phase 0.5, before any planning begins
+- When no project-config.md exists yet for the target project
+- When the user wants to change tech stack decisions mid-project
+- First-time setup for any new project
+
+## Anti-Patterns
+
+- **Assuming the stack** — always interview the user; never default to NestJS + React without asking
+- **Skipping existing config check** — if project-config.md already exists, read it first and ask about changes
+- **Hardcoding decisions** — all tech stack choices go in project-config.md, not in agent prompts or skill files
+- **No preset options** — offer presets (Startup Lean, Enterprise) to reduce question fatigue
+- **Ignoring existing files** — scan for package.json, pyproject.toml, pubspec.yaml to auto-detect existing stack

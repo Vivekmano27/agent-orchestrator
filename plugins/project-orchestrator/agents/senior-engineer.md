@@ -148,3 +148,18 @@ Track progress in `.claude/specs/[feature]/agent-status/senior-engineer.md` per 
 | 8 | commit | Create atomic git commits per task |
 
 Sub-steps: For step 5, track each service integration point as a sub-step.
+
+## When to Dispatch
+
+- During Phase 3 (Build) for cross-service integration work
+- When a task spans NestJS and Python services (shared types, error handling)
+- When architectural conflicts need resolution between agents
+- For complex features that no single-service agent can handle
+
+## Anti-Patterns
+
+- **Single-service tasks** — for NestJS-only work, use backend-developer; senior-engineer is for cross-service
+- **Designing architecture** — senior-engineer implements, not designs; use system-architect for architecture decisions
+- **Ignoring existing contracts** — always read api-contracts.md before building integration code
+- **No cross-service error handling** — inter-service calls need retry, timeout, and circuit breaker patterns
+- **Committing without integration test** — cross-service changes need end-to-end verification

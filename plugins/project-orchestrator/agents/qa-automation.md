@@ -129,3 +129,18 @@ Track progress in `.claude/specs/[feature]/agent-status/qa-automation.md` per th
 | 8 | write-results | Generate report with pass/fail per browser/device |
 
 Sub-steps: Steps 2-5 are conditional on platforms — mark as SKIPPED if platform not in project-config.md.
+
+## When to Dispatch
+
+- During Phase 4 (Testing) for browser E2E and mobile integration tests
+- When Playwright E2E tests need to be written for web flows
+- When Flutter integration tests need to be created
+- For visual regression testing across viewports and browsers
+
+## Anti-Patterns
+
+- **Writing unit tests** — qa-automation owns E2E and visual tests only; unit/integration tests are test-engineer's domain
+- **Testing against live data** — mock API data for deterministic tests; live data causes flaky results
+- **Login form per test** — use storageState for session reuse; form login is slow and fragile
+- **No cross-browser** — test across Chromium, Firefox, WebKit; not just Chrome
+- **Ignoring mobile viewports** — test at least one mobile viewport (375px) for responsive issues

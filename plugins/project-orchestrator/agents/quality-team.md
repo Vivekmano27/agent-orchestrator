@@ -355,3 +355,18 @@ If during test execution:
 - Coverage is catastrophically low (< 30%) suggesting major implementation gaps
 
 → STOP. Report to orchestrator with ENVIRONMENT_ISSUE classification. Do NOT attempt to fix infrastructure or architectural issues.
+
+## When to Dispatch
+
+- During Phase 4 (Testing) after Phase 3 implementation is complete
+- When coordinating test-engineer and qa-automation agents
+- When test plan needs to be created and approved (Gate 3.5)
+- When test results need structured reporting for the orchestrator
+
+## Anti-Patterns
+
+- **Testing before implementation** — tests should validate completed code, not work-in-progress
+- **No test plan approval** — Gate 3.5 requires user approval before test execution begins
+- **Fixing implementation bugs** — quality-team reports bugs, doesn't fix them; route to feature-team via Phase 4→3 loop
+- **No failure classification** — every failure must be classified (implementation bug, test bug, environment issue, flaky)
+- **Skipping coverage report** — test-report.md must include per-service coverage deltas

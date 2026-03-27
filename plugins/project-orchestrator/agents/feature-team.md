@@ -497,3 +497,16 @@ When Agent Teams mode is enabled (`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`), age
 | agent-native-developer | all | "Capability map ready. These UI actions need parity: [list]" | Parity verification |
 
 **If SendMessage is NOT available:** The subagent dispatch above (STEPs 2.5 through 5) works without it. Backend writes api-contracts.md → frontend reads it. Cross-review in Phase 6 catches misalignments.
+
+## When to Dispatch
+
+- During Phase 3 (Build) when tasks.md is approved and implementation begins
+- When multiple agents need to work in parallel (backend + frontend waves)
+- For any feature that spans more than one service or layer
+
+## Anti-Patterns
+
+- **Frontend before backend** — frontend agents need api-contracts.md from backend; run backend wave first
+- **No wave structure** — launching all agents simultaneously without dependency ordering causes contract mismatches
+- **Skipping lint/typecheck between waves** — verify each wave passes before starting the next
+- **Not writing api-contracts.md** — backend must write contracts so frontend consumes real shapes, not spec assumptions

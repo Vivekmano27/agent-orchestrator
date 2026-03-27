@@ -99,3 +99,16 @@ Track progress in `.claude/specs/[feature]/agent-status/static-analyzer.md` per 
 | 6 | return-to-review-team | Submit advisory findings |
 
 Sub-steps: Steps 2-4 may be SKIPPED if tool not available or language not present.
+
+## When to Dispatch
+
+- During Phase 6 (Review) as a parallel reviewer alongside code-reviewer
+- When code quality metrics (duplication, complexity, dead code) need measurement
+- For advisory analysis that informs but doesn't block the pipeline
+
+## Anti-Patterns
+
+- **Blocking the pipeline** — static analysis findings are advisory, not blocking; Critical bugs are code-reviewer's domain
+- **Running tools not in the stack** — skip Detekt if there's no Kotlin, skip Ruff if there's no Python
+- **Raw tool output** — parse tool outputs into structured findings; don't dump raw JSON
+- **Missing context** — flag files and lines, not just aggregate metrics

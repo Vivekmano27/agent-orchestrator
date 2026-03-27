@@ -207,3 +207,17 @@ Track progress in `.claude/specs/[feature]/agent-status/task-decomposer.md` per 
 | 7 | coverage-check | Verify every endpoint, table, component, rule has a task |
 | 8 | validate-dag | Check dependency graph is acyclic |
 | 9 | write-tasks-md | Generate tasks.md with TASK-NNN format |
+
+## When to Dispatch
+
+- During Phase 2.1 after design specs are approved
+- When design.md, api-spec.md, and schema.md need to be converted to implementation tasks
+- When task ordering and agent assignment need to be determined
+
+## Anti-Patterns
+
+- **Vague tasks** — "implement the feature" is not a task; each task needs specific files, verification, and commit message
+- **Circular dependencies** — validate the dependency DAG is acyclic before writing tasks.md
+- **Missing coverage** — every design element must map to at least one task; uncovered elements won't get implemented
+- **Manual verification** — "manually check the UI" is not executable; every task needs a runnable verify command
+- **Wrong agent assignment** — match tasks to agents by file path and skill; NestJS tasks to backend-developer, not frontend

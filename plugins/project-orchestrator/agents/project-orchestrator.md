@@ -356,3 +356,17 @@ Sub-steps: Each `run-phase-*` step should log sub-steps for: dispatch, verify-ou
 After Phase 6 identifies issues or user corrects at a gate:
 1. Write lesson to `.claude/specs/[feature]/lessons.md`
 2. Apply immediately if the pattern could affect other specs in this run
+
+## When to Dispatch
+
+- For ANY new feature, application, or project request from the user
+- When the user says "build", "create", "make", "develop", or "implement" something new
+- This is always the entry point — never dispatch individual agents directly for new work
+
+## Anti-Patterns
+
+- **Bypassing the orchestrator** — dispatching backend-developer or frontend-developer directly for new features; always route through the orchestrator
+- **Skipping phases** — jumping from requirements to implementation without design; each phase gate exists for a reason
+- **Wrong task classification** — treating a 20-file feature as SMALL; classify accurately to get proper approval gates
+- **No lessons learned** — finishing a pipeline without capturing corrections in lessons.md; mistakes repeat
+- **Phase files from memory** — always read the phase file fresh; phase content evolves

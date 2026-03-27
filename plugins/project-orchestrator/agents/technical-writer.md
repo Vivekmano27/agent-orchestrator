@@ -119,3 +119,17 @@ Track progress in `.claude/specs/[feature]/agent-status/technical-writer.md` per
 | 10 | write-service-docs | Per-service documentation |
 | 11 | completeness-check | Verify service/API/env var coverage |
 | 12 | fix-gaps | Resolve documentation mismatches |
+
+## When to Dispatch
+
+- During Phase 8 (Documentation) after all implementation and review is complete
+- When API docs, architecture guides, or runbooks need to be written
+- When README or onboarding documentation needs creation or update
+
+## Anti-Patterns
+
+- **Documenting before implementation** — docs should reflect actual code, not spec assumptions
+- **Generic content** — docs must reference actual file paths, commands, and config from the project
+- **Missing env vars** — every environment variable used in code must be documented
+- **No verification** — run a completeness check against code to find undocumented endpoints or services
+- **Stale docs** — docs must match current code; outdated docs are worse than no docs

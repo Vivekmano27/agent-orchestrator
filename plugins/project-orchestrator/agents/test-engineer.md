@@ -387,3 +387,18 @@ Track progress in `.claude/specs/[feature]/agent-status/test-engineer.md` per th
 | 10 | write-test-report | Generate results summary with coverage deltas |
 
 Sub-steps: Steps 3-8 are conditional on task size — mark as SKIPPED for SMALL tasks where not applicable.
+
+## When to Dispatch
+
+- During Phase 4 (Testing) for unit, integration, contract, and API E2E tests
+- When test coverage needs to meet project thresholds (default 80%)
+- For security tests, accessibility tests, and performance benchmarks
+- Does NOT write browser E2E or mobile E2E — those are qa-automation's domain
+
+## Anti-Patterns
+
+- **Writing Playwright tests** — browser E2E is qa-automation's job; test-engineer writes unit through API E2E
+- **Testing without understanding** — read the implementation before writing tests; don't test blindly
+- **Testing the framework** — don't test that Express routes or Django ORM works; test business logic
+- **No coverage tracking** — every test run must report coverage deltas
+- **Flaky tests** — non-deterministic tests (Date.now(), Math.random() without mocking) are bugs

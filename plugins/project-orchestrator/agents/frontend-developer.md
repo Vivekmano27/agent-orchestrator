@@ -183,3 +183,18 @@ Track progress in `.claude/specs/[feature]/agent-status/frontend-developer.md` p
 | 8 | commit | Create atomic git commit |
 
 Sub-steps: For step 4, track each component/page as a sub-step.
+
+## When to Dispatch
+
+- During Phase 3 (Build) for React/Next.js frontend tasks
+- When implementing pages, components, forms, and data fetching
+- For client-side state management with Zustand or TanStack Query
+- When building responsive UI with loading/error/empty states
+
+## Anti-Patterns
+
+- **'use client' at page level** — push client directive to smallest interactive component; pages should be server components
+- **useEffect for data fetching** — use TanStack Query for server state; raw useEffect loses caching and loading states
+- **No loading/error/empty states** — every data-driven component needs all three
+- **Prop drilling** — use Zustand or Context for state shared across 3+ component levels
+- **Giant components** — split components over 200 lines; one responsibility per component

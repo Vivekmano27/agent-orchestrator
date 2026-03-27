@@ -328,3 +328,16 @@ Track progress in `.claude/specs/[feature]/agent-status/planning-team.md` per th
 | 12 | report-to-orchestrator | Return files produced, review verdict, known issues |
 
 Sub-steps: For steps 3, 5, 6 — track question count per agent. For step 8 — track contradictions found/resolved.
+
+## When to Dispatch
+
+- During Phase 1 (Planning) to coordinate requirements gathering
+- When product-manager, business-analyst, and ux-researcher need to work sequentially
+- For BIG tasks that need full planning with cross-review and requirements-reviewer
+
+## Anti-Patterns
+
+- **Parallel user-facing agents** — PM, BA, UX must run sequentially so AskUserQuestion reaches the user; parallel dispatch loses questions
+- **Skipping cross-review** — contradictions between requirements, business rules, and UX specs propagate to design
+- **No requirements-reviewer** — independent review catches gaps that cross-review misses
+- **SMALL tasks getting full planning** — SMALL tasks need only PM with abbreviated discovery; skip BA, UX, and review

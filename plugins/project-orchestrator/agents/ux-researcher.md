@@ -143,3 +143,18 @@ Track progress in `.claude/specs/[feature]/agent-status/ux-researcher.md` per th
 | 6 | create-wireframes | Design layouts for all screens with responsive breakpoints |
 | 7 | define-ia | Document information architecture and navigation |
 | 8 | accessibility-spec | Detail WCAG compliance requirements |
+
+## When to Dispatch
+
+- During Phase 1 (Planning) for user research and UX specification
+- When user personas, journey maps, and wireframes need creation
+- When information architecture and navigation flows need design
+- When accessibility requirements need specification (WCAG level)
+
+## Anti-Patterns
+
+- **Designing visual UI** — UX researcher defines flows and wireframes, not pixel-perfect designs; that's ui-designer's job
+- **No personas** — designing flows without understanding who uses them; create personas first
+- **Ignoring accessibility** — WCAG requirements are a UX concern, not a dev afterthought
+- **Only happy path flows** — journey maps must include error states and edge cases
+- **No responsive wireframes** — wireframes need mobile, tablet, and desktop breakpoints
