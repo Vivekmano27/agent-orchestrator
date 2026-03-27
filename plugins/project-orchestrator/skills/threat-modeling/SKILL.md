@@ -114,3 +114,23 @@ For each cross-service boundary, document:
 - Do not explain STRIDE categories to the user. They are a framework for your analysis, not deliverable content.
 - If a component has no threats in a STRIDE category, omit that row. Do not write "N/A" rows.
 - Rate every finding. Unrated findings are useless to the security-auditor agent downstream.
+
+## Anti-Patterns
+
+- **Threat modeling after launch** — threat models should be created during design, not as an afterthought after deployment; finding threats early is 10x cheaper to fix
+- **Only modeling external threats** — ignoring insider threats and supply chain risks; STRIDE covers elevation of privilege and repudiation for a reason
+- **No severity ratings** — listing threats without rating them; teams can't prioritize without severity (Critical/High/Medium/Low)
+- **Theoretical threats with no context** — listing generic threats that don't apply to the specific system; every threat should reference a specific component or data flow
+- **Modeling without the codebase** — running STRIDE from a whiteboard diagram only; the grep-based discovery step grounds the model in actual code
+- **Not updating the model** — threat models are living documents; new features and integrations change the attack surface
+
+## Checklist
+
+- [ ] Attack surface discovered (auth boundaries, data ingress, storage, egress, external services)
+- [ ] All STRIDE categories evaluated per component
+- [ ] Each threat has severity rating (Critical/High/Medium/Low)
+- [ ] Mitigations proposed for High and Critical findings
+- [ ] Threat model references specific files and code patterns found during discovery
+- [ ] Data flow diagram included showing trust boundaries
+- [ ] Findings saved to `.claude/specs/[feature]/threat-model.md`
+- [ ] Model reviewed when new features or integrations are added

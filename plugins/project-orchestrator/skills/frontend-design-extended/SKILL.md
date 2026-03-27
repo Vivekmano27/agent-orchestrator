@@ -89,6 +89,15 @@ components/
 - **Loading states:** Skeleton screens, not spinners
 - **Reduced motion:** Always respect `prefers-reduced-motion`
 
+## Anti-Patterns
+
+- **Generic AI aesthetics** — gradient backgrounds, stock illustrations, rounded everything; design should have a distinctive identity, not look like every other AI-generated landing page
+- **Ignoring the design system** — creating one-off styles instead of using tokens and shared components; every visual decision should reference the token system
+- **Desktop-only design** — designing for 1440px and hoping mobile works; always design mobile-first, then expand
+- **No loading states** — showing blank space while data loads; every async section needs a skeleton or placeholder
+- **Inaccessible color choices** — using low-contrast text or color-only indicators; always verify 4.5:1 contrast and use icons alongside color
+- **Over-animating** — adding motion to everything; animation should guide attention, not distract
+
 ## Accessibility Checklist
 - [ ] All interactive elements keyboard accessible
 - [ ] Focus indicators visible and styled

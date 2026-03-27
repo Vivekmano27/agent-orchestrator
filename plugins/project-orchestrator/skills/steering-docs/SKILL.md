@@ -98,3 +98,21 @@ src/
 - Models are shared across all layers
 - Config is read-only at runtime
 ```
+
+## Anti-Patterns
+
+- **Stale steering docs** — writing them once and never updating; docs must evolve with the project or they mislead
+- **Too much detail** — writing 500+ lines of rules that nobody reads; keep each doc focused and scannable
+- **Duplicating CLAUDE.md** — steering docs complement CLAUDE.md, not duplicate it; CLAUDE.md has repo rules, steering docs have product/tech/structure context
+- **No product context** — only documenting technical decisions without explaining what the product does and why; agents need business context to make good decisions
+- **Missing structure.md** — documenting product and tech without documenting how the code is organized; agents waste time exploring instead of navigating directly
+
+## Checklist
+
+- [ ] product.md created (what the product does, who uses it, key workflows)
+- [ ] tech.md created (stack decisions, patterns, external services, environment setup)
+- [ ] structure.md created (directory layout, module responsibilities, import rules)
+- [ ] All three docs use project-config.md values (not hardcoded stack assumptions)
+- [ ] Docs are concise (each under 200 lines)
+- [ ] Docs saved to project root or `.claude/` directory
+- [ ] Updated when significant architecture or product changes occur

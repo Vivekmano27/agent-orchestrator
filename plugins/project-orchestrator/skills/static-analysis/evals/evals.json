@@ -1,0 +1,65 @@
+{
+  "skill_name": "static-analysis",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Run static analysis on our NestJS backend (src/ directory). Check for code duplication, complexity hotspots, dead exports, and code smells. We use ESLint and have Semgrep available.",
+      "expected_output": "Structured report with duplication findings (jscpd), complexity scores, dead code (knip), and code smells (Semgrep) with file references",
+      "assertions": [
+        {"name": "runs_duplication_check", "description": "Uses jscpd or equivalent for duplication detection"},
+        {"name": "runs_complexity_check", "description": "Reports cyclomatic complexity per function"},
+        {"name": "runs_dead_code_check", "description": "Uses knip or equivalent for unused exports"},
+        {"name": "structured_output", "description": "Results in structured tables with file:line references"},
+        {"name": "advisory_not_blocking", "description": "Findings presented as advisory, not pipeline-blocking"}
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Our Python Django codebase has grown to 50K lines over 2 years. Run static analysis to find the worst complexity hotspots and dead code. We have Ruff and Semgrep available.",
+      "expected_output": "Uses Ruff for Python linting and complexity, vulture for dead code, Semgrep for patterns, with prioritized findings",
+      "assertions": [
+        {"name": "uses_ruff", "description": "Uses Ruff (not flake8 or pylint) as specified for Python analysis"},
+        {"name": "dead_code_detection", "description": "Uses vulture or equivalent for Python dead code"},
+        {"name": "complexity_hotspots", "description": "Identifies functions with highest cyclomatic complexity"},
+        {"name": "prioritized_findings", "description": "Findings sorted by impact, not just listed"},
+        {"name": "structured_tables", "description": "Results in tabular format with file paths and line numbers"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Run a duplication analysis across our monorepo (3 packages: api, web, shared). Find copy-paste blocks that should be extracted to the shared package.",
+      "expected_output": "Cross-package duplication report showing blocks duplicated between api and web that belong in shared",
+      "assertions": [
+        {"name": "cross_package_scan", "description": "Scans across all 3 packages, not just one"},
+        {"name": "identifies_shared_candidates", "description": "Flags duplicated blocks that should move to shared/"},
+        {"name": "shows_duplicate_locations", "description": "Shows file:line in both packages where duplication exists"},
+        {"name": "estimates_duplication_percent", "description": "Reports overall duplication percentage"},
+        {"name": "actionable_recommendations", "description": "Suggests which blocks to extract and where"}
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Check our React frontend for unused components and dead CSS. We suspect there are old components nobody imports anymore after a redesign last month.",
+      "expected_output": "Lists unused component files, unreferenced CSS classes, and unused npm exports using knip or similar",
+      "assertions": [
+        {"name": "detects_unused_components", "description": "Finds React component files not imported anywhere"},
+        {"name": "detects_unused_exports", "description": "Finds exported functions/types never imported"},
+        {"name": "reports_file_paths", "description": "Lists specific file paths that can be safely deleted"},
+        {"name": "distinguishes_confidence", "description": "Marks findings as HIGH or MEDIUM confidence"},
+        {"name": "safe_deletion_guidance", "description": "Notes which files are safe to delete vs need manual review"}
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Our Go microservice has complexity warnings from golangci-lint. Run static analysis focusing on complexity metrics, error handling patterns, and any functions over 50 lines.",
+      "expected_output": "Go-specific analysis using golangci-lint, complexity per function, long functions flagged, error handling pattern review",
+      "assertions": [
+        {"name": "uses_go_tools", "description": "Uses golangci-lint, go vet, or gocyclo for Go analysis"},
+        {"name": "complexity_per_function", "description": "Reports cyclomatic complexity for functions exceeding threshold"},
+        {"name": "flags_long_functions", "description": "Lists functions over 50 lines with file:line"},
+        {"name": "checks_error_handling", "description": "Reviews error handling patterns (unchecked errors, swallowed errors)"},
+        {"name": "structured_output", "description": "Results in structured format, not raw tool output"}
+      ]
+    }
+  ]
+}

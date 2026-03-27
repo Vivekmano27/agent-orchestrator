@@ -102,3 +102,24 @@ flowchart LR
 - [Positive consequence]
 - [Negative consequence / trade-off]
 ```
+
+## Anti-Patterns
+
+- **Microservices by default** — starting with microservices when the team is small (< 5 devs) or the domain is unclear; start with a modular monolith and extract services only when you have a clear reason (independent scaling, team ownership)
+- **Shared database across services** — microservices sharing a single database couples them at the data layer; each service should own its data and expose it via API
+- **No ADRs** — making architecture decisions without documenting the rationale; six months later nobody remembers why gRPC was chosen over REST
+- **Resume-driven architecture** — picking technologies because they look good on a resume rather than because they solve the actual problem
+- **Ignoring team size** — designing for 10 teams when you have 2 developers; architecture should match organizational capacity
+- **No data flow diagram** — designing components without tracing how a request flows through the system end-to-end; missing data flows hide coupling
+
+## Checklist
+
+- [ ] Architecture pattern chosen (monolith / modular monolith / microservices) with documented rationale
+- [ ] Module/service boundaries defined by domain, not by technical layer
+- [ ] Data flow diagram traces request lifecycle from client to database and back
+- [ ] Infrastructure topology diagram shows all services, databases, caches, and queues
+- [ ] Communication patterns defined (REST, gRPC, events) for each service boundary
+- [ ] ADR written for every significant decision (database choice, auth strategy, hosting)
+- [ ] Mermaid diagrams included (architecture overview + data flow)
+- [ ] Non-functional requirements addressed (scale, latency, availability targets)
+- [ ] Output saved to `.claude/specs/[feature]/architecture.md`

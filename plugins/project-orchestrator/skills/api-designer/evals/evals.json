@@ -1,0 +1,66 @@
+{
+  "skill_name": "api-designer",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Design a REST API for a task management app. Resources: users, projects, tasks, comments. Tasks belong to projects and have an assignee (user). Comments belong to tasks. Need CRUD for all resources, plus endpoints for assigning tasks and filtering tasks by status/priority. Use JWT auth.",
+      "expected_output": "Complete API spec with endpoints, HTTP methods, request/response schemas, auth, pagination, error format, and status codes",
+      "assertions": [
+        {"name": "resource_oriented_urls", "description": "URLs use nouns (/projects, /tasks) not verbs (/getProjects)"},
+        {"name": "crud_for_all", "description": "GET, POST, PUT/PATCH, DELETE for users, projects, tasks, comments"},
+        {"name": "nested_resources", "description": "Tasks nested under projects (/projects/:id/tasks) or with projectId filter"},
+        {"name": "pagination", "description": "List endpoints have pagination params (page/limit or cursor)"},
+        {"name": "consistent_error_format", "description": "Error responses use consistent format with statusCode, error, message"},
+        {"name": "auth_specified", "description": "JWT Bearer auth documented with protected vs public endpoints"}
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Design a REST API for a file storage service like S3. Endpoints: upload file (multipart), download file (presigned URL), list files with search/filter, delete file, create shared link with expiry. Files belong to folders, folders can be nested.",
+      "expected_output": "API spec for file operations with multipart upload, presigned URLs, recursive folder structure, and sharing links",
+      "assertions": [
+        {"name": "multipart_upload", "description": "Upload endpoint accepts multipart/form-data"},
+        {"name": "presigned_download", "description": "Download returns a presigned URL, not the file directly"},
+        {"name": "folder_nesting", "description": "API supports nested folder structure"},
+        {"name": "shared_links", "description": "Endpoint to create time-limited shared links"},
+        {"name": "search_filter", "description": "List endpoint supports search by name and filter by type/size"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Design a GraphQL API for a social media feed. Types: User (profile), Post (content, images, likes), Comment (on posts), Follow (user follows user). Queries: feed (paginated, sorted by relevance), user profile, post detail. Mutations: create post, like/unlike, follow/unfollow, add comment.",
+      "expected_output": "GraphQL schema with types, queries, mutations, input types, pagination (cursor-based), and auth directives",
+      "assertions": [
+        {"name": "graphql_types", "description": "Type definitions for User, Post, Comment, Follow"},
+        {"name": "queries_defined", "description": "Query type with feed, user, post queries"},
+        {"name": "mutations_defined", "description": "Mutation type with createPost, like, follow, addComment"},
+        {"name": "cursor_pagination", "description": "Feed uses cursor-based pagination (first/after pattern)"},
+        {"name": "input_types", "description": "Input types for mutations (CreatePostInput, etc.)"}
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Design API versioning strategy for our public REST API. We currently have v1 with 20 endpoints. We need to make breaking changes to 5 endpoints (rename fields, change response shapes) without breaking existing clients. What approach should we use?",
+      "expected_output": "Versioning strategy (URL path, header, or query param) with migration plan, deprecation timeline, and backward compatibility guidance",
+      "assertions": [
+        {"name": "versioning_approach", "description": "Recommends a specific versioning approach with rationale"},
+        {"name": "migration_plan", "description": "Plan for transitioning clients from v1 to v2"},
+        {"name": "deprecation_timeline", "description": "Timeline for v1 deprecation with sunset headers"},
+        {"name": "backward_compatibility", "description": "How to maintain v1 while serving v2"},
+        {"name": "documentation_strategy", "description": "How to document both versions"}
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Design a webhook API for our payment platform. Merchants register webhook URLs, subscribe to event types (payment.completed, payment.failed, refund.created, dispute.opened), and receive POST callbacks. Need signature verification, retry logic, and a delivery log endpoint.",
+      "expected_output": "Webhook API spec with registration, event types, HMAC signature, retry policy, delivery status endpoint",
+      "assertions": [
+        {"name": "registration_endpoint", "description": "Endpoint to register/update/delete webhook URLs with event type subscriptions"},
+        {"name": "event_types", "description": "Documented event types with payload schemas for each"},
+        {"name": "signature_verification", "description": "HMAC-SHA256 signature in header for payload verification"},
+        {"name": "retry_policy", "description": "Retry schedule documented (exponential backoff, max attempts)"},
+        {"name": "delivery_logs", "description": "Endpoint to query delivery history with status and response codes"}
+      ]
+    }
+  ]
+}

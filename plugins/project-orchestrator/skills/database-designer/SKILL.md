@@ -100,3 +100,26 @@ CREATE TABLE user_roles (
 3. Name format: `YYYYMMDDHHMMSS_descriptive_name`
 4. Test migrations on copy of production data
 5. Run in transaction when possible
+
+## Anti-Patterns
+
+- **No indexes on foreign keys** — every FK column needs an index; without one, JOIN queries do full table scans as data grows
+- **Using VARCHAR for everything** — use appropriate types (UUID for IDs, TIMESTAMPTZ for dates, INTEGER for counts, BOOLEAN for flags); wrong types prevent DB-level validation
+- **Missing NOT NULL constraints** — nullable columns should be the exception, not the default; every field should be NOT NULL unless there's a specific reason to allow nulls
+- **No soft delete strategy** — adding `deleted_at` after launch requires backfilling and query changes; decide upfront whether entities use soft or hard delete
+- **JSONB as a crutch** — storing structured data as JSONB to avoid schema design; if you query or filter on a field, it should be a column with an index
+- **No updated_at trigger** — relying on application code to set updated_at leads to stale timestamps when raw SQL updates happen
+- **Missing ON DELETE behavior** — foreign keys without CASCADE or SET NULL cause unexpected constraint violations when parent records are deleted
+
+## Checklist
+
+- [ ] All entities identified from requirements with clear table names (plural, snake_case)
+- [ ] Primary keys use UUID (not auto-increment integers) for distributed safety
+- [ ] All foreign keys have indexes
+- [ ] NOT NULL on every column that should never be empty
+- [ ] CHECK constraints on enum/status fields
+- [ ] created_at and updated_at on every table with triggers
+- [ ] Relationship types documented (1:1, 1:N, M:N) with join tables where needed
+- [ ] Indexes added for all query patterns (WHERE, ORDER BY, JOIN columns)
+- [ ] Migration files created with up and down functions
+- [ ] Schema documented in `.claude/specs/[feature]/schema.md`

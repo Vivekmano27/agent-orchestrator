@@ -1,0 +1,65 @@
+{
+  "skill_name": "steering-docs",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Generate steering documents for a NestJS + React + PostgreSQL task management SaaS. It has user auth, project management, task tracking, and team collaboration features. Deployed on AWS ECS.",
+      "expected_output": "Three files: product.md (features, users, workflows), tech.md (stack, patterns, services), structure.md (directory layout, module rules)",
+      "assertions": [
+        {"name": "creates_product_md", "description": "product.md describes what the app does, who uses it, and key workflows"},
+        {"name": "creates_tech_md", "description": "tech.md lists stack decisions, patterns, external services, and dev setup"},
+        {"name": "creates_structure_md", "description": "structure.md shows directory layout and import rules"},
+        {"name": "uses_project_config", "description": "References or reads project-config.md for stack details"},
+        {"name": "concise_docs", "description": "Each doc is under 200 lines"}
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Our project has grown to 50K lines and new developers take a week to onboard. Create steering docs that give agents and developers instant context about the codebase.",
+      "expected_output": "Steering docs focused on reducing onboarding time — clear product overview, tech decisions with rationale, and navigable structure map",
+      "assertions": [
+        {"name": "product_context", "description": "product.md explains what the product does in business terms"},
+        {"name": "tech_rationale", "description": "tech.md explains WHY decisions were made, not just what was chosen"},
+        {"name": "directory_navigation", "description": "structure.md enables finding code by feature, not by guessing"},
+        {"name": "module_boundaries", "description": "Import rules prevent circular dependencies"},
+        {"name": "scannable_format", "description": "Uses tables, bullet lists, and headers — not walls of text"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Generate steering docs for a Django + React Native mobile app for food delivery. Backend serves REST APIs, mobile app consumes them. Uses Stripe for payments, Google Maps for routing, and Firebase for push notifications.",
+      "expected_output": "Steering docs covering Django backend, React Native mobile, and all three external services",
+      "assertions": [
+        {"name": "covers_both_platforms", "description": "tech.md covers both Django backend and React Native mobile"},
+        {"name": "documents_external_services", "description": "Lists Stripe, Google Maps, and Firebase with how they're integrated"},
+        {"name": "api_contract_reference", "description": "References the API contract between backend and mobile"},
+        {"name": "structure_both_codebases", "description": "structure.md covers both backend and mobile directory layouts"},
+        {"name": "environment_setup", "description": "tech.md includes how to set up both backend and mobile dev environments"}
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "We're a microservices project with 4 NestJS services (user, order, product, notification) and a React frontend. Create steering docs that help agents understand which service owns what.",
+      "expected_output": "Steering docs with service ownership map, inter-service communication patterns, and per-service structure",
+      "assertions": [
+        {"name": "service_ownership", "description": "product.md or tech.md maps which entities belong to which service"},
+        {"name": "communication_patterns", "description": "tech.md documents how services communicate (REST, events, gRPC)"},
+        {"name": "per_service_structure", "description": "structure.md covers directory layout for each of the 4 services"},
+        {"name": "frontend_api_mapping", "description": "Documents which frontend pages call which backend services"},
+        {"name": "no_cross_import_rules", "description": "Import rules prevent services from importing each other's code directly"}
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Update existing steering docs after we added a new AI features service (Python/FastAPI) to our NestJS monorepo. The AI service calls Claude API for content generation and has its own PostgreSQL database.",
+      "expected_output": "Updated steering docs adding the AI service to tech.md and structure.md without breaking existing content",
+      "assertions": [
+        {"name": "updates_not_rewrites", "description": "Adds AI service info without removing existing content"},
+        {"name": "documents_ai_service", "description": "tech.md includes Python/FastAPI stack, Claude API integration"},
+        {"name": "updates_structure", "description": "structure.md adds the AI service directory layout"},
+        {"name": "cross_service_communication", "description": "Documents how the NestJS services call the AI service"},
+        {"name": "separate_database", "description": "Notes that the AI service has its own database"}
+      ]
+    }
+  ]
+}

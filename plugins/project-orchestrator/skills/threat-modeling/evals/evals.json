@@ -1,0 +1,67 @@
+{
+  "skill_name": "threat-modeling",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Perform a STRIDE threat model for our NestJS payment service. It handles credit card processing via Stripe, stores payment records in PostgreSQL, and is called by the API gateway. Users authenticate via JWT. The service also sends payment confirmation emails via SendGrid.",
+      "expected_output": "STRIDE analysis with attack surface discovery, per-component threat table, severity ratings, mitigations, and data flow diagram",
+      "assertions": [
+        {"name": "attack_surface_discovery", "description": "Discovers auth boundaries, data ingress points, storage, and external services"},
+        {"name": "stride_coverage", "description": "All 6 STRIDE categories evaluated for the payment flow"},
+        {"name": "severity_ratings", "description": "Each finding has Critical/High/Medium/Low severity"},
+        {"name": "specific_threats", "description": "Threats reference specific components (Stripe API, JWT, PostgreSQL, SendGrid)"},
+        {"name": "mitigations_proposed", "description": "Mitigations provided for High and Critical findings"},
+        {"name": "data_flow_diagram", "description": "Shows trust boundaries between gateway, payment service, Stripe, and DB"}
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "We're adding OAuth2 login (Google, GitHub) to our React + NestJS app. Threat model the authentication flow — from the user clicking 'Login with Google' to receiving a JWT. Focus on token handling, callback vulnerabilities, and session management.",
+      "expected_output": "Focused threat model on OAuth2 flow with specific attacks (CSRF on callback, token leakage, open redirect) and mitigations",
+      "assertions": [
+        {"name": "oauth_specific_threats", "description": "Identifies OAuth-specific attacks: CSRF on callback, open redirect, token leakage"},
+        {"name": "token_handling", "description": "Analyzes how access/refresh tokens are stored and transmitted"},
+        {"name": "callback_security", "description": "Reviews callback URL validation and state parameter usage"},
+        {"name": "severity_ratings", "description": "Each threat has a severity rating"},
+        {"name": "mitigations", "description": "Specific mitigations for each identified threat"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Threat model our file upload feature. Users upload images and PDFs (max 50MB) to a NestJS endpoint, files are stored in S3, and a Lambda processes them (resize images, extract PDF text). Results are stored in DynamoDB.",
+      "expected_output": "Threat model covering upload validation, S3 access controls, Lambda execution risks, and data flow between services",
+      "assertions": [
+        {"name": "upload_threats", "description": "Identifies malicious file upload risks (malware, path traversal, content-type spoofing)"},
+        {"name": "s3_access_threats", "description": "Reviews S3 bucket permissions, presigned URL risks, and public access"},
+        {"name": "lambda_risks", "description": "Considers Lambda execution environment risks (code injection, resource exhaustion)"},
+        {"name": "severity_ratings", "description": "All findings severity-rated"},
+        {"name": "trust_boundaries", "description": "Shows trust boundaries between user, API, S3, Lambda, and DynamoDB"}
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "We're building a multi-tenant SaaS platform. Tenants share the same database (row-level isolation via tenant_id). Perform STRIDE threat modeling focused on tenant isolation — can one tenant access another's data?",
+      "expected_output": "Focused threat model on tenant isolation attacks with specific SQL injection, IDOR, and side-channel vectors",
+      "assertions": [
+        {"name": "isolation_threats", "description": "Identifies cross-tenant data access vectors (missing WHERE tenant_id, IDOR)"},
+        {"name": "sql_injection_risk", "description": "Evaluates SQL injection risk for bypassing tenant_id filters"},
+        {"name": "api_level_isolation", "description": "Checks if every API endpoint enforces tenant_id from JWT, not from request body"},
+        {"name": "severity_ratings", "description": "Isolation breaches rated as Critical"},
+        {"name": "mitigations", "description": "Row-level security policies, middleware enforcement, and testing recommendations"}
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Perform a STRIDE analysis on our WebSocket-based chat application. Users connect via Socket.IO, messages are broadcast to room members, and message history is stored in MongoDB. Users authenticate once on connection with a JWT.",
+      "expected_output": "STRIDE analysis covering WebSocket-specific threats: connection hijacking, message injection, DoS via connection flood, and auth token handling",
+      "assertions": [
+        {"name": "websocket_specific", "description": "Identifies WebSocket-specific threats (connection hijacking, message replay, origin validation)"},
+        {"name": "auth_on_connection", "description": "Reviews JWT validation on WebSocket handshake and reconnection"},
+        {"name": "message_injection", "description": "Considers XSS via injected message content"},
+        {"name": "dos_vectors", "description": "Identifies DoS via connection flooding or large message payloads"},
+        {"name": "severity_ratings", "description": "All findings severity-rated"},
+        {"name": "room_authorization", "description": "Reviews whether users can only join rooms they're authorized for"}
+      ]
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 ---
 name: phase-runner
-description: "Just-in-time phase instruction loader for the project-orchestrator. Reads focused ~40-line phase files instead of holding the entire 1094-line prompt in active attention. Each phase file contains preconditions, expected outputs, content validation, dispatch instructions, and conditional logic."
+description: "Just-in-time phase instruction loader for the project-orchestrator pipeline. Reads focused ~40-line phase files instead of holding the entire prompt in active attention. Use when running the build pipeline, executing phases, dispatching agents per phase, resuming a stalled pipeline, or when the orchestrator says 'run phase', 'execute pipeline', 'next phase', 'phase transition'. Each phase file contains preconditions, expected outputs, content validation, dispatch instructions, and conditional logic."
 ---
 
 # Phase Runner — Just-in-Time Phase Instructions
@@ -47,3 +47,23 @@ If content validation fails, re-dispatch the responsible agent with a retry prom
 | 6 | phase-6.md | Code review via review-team |
 | 7 | phase-7.md | DevOps & deployment |
 | 8 | phase-8.md | Documentation |
+
+## Anti-Patterns
+
+- **Skipping precondition checks** — executing a phase without verifying required input files exist; causes cascading failures downstream
+- **Not updating progress.md** — running a phase without marking it complete; the orchestrator loses track of pipeline state
+- **Skipping phase transition gates** — advancing without the mandatory AskUserQuestion gate; users lose visibility
+- **Retrying infinitely** — retrying a failed phase more than once; after 1 retry, escalate to the user
+- **Running phases out of order** — jumping to Phase 3 without Phase 2 outputs
+- **Not reading the phase file** — executing from memory instead of reading the current phase file; files evolve
+
+## Checklist
+
+- [ ] Phase file read from `${CLAUDE_PLUGIN_ROOT}/skills/phase-runner/phases/`
+- [ ] Preconditions checked (required input files exist)
+- [ ] Conditional logic evaluated (skip if project-config.md says N/A)
+- [ ] Agents dispatched per phase instructions
+- [ ] Output files validated (exist AND pass content checks)
+- [ ] progress.md updated with phase status
+- [ ] Phase transition gate executed (AskUserQuestion)
+- [ ] Approval gate executed if required for task size

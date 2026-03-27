@@ -1,0 +1,66 @@
+{
+  "skill_name": "system-architect",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Design the architecture for a real-time collaboration tool (like Notion). It needs document editing, user presence, comments, and version history. We have a team of 4 developers and want to launch in 3 months. Should we go monolith or microservices?",
+      "expected_output": "Architecture recommendation (monolith for small team + tight timeline), module boundaries, data flow, Mermaid diagrams, ADR for the decision",
+      "assertions": [
+        {"name": "recommends_monolith", "description": "Recommends monolith or modular monolith given team size of 4 and 3-month timeline"},
+        {"name": "module_boundaries", "description": "Defines module boundaries (documents, collaboration, auth, versioning)"},
+        {"name": "data_flow_diagram", "description": "Shows request lifecycle through the system"},
+        {"name": "mermaid_diagrams", "description": "Includes at least one Mermaid architecture or sequence diagram"},
+        {"name": "adr_documented", "description": "Architecture Decision Record with rationale for pattern choice"},
+        {"name": "addresses_realtime", "description": "Addresses WebSocket/SSE strategy for real-time collaboration"}
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "We have a monolith Rails app with 200K requests/day. The search feature is slow and we want to add AI-powered recommendations. Should we extract these as microservices? We have 12 developers across 3 teams.",
+      "expected_output": "Selective extraction plan — search and AI as separate services, keep the rest monolithic, with communication patterns and migration strategy",
+      "assertions": [
+        {"name": "selective_extraction", "description": "Recommends extracting search and AI only, not breaking up the entire monolith"},
+        {"name": "communication_pattern", "description": "Defines how Rails app communicates with new services (REST, gRPC, events)"},
+        {"name": "migration_strategy", "description": "Phased migration plan, not big-bang rewrite"},
+        {"name": "team_alignment", "description": "Considers 3-team structure in service ownership"},
+        {"name": "infrastructure_diagram", "description": "Topology showing monolith + extracted services + databases"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Design the system architecture for a multi-tenant SaaS analytics platform. It needs to ingest event data (100K events/sec peak), store it for querying, provide real-time dashboards, and support tenant isolation. Budget is moderate — we can't use expensive managed services for everything.",
+      "expected_output": "Event ingestion pipeline, storage strategy, query layer, tenant isolation approach, infrastructure topology with cost-conscious choices",
+      "assertions": [
+        {"name": "ingestion_pipeline", "description": "Event ingestion design handling 100K events/sec (queue + workers pattern)"},
+        {"name": "storage_strategy", "description": "Appropriate storage for analytics (ClickHouse, TimescaleDB, or similar OLAP)"},
+        {"name": "tenant_isolation", "description": "Tenant isolation strategy (row-level, schema-level, or database-level)"},
+        {"name": "cost_conscious", "description": "Makes cost-appropriate choices, not just defaulting to most expensive managed services"},
+        {"name": "mermaid_diagrams", "description": "Architecture and data flow diagrams included"}
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "We're building a mobile app (React Native) with a NestJS backend. The app needs offline support for viewing data, background sync when connectivity returns, and push notifications. Design the overall architecture.",
+      "expected_output": "Architecture covering mobile offline storage, sync protocol, push notification flow, API design for offline-first, and conflict resolution strategy",
+      "assertions": [
+        {"name": "offline_architecture", "description": "Addresses local storage on mobile for offline data access"},
+        {"name": "sync_protocol", "description": "Defines sync strategy (last-write-wins, CRDT, or custom merge)"},
+        {"name": "push_notification_flow", "description": "Shows notification flow from backend event to mobile device"},
+        {"name": "api_design_for_offline", "description": "API supports delta sync or pagination for efficient reconnect"},
+        {"name": "conflict_resolution", "description": "Addresses what happens when offline edits conflict with server state"}
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Design a serverless architecture for a document processing pipeline. Users upload PDFs, we extract text (OCR), classify the document type, extract key fields, and store results. Processing should be async. We're on AWS.",
+      "expected_output": "Serverless pipeline with S3 trigger, Lambda/Step Functions, queue-based processing, and results storage",
+      "assertions": [
+        {"name": "serverless_pattern", "description": "Uses Lambda, Step Functions, or similar serverless compute"},
+        {"name": "event_driven", "description": "S3 upload triggers the processing pipeline"},
+        {"name": "async_processing", "description": "Processing is async — user gets a job ID, not a synchronous result"},
+        {"name": "step_function_or_queue", "description": "Multi-step pipeline using Step Functions or SQS queue chain"},
+        {"name": "results_storage", "description": "Processed results stored in DynamoDB, RDS, or S3"}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "skill_name": "database-designer",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Design the database schema for a multi-tenant project management SaaS. Entities: Organization (name, plan), User (email, name, role per org), Project (name, description, status), Task (title, description, priority, status, assignee, due date), Comment (body, author). Users can belong to multiple orgs. Tasks belong to a project and have an assignee. Use PostgreSQL.",
+      "expected_output": "SQL CREATE TABLE statements for all entities with proper types, constraints, indexes, foreign keys, join table for user-org, and migration strategy",
+      "assertions": [
+        {"name": "all_entities_created", "description": "CREATE TABLE for organizations, users, projects, tasks, comments, and user_organizations join table"},
+        {"name": "uuid_primary_keys", "description": "All tables use UUID primary keys, not serial/integer"},
+        {"name": "foreign_key_indexes", "description": "Every foreign key column has a corresponding index"},
+        {"name": "not_null_constraints", "description": "Required fields (name, email, title) have NOT NULL constraints"},
+        {"name": "timestamps_on_all", "description": "created_at and updated_at on every table"},
+        {"name": "enum_check_constraints", "description": "Status and priority fields use CHECK constraints or enum types"}
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I need a database schema for an e-commerce product catalog. Products have name, description, price, SKU, and can belong to multiple categories. Products have variants (size, color) each with their own price and stock quantity. Products also have images (url, alt text, sort order). Design for PostgreSQL with Prisma ORM.",
+      "expected_output": "Prisma schema with Product, Category, ProductVariant, ProductImage models with proper relations and indexes",
+      "assertions": [
+        {"name": "many_to_many_categories", "description": "Product-Category uses a join table or implicit M:N relation"},
+        {"name": "variant_model", "description": "ProductVariant model with size, color, price override, and stock quantity"},
+        {"name": "image_sort_order", "description": "ProductImage has a sortOrder/position field for ordering"},
+        {"name": "sku_unique", "description": "SKU field has a unique constraint"},
+        {"name": "price_type_correct", "description": "Price uses Decimal/numeric type, not float"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Design a schema for a chat application. Users can create conversations (1-on-1 or group). Messages belong to a conversation and have a sender. Messages can have attachments (file URL, type, size). Users have a read cursor per conversation (last message they've seen). Need to support querying unread count efficiently.",
+      "expected_output": "Schema with users, conversations, conversation_members, messages, attachments, read_cursors with indexes optimized for unread count queries",
+      "assertions": [
+        {"name": "conversation_members_join", "description": "Join table for users in conversations (supports both 1-on-1 and group)"},
+        {"name": "read_cursor_model", "description": "Read cursor tracks last_read_message_id or last_read_at per user per conversation"},
+        {"name": "message_indexes", "description": "Index on (conversation_id, created_at) for efficient message listing"},
+        {"name": "unread_query_support", "description": "Schema design enables efficient unread count query (cursor vs message timestamps)"},
+        {"name": "attachment_model", "description": "Separate attachment table with file metadata (url, type, size)"}
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "We need to add an audit logging system to our existing PostgreSQL database. Every create, update, and delete on the users, orders, and products tables should be logged with: who made the change, what changed (before/after values), when, and the IP address. Design the audit table and explain how to capture changes.",
+      "expected_output": "Audit log table with JSONB for before/after values, trigger-based or application-level capture strategy, indexes for querying by entity and user",
+      "assertions": [
+        {"name": "audit_table_design", "description": "Audit table with entity_type, entity_id, action (create/update/delete), user_id, changes, timestamp, ip_address"},
+        {"name": "before_after_values", "description": "Changes stored as JSONB with old and new values"},
+        {"name": "capture_strategy", "description": "Explains trigger-based and/or application-level approach for capturing changes"},
+        {"name": "query_indexes", "description": "Indexes on entity_type+entity_id and user_id+created_at for efficient querying"},
+        {"name": "covers_all_three_tables", "description": "Audit applies to users, orders, and products tables"}
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "I'm migrating from MongoDB to PostgreSQL. Our current MongoDB collections: users (with nested address object and tags array), products (with nested specs object and reviews array), and orders (with nested items array containing product references and quantities). Design the PostgreSQL schema that properly normalizes this data.",
+      "expected_output": "Normalized PostgreSQL schema replacing nested objects with related tables, arrays with join tables, preserving all data with proper foreign keys",
+      "assertions": [
+        {"name": "normalizes_nested_objects", "description": "Nested address becomes a separate addresses table or columns on users"},
+        {"name": "normalizes_arrays", "description": "Tags array becomes a tags table with user_tags join table"},
+        {"name": "order_items_table", "description": "Nested items array becomes an order_items table with product_id and quantity"},
+        {"name": "reviews_table", "description": "Nested reviews become a separate reviews table with product_id foreign key"},
+        {"name": "migration_strategy", "description": "Describes data migration approach from MongoDB documents to normalized tables"}
+      ]
+    }
+  ]
+}

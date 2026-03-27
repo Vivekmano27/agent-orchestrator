@@ -96,3 +96,24 @@ Blocking issues: [count] | Non-blocking issues: [count]
 - Any CRITICAL finding = automatic BLOCK recommendation
 - 3+ HIGH findings = REQUEST CHANGES even if individually non-blocking
 - Security grep match confirmed as real = always CRITICAL
+
+## Anti-Patterns
+
+- **Rubber-stamping** — approving without reading the code; every review should have at least one specific observation per file
+- **Style-only reviews** — commenting on formatting while missing logic bugs; prioritize correctness over cosmetics
+- **Reviewing without context** — reviewing diffs without understanding what the feature does; read the spec/task first
+- **Blocking on opinions** — using CRITICAL for subjective preferences; reserve BLOCK for bugs, security, and missing tests
+- **No file:line references** — vague feedback like "the auth seems wrong"; every finding must cite file:line
+- **Ignoring test coverage** — reviewing implementation without checking if tests cover the changes
+
+## Checklist
+
+- [ ] All changed files reviewed
+- [ ] Logic correctness verified (edge cases, null handling, off-by-one)
+- [ ] Security patterns checked (injection, auth bypass, data leaks)
+- [ ] Test coverage adequate for new/changed code
+- [ ] Error handling present for failure scenarios
+- [ ] Naming clear and consistent with project conventions
+- [ ] No code duplication introduced
+- [ ] Every finding has severity and file:line reference
+- [ ] Review saved to `.claude/specs/[feature]/code-review.md`

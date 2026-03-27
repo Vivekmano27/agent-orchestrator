@@ -110,3 +110,24 @@ Design production-grade APIs with complete specifications.
 3. POST /api/v1/auth/refresh — Refresh expired access token
 4. POST /api/v1/auth/logout — Invalidate tokens
 5. All other endpoints: `Authorization: Bearer <access_token>`
+
+## Anti-Patterns
+
+- **Verbs in URLs** — `/getUsers`, `/createOrder` instead of `/users`, `/orders`; REST uses HTTP methods for actions, not URL verbs
+- **Inconsistent response shapes** — some endpoints return `{data: [...]}`, others return raw arrays; every endpoint should use the same wrapper
+- **No pagination on list endpoints** — returning unbounded arrays; every list endpoint needs page/limit or cursor-based pagination from day one
+- **Leaking internal IDs** — exposing database auto-increment IDs; use UUIDs or slugs in public APIs
+- **No error code system** — returning only HTTP status without a machine-readable error code; APIs need both status codes and application-level error codes
+- **Breaking changes without versioning** — renaming or removing fields without a new API version; always version breaking changes
+
+## Checklist
+
+- [ ] All endpoints use resource-oriented URLs (nouns, not verbs)
+- [ ] HTTP methods match CRUD operations (GET=read, POST=create, PUT/PATCH=update, DELETE=remove)
+- [ ] Response format is consistent across all endpoints (same wrapper shape)
+- [ ] Every list endpoint has pagination (page/limit or cursor)
+- [ ] Error responses include statusCode, error code, message, and correlationId
+- [ ] Authentication specified (JWT Bearer, API key, OAuth2)
+- [ ] Rate limiting documented (requests per minute, per endpoint or global)
+- [ ] API versioned (URL path /v1/ or header)
+- [ ] Spec saved to `.claude/specs/[feature]/api-spec.md`

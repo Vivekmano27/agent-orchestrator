@@ -98,3 +98,13 @@ Return findings as structured text for the static-analyzer agent to include in r
 - [N] findings from Detekt (if applicable)
 - [details of top 5 most impactful smells]
 ```
+
+## Checklist
+
+- [ ] Duplication scan completed (jscpd or equivalent)
+- [ ] Complexity metrics collected (cyclomatic complexity per function)
+- [ ] Dead code detection run (knip/vulture/deadcode)
+- [ ] Code smells identified (Semgrep best-practices rules)
+- [ ] Findings are advisory, not blocking (static analysis informs, doesn't gate)
+- [ ] Results formatted in structured tables with file:line references
+- [ ] Top 5 most impactful findings highlighted for developer attention

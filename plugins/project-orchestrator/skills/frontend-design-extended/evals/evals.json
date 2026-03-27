@@ -1,0 +1,66 @@
+{
+  "skill_name": "frontend-design-extended",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Design a landing page for a developer tools SaaS. Needs: hero section with animated code editor mockup, feature grid (6 features with icons), pricing table (3 tiers), testimonial carousel, and a CTA section. Use Tailwind CSS with a dark theme. Make it look distinctive — not like every other AI-generated landing page.",
+      "expected_output": "Production-grade HTML/React with Tailwind, distinctive design choices, responsive layout, accessibility, animations with reduced-motion support",
+      "assertions": [
+        {"name": "distinctive_design", "description": "Uses creative design elements beyond generic gradients and rounded cards"},
+        {"name": "responsive_layout", "description": "Layout adapts to mobile, tablet, and desktop breakpoints"},
+        {"name": "tailwind_styling", "description": "Uses Tailwind CSS classes, not inline styles or custom CSS"},
+        {"name": "accessibility", "description": "Proper semantic HTML, alt text, focus states, color contrast"},
+        {"name": "animation_with_reduced_motion", "description": "Animations respect prefers-reduced-motion media query"},
+        {"name": "all_sections_present", "description": "Hero, features, pricing, testimonials, and CTA all implemented"}
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Build a dashboard layout with a collapsible sidebar, header with search and user menu, main content area with a grid of stat cards, and a notification drawer that slides in from the right. Use Tailwind and make it dark-mode ready.",
+      "expected_output": "React component with sidebar toggle, responsive layout, dark mode classes, proper z-index layering",
+      "assertions": [
+        {"name": "sidebar_toggle", "description": "Sidebar collapses/expands with animation"},
+        {"name": "dark_mode_support", "description": "Uses Tailwind dark: variant classes throughout"},
+        {"name": "notification_drawer", "description": "Slide-in drawer with backdrop overlay"},
+        {"name": "responsive", "description": "Sidebar auto-collapses on mobile"},
+        {"name": "stat_cards", "description": "Grid of cards with proper spacing and hover states"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Create a multi-step checkout form with progress indicator. Steps: cart review, shipping info, payment, confirmation. Each step should have smooth transitions. The design should feel premium — think Stripe's checkout experience.",
+      "expected_output": "Multi-step form with transitions, progress bar, premium design with attention to typography and spacing",
+      "assertions": [
+        {"name": "four_steps", "description": "All 4 checkout steps implemented with distinct content"},
+        {"name": "progress_indicator", "description": "Visual step indicator showing current and completed steps"},
+        {"name": "step_transitions", "description": "Smooth CSS transitions between steps"},
+        {"name": "premium_typography", "description": "Careful attention to font sizes, weights, and spacing"},
+        {"name": "form_validation_states", "description": "Error states, disabled submit, and loading states on forms"}
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Design a data-heavy admin table page. It needs: searchable/sortable data table, filter sidebar with checkboxes and date range picker, bulk action bar that appears when rows are selected, and export button. Make it clean and functional, not flashy.",
+      "expected_output": "Functional admin interface prioritizing usability over aesthetics, with proper table patterns and accessible controls",
+      "assertions": [
+        {"name": "sortable_headers", "description": "Column headers are clickable with sort direction indicators"},
+        {"name": "search_input", "description": "Search input filters table rows"},
+        {"name": "filter_sidebar", "description": "Filter panel with checkboxes and date inputs"},
+        {"name": "bulk_actions", "description": "Action bar appears when rows are checkbox-selected"},
+        {"name": "keyboard_accessible", "description": "Table rows and controls navigable by keyboard"}
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Build an interactive pricing page with toggle between monthly/annual billing, feature comparison table across 3 tiers, and a 'most popular' badge on the middle tier. Include a FAQ accordion at the bottom. Needs to look polished on mobile.",
+      "expected_output": "Pricing page with billing toggle, comparison matrix, tier highlighting, FAQ accordion, mobile-optimized",
+      "assertions": [
+        {"name": "billing_toggle", "description": "Monthly/annual toggle that updates prices with annual discount"},
+        {"name": "three_tiers", "description": "Three pricing tiers with distinct feature sets"},
+        {"name": "popular_badge", "description": "Middle tier highlighted as most popular/recommended"},
+        {"name": "faq_accordion", "description": "Expandable FAQ section with smooth open/close"},
+        {"name": "mobile_layout", "description": "Tiers stack vertically on mobile with swipe or scroll"}
+      ]
+    }
+  ]
+}

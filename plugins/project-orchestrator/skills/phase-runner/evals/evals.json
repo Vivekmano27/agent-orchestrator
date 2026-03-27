@@ -1,0 +1,65 @@
+{
+  "skill_name": "phase-runner",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Execute Phase 1 (Planning) for a new feature called 'user-notifications'. The spec directory already exists at .claude/specs/user-notifications/ and project-config.md shows NestJS + React stack.",
+      "expected_output": "Reads phase-1.md, checks preconditions, dispatches planning-team, validates outputs, updates progress.md",
+      "assertions": [
+        {"name": "reads_phase_file", "description": "Reads the phase-1.md file from the phases/ directory"},
+        {"name": "checks_preconditions", "description": "Verifies required input files exist before executing"},
+        {"name": "dispatches_correct_agent", "description": "Dispatches planning-team for Phase 1"},
+        {"name": "validates_outputs", "description": "Checks that requirements.md was produced"},
+        {"name": "updates_progress", "description": "Updates progress.md with phase completion status"}
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Resume the pipeline from Phase 3 (Build). Phases 0-2 are already complete. The spec directory has requirements.md, design.md, and tasks.md. project-config.md shows Django + React.",
+      "expected_output": "Skips phases 0-2, reads phase-3.md, dispatches feature-team, validates build outputs",
+      "assertions": [
+        {"name": "skips_completed_phases", "description": "Does not re-execute phases 0, 0.5, 1, or 2"},
+        {"name": "reads_phase_3_file", "description": "Reads phase-3.md from phases/ directory"},
+        {"name": "checks_preconditions", "description": "Verifies tasks.md and design.md exist before building"},
+        {"name": "dispatches_feature_team", "description": "Dispatches feature-team for Phase 3"},
+        {"name": "phase_transition_gate", "description": "Asks user for approval before advancing to Phase 4"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Phase 2 (Design) just failed — the design-team agent didn't produce a valid api-spec.md. Handle the failure and retry.",
+      "expected_output": "Detects missing output, retries once with error context, escalates to user if retry also fails",
+      "assertions": [
+        {"name": "detects_missing_output", "description": "Identifies that api-spec.md was not produced"},
+        {"name": "retries_once", "description": "Re-dispatches the responsible agent with retry prompt"},
+        {"name": "max_one_retry", "description": "Does not retry more than once"},
+        {"name": "escalates_on_second_failure", "description": "Reports failure to user if retry also fails"},
+        {"name": "preserves_progress", "description": "Does not mark the phase as complete on failure"}
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Execute Phase 0.5 (Project Setup) for a brand new project. No project-config.md exists yet. The user wants to build a mobile app.",
+      "expected_output": "Reads phase-0-5.md, dispatches project-setup agent, validates project-config.md is produced",
+      "assertions": [
+        {"name": "reads_phase_file", "description": "Reads phase-0-5.md from phases/ directory"},
+        {"name": "dispatches_project_setup", "description": "Dispatches project-setup agent"},
+        {"name": "validates_config_output", "description": "Checks that project-config.md was produced"},
+        {"name": "updates_progress", "description": "Marks Phase 0.5 complete in progress.md"},
+        {"name": "transition_gate", "description": "Asks user before advancing to Phase 1"}
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Run Phase 4 (Testing) but project-config.md says testing framework is 'none' and coverage threshold is 0. Should this phase be skipped?",
+      "expected_output": "Reads phase-4.md, checks conditional logic in project-config.md, skips or runs minimal testing based on config",
+      "assertions": [
+        {"name": "reads_phase_file", "description": "Reads phase-4.md"},
+        {"name": "checks_conditional_logic", "description": "Evaluates project-config.md to determine if testing is configured"},
+        {"name": "handles_skip_correctly", "description": "Either skips with explanation or runs minimal validation"},
+        {"name": "updates_progress", "description": "Updates progress.md regardless of skip/run decision"},
+        {"name": "documents_decision", "description": "Explains why the phase was skipped or what was tested"}
+      ]
+    }
+  ]
+}

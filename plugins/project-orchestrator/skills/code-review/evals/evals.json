@@ -1,0 +1,67 @@
+{
+  "skill_name": "code-review",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Review this NestJS PR that adds a new payments module. It has a PaymentController, PaymentService, CreatePaymentDto, and payment.e2e-spec.ts. The service calls Stripe's API and stores payment records in PostgreSQL via Prisma.",
+      "expected_output": "Review covering logic correctness, security (Stripe key handling, input validation), error handling, test coverage, and naming conventions with file:line references",
+      "assertions": [
+        {"name": "checks_stripe_security", "description": "Reviews how Stripe secret key is accessed (env var vs hardcoded)"},
+        {"name": "checks_input_validation", "description": "Verifies DTO has class-validator decorators"},
+        {"name": "checks_error_handling", "description": "Reviews what happens when Stripe API call fails"},
+        {"name": "checks_test_coverage", "description": "Evaluates whether e2e tests cover happy path and error scenarios"},
+        {"name": "uses_file_line_refs", "description": "Every finding references specific file:line"},
+        {"name": "severity_rated", "description": "Each finding has CRITICAL/HIGH/MEDIUM/LOW severity"}
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Review a React PR that adds a user settings page. It has a SettingsPage component (200 lines), a useSettings hook, and a settingsApi.ts file. The component uses 8 useState calls and has inline form validation.",
+      "expected_output": "Review identifying complexity issues (too many useState), missing error boundaries, inline validation concerns, and suggestions for React Hook Form",
+      "assertions": [
+        {"name": "flags_excessive_state", "description": "Identifies 8 useState calls as a complexity issue"},
+        {"name": "suggests_form_library", "description": "Recommends React Hook Form or similar for form state management"},
+        {"name": "checks_error_handling", "description": "Reviews error states for the settings API calls"},
+        {"name": "checks_loading_states", "description": "Verifies loading state is shown during saves"},
+        {"name": "appropriate_severity", "description": "Uses MEDIUM/LOW for refactoring suggestions, not CRITICAL"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Review a small bug fix PR — 2 files changed, 10 lines total. The fix adds a null check in a utility function that was causing a TypeError in production. A regression test was added.",
+      "expected_output": "Concise review focused on the fix correctness and test coverage, not over-scoped to unrelated code",
+      "assertions": [
+        {"name": "scoped_to_changes", "description": "Review focuses on the 2 changed files, not the entire codebase"},
+        {"name": "verifies_fix_correctness", "description": "Checks that the null check actually prevents the TypeError"},
+        {"name": "checks_regression_test", "description": "Verifies the test reproduces the original bug"},
+        {"name": "not_over_scoped", "description": "Does not suggest refactoring unrelated surrounding code"},
+        {"name": "approve_recommendation", "description": "Recommends APPROVE for a clean, tested bug fix"}
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Review a Django PR that adds a CSV export endpoint. The view reads all orders from the database, formats them as CSV, and streams the response. No pagination, no auth check, and it loads all records into memory.",
+      "expected_output": "Review flagging security (missing auth), performance (loading all records), and suggesting streaming/pagination with CRITICAL/HIGH severity",
+      "assertions": [
+        {"name": "flags_missing_auth", "description": "Identifies missing authentication as CRITICAL"},
+        {"name": "flags_memory_issue", "description": "Identifies loading all records into memory as HIGH (unbounded query)"},
+        {"name": "suggests_streaming", "description": "Recommends StreamingHttpResponse or chunked transfer"},
+        {"name": "suggests_pagination", "description": "Recommends limiting records or adding pagination"},
+        {"name": "block_recommendation", "description": "Recommends BLOCK or REQUEST CHANGES due to auth gap"}
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Review a PR that refactors the auth module — moves from session-based to JWT auth. 15 files changed, 800 lines added, 400 removed. Includes migration script, updated middleware, new token refresh endpoint, and updated tests.",
+      "expected_output": "Comprehensive BIG-scope review covering architecture, security, migration safety, test coverage, and backward compatibility",
+      "assertions": [
+        {"name": "big_scope_review", "description": "Uses BIG review scope (architecture-level) given 15 files and auth changes"},
+        {"name": "checks_migration_safety", "description": "Reviews the migration path from sessions to JWT (existing users)"},
+        {"name": "checks_token_security", "description": "Reviews JWT secret handling, token expiry, refresh rotation"},
+        {"name": "checks_backward_compat", "description": "Evaluates impact on existing authenticated sessions"},
+        {"name": "checks_test_coverage", "description": "Verifies tests cover login, refresh, logout, and expired token scenarios"},
+        {"name": "severity_rated", "description": "All findings have severity ratings"}
+      ]
+    }
+  ]
+}

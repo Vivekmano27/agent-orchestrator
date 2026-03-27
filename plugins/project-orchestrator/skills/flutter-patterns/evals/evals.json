@@ -1,0 +1,66 @@
+{
+  "skill_name": "flutter-patterns",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Build a Flutter product listing screen with Riverpod for state management. It should fetch products from a REST API, show loading shimmer, handle errors with retry, support pull-to-refresh, and have a search bar that filters products locally. Use clean architecture layers.",
+      "expected_output": "Flutter screen with Riverpod AsyncNotifier, repository pattern, loading/error/empty states, pull-to-refresh, local search filter",
+      "assertions": [
+        {"name": "clean_architecture", "description": "Code organized into data/domain/presentation layers"},
+        {"name": "riverpod_state", "description": "Uses Riverpod provider (AsyncNotifier or FutureProvider) for state"},
+        {"name": "loading_error_empty", "description": "All three states handled with appropriate widgets"},
+        {"name": "pull_to_refresh", "description": "RefreshIndicator wrapping the list for pull-to-refresh"},
+        {"name": "search_filter", "description": "Search bar filters products without re-fetching from API"}
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Implement a responsive Flutter layout that shows a list on mobile, master-detail on tablet, and a three-column layout on desktop. Use LayoutBuilder for breakpoints. The content is a list of conversations (like a chat app).",
+      "expected_output": "Responsive layout using LayoutBuilder with 3 breakpoints, adaptive navigation, shared state across panels",
+      "assertions": [
+        {"name": "layout_builder", "description": "Uses LayoutBuilder or MediaQuery for breakpoint detection"},
+        {"name": "three_breakpoints", "description": "Mobile (<768), tablet (768-1024), desktop (>1024) layouts"},
+        {"name": "master_detail", "description": "Tablet shows list + detail side by side"},
+        {"name": "shared_state", "description": "Selected conversation syncs across layout variants"},
+        {"name": "no_hardcoded_sizes", "description": "No fixed pixel widths — uses Flexible, Expanded, or fractions"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Create a Flutter form with multiple field types: text input, email with validation, password with strength indicator, dropdown select, date picker, and a photo upload. Use a form key for validation and show inline errors.",
+      "expected_output": "Flutter Form widget with GlobalKey, TextFormField validators, custom widgets for password strength and photo upload",
+      "assertions": [
+        {"name": "form_key", "description": "Uses GlobalKey<FormState> for form validation"},
+        {"name": "field_validators", "description": "Each field has a validator function with error messages"},
+        {"name": "inline_errors", "description": "Validation errors shown below each field"},
+        {"name": "password_strength", "description": "Visual password strength indicator"},
+        {"name": "photo_upload", "description": "Image picker integration with preview"},
+        {"name": "dispose_controllers", "description": "TextEditingControllers disposed in dispose()"}
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Build a Flutter bottom navigation app with 4 tabs: Home, Search, Notifications, Profile. Each tab should maintain its scroll position and state when switching. Use go_router for navigation with nested routes per tab.",
+      "expected_output": "Bottom nav with go_router StatefulShellRoute, preserved scroll state per tab, proper back button handling",
+      "assertions": [
+        {"name": "go_router_navigation", "description": "Uses go_router with StatefulShellRoute or equivalent for tab navigation"},
+        {"name": "four_tabs", "description": "Four bottom navigation tabs with icons and labels"},
+        {"name": "state_preservation", "description": "Scroll position and state preserved when switching tabs"},
+        {"name": "nested_routes", "description": "Each tab has its own route hierarchy"},
+        {"name": "back_button", "description": "Android back button works correctly within and across tabs"}
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Implement offline-first data sync in Flutter. Use Hive for local storage, Dio for API calls, and a connectivity listener. When offline, read from cache. When back online, sync pending writes. Show a connectivity banner.",
+      "expected_output": "Offline-first architecture with Hive cache, Dio interceptors, connectivity listener, sync queue, and UI indicator",
+      "assertions": [
+        {"name": "hive_local_storage", "description": "Uses Hive for local caching of API data"},
+        {"name": "offline_read", "description": "Reads from cache when network is unavailable"},
+        {"name": "sync_queue", "description": "Queues writes when offline and replays on reconnection"},
+        {"name": "connectivity_listener", "description": "Listens for network state changes"},
+        {"name": "ui_indicator", "description": "Shows offline/online status banner in the UI"}
+      ]
+    }
+  ]
+}
