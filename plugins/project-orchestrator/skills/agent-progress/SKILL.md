@@ -196,3 +196,19 @@ To find failures:
 ```
 Grep("FAILED", ".claude/specs/*/agent-status/", glob="*.md")
 ```
+
+## Anti-Patterns
+
+- **No status updates** — running an agent without writing progress files; the orchestrator has no visibility into what's happening
+- **Stale IN_PROGRESS** — leaving a status file at IN_PROGRESS after the agent has finished or failed; clean up on exit
+- **Progress without timestamps** — status files missing timestamps make it impossible to detect stalls
+- **Overwriting instead of appending** — replacing the entire status file on each update instead of appending sub-steps; history is lost
+- **No failure details** — writing FAILED without an error message or context; debugging becomes impossible
+
+## Checklist
+
+- [ ] Status file created at agent start with IN_PROGRESS
+- [ ] Sub-step transitions logged with timestamps
+- [ ] Status updated to COMPLETED or FAILED on exit
+- [ ] Error details included in FAILED status
+- [ ] Status files queryable via Grep for debugging

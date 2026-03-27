@@ -253,3 +253,23 @@ groups:
 4. **Health check must return 503 when unhealthy.** Returning 200 with `"status": "unhealthy"` in the body defeats load balancer health checking — the LB reads the status code, not the body.
 5. **Correlation IDs must propagate across service boundaries.** Read `x-correlation-id` from incoming requests, generate one if missing, and pass it to all downstream HTTP calls and log entries.
 6. **Prometheus scrape interval and alert `for` duration must be compatible.** If scrape interval is 15s and `for` is 1m, you only get ~4 data points before the alert fires. Use `for >= 5 * scrape_interval` as a minimum.
+
+## Anti-Patterns
+
+- **Alerts without runbooks** — waking someone up with no diagnosis steps; every alert needs a linked runbook
+- **Logging PII** — request/response bodies often contain passwords and tokens; never log bodies by default
+- **Health check returning 200 when unhealthy** — load balancers read status codes, not body text; return 503
+- **No correlation IDs** — tracing a request across services is impossible without a shared ID
+- **Alert fatigue** — alerts without `for` duration fire on single-sample spikes; minimum 5m for critical, 10m for warning
+- **Unstructured logs** — console.log strings are unsearchable; use structured JSON logging
+
+## Checklist
+
+- [ ] Structured JSON logging configured for all services
+- [ ] Correlation ID middleware propagates X-Correlation-ID
+- [ ] Health check endpoint returns 200 (healthy) or 503 (unhealthy)
+- [ ] Prometheus metrics exposed (/metrics endpoint)
+- [ ] Alert rules defined with `for` duration and runbook annotations
+- [ ] Dashboard created for key metrics (request rate, error rate, latency)
+- [ ] Log aggregation configured (CloudWatch, ELK, or Loki)
+- [ ] PII excluded from logs (no request/response bodies in production)

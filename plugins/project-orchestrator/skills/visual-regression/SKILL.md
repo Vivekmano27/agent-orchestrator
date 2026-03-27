@@ -245,3 +245,23 @@ Write to `.claude/specs/{feature}/visual-regression-report.md`:
 - Do not screenshot pages behind authentication without first programmatically logging in via `storageState` or API-based auth. Never use `page.fill` on a login form in every test — it's slow and fragile.
 - Name screenshots descriptively: `{page}-{state}-{viewport}.png`, not `screenshot-1.png`.
 - If `toHaveScreenshot` fails with >5% diff on first run, the test setup is wrong (animations not disabled, data not mocked). Fix the setup, don't raise the threshold above 2%.
+
+## Anti-Patterns
+
+- **Unmasked dynamic content** — timestamps, avatars, random IDs cause false positives; always mask dynamic regions
+- **Live data screenshots** — screenshotting against real API data; mock all data for deterministic results
+- **High diff thresholds** — setting maxDiffPixelRatio above 2% to avoid fixing flaky tests; fix the root cause instead
+- **Generic screenshot names** — `screenshot-1.png` gives no context; use `{page}-{state}-{viewport}.png`
+- **No viewport coverage** — only testing desktop; test mobile and tablet viewports too
+- **Login form in every test** — using page.fill for auth in each test; use storageState for session reuse
+
+## Checklist
+
+- [ ] Baseline screenshots generated for all key pages
+- [ ] Dynamic content masked (timestamps, avatars, ads)
+- [ ] API data mocked for deterministic results
+- [ ] Multiple viewports tested (mobile, tablet, desktop)
+- [ ] Animations disabled in test configuration
+- [ ] Screenshots named descriptively with page-state-viewport convention
+- [ ] Diff threshold set at 1-2% (not higher)
+- [ ] CI pipeline runs visual regression on PRs

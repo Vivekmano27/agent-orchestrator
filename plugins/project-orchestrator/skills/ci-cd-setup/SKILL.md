@@ -197,3 +197,23 @@ withCredentials([
     usernamePassword(credentialsId: 'deploy-creds', usernameVariable: 'USER', passwordVariable: 'PASS')
 ]) { sh './deploy.sh' }
 ```
+
+## Anti-Patterns
+
+- **Secrets in YAML** — hardcoding API keys in workflow files; use platform secret management
+- **No caching** — re-downloading dependencies on every run; cache node_modules, pip cache, Go modules
+- **Deploy without tests** — deploying without running tests first; tests must gate deployment
+- **No staging** — deploying directly to production; always use staging → production promotion
+- **No failure notifications** — CI fails silently; configure Slack/email on failure
+- **Sequential when parallel possible** — lint, test, type-check can run concurrently
+
+## Checklist
+
+- [ ] Pipeline triggers defined (push, PR, schedule)
+- [ ] Lint, test, type-check, build stages present
+- [ ] Dependencies cached for speed
+- [ ] Secrets in platform secret management
+- [ ] Deploy gated by test success
+- [ ] Staging deploys before production
+- [ ] Failure notifications configured
+- [ ] PR pipeline runs under 10 minutes

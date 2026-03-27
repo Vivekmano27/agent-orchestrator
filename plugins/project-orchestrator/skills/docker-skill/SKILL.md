@@ -222,3 +222,23 @@ services:
 volumes:
   postgres_data:
 ```
+
+## Anti-Patterns
+
+- **Running as root** — containers running as root user; always use a non-root USER in the Dockerfile
+- **No .dockerignore** — copying node_modules, .git, and .env into the image; always create a .dockerignore
+- **Using :latest tag** — non-deterministic builds; pin base images to specific versions or SHAs
+- **Single-stage builds** — including build tools (compilers, dev dependencies) in the production image; use multi-stage builds
+- **No health checks** — containers without HEALTHCHECK; orchestrators can't detect unhealthy containers
+- **Hardcoded config** — baking environment-specific config into the image; use environment variables
+
+## Checklist
+
+- [ ] Multi-stage build separating build and runtime
+- [ ] Base image pinned to specific version
+- [ ] .dockerignore excludes node_modules, .git, .env, build artifacts
+- [ ] Non-root USER directive in Dockerfile
+- [ ] HEALTHCHECK instruction defined
+- [ ] Environment variables for all configuration
+- [ ] docker-compose.yml for local development with all services
+- [ ] Health checks on all service dependencies (DB, Redis, etc.)

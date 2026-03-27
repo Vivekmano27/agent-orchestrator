@@ -250,3 +250,23 @@ terraform import aws_vpc.main vpc-abc123
 # Destroy (requires explicit approval)
 terraform destroy -var-file=environments/dev.tfvars
 ```
+
+## Anti-Patterns
+
+- **No remote state** — using local state files; state must be in S3/GCS with locking (DynamoDB/GCS) for team collaboration
+- **Hardcoded values** — putting region, account IDs, or secrets directly in .tf files; use variables and tfvars
+- **No state locking** — two developers running apply simultaneously corrupt state; always enable locking
+- **Giant monolithic config** — all resources in one main.tf; split into modules by service/concern
+- **No plan before apply** — running terraform apply without reviewing the plan; always plan first
+- **Committed tfstate** — state files in git expose secrets; use remote backend and .gitignore
+
+## Checklist
+
+- [ ] Remote state backend configured with locking
+- [ ] Resources organized into reusable modules
+- [ ] Variables defined for all environment-specific values
+- [ ] Separate tfvars per environment (dev, staging, prod)
+- [ ] State files excluded from git (.gitignore)
+- [ ] terraform plan reviewed before every apply
+- [ ] Sensitive outputs marked with sensitive = true
+- [ ] Provider versions pinned in required_providers block

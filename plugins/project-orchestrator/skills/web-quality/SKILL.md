@@ -267,3 +267,23 @@ Write to `.claude/specs/{feature}/web-quality-report.md`:
 - When a CWV metric fails, trace it to a specific resource or code path. "LCP is 3.2s" is a symptom. "LCP is 3.2s because the hero image at `public/hero.png` is 2.4MB and loaded without `priority`" is actionable.
 - Do not recommend `loading="lazy"` on above-the-fold images. This worsens LCP. Only hero/LCP images should be eagerly loaded.
 - `resourceSizes` budgets are in KB (kilobytes), not bytes. Getting this wrong creates budgets that are 1000x too permissive.
+
+## Anti-Patterns
+
+- **Dev-mode Lighthouse** — running Lighthouse against `npm run dev`; scores are meaningless without production build
+- **Unthrottled scores** — reporting scores without specifying throttling; unthrottled is 20-40 points above real experience
+- **Lazy-loading hero images** — `loading="lazy"` on above-the-fold LCP images worsens LCP; eagerly load hero content
+- **Symptom-only reports** — "LCP is 3.2s" without tracing to a specific resource or code path; always identify the cause
+- **Ignoring CLS** — focusing only on LCP/FID while layout shift goes unaddressed; CLS is user-visible jank
+- **No budgets** — no performance budgets means no guardrails; set bundle and resource size budgets
+
+## Checklist
+
+- [ ] Lighthouse run on production build with throttling enabled
+- [ ] LCP < 2.5s, FID < 100ms, CLS < 0.1 (Good thresholds)
+- [ ] Performance budgets set for bundle and resource sizes
+- [ ] Hero/LCP image eagerly loaded (no lazy loading)
+- [ ] Images use next/image or explicit width/height for CLS prevention
+- [ ] JavaScript bundle analyzed for large dependencies
+- [ ] Core Web Vitals traced to specific causes (not just scores reported)
+- [ ] Accessibility score included in quality report

@@ -235,3 +235,12 @@ Write to `.claude/specs/{feature}/a11y-report.md`:
 - Do not add `aria-label` to elements that already have visible text. Redundant ARIA is a violation (WCAG 4.1.2). Use `aria-label` only for icon-only buttons and inputs without visible labels.
 - When reporting color contrast violations, always include the specific hex values and the required ratio. "Low contrast" without numbers is not actionable.
 - Do not count the same component rendered multiple times as multiple violations. `Card.tsx` missing alt text is one finding, regardless of how many times `<Card>` is rendered on a page.
+
+## Anti-Patterns
+
+- **Axe-only audits** — automated tools catch 30-40% of issues; keyboard testing and semantic HTML review are mandatory
+- **Decorative ARIA** — adding aria-label to elements with visible text; redundant ARIA is itself a violation (WCAG 4.1.2)
+- **div with onClick** — using div/span as buttons; always use semantic elements (button, a) instead of role="button"
+- **Color-only indicators** — using red/green only for status; always pair color with icons or text
+- **Skipping keyboard testing** — assuming mouse-accessible means keyboard-accessible; test Tab, Enter, Escape, Arrow flows
+- **Vague contrast findings** — reporting "low contrast" without hex values and ratios; include specific numbers

@@ -263,3 +263,23 @@ test('settings page matches snapshot', async ({ page }) => {
   });
 });
 ```
+
+## Anti-Patterns
+
+- **Testing implementation details** — asserting on CSS classes or DOM structure instead of user-visible behavior
+- **No test isolation** — tests depending on state from previous tests; each test must set up its own data
+- **Hardcoded waits** — using page.waitForTimeout(5000) instead of waiting for elements or network idle
+- **Login form in every test** — use storageState for authenticated session reuse
+- **No CI integration** — tests run locally but not in CI; must run in CI with artifact upload on failure
+- **Ignoring flaky tests** — skipping instead of fixing root cause (missing waits, unmocked data, animations)
+
+## Checklist
+
+- [ ] E2E tests cover critical user flows (login, CRUD, key features)
+- [ ] Tests use Playwright locators (getByRole, getByText) not CSS selectors
+- [ ] Authentication uses storageState for session reuse
+- [ ] API data mocked or seeded for deterministic results
+- [ ] Cross-browser testing (Chromium, Firefox, WebKit)
+- [ ] Mobile viewport tested
+- [ ] Screenshots/traces captured on failure
+- [ ] Tests run in CI on every PR

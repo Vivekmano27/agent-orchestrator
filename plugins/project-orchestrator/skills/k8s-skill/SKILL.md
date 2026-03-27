@@ -246,3 +246,22 @@ stringData:
 5. **HPA `scaleDown` must have a stabilization window** of at least 300 seconds. Without it, the cluster thrashes during traffic fluctuations.
 6. **Use `app.kubernetes.io/*` labels** (name, part-of, managed-by) instead of ad-hoc `app: foo` labels. This is the Kubernetes recommended label schema.
 7. **Ingress must include rate-limiting annotations.** Unprotected ingress = trivial DDoS target.
+
+## Anti-Patterns
+
+- **No resource limits** — pods without CPU/memory limits can starve other workloads; always set requests and limits
+- **Using :latest tag** — non-reproducible deployments; pin to specific version or SHA digest
+- **Secrets in YAML** — real secret values in manifest files; use sealed-secrets or external-secrets-operator
+- **No probes** — missing liveness/readiness/startup probes; K8s can't manage pod lifecycle without them
+- **Single replica** — running one replica with no PDB; any node issue takes the service down
+
+## Checklist
+
+- [ ] Deployment has resource requests and limits
+- [ ] Container images pinned to specific version
+- [ ] Liveness, readiness, and startup probes configured
+- [ ] HPA configured with scaleDown stabilization window
+- [ ] Secrets managed via sealed-secrets or external-secrets
+- [ ] Ingress has TLS and rate-limiting annotations
+- [ ] app.kubernetes.io/* labels on all resources
+- [ ] PodDisruptionBudget defined for production workloads
