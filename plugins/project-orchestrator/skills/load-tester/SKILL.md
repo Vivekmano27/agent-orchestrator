@@ -343,3 +343,23 @@ Write to `.claude/specs/{feature}/load-test-report.md`:
 - Soak tests must run for at least 15 minutes to surface memory leaks and connection pool exhaustion. A 2-minute "soak test" catches nothing.
 - Always create a dedicated test user and seed data for load tests. Never load-test against real user accounts or production data.
 - Report absolute numbers (p50=180ms, p95=450ms), not just pass/fail. The trend across runs matters more than a single threshold check.
+
+## Anti-Patterns
+
+- **No think time** — sending requests as fast as possible doesn't model real users; always include sleep between requests
+- **Wrong executor** — using shared-iterations for load tests; use ramping-vus or constant-arrival-rate
+- **Hardcoded credentials** — secrets in k6 scripts; use __ENV.VAR_NAME
+- **Short soak tests** — 2-minute soak tests catch nothing; minimum 15 minutes for memory leaks
+- **Testing against production data** — use dedicated test users and seed data
+- **Threshold-only reporting** — "pass/fail" without p50/p95/p99 numbers; trends matter
+
+## Checklist
+
+- [ ] Test scenarios defined (baseline, spike, soak, stress)
+- [ ] Think time included between requests
+- [ ] Proper executor chosen (ramping-vus for most cases)
+- [ ] Thresholds set for p95 latency and error rate
+- [ ] Test data seeded (not using production accounts)
+- [ ] Credentials passed via environment variables
+- [ ] Results include absolute latency numbers (p50/p95/p99)
+- [ ] Report saved to `.claude/specs/[feature]/load-test-report.md`

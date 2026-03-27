@@ -270,3 +270,23 @@ def custom_exception_handler(exc, context):
     
     return response
 ```
+
+## Anti-Patterns
+
+- **Fat views** — putting business logic in views/viewsets; extract into service functions and keep views thin
+- **N+1 queries** — accessing related objects in a loop without select_related/prefetch_related; always check SQL query count in tests
+- **No serializer validation** — accepting raw request data without DRF serializer validation; always validate at the API boundary
+- **Synchronous long tasks** — blocking the request thread with email sending or file processing; use Celery for anything over 500ms
+- **Mutable default arguments** — using `def func(items=[])` with mutable defaults; use `None` and create inside the function
+- **Raw SQL without parameterization** — using f-strings in SQL queries; always use Django ORM or parameterized queries
+
+## Checklist
+
+- [ ] Views/viewsets are thin — business logic in services
+- [ ] Serializers validate all input with proper field types
+- [ ] QuerySets use select_related/prefetch_related for related data
+- [ ] Celery tasks handle async work (email, file processing, reports)
+- [ ] Custom exception handler registered in DRF settings
+- [ ] Tests use pytest-django with factories (not fixtures)
+- [ ] Migrations reviewed for backward compatibility
+- [ ] API endpoints documented in serializers/viewsets

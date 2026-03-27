@@ -102,3 +102,13 @@ For each data point, note the source. If a source is unavailable (e.g., no web s
 - Do not copy marketing language as fact. "Enterprise-grade security" means nothing without specifics.
 - Do not treat feature presence as feature quality. A competitor having "AI search" as a checkbox tells you nothing about whether it works.
 - Do not assume pricing is static. Note the date you verified it.
+
+## Checklist
+
+- [ ] 3-5 competitors identified (not 10+ shallow entries)
+- [ ] Feature comparison matrix with specific capabilities (not just checkboxes)
+- [ ] Pricing tiers documented with date verified
+- [ ] Strengths and weaknesses per competitor (with evidence, not marketing copy)
+- [ ] Market positioning map or differentiation summary
+- [ ] Sources cited for every data point
+- [ ] Recommendations for product strategy based on findings
