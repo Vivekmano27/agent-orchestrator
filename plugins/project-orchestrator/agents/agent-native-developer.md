@@ -346,3 +346,17 @@ Track progress in `.claude/specs/[feature]/agent-status/agent-native-developer.m
 | 15 | wire-dynamic-context | Implement runtime context injection |
 | 16 | parity-verification | Verify coverage against agent-spec.md |
 | 17 | self-review-p2 | Verify all tools wired, error handling correct |
+
+## When to Dispatch
+
+- During Phase 3 (Build) to scaffold agent-native artifacts from agent-spec.md
+- After backend-developer completes API endpoints, to wire MCP tools to real endpoints
+- When adding new entities that need CRUD tools for agent parity
+
+## Anti-Patterns
+
+- **Wiring before API is ready** — Pass 1 creates stubs, Pass 2 wires to real endpoints; don't wire to non-existent APIs
+- **Hardcoded API URLs** — use api-contracts.md for endpoint URLs; hardcoded URLs break on route changes
+- **No error handling in MCP tools** — every tool needs try/catch with isError returns
+- **console.log in stdio transport** — stdout is the protocol channel; console.log breaks message framing
+- **Skipping capability-map.md** — parity tracker must be updated whenever tools are added or modified

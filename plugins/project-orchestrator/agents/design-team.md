@@ -400,3 +400,15 @@ Sub-steps: For step 5, track each parallel agent as a sub-step.
 - Communication patterns (REST vs gRPC vs WebSocket)
 - Shared infrastructure decisions (cache, queue, CDN)
 
+## When to Dispatch
+
+- During Phase 2 (Design) when multiple design agents need coordination
+- When architecture, API, schema, and UI design must align on entity names and patterns
+- For BIG tasks that need peer cross-review between designers
+
+## Anti-Patterns
+
+- **Running designers without system-architect first** — architecture.md must exist before other designers start; they depend on service boundaries
+- **No cross-review** — skipping peer review between designers; entity name mismatches propagate to implementation
+- **Parallel without coordination** — designers working in isolation produce inconsistent specs; use SendMessage for real-time alignment
+- **Skipping design-reviewer** — design-reviewer catches cross-spec inconsistencies that individual designers miss

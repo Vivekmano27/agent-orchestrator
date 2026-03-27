@@ -147,3 +147,18 @@ Track progress in `.claude/specs/[feature]/agent-status/deployment-engineer.md` 
 | 5 | define-rollback | Step-by-step rollback commands in reverse order |
 | 6 | define-smoke-tests | Create verification commands for post-deploy |
 | 7 | define-validation-window | Set monitoring duration and escalation procedures |
+
+## When to Dispatch
+
+- During Phase 7 (DevOps) for production deployment planning
+- When deploying new services or database migrations
+- When zero-downtime deployment strategy is needed
+- When rollback procedures need to be documented
+
+## Anti-Patterns
+
+- **Deploying without rollback plan** — every deployment must have documented rollback steps
+- **Big-bang deployments** — deploying all services simultaneously; deploy in dependency order
+- **No health checks** — deploying without verifying the service is healthy after deploy
+- **Skipping staging** — deploying directly to production without staging validation
+- **No smoke tests** — considering deployment done without running verification commands

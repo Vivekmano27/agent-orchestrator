@@ -192,3 +192,18 @@ Track progress in `.claude/specs/[feature]/agent-status/backend-developer.md` pe
 | 6 | commit | Create atomic git commit |
 
 Sub-steps: For step 3, track each task from tasks.md as a sub-step (e.g., "TASK-003: COMPLETE", "TASK-004: IN_PROGRESS").
+
+## When to Dispatch
+
+- During Phase 3 (Build) for NestJS backend implementation tasks
+- When implementing API endpoints, services, DTOs, and database queries
+- For BullMQ background job implementation
+- When a single NestJS service needs changes (not cross-service — use senior-engineer)
+
+## Anti-Patterns
+
+- **Fat controllers** — business logic in controllers instead of services; controllers should only parse, delegate, format
+- **Skipping DTOs** — accepting raw request bodies; always validate with class-validator
+- **No error handling** — letting NestJS default errors leak stack traces; use the global exception filter
+- **Cross-service imports** — importing from another service's module directly; use API/gRPC only
+- **No tests** — implementing without writing tests; follow TDD (test first, implement, refactor)

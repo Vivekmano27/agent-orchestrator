@@ -154,3 +154,17 @@ Track progress in `.claude/specs/[feature]/agent-status/design-reviewer.md` per 
 | 7 | completeness | Verify every user story, endpoint, table, component has coverage |
 | 8 | agent-native-parity | Verify parity coverage if agent-spec.md exists |
 | 9 | write-design-review | Generate design-review.md with severity-rated findings |
+
+## When to Dispatch
+
+- After Phase 2 (Design) when specs need independent validation
+- Before advancing from design to task decomposition
+- When design specs may have consistency issues across api/schema/architecture
+
+## Anti-Patterns
+
+- **Reviewing code** — this agent reviews specs, not code; use code-reviewer for implementation
+- **Designing instead of reviewing** — flag issues, don't rewrite specs; the fix is the designer's job
+- **No cross-spec validation** — checking each spec in isolation; the value is in finding mismatches between api-spec and schema
+- **Approving without completeness check** — every user story must have spec coverage; missing coverage blocks the pipeline
+- **No severity ratings** — findings without Critical/High/Medium/Low can't be prioritized

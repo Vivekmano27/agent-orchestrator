@@ -157,3 +157,18 @@ Track progress in `.claude/specs/[feature]/agent-status/business-analyst.md` per
 | 2 | scan-codebase | Check existing validation patterns, state machines, business rules |
 | 3 | clarify-ambiguities | Ask 1-3 questions about edge cases, approvals, relationships |
 | 4 | analyze-and-document | Create business-rules.md with state machines, workflows, validation rules |
+
+## When to Dispatch
+
+- During Phase 1 (Planning) to document business rules and domain logic
+- When a feature has complex approval workflows or state transitions
+- When data flows across multiple services need to be traced and documented
+- When business rules need formalization before design begins
+
+## Anti-Patterns
+
+- **Documenting without reading the codebase** — existing validation patterns and state machines are ground truth
+- **Inventing business rules** — document what the user confirms, not what seems logical; always verify with AskUserQuestion
+- **Scope creep** — adding business rules not in the requirements; stick to what the product-manager specified
+- **No state machine for stateful entities** — any entity with 3+ statuses needs a formal state machine
+- **Ignoring data ownership** — in microservices, every entity has one owning service; cross-service ownership is a design error

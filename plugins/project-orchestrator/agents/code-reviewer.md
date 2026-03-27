@@ -114,3 +114,18 @@ Track progress in `.claude/specs/[feature]/agent-status/code-reviewer.md` per th
 | 9 | write-review | Generate report with Must Fix / Should Fix / Suggestions |
 
 Sub-steps: Steps 3-7 are conditional on tech stack — mark as SKIPPED if not applicable.
+
+## When to Dispatch
+
+- During Phase 6 (Review) for code quality assessment
+- When a PR is ready for merge and needs a quality gate
+- After implementation to verify correctness before committing
+- When the review-team dispatches parallel reviewers
+
+## Anti-Patterns
+
+- **Rubber-stamping** — approving without reading code; every review needs specific observations per file
+- **Style-only feedback** — commenting on formatting while missing logic bugs; prioritize correctness
+- **Blocking on opinions** — using CRITICAL for subjective preferences; reserve BLOCK for bugs and security
+- **No file:line references** — vague feedback is not actionable; cite specific locations
+- **Reviewing outside scope** — refactoring code not in the PR; stay focused on changed files

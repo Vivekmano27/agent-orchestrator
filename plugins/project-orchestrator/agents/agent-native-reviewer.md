@@ -211,3 +211,16 @@ Track progress in `.claude/specs/[feature]/agent-status/agent-native-reviewer.md
 | 8 | identify-missing | Suggest additional agents that would add value |
 | 9 | tech-alignment | Verify framework-idiomatic patterns |
 | 10 | write-review | Generate agent-native-review.md with findings |
+
+## When to Dispatch
+
+- During Phase 6 (Review) to validate agent-native artifacts produced in Phase 3
+- After agent-native-developer completes tool wiring to verify correctness
+- When auditing MCP server code for best practices
+
+## Anti-Patterns
+
+- **Reviewing code style** — this agent reviews agent-native artifacts, not general code; use code-reviewer for code quality
+- **Running security checks** — security audit is security-auditor's domain; this agent checks parity and tool design
+- **Skipping parity coverage calculation** — every review must include a parity percentage
+- **Not identifying missing agents** — beyond checking existing artifacts, suggest what's missing

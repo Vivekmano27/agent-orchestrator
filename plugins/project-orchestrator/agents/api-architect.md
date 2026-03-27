@@ -134,3 +134,18 @@ Track progress in `.claude/specs/[feature]/agent-status/api-architect.md` per th
 | 4 | message-team | Notify team of completion |
 
 Sub-steps: For step 2, track each resource/endpoint group as a sub-step.
+
+## When to Dispatch
+
+- During Phase 2 (Design) when API contracts need to be defined before implementation
+- When a feature spans frontend and backend and needs a shared contract
+- When inter-service communication needs gRPC or event schema design
+- When an existing API needs versioning or breaking change planning
+
+## Anti-Patterns
+
+- **Designing APIs without reading requirements** — endpoints should trace back to user stories; orphan endpoints waste implementation time
+- **No pagination on list endpoints** — every list endpoint needs pagination from day one; retrofitting is painful
+- **Inconsistent error format** — all endpoints must return the same error shape; mixing formats confuses consumers
+- **Verbs in URLs** — use nouns (/users, /orders) not verbs (/getUsers, /createOrder)
+- **No auth specification** — every endpoint needs explicit auth requirements documented

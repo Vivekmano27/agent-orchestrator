@@ -202,3 +202,18 @@ Track progress in `.claude/specs/[feature]/agent-status/database-architect.md` p
 | 6 | message-team | Notify team of completion |
 
 Sub-steps: For step 2, track each table as a sub-step.
+
+## When to Dispatch
+
+- During Phase 2 (Design) when database schema needs to be designed
+- When a new feature requires new tables or schema changes
+- When cross-service data consistency patterns need design
+- When migration strategy for schema changes needs planning
+
+## Anti-Patterns
+
+- **No indexes on foreign keys** — every FK column needs an index; JOINs become full table scans without them
+- **Auto-increment IDs** — use UUIDs for distributed safety; auto-increment leaks entity count
+- **Missing timestamps** — every table needs created_at and updated_at with triggers
+- **Shared databases across services** — in microservices, each service owns its database; sharing couples services at the data layer
+- **No migration rollback** — every migration must have a reversible down function

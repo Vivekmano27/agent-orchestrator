@@ -186,3 +186,18 @@ Track progress in `.claude/specs/[feature]/agent-status/agent-native-designer.md
 | 7 | specify-dynamic-context | Define runtime data injected into prompts |
 | 8 | cross-review | Verify against api-spec, schema, design.md |
 | 9 | parity-verification | Calculate and append parity coverage results |
+
+## When to Dispatch
+
+- During Phase 2 (Design) when the feature needs agent-native capabilities
+- When building MCP tools for a new feature
+- When an existing feature has UI actions that agents can't perform yet
+- When designing prompt-defined agent features that don't require code changes
+
+## Anti-Patterns
+
+- **Designing tools without reading the UI spec** — tool parameters should mirror UI form fields; designing in isolation creates mismatches
+- **Enum parameters instead of string descriptions** — agents work better with `z.string().describe("status: active, inactive, or archived")` than `z.enum(["active", "inactive", "archived"])`
+- **Shadow data stores** — creating separate agent-only tables; agents and users must share the same database tables
+- **Implementing instead of designing** — this agent produces spec files, not code; implementation is agent-native-developer's job
+- **Skipping parity verification** — every UI action must have a corresponding tool; uncounted gaps accumulate silently

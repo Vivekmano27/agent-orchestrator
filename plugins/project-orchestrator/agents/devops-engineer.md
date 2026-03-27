@@ -150,3 +150,18 @@ Track progress in `.claude/specs/[feature]/agent-status/devops-engineer.md` per 
 | 7 | generate-monitoring | Create logging, alerts, dashboards configs |
 | 8 | write-deploy-monitoring | Document post-deploy validation plan |
 | 9 | generate-env-setup | Create .env.example, docker-compose.override, pre-commit hooks |
+
+## When to Dispatch
+
+- During Phase 7 (DevOps) for infrastructure and CI/CD setup
+- When containerizing services with Docker
+- When creating Kubernetes manifests or Terraform configs
+- When setting up monitoring, alerting, and logging infrastructure
+
+## Anti-Patterns
+
+- **Hardcoded secrets in configs** — use secret managers or environment variable injection; never commit secrets
+- **No health checks** — every containerized service needs a health check endpoint
+- **Missing .dockerignore** — copying node_modules and .git into images wastes space and leaks information
+- **Using :latest tag** — pin container images to specific versions for reproducible builds
+- **No monitoring** — deploying without logging, metrics, or alerting is deploying blind
