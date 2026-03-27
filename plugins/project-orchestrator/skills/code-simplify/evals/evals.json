@@ -1,0 +1,72 @@
+{
+  "skill_name": "code-simplify",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Simplify this TypeScript code:\n\n```typescript\nfunction processUsers(users: any[]) {\n  let result = [];\n  for (let i = 0; i < users.length; i++) {\n    if (users[i] !== null && users[i] !== undefined) {\n      if (users[i].status === 'active') {\n        if (users[i].age >= 18) {\n          let formattedName = '';\n          if (users[i].firstName && users[i].lastName) {\n            formattedName = users[i].firstName + ' ' + users[i].lastName;\n          } else if (users[i].firstName) {\n            formattedName = users[i].firstName;\n          } else {\n            formattedName = 'Unknown';\n          }\n          result.push({\n            id: users[i].id,\n            name: formattedName,\n            email: users[i].email,\n            isAdult: true,\n            registeredDays: Math.floor((Date.now() - new Date(users[i].createdAt).getTime()) / 86400000)\n          });\n        }\n      }\n    }\n  }\n  return result;\n}\n```",
+      "expected_output": "Simplified version using guard clauses, named constants, extracted helper functions, proper TypeScript types, filter/map instead of manual loop, and clear naming.",
+      "assertions": [
+        {"name": "reduces_nesting", "description": "Maximum nesting depth reduced from 5 to 2 or less"},
+        {"name": "uses_guard_clauses_or_filter", "description": "Uses early returns, filter(), or guard clauses instead of nested ifs"},
+        {"name": "extracts_constants", "description": "86400000 replaced with a named constant like MS_PER_DAY"},
+        {"name": "adds_types", "description": "Replaces 'any' with proper TypeScript interface/type"},
+        {"name": "extracts_helper", "description": "Name formatting logic extracted to a separate function"},
+        {"name": "uses_modern_syntax", "description": "Uses const/let, template literals, or array methods instead of manual loop"}
+      ],
+      "last_run": {
+        "date": "2026-03-27",
+        "with_skill": "6/6",
+        "without_skill": "6/6",
+        "delta": "0"
+      }
+    },
+    {
+      "id": 2,
+      "prompt": "Simplify this Python function:\n\n```python\ndef fetch_and_process(urls):\n    results = []\n    for url in urls:\n        try:\n            try:\n                response = requests.get(url, timeout=10)\n                try:\n                    data = response.json()\n                    try:\n                        validated = validate_schema(data)\n                        results.append({'url': url, 'data': validated, 'status': 'success'})\n                    except ValidationError as e:\n                        logger.error(f'Validation failed for {url}: {e}')\n                        results.append({'url': url, 'data': None, 'status': 'validation_error', 'error': str(e)})\n                except json.JSONDecodeError as e:\n                    logger.error(f'JSON parse failed for {url}: {e}')\n                    results.append({'url': url, 'data': None, 'status': 'parse_error', 'error': str(e)})\n            except requests.Timeout as e:\n                logger.error(f'Timeout for {url}: {e}')\n                results.append({'url': url, 'data': None, 'status': 'timeout', 'error': str(e)})\n        except requests.RequestException as e:\n            logger.error(f'Request failed for {url}: {e}')\n            results.append({'url': url, 'data': None, 'status': 'request_error', 'error': str(e)})\n    return results\n```",
+      "expected_output": "Flat error handling with single try/except chain or extracted helper, reduced nesting, DRY error result construction",
+      "assertions": [
+        {"name": "reduces_nesting", "description": "Nesting reduced from 5 levels to 2 or fewer"},
+        {"name": "extracts_error_handler", "description": "Error result construction extracted to a helper or uses a consistent pattern"},
+        {"name": "removes_duplication", "description": "The repeated results.append({url, data:None, status, error}) pattern is DRY"},
+        {"name": "preserves_error_specificity", "description": "Still distinguishes between timeout, parse, validation, and request errors"},
+        {"name": "uses_single_try_except", "description": "Uses a single try/except with multiple except clauses instead of nested try blocks"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Simplify this React component that has too many useState calls and duplicated JSX:\n\n```tsx\nfunction Dashboard() {\n  const [users, setUsers] = useState([]);\n  const [products, setProducts] = useState([]);\n  const [orders, setOrders] = useState([]);\n  const [usersLoading, setUsersLoading] = useState(true);\n  const [productsLoading, setProductsLoading] = useState(true);\n  const [ordersLoading, setOrdersLoading] = useState(true);\n  const [usersError, setUsersError] = useState(null);\n  const [productsError, setProductsError] = useState(null);\n  const [ordersError, setOrdersError] = useState(null);\n\n  useEffect(() => { fetchUsers().then(setUsers).catch(setUsersError).finally(() => setUsersLoading(false)); }, []);\n  useEffect(() => { fetchProducts().then(setProducts).catch(setProductsError).finally(() => setProductsLoading(false)); }, []);\n  useEffect(() => { fetchOrders().then(setOrders).catch(setOrdersError).finally(() => setOrdersLoading(false)); }, []);\n\n  return (\n    <div>\n      {usersLoading ? <Skeleton /> : usersError ? <Error msg={usersError} /> : <Card title=\"Users\" count={users.length} />}\n      {productsLoading ? <Skeleton /> : productsError ? <Error msg={productsError} /> : <Card title=\"Products\" count={products.length} />}\n      {ordersLoading ? <Skeleton /> : ordersError ? <Error msg={ordersError} /> : <Card title=\"Orders\" count={orders.length} />}\n    </div>\n  );\n}\n```",
+      "expected_output": "Extracted custom hook useAsync or useFetch, single StatCard component, reduced from 9 useState to 0-3 via custom hook",
+      "assertions": [
+        {"name": "extracts_custom_hook", "description": "Extracts a reusable useAsync/useFetch hook that handles data, loading, and error states"},
+        {"name": "reduces_state_count", "description": "Reduces from 9 useState calls to 3 or fewer via the custom hook"},
+        {"name": "extracts_reusable_component", "description": "Extracts a StatCard or similar component for the repeated loading/error/data pattern"},
+        {"name": "removes_jsx_duplication", "description": "The three identical ternary blocks replaced with a map or reusable component"},
+        {"name": "preserves_behavior", "description": "All three data sources still fetched independently with loading/error states"}
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Simplify this function with a long switch statement:\n\n```typescript\nfunction getHttpStatusInfo(code: number): { label: string; type: 'success' | 'redirect' | 'client_error' | 'server_error'; retryable: boolean } {\n  switch (code) {\n    case 200: return { label: 'OK', type: 'success', retryable: false };\n    case 201: return { label: 'Created', type: 'success', retryable: false };\n    case 204: return { label: 'No Content', type: 'success', retryable: false };\n    case 301: return { label: 'Moved Permanently', type: 'redirect', retryable: false };\n    case 302: return { label: 'Found', type: 'redirect', retryable: false };\n    case 304: return { label: 'Not Modified', type: 'redirect', retryable: false };\n    case 400: return { label: 'Bad Request', type: 'client_error', retryable: false };\n    case 401: return { label: 'Unauthorized', type: 'client_error', retryable: false };\n    case 403: return { label: 'Forbidden', type: 'client_error', retryable: false };\n    case 404: return { label: 'Not Found', type: 'client_error', retryable: false };\n    case 409: return { label: 'Conflict', type: 'client_error', retryable: false };\n    case 422: return { label: 'Unprocessable Entity', type: 'client_error', retryable: false };\n    case 429: return { label: 'Too Many Requests', type: 'client_error', retryable: true };\n    case 500: return { label: 'Internal Server Error', type: 'server_error', retryable: true };\n    case 502: return { label: 'Bad Gateway', type: 'server_error', retryable: true };\n    case 503: return { label: 'Service Unavailable', type: 'server_error', retryable: true };\n    case 504: return { label: 'Gateway Timeout', type: 'server_error', retryable: true };\n    default: return { label: 'Unknown', type: 'server_error', retryable: false };\n  }\n}\n```",
+      "expected_output": "Replace switch with a Record/Map lookup, extract type from status code range, derive retryable from a Set",
+      "assertions": [
+        {"name": "replaces_switch_with_map", "description": "Uses a Record, Map, or object lookup instead of switch statement"},
+        {"name": "reduces_line_count", "description": "Total lines reduced by at least 30%"},
+        {"name": "handles_default_case", "description": "Unknown status codes still return a fallback value"},
+        {"name": "preserves_all_mappings", "description": "All 17 status codes still map to their correct label, type, and retryable value"},
+        {"name": "adds_type_safety", "description": "Uses TypeScript types for the return shape and/or satisfies keyword"}
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Simplify this callback hell to async/await:\n\n```javascript\nfunction processOrder(orderId) {\n  return getOrder(orderId).then(order => {\n    return validateInventory(order.items).then(inventory => {\n      if (!inventory.available) {\n        throw new Error('Items out of stock');\n      }\n      return processPayment(order.total, order.paymentMethod).then(payment => {\n        if (!payment.success) {\n          throw new Error('Payment failed: ' + payment.error);\n        }\n        return updateOrderStatus(orderId, 'confirmed', payment.transactionId).then(updated => {\n          return sendConfirmationEmail(order.customerEmail, updated).then(() => {\n            return { success: true, order: updated, transactionId: payment.transactionId };\n          }).catch(emailErr => {\n            console.warn('Email failed but order confirmed:', emailErr);\n            return { success: true, order: updated, transactionId: payment.transactionId, emailFailed: true };\n          });\n        });\n      });\n    });\n  }).catch(err => {\n    return { success: false, error: err.message };\n  });\n}\n```",
+      "expected_output": "Flat async/await with try/catch, email failure handled separately, no .then nesting",
+      "assertions": [
+        {"name": "converts_to_async_await", "description": "Function uses async/await instead of .then() chains"},
+        {"name": "removes_nesting", "description": "No more than 1 level of nesting in the function body"},
+        {"name": "preserves_error_handling", "description": "Outer errors still caught, email failure still non-fatal"},
+        {"name": "uses_try_catch", "description": "Uses try/catch for error handling instead of .catch()"},
+        {"name": "maintains_sequential_logic", "description": "Steps still execute in order: get order, validate, pay, update, email"}
+      ]
+    }
+  ]
+}

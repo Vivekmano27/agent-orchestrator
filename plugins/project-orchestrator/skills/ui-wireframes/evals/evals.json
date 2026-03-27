@@ -1,0 +1,80 @@
+{
+  "skill_name": "ui-wireframes",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Create wireframes for an admin dashboard with these screens: 1) Dashboard overview with KPI cards and recent activity feed, 2) User management table with search, filters, and bulk actions, 3) Settings page with tabs for profile, notifications, and billing. Include navigation flow, responsive breakpoints, and component states.",
+      "expected_output": "ASCII wireframes for all 3 screens, component tables with data sources, all 4 states per screen, responsive breakpoints, navigation flow Mermaid diagram, interaction specs",
+      "assertions": [
+        {"name": "ascii_wireframes", "description": "At least 3 ASCII art wireframe layouts using box-drawing characters"},
+        {"name": "component_tables", "description": "Component tables with columns for name, data source, and actions"},
+        {"name": "four_states", "description": "Loading, empty, error, and loaded states specified for each screen"},
+        {"name": "responsive_breakpoints", "description": "Mobile, tablet, desktop breakpoints defined with layout changes"},
+        {"name": "navigation_flow", "description": "Mermaid flowchart showing navigation between screens"},
+        {"name": "interaction_specs", "description": "At least one interaction specification (e.g., bulk delete, filter)"}
+      ],
+      "last_run": {
+        "date": "2026-03-27",
+        "with_skill": "6/6",
+        "without_skill": "4/6",
+        "delta": "+2"
+      }
+    },
+    {
+      "id": 2,
+      "prompt": "I'm building a mobile-first e-commerce app in React Native and need wireframes for the checkout flow. The flow has 4 steps: cart review (item list with quantity adjust and remove, promo code input, order summary), shipping address (saved addresses with select, add new address form, delivery speed options), payment (saved cards, add new card, Apple Pay / Google Pay buttons, billing address toggle), and order confirmation (order number, estimated delivery, item summary, continue shopping CTA). Users should be able to go back to any previous step. Show me the mobile layout first, then how it adapts to tablet/desktop as a side-by-side or stepper layout.",
+      "expected_output": "ASCII wireframes for all 4 checkout steps in mobile-first layout, step indicator/progress bar, back navigation between steps, tablet/desktop adaptation with side-by-side layout, component states for each step, interaction specs for quantity adjust and promo code",
+      "assertions": [
+        {"name": "four_step_wireframes", "description": "Separate ASCII wireframe for each of the 4 checkout steps (cart, shipping, payment, confirmation)"},
+        {"name": "progress_indicator", "description": "Step indicator or progress bar showing current position in the 4-step flow"},
+        {"name": "mobile_first_layout", "description": "Primary wireframes use single-column mobile-first layout with touch-friendly targets"},
+        {"name": "responsive_adaptation", "description": "Shows how the layout adapts to tablet/desktop with side-by-side or stepper layout"},
+        {"name": "back_navigation", "description": "Back navigation between steps is explicitly shown in the flow or wireframes"},
+        {"name": "component_states", "description": "Loading, empty, error, and success states for at least the cart and payment steps"},
+        {"name": "interaction_specs", "description": "Interaction specs for quantity adjustment, promo code validation, or payment method selection"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "We're building a project management tool (think Linear meets Notion) in Next.js. I need wireframes for: 1) Kanban board view with draggable cards across columns (Backlog, Todo, In Progress, In Review, Done), each card shows title, assignee avatar, priority badge, and due date. 2) Timeline/Gantt view showing tasks as horizontal bars with dependencies (arrows between tasks), date range header, and zoom controls. 3) A persistent team members sidebar that shows online status, role, and current task count. The sidebar should collapse on mobile. Include drag-and-drop interaction specs for the kanban and the responsive behavior for all 3 views.",
+      "expected_output": "ASCII wireframes for kanban board, timeline/Gantt view, and team sidebar, drag-and-drop interaction specs, card component breakdown, responsive collapse behavior, Mermaid navigation diagram",
+      "assertions": [
+        {"name": "kanban_wireframe", "description": "ASCII wireframe showing kanban columns (Backlog, Todo, In Progress, In Review, Done) with card placeholders"},
+        {"name": "timeline_wireframe", "description": "ASCII wireframe showing timeline/Gantt bars with date headers and dependency arrows or lines"},
+        {"name": "sidebar_wireframe", "description": "Team sidebar wireframe showing member entries with online status, role, and task count"},
+        {"name": "card_component", "description": "Card component breakdown showing title, assignee avatar, priority badge, and due date fields"},
+        {"name": "drag_drop_interaction", "description": "Drag-and-drop interaction spec describing grab, drag, drop zones, and visual feedback for kanban"},
+        {"name": "responsive_sidebar", "description": "Sidebar collapse behavior on mobile explicitly described or shown in a mobile wireframe"},
+        {"name": "navigation_flow", "description": "Mermaid diagram or description showing navigation between kanban, timeline, and other views"}
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "We're designing an onboarding wizard for a B2B SaaS analytics platform (think Mixpanel or Amplitude). The wizard has 4 steps: 1) Account setup — company name, industry dropdown, company size radio buttons, timezone selector. 2) Invite team — email input with role selector (Admin/Editor/Viewer), bulk CSV upload option, skip for now link. 3) Integration config — list of available integrations (Segment, Google Analytics, Stripe, Slack) with connect buttons, each shows a brief setup guide when selected. 4) First project — project name, select data source from connected integrations, choose a template (blank, e-commerce funnel, SaaS metrics, marketing attribution). Each step should show validation states and the wizard needs a progress bar. Also show what happens when the user tries to skip steps or close the wizard mid-flow.",
+      "expected_output": "ASCII wireframes for all 4 onboarding steps, progress bar, validation error states, skip/close behavior, integration selection interaction, template preview component",
+      "assertions": [
+        {"name": "four_step_wireframes", "description": "Separate ASCII wireframe for each of the 4 onboarding steps (account, team, integrations, first project)"},
+        {"name": "progress_bar", "description": "Progress bar or step indicator showing completion across all 4 steps"},
+        {"name": "validation_states", "description": "Validation error states shown for at least one step (inline errors, field highlighting)"},
+        {"name": "skip_close_behavior", "description": "Describes what happens when user skips a step or closes the wizard mid-flow (confirmation dialog, resume state)"},
+        {"name": "form_components", "description": "Form component specs for inputs like dropdowns, radio buttons, email fields, and role selectors"},
+        {"name": "integration_interaction", "description": "Interaction spec for selecting an integration and viewing its setup guide"},
+        {"name": "template_selection", "description": "Template selection UI with template names and either preview or description for each option"}
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "I need wireframes for a real-time analytics dashboard built with Next.js and Recharts. The dashboard has: 1) A main view with 4 live-updating metric cards (active users, requests/sec, error rate, p95 latency) that show sparkline trends and delta indicators (up/down arrows with color). 2) Below the cards, a large time-series chart area that supports line, bar, and area chart modes with a time range picker (last 1h, 6h, 24h, 7d, 30d, custom). 3) An alert configuration panel — users can set threshold alerts on any metric (e.g., error rate > 5% for 5 minutes), choose notification channels (email, Slack, PagerDuty), and see a list of active/resolved alerts. 4) A data export sidebar — export as CSV or JSON, select date range, choose metrics to include, and schedule recurring exports. Show auto-refresh indicator and what the dashboard looks like in degraded mode when the data stream drops.",
+      "expected_output": "ASCII wireframes for dashboard with metric cards, chart area, alert config panel, export sidebar, auto-refresh indicator, degraded/disconnected state, chart mode switcher interaction",
+      "assertions": [
+        {"name": "metric_cards_wireframe", "description": "ASCII wireframe showing 4 metric cards with sparklines and delta indicators"},
+        {"name": "chart_area_wireframe", "description": "Time-series chart area wireframe with chart mode toggle (line/bar/area) and time range picker"},
+        {"name": "alert_config_wireframe", "description": "Alert configuration panel showing threshold inputs, notification channel selection, and alert list"},
+        {"name": "export_sidebar_wireframe", "description": "Data export sidebar wireframe with format selection, date range, metric checkboxes, and schedule option"},
+        {"name": "auto_refresh_indicator", "description": "Auto-refresh or live indicator element shown in the wireframe or described in component specs"},
+        {"name": "degraded_state", "description": "Degraded or disconnected state wireframe showing what happens when the data stream drops"},
+        {"name": "responsive_layout", "description": "Responsive behavior described for at least mobile and desktop breakpoints"}
+      ]
+    }
+  ]
+}

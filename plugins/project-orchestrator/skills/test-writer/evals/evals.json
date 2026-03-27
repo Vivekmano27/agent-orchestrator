@@ -1,0 +1,80 @@
+{
+  "skill_name": "test-writer",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I have a UserService class in a NestJS app with methods: register(email, password, name), login(email, password), and resetPassword(email). Write comprehensive tests for this service using Jest. The service uses a UserRepository for database operations and BcryptService for password hashing.",
+      "expected_output": "Jest test file with AAA pattern, test factories, mock setup for repo and bcrypt, tests covering happy path, validation errors, duplicate email, wrong password, nonexistent user, and edge cases",
+      "assertions": [
+        {"name": "uses_arrange_act_assert", "description": "Tests follow AAA pattern with clear sections"},
+        {"name": "mocks_at_boundary", "description": "Mocks UserRepository and BcryptService, not internal methods"},
+        {"name": "covers_happy_path", "description": "At least one test per method for successful operation"},
+        {"name": "covers_error_cases", "description": "Tests for duplicate email, wrong password, user not found"},
+        {"name": "uses_factory_or_builder", "description": "Uses a factory function or builder for test data rather than inline objects everywhere"},
+        {"name": "no_implementation_testing", "description": "Does not spy on private/internal methods"}
+      ],
+      "last_run": {
+        "date": "2026-03-27",
+        "with_skill": "6/6",
+        "without_skill": "4/6",
+        "delta": "+2"
+      }
+    },
+    {
+      "id": 2,
+      "prompt": "I need Pytest tests for a Python FastAPI payment processing service. The service has these endpoints: POST /payments/charge (accepts amount, currency, customer_id, payment_method_id), POST /payments/refund (accepts payment_id, amount, reason), and GET /payments/{payment_id}/status. It integrates with Stripe via stripe.PaymentIntent.create() and stripe.Refund.create(). The service uses SQLAlchemy with a PaymentRecord model and raises PaymentDeclinedError, InsufficientFundsError, and RefundLimitExceededError. We're on FastAPI 0.104 and pytest 7.4.",
+      "expected_output": "Pytest test file using httpx AsyncClient and pytest-asyncio, with Stripe API mocked via monkeypatch or unittest.mock.patch, fixture factories for PaymentRecord, tests covering successful charge, declined card, insufficient funds, partial refund, full refund, refund exceeding original amount, idempotency key handling, and currency validation",
+      "assertions": [
+        {"name": "uses_async_test_client", "description": "Tests use httpx.AsyncClient or TestClient from FastAPI, not raw requests"},
+        {"name": "mocks_stripe_at_boundary", "description": "Patches stripe.PaymentIntent.create and stripe.Refund.create, does not call real Stripe API"},
+        {"name": "tests_charge_happy_path", "description": "At least one test for a successful charge that asserts status code 200/201 and response body contains payment_id"},
+        {"name": "tests_payment_declined", "description": "Test that simulates Stripe declining a card and asserts appropriate error response"},
+        {"name": "tests_refund_exceeds_amount", "description": "Test that a refund greater than the original charge amount returns an error"},
+        {"name": "uses_fixtures_for_test_data", "description": "Uses pytest fixtures or factory functions for creating PaymentRecord instances, not inline dicts in every test"},
+        {"name": "tests_idempotency_or_duplicate", "description": "Tests that duplicate charge requests are handled (either idempotency key or duplicate detection)"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Write integration tests for a NestJS FileUploadController that handles multipart file uploads to AWS S3. The controller has: POST /files/upload (single file, max 10MB, allowed types: jpg/png/pdf), POST /files/upload-batch (up to 5 files), GET /files/:id (returns presigned download URL), and DELETE /files/:id. It uses an S3Service wrapper around @aws-sdk/client-s3 and a FileMetadataRepository (TypeORM/Postgres) to store file records. Tests should use supertest. The app validates file size in a custom ParseFilePipe and checks auth via a JwtAuthGuard.",
+      "expected_output": "Supertest-based integration test file with S3Service mocked, test database or mocked repository, tests covering successful single and batch upload, file size rejection, invalid file type rejection, download URL generation, deletion, auth guard enforcement, and metadata persistence",
+      "assertions": [
+        {"name": "uses_supertest_with_nestjs", "description": "Tests use supertest with a NestJS testing module (Test.createTestingModule) to make HTTP requests"},
+        {"name": "mocks_s3_service", "description": "S3Service is mocked or overridden in the testing module, no real AWS calls are made"},
+        {"name": "tests_file_size_limit", "description": "A test sends a file larger than 10MB and asserts it is rejected with 413 or 400"},
+        {"name": "tests_invalid_file_type", "description": "A test uploads a disallowed file type (e.g. .exe) and asserts rejection"},
+        {"name": "tests_batch_upload_limit", "description": "A test uploads more than 5 files in a batch and asserts it fails"},
+        {"name": "tests_auth_required", "description": "At least one test sends a request without auth token and asserts 401 Unauthorized"},
+        {"name": "tests_delete_removes_record", "description": "A test verifies that deleting a file removes both the S3 object (via mock assertion) and the metadata record"}
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Write tests for a React custom hook called useAuth that manages authentication state. The hook exposes: login(email, password) which calls POST /api/auth/login and stores the JWT in memory, logout() which calls POST /api/auth/logout and clears state, refreshToken() which calls POST /api/auth/refresh with the stored refresh token, isAuthenticated (boolean), user (object with id, email, role), and isLoading (boolean). The hook uses fetch internally and wraps state in a React context provider. We're using React 18, @testing-library/react-hooks (renderHook, act), and vitest. Token refresh should happen automatically when the access token is within 60 seconds of expiry.",
+      "expected_output": "Vitest test file using renderHook with a wrapper AuthProvider, fetch mocked globally, tests for login success, login failure (wrong credentials), logout clears state, token refresh on expiry, isLoading states during async operations, and context consumer without provider throws error",
+      "assertions": [
+        {"name": "uses_render_hook", "description": "Tests use renderHook from @testing-library/react or react-hooks to test the hook in isolation"},
+        {"name": "wraps_with_provider", "description": "renderHook calls include a wrapper component that provides the AuthContext/AuthProvider"},
+        {"name": "mocks_fetch_not_internals", "description": "Mocks global fetch or uses msw, does not mock internal hook functions"},
+        {"name": "tests_login_updates_state", "description": "A test calls login(), waits for resolution, and asserts isAuthenticated becomes true and user object is populated"},
+        {"name": "tests_logout_clears_state", "description": "A test calls logout() and asserts isAuthenticated becomes false and user becomes null"},
+        {"name": "tests_token_refresh", "description": "A test simulates an expired or near-expiry token and asserts that refreshToken is called and new token is stored"},
+        {"name": "tests_loading_states", "description": "Tests verify isLoading is true during async operations and false after completion"}
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Write tests for a Go HTTP handler package that does CRUD on a users table in Postgres. The handler struct has methods: CreateUser(w, r), GetUser(w, r), UpdateUser(w, r), DeleteUser(w, r), and ListUsers(w, r) with pagination via ?page=1&limit=20 query params. It uses a UserRepository interface with Create, FindByID, Update, Delete, and List methods. Requests and responses use JSON. CreateUser validates that email is unique and password is at least 8 chars. We're using Go 1.22, net/http, and the standard testing package with testify for assertions. The handler returns proper HTTP status codes: 201 for create, 200 for get/update/list, 204 for delete, 400 for validation, 404 for not found, 409 for duplicate email.",
+      "expected_output": "Go test file with mock UserRepository, table-driven tests for each handler method, httptest.NewRecorder for capturing responses, tests covering all status codes (201, 200, 204, 400, 404, 409), JSON request/response validation, and pagination parameter handling",
+      "assertions": [
+        {"name": "uses_mock_repository", "description": "Defines a mock struct implementing the UserRepository interface, does not use a real database"},
+        {"name": "uses_httptest", "description": "Tests use httptest.NewRequest and httptest.NewRecorder to simulate HTTP requests"},
+        {"name": "table_driven_tests", "description": "At least one test function uses table-driven test pattern with a slice of test cases and t.Run subtests"},
+        {"name": "tests_correct_status_codes", "description": "Tests assert specific HTTP status codes: 201 for create, 204 for delete, 400 for validation errors, 404 for not found, 409 for duplicate"},
+        {"name": "tests_pagination", "description": "A test for ListUsers verifies that page and limit query params are parsed and passed to the repository"},
+        {"name": "validates_json_response", "description": "Tests unmarshal response body JSON and assert on specific fields, not just status code"},
+        {"name": "tests_password_validation", "description": "A test sends a password shorter than 8 characters and asserts a 400 response"}
+      ]
+    }
+  ]
+}

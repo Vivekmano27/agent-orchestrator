@@ -1,0 +1,78 @@
+{
+  "skill_name": "estimation-skill",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Estimate the effort to add a real-time notification system to our NestJS + React app. It needs: WebSocket connection with Socket.IO, notification types (info, warning, error), a notification center UI with read/unread state, push notification support for mobile (via Firebase), and a notification preferences page.",
+      "expected_output": "Feature decomposed into tasks, each scored on 5 complexity factors, risk multipliers applied, estimate as a range with confidence level",
+      "assertions": [
+        {"name": "task_decomposition", "description": "Feature broken into 5+ concrete tasks before estimating"},
+        {"name": "complexity_scoring", "description": "Each task scored on complexity factors (code changes, new concepts, dependencies, testing, risk)"},
+        {"name": "size_mapping", "description": "Total score mapped to S/M/L/XL with story points"},
+        {"name": "risk_multipliers", "description": "Risk multipliers applied (e.g., new technology for WebSocket/Firebase)"},
+        {"name": "range_estimate", "description": "Final estimate given as a range, not a single number"},
+        {"name": "confidence_level", "description": "Confidence level stated (Low/Medium/High) with reasoning"}
+      ],
+      "last_run": {
+        "date": "2026-03-27",
+        "with_skill": "6/6",
+        "without_skill": "2/6",
+        "delta": "+4"
+      }
+    },
+    {
+      "id": 2,
+      "prompt": "We have a monolith Express.js app (about 40 routes, 15 Mongoose models, session-based auth) and want to migrate to NestJS microservices. The plan is 3 services: user-service (auth + profiles), product-service (catalog + search), and order-service (cart + checkout + payments). We need shared JWT auth across all services, a new API gateway, and CI/CD pipelines for each service using GitHub Actions. The existing app has zero tests. Estimate the full migration effort.",
+      "expected_output": "Migration decomposed into phases with per-service estimates, legacy analysis factored in, risk multipliers for zero test coverage and new architecture, range estimate with low confidence due to unknowns",
+      "assertions": [
+        {"name": "task_decomposition", "description": "Migration broken into 8+ tasks covering API gateway setup, each service extraction, shared auth, CI/CD per service, data migration, and testing"},
+        {"name": "complexity_scoring", "description": "Each task scored on complexity factors including code changes, new concepts (NestJS, microservices, JWT), dependencies, testing, and risk"},
+        {"name": "size_mapping", "description": "Total score mapped to XL size with story points reflecting multi-sprint effort"},
+        {"name": "risk_multipliers", "description": "Risk multipliers applied for zero existing test coverage, monolith-to-microservices architecture shift, and data migration risks"},
+        {"name": "range_estimate", "description": "Final estimate given as a wide range (e.g., 8-14 weeks) reflecting high uncertainty of a major migration"},
+        {"name": "confidence_level", "description": "Confidence level stated as Low with reasoning citing zero test coverage, architectural shift, and unknown coupling in the monolith"},
+        {"name": "phase_breakdown", "description": "Estimate broken into sequential phases (e.g., analysis, service extraction, integration, cutover) rather than a single lump estimate"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "We need to add multi-language support (i18n) to our React + NestJS application. The frontend has about 50 screens built with Next.js App Router and Tailwind. The backend serves 25 API endpoints that return user-facing strings (error messages, email templates, PDF reports). We want to support English, Spanish, and French initially, with the ability to add more later. We use react-intl on the frontend already for date formatting but haven't extracted any strings yet. Estimate the effort for full i18n coverage.",
+      "expected_output": "Feature decomposed into frontend string extraction, backend message externalization, translation workflow, locale switching, and RTL-readiness tasks with per-task complexity scores",
+      "assertions": [
+        {"name": "task_decomposition", "description": "Feature broken into 6+ tasks: string extraction from 50 screens, backend message externalization, translation file management, locale switching UI, email/PDF template localization, and testing across locales"},
+        {"name": "complexity_scoring", "description": "Each task scored on complexity factors with string extraction from 50 screens receiving high volume score and email/PDF templates receiving high dependency score"},
+        {"name": "size_mapping", "description": "Total score mapped to L or XL size reflecting the breadth of touching 50 screens plus backend endpoints"},
+        {"name": "risk_multipliers", "description": "Risk multipliers applied for string extraction completeness (missing strings), pluralization edge cases, and RTL layout considerations for future languages"},
+        {"name": "range_estimate", "description": "Final estimate given as a range acknowledging that string extraction volume is predictable but edge cases in formatting and plurals add variance"},
+        {"name": "confidence_level", "description": "Confidence level stated as Medium with reasoning citing known screen count but unknown complexity of dynamic string patterns"}
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Estimate building a CSV import feature for our NestJS + PostgreSQL inventory management system. Users will upload CSV files with 100K+ rows of product data. Requirements: file upload with size validation (max 50MB), column mapping UI in React, row-by-row validation against our product schema (name, SKU, price, category must be valid), duplicate detection by SKU with merge/skip/overwrite options, a real-time progress bar via SSE, error report generation with row numbers and failure reasons, and the ability to cancel an in-progress import. We use Bull queues for background jobs already.",
+      "expected_output": "Feature decomposed into upload handling, parsing, validation pipeline, dedup logic, progress tracking, error reporting, and cancellation tasks with complexity scores reflecting async processing challenges",
+      "assertions": [
+        {"name": "task_decomposition", "description": "Feature broken into 7+ tasks: file upload endpoint, CSV parsing and streaming, validation pipeline, dedup logic with merge/skip/overwrite, progress tracking via SSE, error report generation, and import cancellation"},
+        {"name": "complexity_scoring", "description": "Each task scored with high marks for dedup logic (business rule complexity), progress tracking (real-time SSE), and cancellation (async job control)"},
+        {"name": "size_mapping", "description": "Total score mapped to L size reflecting significant backend complexity with moderate frontend work"},
+        {"name": "risk_multipliers", "description": "Risk multipliers applied for large file processing (memory/performance), concurrent import handling, and edge cases in CSV parsing (encoding, delimiters, malformed rows)"},
+        {"name": "range_estimate", "description": "Final estimate given as a range reflecting that core upload is straightforward but dedup strategies and cancellation add significant complexity"},
+        {"name": "confidence_level", "description": "Confidence level stated as Medium with reasoning citing existing Bull queue infrastructure as a positive but CSV parsing edge cases and memory management for 100K rows as unknowns"}
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Estimate adding end-to-end encryption to our existing chat application. The stack is React Native for mobile, Next.js for web, NestJS backend with PostgreSQL, and Socket.IO for real-time messaging. We need: X3DH key exchange protocol for establishing sessions, Double Ratchet for message encryption, encrypted file attachment support (images and documents up to 10MB), device key management (users can have up to 3 devices), key backup and recovery flow, and the server should never have access to plaintext messages. Currently messages are stored as plaintext in the DB.",
+      "expected_output": "Feature decomposed into cryptographic protocol implementation, key management, message migration, and multi-device sync tasks with high risk multipliers for cryptographic complexity",
+      "assertions": [
+        {"name": "task_decomposition", "description": "Feature broken into 8+ tasks: X3DH key exchange implementation, Double Ratchet protocol, message encryption/decryption layer, file attachment encryption, multi-device key sync, key backup/recovery, message migration from plaintext, and client-side key storage"},
+        {"name": "complexity_scoring", "description": "Each task scored with very high marks for new concepts (cryptographic protocols), dependencies (cross-platform crypto libraries), and risk (security-critical implementation)"},
+        {"name": "size_mapping", "description": "Total score mapped to XL size reflecting deep cryptographic complexity and multi-platform implementation"},
+        {"name": "risk_multipliers", "description": "Risk multipliers applied for cryptographic implementation risk (security vulnerabilities), cross-platform crypto library compatibility (React Native + Next.js), data migration from plaintext, and key recovery edge cases"},
+        {"name": "range_estimate", "description": "Final estimate given as a wide range reflecting extremely high uncertainty of implementing cryptographic protocols correctly across platforms"},
+        {"name": "confidence_level", "description": "Confidence level stated as Low with reasoning citing novel cryptographic protocol implementation, cross-platform consistency requirements, and zero-tolerance for security bugs"},
+        {"name": "specialist_flag", "description": "Recommendation to involve a cryptography specialist or security auditor flagged as a risk mitigation measure"}
+      ]
+    }
+  ]
+}

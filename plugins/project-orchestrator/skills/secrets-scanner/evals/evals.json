@@ -1,0 +1,76 @@
+{
+  "skill_name": "secrets-scanner",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I'm about to make my private repo public on GitHub. It's a Node.js/Express app that has been in development for 6 months. Scan for any secrets that might be committed and give me a remediation plan.",
+      "expected_output": "Gitleaks scan command, vendor pattern list to check, file types to flag, remediation steps (rotate, remove from history, gitignore, pre-commit hook), prevention setup",
+      "assertions": [
+        {"name": "scan_command", "description": "Provides gitleaks detect command or equivalent scanning approach"},
+        {"name": "vendor_patterns", "description": "Lists specific vendor patterns to check (AWS keys, GitHub tokens, Stripe keys, etc.)"},
+        {"name": "file_flags", "description": "Flags .env files, .pem/.key files, and other sensitive file types"},
+        {"name": "rotate_first", "description": "Emphasizes rotating/revoking secrets BEFORE removing from git history"},
+        {"name": "history_cleanup", "description": "Includes git history cleanup (BFG or git-filter-repo)"},
+        {"name": "prevention_setup", "description": "Sets up pre-commit hook and .gitignore to prevent future leaks"}
+      ],
+      "last_run": {
+        "date": "2026-03-27",
+        "with_skill": "6/6",
+        "without_skill": "5/6",
+        "delta": "+1"
+      }
+    },
+    {
+      "id": 2,
+      "prompt": "I'm reviewing a PR for our Django + AWS project that modifies settings.py and adds a new deploy.sh script. Can you check if any secrets might be in these changes before I approve?",
+      "expected_output": "Focused scan on settings.py patterns (SECRET_KEY, DB credentials, AWS keys) and deploy script (hardcoded credentials, key paths), with PR-specific guidance",
+      "assertions": [
+        {"name": "scans_settings_py", "description": "Checks settings.py for Django SECRET_KEY, DATABASE config, AWS credentials"},
+        {"name": "scans_deploy_script", "description": "Checks deploy.sh for hardcoded credentials, SSH keys, or API tokens"},
+        {"name": "distinguishes_env_refs", "description": "Distinguishes os.environ references from hardcoded values (env refs are OK)"},
+        {"name": "pr_specific_guidance", "description": "Focuses on the changed files, not a full repo scan"},
+        {"name": "recommends_ci_check", "description": "Suggests adding secret scanning to CI for future PRs"},
+        {"name": "checks_aws_patterns", "description": "Specifically checks for AKIA keys, secret access keys, region strings"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Set up a complete secret prevention system for our new TypeScript monorepo. We need pre-commit hooks, CI scanning in GitHub Actions, and a .env.example template. We use AWS, Stripe, and SendGrid APIs.",
+      "expected_output": "Pre-commit config with Gitleaks, GitHub Actions workflow, .env.example with all three services, .gitignore updates, developer guidelines",
+      "assertions": [
+        {"name": "pre_commit_hook", "description": "Provides .pre-commit-config.yaml with Gitleaks hook configuration"},
+        {"name": "ci_workflow", "description": "GitHub Actions workflow that runs gitleaks on PRs"},
+        {"name": "env_example", "description": ".env.example with placeholder values for AWS, Stripe, and SendGrid"},
+        {"name": "gitignore_updates", "description": "Adds .env, *.pem, *.key to .gitignore"},
+        {"name": "covers_all_three_services", "description": "Mentions patterns for AWS (AKIA), Stripe (sk_live_), and SendGrid (SG.) specifically"},
+        {"name": "developer_guidelines", "description": "Guidance on where to store secrets (env vars, secret manager) and what not to commit"}
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Emergency! A junior dev committed our production .env file with real database credentials and Stripe live keys. It was 3 commits ago. The repo is private with 5 team members. What do I do right now?",
+      "expected_output": "Emergency remediation: rotate immediately, clean history, verify, notify team. Urgent tone with clear step ordering.",
+      "assertions": [
+        {"name": "rotate_first_emphasis", "description": "Step 1 is rotating all exposed secrets — DB password, Stripe keys — BEFORE cleaning history"},
+        {"name": "specific_rotation_steps", "description": "Names the specific credentials to rotate (DB password, Stripe live key) with provider instructions"},
+        {"name": "history_cleanup", "description": "Provides BFG or git-filter-repo commands to remove .env from all 3 commits"},
+        {"name": "team_notification", "description": "Recommends notifying all 5 team members to re-pull after force push"},
+        {"name": "verification_scan", "description": "Re-run gitleaks after cleanup to verify clean history"},
+        {"name": "urgency_conveyed", "description": "Treats this as urgent — rotation before cleanup, not the reverse"}
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Audit our Terraform repository for leaked secrets. We have AWS provider configs in providers.tf, RDS and ElastiCache modules in modules/, some .tfvars files, and I'm not sure if our state files are committed. Check everything.",
+      "expected_output": "Checks tfstate files, tfvars for credentials, provider blocks for hardcoded keys, recommends remote state backend and env var injection",
+      "assertions": [
+        {"name": "checks_tfstate", "description": "Checks if .tfstate files are committed (they contain all secrets in plaintext)"},
+        {"name": "checks_tfvars", "description": "Checks .tfvars files for hardcoded passwords, access keys, or tokens"},
+        {"name": "checks_provider_blocks", "description": "Checks provider blocks for hardcoded access_key/secret_key instead of env vars"},
+        {"name": "recommends_remote_state", "description": "Recommends S3/GCS remote state backend instead of local state files"},
+        {"name": "recommends_env_vars", "description": "Suggests using TF_VAR_ environment variables or Vault instead of hardcoded values"},
+        {"name": "gitignore_for_tf", "description": "Adds *.tfstate, *.tfvars (except examples), and .terraform/ to .gitignore"}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "skill_name": "fullstack-dev",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Scaffold a new NestJS + PostgreSQL backend project for a task management API. Set up the project structure, Prisma ORM, JWT authentication, environment configuration, and initial tests.",
+      "expected_output": "NestJS project structure with modules, Prisma schema, auth module with JWT, .env.example, initial test, package.json with dependencies",
+      "assertions": [
+        {"name": "nestjs_structure", "description": "Creates NestJS project structure with src/, modules, controllers, services"},
+        {"name": "prisma_setup", "description": "Includes Prisma schema file with initial model"},
+        {"name": "auth_template", "description": "Auth module with JWT register/login/refresh flow"},
+        {"name": "env_example", "description": ".env.example with all required environment variables (placeholders only)"},
+        {"name": "initial_test", "description": "At least one test file that verifies the app starts"},
+        {"name": "scope_boundary", "description": "Does NOT include React/frontend setup (stays within backend scope)"}
+      ],
+      "last_run": {
+        "date": "2026-03-27",
+        "with_skill": "6/6",
+        "without_skill": "5/6",
+        "delta": "+1"
+      }
+    },
+    {
+      "id": 2,
+      "prompt": "Scaffold a Next.js 14 + PostgreSQL full-stack app for a blog platform. Use Prisma ORM, NextAuth.js for Google OAuth, App Router with server components, and Tailwind CSS. Models: User and Post (title, content, slug, published, authorId).",
+      "expected_output": "Next.js App Router structure, Prisma schema with User and Post models, NextAuth config, Tailwind config, .env.example, initial pages",
+      "assertions": [
+        {"name": "nextjs_app_router", "description": "Uses app/ directory structure with layout.tsx, page.tsx, loading.tsx"},
+        {"name": "prisma_schema", "description": "Prisma schema with User and Post models and the relationship between them"},
+        {"name": "nextauth_config", "description": "NextAuth setup with Google OAuth provider configuration"},
+        {"name": "env_example", "description": ".env.example with NEXTAUTH_SECRET, GOOGLE_CLIENT_ID, DATABASE_URL placeholders"},
+        {"name": "tailwind_config", "description": "Tailwind CSS configured with content paths for app/ and components/"},
+        {"name": "initial_test", "description": "At least one test or the app compiles without errors"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Scaffold a Django 5 REST API for an inventory management system. Use Django REST Framework, PostgreSQL, JWT auth with djangorestframework-simplejwt, and Celery + Redis for background tasks. Models: Product (name, SKU, price, quantity), Category (name, slug), and Warehouse (name, location).",
+      "expected_output": "Django project structure, DRF viewsets, models with relationships, JWT auth config, Celery setup, requirements.txt, .env.example",
+      "assertions": [
+        {"name": "django_structure", "description": "Django project with manage.py, settings.py, and at least one app (inventory)"},
+        {"name": "drf_setup", "description": "Django REST Framework configured with serializers, viewsets, or views"},
+        {"name": "models_defined", "description": "Product, Category, and Warehouse models with proper fields and relationships"},
+        {"name": "jwt_auth", "description": "djangorestframework-simplejwt configured in settings with token endpoints"},
+        {"name": "celery_setup", "description": "Celery configured with Redis broker and at least one example task"},
+        {"name": "env_example", "description": ".env.example with DATABASE_URL, REDIS_URL, SECRET_KEY placeholders"}
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Scaffold a NestJS backend for a real-time messaging service. Use MongoDB with Mongoose, Socket.IO for WebSocket connections, JWT auth, and Bull + Redis for message queue processing. Models: User, Conversation (participants, lastMessage), Message (senderId, conversationId, content, timestamp). Include the Socket.IO gateway module.",
+      "expected_output": "NestJS structure with Mongoose schemas, Socket.IO gateway, JWT auth, Bull queue, .env.example",
+      "assertions": [
+        {"name": "nestjs_structure", "description": "NestJS project with src/, modules for auth, messages, conversations, gateway"},
+        {"name": "mongoose_schemas", "description": "Mongoose schemas for User, Conversation, and Message with proper references"},
+        {"name": "socketio_gateway", "description": "A @WebSocketGateway module handling real-time message events"},
+        {"name": "jwt_auth", "description": "Auth module with JWT strategy and guards"},
+        {"name": "bull_queue", "description": "Bull queue configured for message processing"},
+        {"name": "env_example", "description": ".env.example with MONGODB_URI, REDIS_URL, JWT_SECRET placeholders"}
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Scaffold a TypeScript monorepo with React frontend (Vite) and Express backend sharing types. Use npm workspaces with packages: web (React+Vite), api (Express), and shared (TypeScript types). Backend has PostgreSQL + Prisma and JWT auth. Frontend imports types from the shared package for API responses.",
+      "expected_output": "Monorepo with npm workspaces, shared types package, Prisma in api, Vite React in web, cross-package type imports",
+      "assertions": [
+        {"name": "monorepo_workspaces", "description": "Root package.json with workspaces array pointing to packages/*"},
+        {"name": "shared_types_package", "description": "packages/shared/ with TypeScript interfaces used by both api and web"},
+        {"name": "prisma_in_backend", "description": "packages/api/ has Prisma schema and client setup"},
+        {"name": "vite_react", "description": "packages/web/ has Vite config with React plugin"},
+        {"name": "jwt_auth", "description": "packages/api/ has JWT authentication middleware or strategy"},
+        {"name": "cross_package_imports", "description": "web or api package.json references @myapp/shared as a workspace dependency"}
+      ]
+    }
+  ]
+}

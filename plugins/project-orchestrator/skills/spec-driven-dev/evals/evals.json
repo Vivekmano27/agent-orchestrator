@@ -1,0 +1,76 @@
+{
+  "skill_name": "spec-driven-dev",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I want to add a multi-tenant billing system to our SaaS app. It needs subscription plans, usage-based billing, Stripe integration, invoice generation, and an admin billing dashboard. Set up the spec-driven development workflow for this feature.",
+      "expected_output": "Spec directory created, requirements.md template with user stories, design.md template with API/schema, tasks.md with ordered implementation tasks, phase gates defined",
+      "assertions": [
+        {"name": "spec_directory", "description": "Creates .claude/specs/billing/ or similar spec directory structure"},
+        {"name": "requirements_template", "description": "requirements.md with user stories, acceptance criteria, and scope boundaries (in/out)"},
+        {"name": "design_template", "description": "design.md covering API endpoints, data model, and error handling"},
+        {"name": "tasks_template", "description": "tasks.md with ordered tasks, dependencies, verification commands"},
+        {"name": "phase_gates", "description": "Phase gates defined (approval required before advancing)"},
+        {"name": "enforcement_rules", "description": "Enforcement rules stated (no code before design, no implementation before tasks)"}
+      ],
+      "last_run": {
+        "date": "2026-03-27",
+        "with_skill": "6/6",
+        "without_skill": "3/6",
+        "delta": "+3"
+      }
+    },
+    {
+      "id": 2,
+      "prompt": "Set up SDD for adding team collaboration features. Needs: team creation with email invites, role-based access (owner, admin, member, guest), shared workspaces per team, activity feed showing member actions, and a team settings page. NestJS + React stack.",
+      "expected_output": "requirements.md with user stories per role, design.md with API/schema for teams and workspaces, tasks.md with ordered tasks, phase gates between each phase",
+      "assertions": [
+        {"name": "spec_directory", "description": "Creates spec directory structure for the feature"},
+        {"name": "requirements_with_roles", "description": "User stories for each role (owner, admin, member, guest) with different permissions"},
+        {"name": "design_with_api", "description": "API endpoints for teams, invites, workspaces, and activity feed"},
+        {"name": "tasks_with_dependencies", "description": "Tasks ordered with explicit dependencies (e.g., team model before invites)"},
+        {"name": "phase_gates", "description": "Approval gates between requirements, design, tasks, and implementation"},
+        {"name": "scope_boundaries", "description": "Explicit in-scope and out-of-scope lists"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Set up the spec-driven development workflow for building a full-text search system. We need to search across products, users, and orders using Elasticsearch. Features: indexing pipeline syncing from PostgreSQL, search API with filters and facets, autocomplete endpoint, and a search analytics dashboard. NestJS backend.",
+      "expected_output": "requirements.md with search-specific acceptance criteria, design.md covering Elasticsearch architecture and sync pipeline, tasks.md with ordered tasks",
+      "assertions": [
+        {"name": "spec_directory", "description": "Creates spec directory structure"},
+        {"name": "requirements_with_criteria", "description": "Acceptance criteria include search relevance, response time, and index freshness"},
+        {"name": "design_covers_elasticsearch", "description": "Design covers index mappings, sync strategy (CDC vs polling), and query architecture"},
+        {"name": "tasks_ordered", "description": "Tasks ordered: index setup before search API, search API before analytics"},
+        {"name": "phase_gates", "description": "Phase gates requiring approval at each transition"},
+        {"name": "enforcement_rules", "description": "Rules stated: no implementation before tasks are approved"}
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "I want to build a webhook delivery system using SDD. Features: register webhook URLs per tenant, event type subscriptions, delivery with exponential backoff retry (max 5 attempts), HMAC-SHA256 signature verification, delivery logs with success/failure status, and a management UI showing recent deliveries. NestJS backend.",
+      "expected_output": "Three spec files with webhook-specific requirements (retry logic, signatures), design with delivery pipeline, tasks with verification commands",
+      "assertions": [
+        {"name": "spec_directory", "description": "Creates spec directory with requirements.md, design.md, tasks.md"},
+        {"name": "requirements_cover_retry", "description": "Requirements specify retry behavior (exponential backoff, max attempts, dead letter)"},
+        {"name": "design_with_delivery_pipeline", "description": "Design covers the delivery pipeline: event -> queue -> deliver -> retry -> log"},
+        {"name": "tasks_with_verification", "description": "Each task has a verification command to confirm it works"},
+        {"name": "phase_gates", "description": "Approval required before advancing phases"},
+        {"name": "enforcement_rules", "description": "No code before design review, no implementation before task approval"}
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Set up SDD for adding audit logging across our 5 NestJS microservices. Every data mutation (create, update, delete) on key entities should be logged with: who (userId), what (entity, field changes), when (timestamp), before/after values, and IP address. Logs go to a central audit-service backed by Elasticsearch for search and compliance reporting.",
+      "expected_output": "Requirements covering all 5 services, design with cross-service audit architecture, tasks broken down per service with integration tasks",
+      "assertions": [
+        {"name": "spec_directory", "description": "Creates spec directory structure"},
+        {"name": "requirements_cover_all_services", "description": "Requirements mention all 5 microservices and which entities are audited in each"},
+        {"name": "design_cross_service", "description": "Design covers how audit events flow from each service to the central audit-service"},
+        {"name": "tasks_per_service", "description": "Tasks broken down per service with a shared audit library/middleware task first"},
+        {"name": "phase_gates", "description": "Phase gates defined between requirements, design, tasks, implementation"},
+        {"name": "enforcement_rules", "description": "Enforcement rules present (no code before design, each task is one commit)"}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "skill_name": "tdd-skill",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Using TDD, implement a ShoppingCart class that supports: addItem(product, quantity), removeItem(productId), getTotal(), and applyDiscount(code). Write the tests first, then the implementation. Use TypeScript with Jest.",
+      "expected_output": "Tests written BEFORE implementation. Red-Green-Refactor cycle visible. Minimal implementation code. Tests cover add, remove, total calculation, discount codes, edge cases (empty cart, invalid discount).",
+      "assertions": [
+        {"name": "tests_before_implementation", "description": "Test code appears before or in separate file from implementation"},
+        {"name": "red_phase_visible", "description": "Tests reference types/interfaces that don't exist yet (showing RED phase)"},
+        {"name": "minimal_implementation", "description": "Implementation is minimal - no extra features beyond what tests require"},
+        {"name": "refactor_phase", "description": "Evidence of refactoring step (extracted helpers, improved naming)"},
+        {"name": "incremental_tests", "description": "Tests are written one behavior at a time, not all at once"},
+        {"name": "edge_cases_tested", "description": "Empty cart, negative quantity, invalid discount code tested"}
+      ],
+      "last_run": {
+        "date": "2026-03-27",
+        "with_skill": "6/6",
+        "without_skill": "5/6",
+        "delta": "+1"
+      }
+    },
+    {
+      "id": 2,
+      "prompt": "Using TDD, build a sliding window rate limiter in TypeScript. Methods: checkLimit(clientId) returns {allowed: boolean, remaining: number, resetAt: Date}, and resetClient(clientId). Configurable window size (default 60s) and max requests (default 100). Use Jest. Write tests first.",
+      "expected_output": "Tests written first for single request, hitting limit, window expiry, reset, multiple clients. Minimal implementation using a Map. Refactored to extract time helpers.",
+      "assertions": [
+        {"name": "tests_before_implementation", "description": "Test file written before or separate from implementation"},
+        {"name": "minimal_implementation", "description": "No extra features like distributed rate limiting or persistence"},
+        {"name": "incremental_tests", "description": "Tests added one behavior at a time: single request, at limit, over limit, window expiry, reset"},
+        {"name": "sliding_window_tested", "description": "Tests verify requests expire from the window after the configured duration"},
+        {"name": "edge_cases_tested", "description": "Tests for concurrent clients, zero remaining, reset mid-window"},
+        {"name": "refactor_phase", "description": "Evidence of cleanup after green phase"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "TDD a simple markdown-to-HTML converter in TypeScript. Support: # headings (h1-h3), **bold**, *italic*, [links](url), and ```code blocks```. Use Jest. Write all tests before implementation.",
+      "expected_output": "Separate test per markdown feature. Minimal regex-based implementation. Tests for nesting (bold inside heading), empty input, unknown syntax passthrough.",
+      "assertions": [
+        {"name": "tests_before_implementation", "description": "Tests written referencing a convert() function before it exists"},
+        {"name": "tests_each_feature_separately", "description": "Separate test for headings, bold, italic, links, and code blocks"},
+        {"name": "minimal_implementation", "description": "Simple regex replacements, no full AST parser"},
+        {"name": "handles_nested_formatting", "description": "Tests bold inside a heading or italic inside a link"},
+        {"name": "edge_cases_tested", "description": "Empty input returns empty, unrecognized syntax passes through unchanged"},
+        {"name": "incremental_tests", "description": "Features added one at a time, not all markdown rules in one test"}
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Using TDD, implement a role-based permission system in TypeScript. Built-in roles: admin (all permissions), editor (create, read, update), viewer (read only). Support custom role definitions and hasPermission(role, permission) checks. Use Jest.",
+      "expected_output": "Tests for each built-in role, custom role creation, unknown role/permission errors. Minimal implementation with a Map of role definitions.",
+      "assertions": [
+        {"name": "tests_before_implementation", "description": "Tests reference Role and PermissionSystem types before implementation"},
+        {"name": "tests_each_builtin_role", "description": "Separate tests verifying admin, editor, and viewer have correct permissions"},
+        {"name": "tests_custom_roles", "description": "Test that custom roles can be defined and checked"},
+        {"name": "edge_cases_tested", "description": "Unknown role throws/returns false, unknown permission handled gracefully"},
+        {"name": "minimal_implementation", "description": "No database, no middleware, just the permission check logic"},
+        {"name": "refactor_phase", "description": "Cleanup after tests pass — extracted constants or simplified lookup"}
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "TDD a cursor-based pagination utility in TypeScript. It should: encode/decode cursors (base64 of id+timestamp), support forward pagination with hasNextPage, support backward pagination with hasPreviousPage, and work with a generic async findMany(options) callback. Use Jest.",
+      "expected_output": "Tests for cursor encoding/decoding, forward page with hasNext, backward page with hasPrev, empty results, single item. Minimal implementation with base64 encode/decode.",
+      "assertions": [
+        {"name": "tests_before_implementation", "description": "Tests written before the paginate() function exists"},
+        {"name": "tests_forward_pagination", "description": "Tests fetch N+1 items to determine hasNextPage"},
+        {"name": "tests_backward_pagination", "description": "Tests for hasPreviousPage using before cursor"},
+        {"name": "cursor_encoding_tested", "description": "Tests verify cursor encodes to base64 and decodes back correctly"},
+        {"name": "edge_cases_tested", "description": "Empty results, single item, first page, last page all tested"},
+        {"name": "minimal_implementation", "description": "No database integration, works with a mock findMany callback"}
+      ]
+    }
+  ]
+}

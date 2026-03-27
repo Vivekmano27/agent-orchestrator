@@ -1,0 +1,77 @@
+{
+  "skill_name": "react-patterns",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I'm building a product catalog page in Next.js App Router. It needs: a server component page that fetches products, a client component for search/filter with debounced input, a product card grid that handles loading/empty/error states, and a 'Add to Cart' button with optimistic updates. Use TanStack Query for data fetching and Zustand for cart state.",
+      "expected_output": "Server component page, client search component with useDebouncedValue, TanStack Query hooks, Zustand cart store, error boundary, loading skeletons, empty state",
+      "assertions": [
+        {"name": "server_component_default", "description": "Page component is a server component (no 'use client' directive) that fetches data directly"},
+        {"name": "client_pushed_down", "description": "'use client' only on interactive components (search, button), not on the page itself"},
+        {"name": "tanstack_query_used", "description": "Uses useQuery/useMutation from @tanstack/react-query for data fetching, not raw useEffect"},
+        {"name": "zustand_store", "description": "Cart state managed with Zustand create() store, not useState or Context"},
+        {"name": "loading_error_empty_states", "description": "All three states handled: loading skeleton, error message, empty state with CTA"},
+        {"name": "debounced_search", "description": "Search input uses debouncing (custom hook or setTimeout pattern)"}
+      ],
+      "last_run": {
+        "date": "2026-03-27",
+        "with_skill": "5/6",
+        "without_skill": "6/6",
+        "delta": "-1",
+        "notes": "With-skill output omitted ProductGrid component file; test execution gap, not skill quality issue"
+      }
+    },
+    {
+      "id": 2,
+      "prompt": "Build a real-time chat interface in Next.js App Router. Needs: a WebSocket connection hook that auto-reconnects, a message list virtualized for 10K+ messages using @tanstack/react-virtual, a typing indicator showing who's typing, a message input with Shift+Enter for newlines and Enter to send, and optimistic message sending (show message immediately, mark as 'sending', update to 'sent' on server ack). Use Zustand for chat state.",
+      "expected_output": "WebSocket hook with reconnection, virtualized message list, typing indicator component, message input with keyboard handling, Zustand chat store with optimistic updates",
+      "assertions": [
+        {"name": "use_client_on_interactive_only", "description": "'use client' on chat components, not on any page-level server component"},
+        {"name": "websocket_custom_hook", "description": "Custom hook managing WebSocket connection with auto-reconnect logic"},
+        {"name": "virtualized_list", "description": "Message list uses @tanstack/react-virtual or similar virtualization, not rendering all 10K messages"},
+        {"name": "zustand_chat_store", "description": "Chat state (messages, typing users) managed in Zustand store"},
+        {"name": "optimistic_send", "description": "New messages appear immediately with a pending/sending state before server confirms"},
+        {"name": "loading_error_states", "description": "Connection lost state and reconnecting indicator handled"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Build a multi-step form wizard in Next.js with 4 steps. Each step has its own Zod validation schema. A progress indicator shows completion percentage. Users can navigate back to any completed step without losing data. Auto-save draft to localStorage every 30 seconds. Final step shows a review of all entered data before submission. Use React Hook Form with Zod.",
+      "expected_output": "Multi-step form with React Hook Form, per-step Zod schemas, progress bar, back navigation, localStorage draft persistence, review step",
+      "assertions": [
+        {"name": "react_hook_form_with_zod", "description": "Uses useForm with zodResolver for validation on each step"},
+        {"name": "step_state_management", "description": "Current step tracked in state, form data preserved across steps"},
+        {"name": "draft_persistence", "description": "Auto-save to localStorage with interval or effect"},
+        {"name": "back_navigation_preserves_data", "description": "Going back to a previous step shows the data the user already entered"},
+        {"name": "loading_error_states", "description": "Submission loading state and error handling on the final step"},
+        {"name": "review_step_shows_all_data", "description": "Final step renders all data from all steps for user confirmation"}
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Build an infinite scroll feed in Next.js App Router. Server component for initial data load (first 20 items). Client component for scroll-based loading using TanStack Query's useInfiniteQuery. Each post has like and bookmark buttons with optimistic updates. Pull-to-refresh on mobile. Loading skeletons at bottom while fetching next page. Empty state when no posts exist.",
+      "expected_output": "Server component initial load, client infinite scroll with useInfiniteQuery, intersection observer, optimistic like/bookmark, pull-to-refresh, skeletons",
+      "assertions": [
+        {"name": "server_component_for_initial", "description": "Initial data fetched in a server component, passed to client component as props"},
+        {"name": "tanstack_infinite_query", "description": "Uses useInfiniteQuery with getNextPageParam for pagination"},
+        {"name": "optimistic_like_update", "description": "Like/bookmark updates UI immediately before server confirms"},
+        {"name": "intersection_observer_for_scroll", "description": "Uses IntersectionObserver or a sentinel element to trigger next page load"},
+        {"name": "loading_skeleton", "description": "Skeleton components shown while next page loads"},
+        {"name": "empty_state", "description": "Empty state with message shown when no posts exist"}
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Build a dashboard page in Next.js App Router with 4 chart widgets using Recharts. Each widget fetches its own data independently via TanStack Query. The widget grid supports drag-to-reorder (persist order in localStorage). Use ISR with revalidate for data freshness. Each widget has its own error boundary so one widget failure doesn't crash the whole dashboard. Show skeleton loaders per widget while data loads.",
+      "expected_output": "Server component page with ISR, per-widget TanStack Query, per-widget error boundary, drag-to-reorder with localStorage, skeletons",
+      "assertions": [
+        {"name": "server_component_default", "description": "Page is a server component with revalidate for ISR"},
+        {"name": "per_widget_error_boundary", "description": "Each chart widget wrapped in its own ErrorBoundary"},
+        {"name": "tanstack_query_per_widget", "description": "Each widget uses its own useQuery hook with independent query key"},
+        {"name": "loading_skeleton_per_widget", "description": "Each widget shows a skeleton while its data loads"},
+        {"name": "drag_reorder_state", "description": "Widget order managed in state and persisted to localStorage"},
+        {"name": "isr_or_revalidate", "description": "Uses revalidate option or generateStaticParams for ISR"}
+      ]
+    }
+  ]
+}

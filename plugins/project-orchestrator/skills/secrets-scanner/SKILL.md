@@ -1,12 +1,21 @@
 ---
 name: secrets-scanner
-description: Detect accidentally committed secrets — API keys, passwords, tokens, private keys, database URLs in code and config. Use when the user says "scan for secrets", "check for leaked keys", "secrets audit", or before any public repository push.
+description: "Detect accidentally committed secrets — API keys, passwords, tokens, private keys, database URLs in code and config. Use when the user says \"scan for secrets\", \"check for leaked keys\", \"secrets audit\", or before any public repository push. Also use when setting up pre-commit hooks for secret prevention or when onboarding a new project to verify no secrets are committed."
 allowed-tools: Read, Grep, Glob, Bash
 ---
 
 # Secrets Scanner Skill
 
 Find and remediate leaked secrets in code. Runs FIRST in the security audit pipeline because committed secrets can trigger STOP (immediate pipeline halt).
+
+## When to Use
+
+- Before making a repository public
+- During security audit (Phase 5 of the pipeline)
+- Setting up a new project's secret management
+- After a developer reports they may have committed a secret
+- Periodic scanning as part of CI/CD
+- When onboarding a project that hasn't been audited
 
 ## Tool Commands
 
@@ -27,15 +36,12 @@ Gitleaks is the primary scanner (comprehensive built-in pattern library). Truffl
 AKIA[0-9A-Z]{16}                              # AWS Access Key ID
 [A-Za-z0-9/+=]{40}  (near aws_secret/AWS_SECRET)  # AWS Secret Access Key
 "type": "service_account"                      # GCP Service Account JSON
-GOOG[\w]{10,}                                  # GCP API Key
 AIza[0-9A-Za-z\-_]{35}                         # Firebase / Google API Key
 DefaultEndpointsProtocol=                      # Azure Connection String
-AccountKey=                                    # Azure Storage Key
 
 # Code Platforms
 ghp_[A-Za-z0-9]{36}                           # GitHub Personal Access Token
 gho_[A-Za-z0-9]{36}                           # GitHub OAuth Token
-ghs_[A-Za-z0-9]{36}                           # GitHub Server-to-Server Token
 glpat-[A-Za-z0-9\-]{20,}                      # GitLab Personal Access Token
 
 # Communication
@@ -47,63 +53,139 @@ sk-[A-Za-z0-9]{48}                            # OpenAI API Key
 
 # Payment
 sk_live_[A-Za-z0-9]{24,}                      # Stripe Secret Key
-pk_live_[A-Za-z0-9]{24,}                      # Stripe Publishable Key
 rk_live_[A-Za-z0-9]{24,}                      # Stripe Restricted Key
 
 # Email/SMS
 SG\.[\w\-]{22,}                               # SendGrid API Key
 AC[a-z0-9]{32}                                # Twilio Account SID
-SK[a-z0-9]{32}                                # Twilio Auth Token
-key-[a-z0-9]{32}                              # Mailgun API Key
 
 # Databases
-(postgres|mysql|mongodb|redis)://[^\s]+        # Connection strings with embedded credentials
+(postgres|mysql|mongodb|redis)://[^\s]+        # Connection strings with credentials
 
-# Files & Tokens
+# Files & Keys
 -----BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY-----  # Private keys
-eyJ[a-zA-Z0-9_-]+\.eyJ[a-zA-Z0-9_-]+           # JWT Tokens
 npm_[A-Za-z0-9]{36}                              # NPM Token
 pypi-[A-Za-z0-9]{50,}                            # PyPI Token
-hvs\.[A-Za-z0-9]{24,}                            # HashiCorp Vault Token
 ```
 
-## Files to Flag (committed accidentally)
+## Files to Flag
+
 - `.env` (NOT `.env.example` or `.env.sample`)
 - `*.tfstate` (Terraform state — contains cloud credentials)
 - `*.pem`, `*.key`, `*.p12` (private key files in non-dev paths)
 
 ## STOP Trigger Rules
 
-Distinguish confirmed secrets from false positives BEFORE triggering STOP:
-
 **Triggers STOP (confirmed vendor-pattern match in production code):**
 - Vendor-prefixed secret (`AKIA`, `sk_live_`, `ghp_`, `xoxb-`, `sk-`) in non-excluded path
-- `.env` file committed (not `.env.example`) with non-placeholder values
+- `.env` file committed with non-placeholder values
 - Private key files in non-dev paths
 - `*.tfstate` committed to repository
 
 **Does NOT trigger STOP (report as CRITICAL or HIGH instead):**
+- Files in `docs/**`, `examples/**`, `*.example`, `*.sample`
+- Test files (`tests/**`, `*.test.*`, `*.spec.*`, `fixtures/**`)
+- Known example keys (`AKIAIOSFODNN7EXAMPLE`)
+- Placeholder values (`changeme`, `your-api-key-here`, `xxx`, `REPLACE_ME`)
+- Environment variable references (`${...}`, `process.env.`, `os.environ`)
+- Stripe test keys (`sk_test_`, `pk_test_`)
 
-Path exclusions:
-- `*.md`, `*.rst`, `docs/**`, `examples/**` (documentation)
-- `*.example`, `*.sample`, `*.template` (template files)
-- `tests/**`, `test/**`, `__tests__/**`, `*_test.*`, `*.test.*`, `*.spec.*`, `fixtures/**`, `mocks/**`
+## Remediation Workflow
 
-Content exclusions:
-- Known example keys: `AKIAIOSFODNN7EXAMPLE`, `wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY`
-- Placeholder values: `changeme`, `your-api-key-here`, `xxx`, `REPLACE_ME`, `TODO`, `FIXME`, `fake`, `dummy`, `test`, `mock`, `sample`, `NOT_REAL`
-- Environment variable references: `${...}`, `process.env.`, `os.environ`, `os.getenv(`
-- Hashes (not secrets): strings starting with `$2b$`, `$argon2`, `sha256:`
+When a secret is found, follow this exact sequence:
 
-Vendor exclusions:
-- Stripe test keys: `sk_test_`, `pk_test_`, `rk_test_`
-- Firebase/Google API keys (`AIza...`) in client-side code (designed to be public)
+### Step 1: Rotate the Secret Immediately
 
-Content in `.claude/security-allowlist.md` (previously reviewed false positives, matched by content hash).
+Do this BEFORE removing from git history. The secret is already exposed.
 
-## Remediation Steps
-1. Rotate the exposed secret immediately
-2. Remove from git history: `git filter-branch` or BFG Repo Cleaner
-3. Add pattern to `.gitignore`
-4. Move secret to environment variable or secret manager
-5. Set up pre-commit hook to prevent future leaks (Gitleaks pre-commit)
+| Provider | Rotation Action |
+|----------|----------------|
+| AWS | IAM Console → Security Credentials → Deactivate old key, create new |
+| GitHub | Settings → Developer Settings → Personal Access Tokens → Regenerate |
+| Stripe | Dashboard → Developers → API Keys → Roll keys |
+| OpenAI | API Settings → Revoke and create new key |
+| Database | Change password, update connection strings in secret manager |
+
+### Step 2: Remove from Git History
+
+```bash
+# Option A: BFG Repo Cleaner (recommended — faster, safer)
+java -jar bfg.jar --replace-text secrets-to-remove.txt .
+git reflog expire --expire=now --all
+git gc --prune=now --aggressive
+git push --force
+
+# Option B: git-filter-repo (if BFG unavailable)
+git filter-repo --invert-paths --path path/to/secret-file
+git push --force
+```
+
+### Step 3: Prevent Recurrence
+
+```bash
+# Add to .gitignore
+echo ".env" >> .gitignore
+echo "*.pem" >> .gitignore
+echo "*.tfstate" >> .gitignore
+
+# Install Gitleaks pre-commit hook
+cat >> .pre-commit-config.yaml << 'EOF'
+repos:
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.18.0
+    hooks:
+      - id: gitleaks
+EOF
+pre-commit install
+```
+
+### Step 4: Move Secrets to Proper Storage
+
+```bash
+# Environment variables (local development)
+# .env.example (committed — shows required vars without values)
+DATABASE_URL=
+STRIPE_SECRET_KEY=
+OPENAI_API_KEY=
+
+# .env (NOT committed — has actual values)
+DATABASE_URL=postgresql://user:pass@localhost:5432/mydb
+STRIPE_SECRET_KEY=sk_live_xxx
+OPENAI_API_KEY=sk-xxx
+
+# For production: use a secret manager
+# AWS: aws secretsmanager create-secret --name my-app/prod --secret-string '...'
+# GCP: gcloud secrets create my-secret --data-file=secret.txt
+# Vault: vault kv put secret/my-app api_key=xxx
+```
+
+### Step 5: Verify Remediation
+
+```bash
+# Re-run scan to confirm clean
+gitleaks detect --source . --report-format json --report-path gitleaks-verify.json
+
+# Check git history is clean
+gitleaks detect --source . --log-opts="--all" --report-format json
+```
+
+## Anti-Patterns
+
+- **Removing the file without rotating the key** — the secret is in git history and may already be scraped; always rotate FIRST
+- **Using .gitignore alone** — .gitignore prevents future commits but doesn't remove existing history; must also clean history
+- **Hardcoding secrets in CI/CD YAML** — use CI platform's secret management (GitHub Secrets, GitLab CI Variables)
+- **Sharing secrets via chat/email** — use a secret manager or encrypted channel; secrets in chat persist in logs
+- **Using the same secret across environments** — dev, staging, prod must each have unique credentials
+- **Ignoring scanner findings as "false positives"** — verify before dismissing; add confirmed false positives to `.claude/security-allowlist.md`
+
+## Checklist
+
+- [ ] Gitleaks scan completed with zero findings (or all findings triaged)
+- [ ] All confirmed secrets rotated at the provider
+- [ ] Secret removed from git history (BFG or git-filter-repo)
+- [ ] `.gitignore` updated to prevent re-commit
+- [ ] `.env.example` committed with placeholder values
+- [ ] Pre-commit hook installed (Gitleaks)
+- [ ] Secrets stored in environment variables or secret manager
+- [ ] CI/CD uses platform secret management (not hardcoded)
+- [ ] Remediation verified with clean re-scan

@@ -1,0 +1,76 @@
+{
+  "skill_name": "dependency-audit",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Run a dependency audit on our NestJS backend and React frontend monorepo. We use npm workspaces. Check for vulnerabilities, outdated packages, and license issues. Prioritize findings and give me a remediation plan.",
+      "expected_output": "npm audit command, triage by severity+reachability, license check, supply chain checks, structured output table, remediation strategies",
+      "assertions": [
+        {"name": "audit_command", "description": "Provides npm audit or equivalent vulnerability scanning command"},
+        {"name": "severity_triage", "description": "Triages findings by severity AND reachability, not just CVSS score alone"},
+        {"name": "license_check", "description": "Checks license compatibility (flags GPL/AGPL in proprietary code)"},
+        {"name": "supply_chain", "description": "Checks for lockfile existence, unpinned deps, suspicious scripts"},
+        {"name": "structured_output", "description": "Produces a structured findings table with package, CVE, severity, fix version"},
+        {"name": "remediation_plan", "description": "Provides specific remediation strategies (upgrade, override, replace)"}
+      ],
+      "last_run": {
+        "date": "2026-03-27",
+        "with_skill": "6/6",
+        "without_skill": "3/6",
+        "delta": "+3"
+      }
+    },
+    {
+      "id": 2,
+      "prompt": "Audit our Django + Celery project (Python 3.11). We use requests, cryptography, Pillow, celery[redis], django-rest-framework, and about 40 other pip packages. Check for CVEs, outdated versions, and license compatibility. We're a commercial SaaS so GPL is a blocker.",
+      "expected_output": "pip-audit command, checks named packages specifically, severity triage with reachability, GPL license flagging, structured output, remediation per finding",
+      "assertions": [
+        {"name": "pip_audit_command", "description": "Provides pip-audit or safety check command for Python dependencies"},
+        {"name": "checks_named_packages", "description": "Specifically mentions checking requests, cryptography, Pillow, celery for known CVEs"},
+        {"name": "severity_triage", "description": "Triages by severity and whether the vulnerable code path is actually used"},
+        {"name": "license_flags_gpl", "description": "Explicitly flags GPL/AGPL as blockers for commercial SaaS"},
+        {"name": "structured_output", "description": "Findings in a table with package, CVE, severity, fix version columns"},
+        {"name": "remediation_per_finding", "description": "Specific upgrade commands or replacement suggestions for each finding"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "npm audit shows 47 vulnerabilities in our Next.js app — 12 critical, 8 high, 15 moderate, 12 low. Most seem to be in dev dependencies and transitive deps. Help me triage which ones actually matter for production and what to fix first.",
+      "expected_output": "Separates dev from prod deps, checks reachability, prioritizes critical+reachable, provides specific fix commands, explains transitive vs direct",
+      "assertions": [
+        {"name": "separates_dev_from_prod", "description": "Distinguishes devDependencies (build-time only) from production dependencies"},
+        {"name": "checks_reachability", "description": "Checks if the vulnerable code path is actually called in the application"},
+        {"name": "prioritizes_actionable", "description": "Focuses on critical+high reachable production deps first, not all 47"},
+        {"name": "provides_fix_commands", "description": "Specific npm install or npm overrides commands for each fix"},
+        {"name": "explains_transitive", "description": "Explains the difference between direct and transitive dependencies"},
+        {"name": "avoids_force_fix", "description": "Does NOT recommend npm audit fix --force blindly as it can break things"}
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "We're evaluating HTTP client libraries for our Node.js backend. Candidates: got, axios, and ky. Before we pick one, audit each for known vulnerabilities, maintenance health (last commit, open issues, bus factor), license, bundle size, and dependency tree depth.",
+      "expected_output": "Comparative audit of all three packages across security, maintenance, license, size, and deps with a recommendation",
+      "assertions": [
+        {"name": "audits_all_three", "description": "Evaluates got, axios, and ky — not just one"},
+        {"name": "checks_vulnerabilities", "description": "Checks CVE history or npm audit advisories for each package"},
+        {"name": "evaluates_maintenance", "description": "Checks recent commit activity, issue response time, or contributor count"},
+        {"name": "compares_licenses", "description": "Lists the license for each and flags any compatibility issues"},
+        {"name": "evaluates_deps", "description": "Compares dependency tree depth or total transitive dependency count"},
+        {"name": "provides_recommendation", "description": "Makes a recommendation based on the audit findings"}
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Our Go microservice (Go 1.22) has about 30 dependencies. Run govulncheck and help us understand the results. We're especially concerned about golang.org/x/crypto, google.golang.org/grpc, and github.com/jackc/pgx.",
+      "expected_output": "govulncheck command with reachability explanation, checks the 3 named packages specifically, structured output, remediation with go get commands",
+      "assertions": [
+        {"name": "govulncheck_command", "description": "Provides govulncheck ./... command for vulnerability scanning"},
+        {"name": "explains_reachability", "description": "Explains that govulncheck shows whether vulnerable code is actually called"},
+        {"name": "checks_named_packages", "description": "Specifically addresses golang.org/x/crypto, grpc, and pgx"},
+        {"name": "severity_triage", "description": "Triages findings by reachability — reachable vulns are higher priority"},
+        {"name": "structured_output", "description": "Findings presented in a structured format with module, CVE, and status"},
+        {"name": "remediation_commands", "description": "Provides go get commands to update affected modules"}
+      ]
+    }
+  ]
+}

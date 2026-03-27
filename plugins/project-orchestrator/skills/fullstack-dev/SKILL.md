@@ -1,12 +1,27 @@
 ---
 name: fullstack-dev
-description: Scaffold and configure project structures, boilerplate code, and initial setup when DELEGATED by the project-orchestrator agent. Do NOT invoke this skill directly for new application requests — those should go through the project-orchestrator agent first. Only triggers when explicitly called by an agent, not from user prompts like "build an app" or "create a project".
+description: "Scaffold and configure project structures, boilerplate code, and initial setup when DELEGATED by the project-orchestrator agent. Covers project directory creation, dependency setup, auth templates, and environment configuration. Do NOT invoke this skill directly for new application requests — those should go through the project-orchestrator agent first. For framework-specific patterns (hooks, modules, state management), use react-patterns or nestjs-patterns instead."
 allowed-tools: Read, Write, Edit, Bash, Grep, Glob
 ---
 
 # Fullstack Development Skill
 
-Build complete applications from project setup through deployment.
+Scaffold project structures and initial boilerplate. This skill handles the one-time setup that gets a project from zero to a running dev environment. For ongoing implementation patterns, defer to framework-specific skills (react-patterns, nestjs-patterns, python-django-patterns).
+
+## Scope Boundary
+
+| This skill handles | Use instead |
+|-------------------|-------------|
+| Project directory structure | — |
+| package.json / dependency setup | — |
+| Auth boilerplate (JWT flow) | — |
+| .env.example templates | — |
+| React component patterns | react-patterns |
+| NestJS module architecture | nestjs-patterns |
+| Database schema design | database-designer |
+| API endpoint design | api-designer |
+| Docker setup | docker-skill |
+| CI/CD pipeline | ci-cd-setup |
 
 ## Project Scaffolding Process
 1. Create project structure based on chosen stack
@@ -118,3 +133,42 @@ AWS_ACCESS_KEY_ID=
 AWS_SECRET_ACCESS_KEY=
 S3_BUCKET=
 ```
+
+## Post-Scaffold Verification
+
+After scaffolding, verify the project starts:
+
+```bash
+# Install dependencies
+npm install  # or pip install -r requirements.txt
+
+# Run database migration
+npx prisma migrate dev  # or python manage.py migrate
+
+# Start dev server
+npm run dev  # or python manage.py runserver
+
+# Run initial test suite
+npm test  # should have at least one passing test
+```
+
+## Anti-Patterns
+
+- **Scaffolding without project-config.md** — always read project-config.md first to know the chosen stack; don't assume React + NestJS
+- **Including real secrets in templates** — `.env.example` must have placeholder values only; never commit actual keys
+- **Over-scaffolding** — generating 20 empty module directories "for the future"; create modules as features require them
+- **Skipping the auth template** — most apps need auth; scaffolding without it means the first feature PR has to add it
+- **No .gitignore** — the first commit should include a proper .gitignore; never commit node_modules, .env, or build artifacts
+- **No README** — a freshly scaffolded project should have at minimum: setup instructions, dev server command, and test command
+
+## Checklist
+
+- [ ] Project directory matches chosen stack template
+- [ ] package.json / pyproject.toml created with correct dependencies
+- [ ] Database configured and initial migration created
+- [ ] Auth template in place (JWT with register/login/refresh/logout)
+- [ ] .env.example committed with all required variables (placeholder values only)
+- [ ] .gitignore includes node_modules, .env, build/, dist/, coverage/
+- [ ] Dev server starts without errors
+- [ ] At least one test passes (smoke test)
+- [ ] README has setup and dev server instructions

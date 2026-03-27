@@ -1,0 +1,77 @@
+{
+  "skill_name": "api-tester",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Generate API tests for a REST API with these endpoints: POST /api/v1/products (create), GET /api/v1/products (list with pagination), GET /api/v1/products/:id (get by ID), PUT /api/v1/products/:id (update), DELETE /api/v1/products/:id (delete). The API uses JWT auth with admin and user roles. Only admins can create/update/delete. Use Supertest with NestJS.",
+      "expected_output": "Complete E2E test file covering all 7 test categories (CRUD, auth, validation, errors, pagination, rate limiting, authorization). Role-based tests for admin vs user. Error response format validation.",
+      "assertions": [
+        {"name": "covers_all_endpoints", "description": "Tests exist for all 5 endpoints (POST, GET list, GET by ID, PUT, DELETE)"},
+        {"name": "tests_auth", "description": "401 tests for unauthenticated requests on protected endpoints"},
+        {"name": "tests_authorization", "description": "403 tests showing regular users cannot create/update/delete"},
+        {"name": "tests_validation", "description": "400 tests for missing/invalid fields on POST and PUT"},
+        {"name": "tests_not_found", "description": "404 test for non-existent product ID"},
+        {"name": "tests_pagination", "description": "Tests for page/limit params and response meta"},
+        {"name": "consistent_error_format", "description": "Error responses validated for standard format (statusCode, error, message)"}
+      ],
+      "last_run": {
+        "date": "2026-03-27",
+        "with_skill": "7/7",
+        "without_skill": "6/7",
+        "delta": "+1"
+      }
+    },
+    {
+      "id": 2,
+      "prompt": "Generate tests for a GraphQL API built with Apollo Server on NestJS. Queries: users(filter, pagination), user(id). Mutations: createUser(input), updateUser(id, input), deleteUser(id). Auth via Bearer JWT, admin role required for delete. Use supertest sending GraphQL query strings to /graphql.",
+      "expected_output": "Tests sending GraphQL operations via POST /graphql with supertest, covering queries, mutations, auth, validation, and error responses",
+      "assertions": [
+        {"name": "tests_graphql_queries", "description": "Tests send GraphQL query strings for users and user(id)"},
+        {"name": "tests_graphql_mutations", "description": "Tests send GraphQL mutations for create, update, delete"},
+        {"name": "tests_auth_on_mutations", "description": "Mutations without JWT return authentication error in GraphQL errors array"},
+        {"name": "tests_input_validation", "description": "Invalid input (missing email, bad format) returns validation errors"},
+        {"name": "tests_not_found", "description": "Query for non-existent user ID returns appropriate error"},
+        {"name": "tests_pagination_args", "description": "Users query tested with first/after or page/limit arguments"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Generate tests for a file upload/download API on NestJS. POST /api/files/upload accepts multipart form data (single file, max 10MB, jpg/png/pdf only). GET /api/files/:id/download returns a presigned S3 URL. DELETE /api/files/:id removes file. JWT auth required on all endpoints. Use supertest.",
+      "expected_output": "Tests with multipart uploads via supertest .attach(), file size and type validation, presigned URL download, deletion, and auth checks",
+      "assertions": [
+        {"name": "tests_successful_upload", "description": "Test uploads a valid file and asserts 201 with file ID in response"},
+        {"name": "tests_file_size_rejection", "description": "Test sends file >10MB and asserts 400 or 413"},
+        {"name": "tests_invalid_type_rejection", "description": "Test uploads .exe or .txt and asserts rejection"},
+        {"name": "tests_download_url", "description": "Test GET /files/:id/download returns a URL string"},
+        {"name": "tests_auth_required", "description": "Request without JWT returns 401"},
+        {"name": "tests_delete", "description": "DELETE removes file and subsequent GET returns 404"}
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Generate tests for a multi-tenant SaaS API. Tenants identified by X-Tenant-ID header. Endpoints: GET /api/projects, POST /api/projects, GET /api/projects/:id. Tenant A must NEVER see Tenant B's data. JWT auth includes a tenantId claim that must match the header. NestJS + Supertest.",
+      "expected_output": "Tests verifying strict tenant isolation, cross-tenant access rejection, missing tenant header handling, CRUD within a single tenant, and auth enforcement",
+      "assertions": [
+        {"name": "tests_tenant_isolation", "description": "Creates data as Tenant A, then verifies GET as Tenant B returns empty or excludes it"},
+        {"name": "tests_cross_tenant_rejection", "description": "Tenant B trying to GET /projects/:id of Tenant A's project returns 403 or 404"},
+        {"name": "tests_missing_tenant_header", "description": "Request without X-Tenant-ID header returns 400 or 403"},
+        {"name": "tests_crud_within_tenant", "description": "Create and list projects within the same tenant works correctly"},
+        {"name": "tests_auth_required", "description": "Unauthenticated request returns 401"},
+        {"name": "consistent_error_format", "description": "Error responses use standard format with statusCode and message"}
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Generate tests for a Stripe webhook receiver at POST /api/webhooks/stripe. It validates the Stripe-Signature header using stripe.webhooks.constructEvent(). Handles events: checkout.session.completed, invoice.paid, charge.failed. Must be idempotent — processing the same event ID twice must not duplicate side effects. Returns 200 on success, 400 on invalid signature, 200 on unknown event types (acknowledge but ignore). NestJS + Supertest.",
+      "expected_output": "Tests with mocked Stripe signature construction, tests per event type, idempotency test, invalid signature rejection, unknown event handling",
+      "assertions": [
+        {"name": "tests_valid_signature", "description": "Constructs a valid Stripe signature and asserts 200"},
+        {"name": "tests_invalid_signature", "description": "Sends wrong signature and asserts 400"},
+        {"name": "tests_each_event_type", "description": "Separate test for checkout.session.completed, invoice.paid, and charge.failed"},
+        {"name": "tests_idempotency", "description": "Sends same event ID twice and verifies no duplicate processing"},
+        {"name": "tests_unknown_event", "description": "Sends an unhandled event type and asserts 200 (acknowledged, not an error)"},
+        {"name": "tests_returns_200_on_success", "description": "All valid webhook deliveries return 200 status"}
+      ]
+    }
+  ]
+}

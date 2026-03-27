@@ -1,10 +1,20 @@
 ---
 name: state-machine-designer
-description: Model entity state transitions, guard conditions, side effects, and generate implementation code. Use when designing order flows, auth states, approval workflows, or any entity with distinct states and transition rules. Trigger on "state machine", "workflow states", "order flow", "status transitions".
+description: "Model entity state transitions, guard conditions, side effects, and generate implementation code. Use when designing order flows, auth states, approval workflows, payment lifecycles, or any entity with distinct states and transition rules. Trigger on \"state machine\", \"workflow states\", \"order flow\", \"status transitions\", \"lifecycle\", \"approval flow\". Also use when an entity has a 'status' field with more than 3 possible values."
 allowed-tools: Read, Write, Edit, Grep, Glob
 ---
 
 # State Machine Designer Skill
+
+Design and implement state machines for entities with lifecycle workflows. Produces both a human-readable spec (tables + Mermaid diagram) and a type-safe TypeScript implementation using a transition map pattern.
+
+## When to Use
+
+- An entity has a `status` field with 3+ possible values (e.g., orders, invoices, tickets)
+- Approval workflows where actions depend on current state and user role
+- Payment flows with pending, processing, completed, failed, refunded states
+- Content publishing with draft, review, published, archived lifecycle
+- Any flow where "what can happen next" depends on "where we are now"
 
 ## Output Format
 
@@ -209,3 +219,24 @@ Run these checks against every state machine before finalizing. All must pass.
 3. **Guards must be pure functions.** They take context + event and return a result. No database calls, no API calls, no side effects inside guards. If you need to check external state, load it into the context before calling `transition()`.
 4. **Side effects execute after guard passes but before the state is persisted.** If a side effect fails, the transition should roll back (state stays the same). Document this in the spec.
 5. **Always generate the Mermaid diagram.** Developers will paste it into GitHub PRs for visual review. A state machine without a diagram is incomplete.
+
+## Anti-Patterns
+
+- **Status field as a string** — using raw strings (`order.status = 'pending'`) instead of a const enum; typos create invalid states at runtime
+- **Switch statement chains** — implementing transitions as `switch (state) { case 'pending': if (event === 'approve') ... }` instead of a transition map; unscalable and hard to audit
+- **Side effects in guards** — guards must be pure; if a guard sends an email or writes to the DB, failures leave the system in an inconsistent state
+- **Missing terminal states** — every workflow must have at least one end state; without one, entities can cycle forever
+- **Implicit transitions** — changing state directly (`order.status = 'approved'`) instead of going through the transition function; bypasses guards and side effects
+- **No error handling for failed side effects** — if an email fails to send after approval, should the state roll back? This must be specified per transition
+
+## Checklist
+
+- [ ] All states listed in the state table with descriptions
+- [ ] All transitions listed with From, To, Trigger, Guard, and Side Effects
+- [ ] At least one terminal state defined
+- [ ] Mermaid diagram matches the transition table exactly
+- [ ] Validation checklist (8 checks) passes
+- [ ] TypeScript implementation uses const enum + transition map pattern
+- [ ] Guards are pure functions (no DB calls, no API calls)
+- [ ] Side effects are idempotent (safe to retry)
+- [ ] Spec saved to `.claude/specs/[feature]/state-machine.md`

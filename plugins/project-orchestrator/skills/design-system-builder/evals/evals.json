@@ -1,0 +1,76 @@
+{
+  "skill_name": "design-system-builder",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Set up a design system for a SaaS dashboard app. Create: design tokens (colors with primary/gray/semantic, spacing scale, typography), a Tailwind config that extends from the tokens, a Button component with variants (primary/secondary/ghost/danger) and sizes (sm/md/lg) using CVA, and a dark mode theme provider.",
+      "expected_output": "Token files, Tailwind config extending tokens, Button component with CVA variants and forwardRef, ThemeProvider with dark mode toggle, proper TypeScript types",
+      "assertions": [
+        {"name": "token_files", "description": "Separate token definitions for colors, spacing, and typography as TypeScript constants"},
+        {"name": "tailwind_extends_tokens", "description": "Tailwind config imports and extends from token files, not hardcoded values"},
+        {"name": "cva_button", "description": "Button uses class-variance-authority (CVA) with variant and size props"},
+        {"name": "forward_ref", "description": "Button uses forwardRef for DOM access"},
+        {"name": "dark_mode", "description": "ThemeProvider or dark mode implementation with class toggle or CSS variables"},
+        {"name": "accessibility", "description": "Button has focus-visible styles and aria attributes for loading/disabled states"}
+      ],
+      "last_run": {
+        "date": "2026-03-27",
+        "with_skill": "6/6",
+        "without_skill": "6/6",
+        "delta": "0"
+      }
+    },
+    {
+      "id": 2,
+      "prompt": "Build a form input system for our design system. Need: TextInput, Select, Checkbox, RadioGroup, and Textarea. Each must support label, help text, error state with message, disabled state, and required indicator. Use CVA for size variants (sm/md/lg), forwardRef, and Tailwind. Dark mode compatible.",
+      "expected_output": "Five form components with shared interface pattern, CVA variants, forwardRef, error/disabled/required states, dark mode classes, accessibility labels",
+      "assertions": [
+        {"name": "all_five_components", "description": "TextInput, Select, Checkbox, RadioGroup, and Textarea components all created"},
+        {"name": "cva_variants", "description": "At least TextInput and Select use CVA for size/variant props"},
+        {"name": "forward_ref_on_inputs", "description": "Form inputs use forwardRef for DOM access and React Hook Form compatibility"},
+        {"name": "error_state_with_message", "description": "Error prop renders an error message below the input with aria-invalid"},
+        {"name": "disabled_state", "description": "Disabled prop grays out the input and prevents interaction"},
+        {"name": "accessibility_labels", "description": "Labels use htmlFor, inputs have aria-describedby for help/error text"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Build a DataTable component for our design system. Needs: sortable columns (click header to sort asc/desc/none), row selection with header checkbox for select-all, column-level filtering, pagination (page selector + per-page dropdown), and loading skeleton state. Accept generic row data via TypeScript generics. Use Tailwind and CVA.",
+      "expected_output": "Generic DataTable<T> component with sortable headers, checkbox selection, filtering, pagination controls, skeleton loading state",
+      "assertions": [
+        {"name": "typescript_generics", "description": "DataTable uses TypeScript generics for row data type (DataTable<T>)"},
+        {"name": "sortable_columns", "description": "Column headers clickable to toggle asc/desc sort with visual indicator"},
+        {"name": "row_selection", "description": "Row checkboxes and select-all header checkbox with onSelectionChange callback"},
+        {"name": "pagination_controls", "description": "Page navigation and per-page limit selector with page count display"},
+        {"name": "loading_skeleton", "description": "Skeleton rows shown during loading state"},
+        {"name": "accessibility_roles", "description": "Table uses proper role attributes, sortable headers have aria-sort"}
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Build a toast notification system for our design system. Variants: success, error, warning, info. Features: auto-dismiss after configurable duration (default 5s), stack from bottom-right, manual dismiss with X button, optional action button (e.g., 'Undo'), max 5 visible toasts (oldest auto-dismissed). Use Zustand for toast state and a ToastProvider component.",
+      "expected_output": "Toast component with variants, Zustand toast store with add/dismiss, ToastProvider rendering portal, auto-dismiss timer, stacking, action button",
+      "assertions": [
+        {"name": "four_variants", "description": "Success, error, warning, info variants with distinct colors/icons"},
+        {"name": "zustand_store", "description": "Zustand store managing toast queue with addToast/dismissToast actions"},
+        {"name": "auto_dismiss", "description": "Toasts auto-removed after configurable duration using setTimeout or timer"},
+        {"name": "max_visible_limit", "description": "Maximum 5 toasts visible, oldest removed when limit exceeded"},
+        {"name": "action_button_support", "description": "Toast accepts optional action prop with label and onClick handler"},
+        {"name": "accessibility_live_region", "description": "Toast container uses role=status or aria-live for screen reader announcements"}
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Build a Modal/Dialog system for our design system. Sizes: sm (400px), md (600px), lg (800px), full (viewport). Features: focus trap inside modal, Escape key to close, backdrop click to close (configurable via closeOnBackdrop prop), body scroll lock when open, portal rendering to document.body. Use CVA for size variants, forwardRef on the content div.",
+      "expected_output": "Modal component with size variants, focus trap, Escape handling, configurable backdrop click, scroll lock, portal rendering",
+      "assertions": [
+        {"name": "size_variants", "description": "CVA or conditional classes for sm/md/lg/full width variants"},
+        {"name": "focus_trap", "description": "Tab key cycles focus within the modal, not escaping to background content"},
+        {"name": "escape_to_close", "description": "Escape key triggers onClose callback"},
+        {"name": "backdrop_click_configurable", "description": "closeOnBackdrop or closeOnOverlayClick prop controls whether backdrop click closes"},
+        {"name": "body_scroll_lock", "description": "Document body overflow hidden when modal is open, restored on close"},
+        {"name": "portal_rendering", "description": "Modal content rendered via React portal to document.body or a portal root"}
+      ]
+    }
+  ]
+}

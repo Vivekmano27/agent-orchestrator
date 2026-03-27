@@ -1,0 +1,77 @@
+{
+  "skill_name": "state-machine-designer",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Design a state machine for an e-commerce order lifecycle. States should include: draft, placed, payment_pending, payment_failed, confirmed, preparing, shipped, delivered, return_requested, returned, cancelled. Include guard conditions, side effects, a Mermaid diagram, and TypeScript implementation.",
+      "expected_output": "State table with descriptions and terminal flags, transition table with guards and side effects, Mermaid stateDiagram, TypeScript implementation with const enum + transition map, validation checklist",
+      "assertions": [
+        {"name": "state_table", "description": "All 11 states listed in a table with descriptions and terminal flags"},
+        {"name": "transition_table", "description": "Transition table with From, To, Trigger, Guard, and Side Effects columns"},
+        {"name": "guard_conditions", "description": "Guard conditions defined (e.g., payment verified, items in stock)"},
+        {"name": "side_effects", "description": "Side effects listed (e.g., send email, update inventory, create audit log)"},
+        {"name": "mermaid_diagram", "description": "Mermaid stateDiagram-v2 showing all states and transitions"},
+        {"name": "typescript_impl", "description": "TypeScript implementation using const enum + transition map pattern (not switch statements)"}
+      ],
+      "last_run": {
+        "date": "2026-03-27",
+        "with_skill": "6/6",
+        "without_skill": "5.5/6",
+        "delta": "+0.5"
+      }
+    },
+    {
+      "id": 2,
+      "prompt": "Design a state machine for a hiring/recruitment pipeline. States: applied, resume_screening, phone_screen, technical_interview, onsite_interview, reference_check, offer_extended, offer_accepted, offer_declined, hired, rejected, withdrawn. Guards should include interviewer feedback scores (>= 3/5 to advance). Side effects: send emails, schedule calendar events, update ATS records.",
+      "expected_output": "State table with all 12 states, transitions with feedback score guards, side effects for emails and calendar, Mermaid diagram, TypeScript implementation",
+      "assertions": [
+        {"name": "state_table", "description": "All 12 states listed with descriptions and terminal flags (hired, rejected, withdrawn, offer_declined)"},
+        {"name": "transition_table", "description": "Transitions between interview stages with clear progression path"},
+        {"name": "feedback_score_guards", "description": "Guards checking interviewer feedback score >= threshold to advance to next stage"},
+        {"name": "side_effects_with_calendar", "description": "Side effects include scheduling calendar events for interviews"},
+        {"name": "mermaid_diagram", "description": "Mermaid stateDiagram showing the full pipeline"},
+        {"name": "typescript_implementation", "description": "TypeScript implementation using const enum + transition map pattern"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Design a state machine for a content publishing workflow. States: draft, in_review, revisions_requested, approved, scheduled, published, archived, unpublished. Guards: reviewer must have editor role, scheduled date must be in the future, only admin can unpublish. Side effects: notify author on status change, update search index on publish/unpublish, invalidate CDN cache.",
+      "expected_output": "State table, transitions with role-based guards, side effects for search index and CDN, Mermaid diagram, TypeScript implementation",
+      "assertions": [
+        {"name": "state_table", "description": "All 8 states listed with terminal flags (archived as terminal or non-terminal based on design)"},
+        {"name": "transition_table", "description": "Transitions covering review cycle (draft->review->revisions->draft loop)"},
+        {"name": "role_based_guards", "description": "Guards checking user role (editor for review, admin for unpublish)"},
+        {"name": "side_effects_with_cache", "description": "Side effects include CDN cache invalidation on publish/unpublish"},
+        {"name": "mermaid_diagram", "description": "Mermaid diagram showing review loop and publish/archive flow"},
+        {"name": "typescript_implementation", "description": "TypeScript using const enum + transition map"}
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Design a state machine for an invoice/payment lifecycle. States: created, sent, viewed, partial_payment, paid, overdue, disputed, refunded, written_off. Guards: payment amount must not exceed remaining balance, dispute must include reason text, refund only within 90 days. Side effects: send payment reminders for overdue, update accounting ledger, trigger collections workflow.",
+      "expected_output": "State table, transitions supporting partial payments, guards with amount validation, side effects for accounting, Mermaid diagram, TypeScript implementation",
+      "assertions": [
+        {"name": "state_table", "description": "All 9 states with descriptions (partial_payment as non-terminal, paid/refunded/written_off as terminal)"},
+        {"name": "partial_payment_transitions", "description": "Supports partial_payment -> partial_payment (additional payment) and partial_payment -> paid (final payment)"},
+        {"name": "amount_validation_guard", "description": "Guard checking payment amount doesn't exceed remaining balance"},
+        {"name": "side_effects_accounting", "description": "Side effects update accounting ledger or financial records on payment"},
+        {"name": "mermaid_diagram", "description": "Mermaid diagram showing payment flow including partial payments"},
+        {"name": "typescript_implementation", "description": "TypeScript with transition map pattern"}
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Design a state machine for a CI/CD deployment pipeline. States: queued, building, testing, staging_deploy, approval_pending, production_deploy, deployed, rolling_back, failed. Guards: all tests must pass to proceed to staging, approval from 2+ reviewers required for production, rollback only allowed from deployed or production_deploy states. Side effects: Slack notifications, GitHub deployment status updates, metric recording.",
+      "expected_output": "State table, transitions with test-pass and approval guards, side effects for Slack/GitHub, Mermaid diagram, TypeScript implementation",
+      "assertions": [
+        {"name": "state_table", "description": "All 9 states with deployed and failed as terminal states"},
+        {"name": "transition_table", "description": "Transitions from building->testing->staging->approval->production->deployed"},
+        {"name": "test_pass_guard", "description": "Guard requiring all tests to pass before staging deployment"},
+        {"name": "approval_guard", "description": "Guard requiring 2+ reviewer approvals for production deploy"},
+        {"name": "rollback_constraints", "description": "Rollback transition only from deployed or production_deploy states"},
+        {"name": "mermaid_diagram", "description": "Mermaid diagram showing the pipeline with failure and rollback paths"},
+        {"name": "typescript_implementation", "description": "TypeScript implementation with const enum + transition map"}
+      ]
+    }
+  ]
+}
