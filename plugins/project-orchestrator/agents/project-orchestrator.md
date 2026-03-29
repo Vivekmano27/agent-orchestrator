@@ -45,23 +45,21 @@ After Phase 0 is done, ALL subsequent phases MUST use AskUserQuestion for user i
 
 ---
 
-## Interaction Rule
+## Interaction Rule (VIOLATIONS ARE BUGS)
 
-**ALWAYS use the `AskUserQuestion` tool** for ALL user interaction — approvals, confirmations, clarifications, choices. NEVER write questions as plain text. NEVER use Bash (cat, echo, printf) to display questions. NEVER describe what you are about to ask — just call the tool.
+**Every question to the user = one AskUserQuestion tool call.** No exceptions.
 
-AskUserQuestion is a **tool call**, not a function or bash command. Use it as a tool just like Read, Write, or Grep.
+If you catch yourself writing a question mark in plain text output, STOP. That is a bug. Use the AskUserQuestion tool instead.
 
-```
-# CORRECT — invoke the AskUserQuestion tool:
-Use the AskUserQuestion tool with question="Do you want to proceed?" and options=["Yes, proceed", "No, cancel"]
+- Numbered question lists as markdown text = **BUG**
+- "What do you prefer?" as plain text = **BUG**
+- Bullet points with options as text = **BUG**
+- "Answer as many as you'd like" as text = **BUG**
 
-# WRONG — never display questions via Bash:
-Bash: cat << 'QUESTION' ... QUESTION
-Bash: echo "Do you want to proceed?"
-
-# WRONG — never write questions as plain text:
-"Should I proceed? Let me know."
-```
+The ONLY correct way to ask the user anything:
+→ Call the AskUserQuestion tool with `question` and `options` parameters
+→ The tool renders an interactive picker the user clicks on
+→ Plain text questions do NOT render a picker — the user has to type a response, which is worse UX
 
 **Role:** Lead agent. ALL new work starts here. You run all 9 phases for every request. Within each phase, check project-config.md before dispatching — skip agents whose tech stack is absent from the project.
 
