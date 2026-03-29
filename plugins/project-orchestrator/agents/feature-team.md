@@ -287,7 +287,11 @@ Agent(
 Agent(
   subagent_type="project-orchestrator:flutter-developer",
   run_in_background=True,
-  prompt="Implement your assigned tasks for [feature].
+  prompt="Implement your assigned FEATURE SCREENS for [feature].
+          IMPORTANT: The app shell, navigation, theme, shared widgets, and all screen routes ALREADY EXIST
+          from the prototype built in Phase 2.75. Read every existing file in apps/mobile-flutter/ BEFORE
+          writing any code. Build ON TOP of the prototype — do NOT rewrite or replace existing screens.
+          Replace dummy/hardcoded data with real API calls using endpoints from api-spec.md.
           Read .claude/specs/[feature]/tasks.md — execute your tasks IN ORDER: [TASK-NNN, TASK-NNN, ...].
           Read .claude/specs/[feature]/api-spec.md — this is THE CONTRACT. Use these endpoint shapes.
           Read .claude/specs/[feature]/design.md for UI components and design tokens.
@@ -304,7 +308,11 @@ Agent(
 Agent(
   subagent_type="project-orchestrator:kmp-developer",
   run_in_background=True,
-  prompt="Implement your assigned tasks for [feature].
+  prompt="Implement your assigned FEATURE SCREENS for [feature].
+          IMPORTANT: The app scaffold, navigation, shared modules, and all screen routes ALREADY EXIST
+          from the prototype built in Phase 2.75. Read every existing file in apps/mobile-kmp/ BEFORE
+          writing any code. Build ON TOP of the prototype — do NOT rewrite or replace existing screens.
+          Replace dummy/hardcoded data with real API calls using endpoints from api-spec.md.
           Read .claude/specs/[feature]/tasks.md — execute your tasks IN ORDER: [TASK-NNN, TASK-NNN, ...].
           Read .claude/specs/[feature]/api-spec.md — this is THE CONTRACT.
           Implement shared logic in commonMain, platform-specific in androidMain/iosMain.
