@@ -106,17 +106,43 @@ PHASE 9:    Post-Deploy Verification [C] (smoke tests, runbook, build check)
 
 ---
 
+## TASK SIZE CLASSIFICATION (BEFORE ANY PHASE RUNS)
+
+Before Phase 0, classify the task and confirm with the user:
+
+```
+AskUserQuestion(
+  question="I'll classify this task:
+  [1-2 sentence description of what was requested]
+
+  My assessment: [SMALL/MEDIUM/BIG]
+  Reason: [why this size]",
+  options=["Correct, proceed", "It's SMALL", "It's MEDIUM", "It's BIG"]
+)
+```
+
+Classification criteria:
+- **SMALL** (1-3 files, 1 service): bug fix, config change, small UI tweak
+- **MEDIUM** (4-10 files, 1-2 services): new endpoint + UI, add a feature to existing app
+- **BIG** (10+ files, multiple services): new application, major feature, multi-service
+
+---
+
 ## THE DISPATCH LOOP — Phase-by-Phase Execution
 
 **For EACH phase in order [0, 0.5, 1, 1.5, 2, 2.05, 2.1, 2.5, 2.75, 3, 4, 5, 6, 7, 8, 9]:**
 
-### A. Read the phase file
+### A. Read the phase file (MANDATORY — do NOT skip)
+
+**You MUST call Read() on the phase file BEFORE doing anything for that phase.** Do NOT execute from memory. The phase file contains the exact dispatch instructions, preconditions, and agent to dispatch.
 
 ```
 Read("${CLAUDE_PLUGIN_ROOT}/skills/phase-runner/phases/phase-{N}.md")
 ```
 
-Phase files are named: `phase-0.md`, `phase-0-5.md`, `phase-1.md`, `phase-1-5.md`, `phase-2.md`, `phase-2-05.md`, `phase-2-1.md`, `phase-2-5.md`, `phase-2-75.md`, `phase-3.md`, `phase-4.md`, `phase-5.md`, `phase-6.md`, `phase-7.md`, `phase-8.md`, `phase-9.md`
+Phase files: `phase-0.md`, `phase-0-5.md`, `phase-1.md`, `phase-1-5.md`, `phase-2.md`, `phase-2-05.md`, `phase-2-1.md`, `phase-2-5.md`, `phase-2-75.md`, `phase-3.md`, `phase-4.md`, `phase-5.md`, `phase-6.md`, `phase-7.md`, `phase-8.md`, `phase-9.md`
+
+**If you skip reading the phase file, you WILL dispatch the wrong agent.** For example, Phase 1 dispatches `planning-team` (NOT `product-manager` directly). The phase file is the source of truth.
 
 ### B. Check preconditions
 
@@ -124,7 +150,7 @@ Verify the files listed in the phase's `## Preconditions` exist. If a required f
 
 ### C. Execute per dispatch instructions
 
-Follow the phase file's `## Dispatch Instructions` exactly. Dispatch agents, wait for completion.
+Follow the phase file's `## Dispatch Instructions` exactly. Use the exact `subagent_type` shown in the phase file. Do NOT substitute a different agent.
 
 ### D. Verify outputs AND pass content validation
 
