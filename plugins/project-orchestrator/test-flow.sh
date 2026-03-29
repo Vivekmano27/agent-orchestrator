@@ -46,7 +46,9 @@ else
   echo -e "  ${GREEN}OK — no stale Phase 0.75 references${NC}"
 fi
 
-STALE_SETUP=$(grep -rln "Phase 0\.5.*[Pp]roject [Ss]etup\|Phase 0\.5.*tech.stack.interview" "$SCRIPT_DIR/agents/" "$SCRIPT_DIR/commands/" 2>/dev/null | grep -v "test-flow.sh" || true)
+# Match "Phase 0.5" immediately followed (within ~30 chars) by "Project Setup" or "tech stack"
+# This catches "Phase 0.5 (Project Setup)" but NOT "Phase 0.5, MEDIUM/BIG), then ... tech stack interview (Phase 1.5)"
+STALE_SETUP=$(grep -rn "Phase 0\.5" "$SCRIPT_DIR/agents/" "$SCRIPT_DIR/commands/" 2>/dev/null | grep -v "test-flow.sh" | grep -i "Phase 0\.5.\{0,30\}\(project.setup\|tech.stack\)" || true)
 if [ -n "$STALE_SETUP" ]; then
   echo -e "  ${YELLOW}WARNING — possible stale 'Phase 0.5 = tech stack' references:${NC}"
   echo "$STALE_SETUP" | while read -r f; do echo "    $f"; done
@@ -85,7 +87,9 @@ echo -e "  ${GREEN}OK — all dispatched agents exist${NC}"
 echo "5. Deleted command references..."
 DELETED_CMDS="start switch-model sprint-plan resume"
 for cmd in $DELETED_CMDS; do
-  refs=$(grep -rln "/$cmd\b\|commands/$cmd\.md" "$SCRIPT_DIR/agents/" "$SCRIPT_DIR/commands/" 2>/dev/null | grep -v "test-flow.sh\|continue-pipeline" || true)
+  # Match "/cmd" as a command (preceded by space, quote, or start-of-line) or "commands/cmd.md" as a file ref
+  # Exclude "checkpoint/resume" and similar compound words
+  refs=$(grep -rn "[[:space:]\"/]/$cmd\b\|commands/$cmd\.md" "$SCRIPT_DIR/agents/" "$SCRIPT_DIR/commands/" 2>/dev/null | grep -v "test-flow.sh\|continue-pipeline\|checkpoint" | cut -d: -f1 | sort -u || true)
   if [ -n "$refs" ]; then
     echo -e "  ${YELLOW}WARNING — deleted command '/$cmd' still referenced in:${NC}"
     echo "$refs" | while read -r f; do echo "    $f"; done
