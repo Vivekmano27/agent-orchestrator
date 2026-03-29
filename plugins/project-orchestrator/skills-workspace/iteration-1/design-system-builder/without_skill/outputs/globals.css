@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Global CSS Variables
+ *
+ * These custom properties define the semantic color layer.
+ * They are overridden by the ThemeProvider at runtime,
+ * but these defaults ensure the page renders correctly
+ * before JavaScript hydrates.
+ */
+
+:root {
+  --color-background: #ffffff;
+  --color-foreground: #030712;
+  --color-muted: #f3f4f6;
+  --color-muted-foreground: #6b7280;
+  --color-border: #e5e7eb;
+  --color-input: #e5e7eb;
+  --color-ring: #3b82f6;
+  --color-card: #ffffff;
+  --color-card-foreground: #030712;
+}
+
+.dark {
+  --color-background: #030712;
+  --color-foreground: #f9fafb;
+  --color-muted: #1f2937;
+  --color-muted-foreground: #9ca3af;
+  --color-border: #374151;
+  --color-input: #374151;
+  --color-ring: #2563eb;
+  --color-card: #111827;
+  --color-card-foreground: #f9fafb;
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Base layer resets                                                           */
+/* -------------------------------------------------------------------------- */
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: 'rlig' 1, 'calt' 1;
+  }
+
+  /* Smooth dark mode transitions */
+  html {
+    transition: color-scheme 0.3s ease;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  html.light {
+    color-scheme: light;
+  }
+}

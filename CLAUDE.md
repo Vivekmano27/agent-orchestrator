@@ -71,6 +71,13 @@ Linting and formatting tools are configured per project in project-config.md.
 - MEDIUM tasks (4-10 files): Quick approval before implementation
 - BIG features (10+ files): Full spec-driven workflow with gates
 
+## Discussion Before Decisions (MANDATORY)
+- ALWAYS discuss with the user BEFORE making changes — never decide and act unilaterally
+- Present the tradeoffs, options, and your recommendation — then let the user choose
+- This applies to: removing/adding files, changing architecture, deleting commands, modifying agent behavior, trimming skills, reordering phases, or any structural change
+- "Here's what I recommend and why" is correct. Just doing it is wrong.
+- The only exception: trivial fixes (typos, formatting) that don't change behavior
+
 ## Core Principles
 - **Simplicity First:** Make every change as simple as possible. Impact minimal code.
 - **No Laziness:** Find root causes. No temporary fixes. Senior developer standards.

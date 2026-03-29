@@ -63,15 +63,14 @@ Design specs are interdependent:
 
 Each agent reads shared files and makes independent decisions. The cross-review step (STEP 6) catches misalignments after the fact.
 
-## CRITICAL: Background Agent Rules
+## Dispatch Mode: ALL FOREGROUND (Sequential)
 
-**Agents dispatched with `run_in_background=True` CANNOT use AskUserQuestion.** Their questions are silently dropped — the user never sees them.
+All design agents run in FOREGROUND (synchronous, one at a time). Each agent:
+- Can ask the user questions via AskUserQuestion
+- Reads the previous agent's output before starting
+- Produces higher quality specs because of sequential dependency chain
 
-Therefore:
-- Background agents must make autonomous design decisions based on specs
-- If an agent MUST ask the user something, dispatch it in foreground (synchronous, not background)
-- system-architect runs in FOREGROUND (it sets direction, may need clarification)
-- All parallel agents (api-architect, database-architect, ui-designer, agent-native-designer) run in BACKGROUND — they must NOT call AskUserQuestion
+Order: system-architect → api-architect → database-architect → ui-designer → agent-native-designer → design-reviewer
 
 ## Team Composition
 ```
@@ -161,69 +160,62 @@ Agent(
 
 Wait for architecture.md to be written.
 
-**3b. Dispatch remaining agents IN PARALLEL — ALL IN A SINGLE MESSAGE with `run_in_background=True`:**
-
-**YOU MUST send all Agent() calls below in ONE response. Do NOT send them one at a time. This is how parallel execution works — multiple tool calls in a single message.**
+**3b. Dispatch remaining agents SEQUENTIALLY (foreground — each can ask questions and reads previous agent's output):**
 
 ```
 Agent(
   subagent_type="project-orchestrator:api-architect",
-  run_in_background=True,
   prompt="Design all API endpoints (REST/gRPC), versioning, auth, rate limiting, error codes for [feature].
           Read requirements.md, project-config.md, research-context.md (if exists), and architecture.md.
           Do your own Pre-Design Research (scan existing API patterns in codebase).
           Write api-spec.md to .claude/specs/[feature]/api-spec.md.
+          Use AskUserQuestion if you need clarification on any endpoint behavior.
           SELF-REVIEW before completing."
 )
+
+Wait for api-spec.md to be written.
 
 Agent(
   subagent_type="project-orchestrator:database-architect",
-  run_in_background=True,
   prompt="Design PostgreSQL schema — tables, columns, constraints, indexes, migrations for [feature].
-          Read architecture.md, project-config.md, and research-context.md (if exists).
+          Read architecture.md, api-spec.md, project-config.md, and research-context.md (if exists).
           Do your own Pre-Design Research (scan existing schema in codebase).
           If architecture requires a database, also create docker-compose.dev.yml.
           Write schema.md to .claude/specs/[feature]/schema.md.
+          Use AskUserQuestion if you need clarification on data modeling decisions.
           SELF-REVIEW before completing."
 )
 
+Wait for schema.md to be written.
+
 Agent(
   subagent_type="project-orchestrator:ui-designer",
-  run_in_background=True,
-  prompt="Create design.md, scaffold the Next.js project, build shared components (src/components/ui/),
-          and build the /design-system page with component library + design tokens + platform mapping table.
-          Read requirements.md, ux.md, project-config.md, and research-context.md (if exists).
+  prompt="Create design.md with design tokens, component specs, responsive layouts, and interaction inventory.
+          Read requirements.md, ux.md, api-spec.md, project-config.md, and research-context.md (if exists).
           Do your own Pre-Design Research (scan existing component patterns in codebase).
           IMPORTANT: Include an '## Interaction Inventory' section listing every user-initiated action.
-          Write design.md, then scaffold prototype (MEDIUM/BIG only — see Prototype Generation in agent).
-          For BIG tasks: after shared components, build screen pages.
-          SELF-REVIEW the /design-system page before completing."
+          Write design.md to .claude/specs/[feature]/design.md.
+          Use AskUserQuestion for design preference questions.
+          SELF-REVIEW before completing."
 )
+
+Wait for design.md to be written.
 ```
 
 **Conditional: agent-native-designer (MEDIUM/BIG only, skip for SMALL):**
 ```
 Agent(
   subagent_type="project-orchestrator:agent-native-designer",
-  run_in_background=True,
   prompt="Design agent-native capabilities — parity map, tool definitions, agent features for [feature].
-          Read requirements.md, architecture.md, project-config.md, and research-context.md (if exists).
+          Read requirements.md, architecture.md, api-spec.md, project-config.md, and research-context.md (if exists).
           Do your own Pre-Design Research (scan existing agent/tool patterns in codebase).
           Write agent-spec.md to .claude/specs/[feature]/agent-spec.md.
+          Use AskUserQuestion if you need clarification on agent capabilities.
           SELF-REVIEW before completing."
 )
+
+Wait for agent-spec.md to be written.
 ```
-
-Wait for all background agents to complete.
-
-**3c. IF Agent Teams available — run peer negotiation:**
-
-If `SendMessage` is available, use it to coordinate entity name alignment between agents:
-- api-architect ↔ database-architect: align entity names, field types, enum values
-- api-architect ↔ ui-designer: align endpoint shapes with component data flows
-- agent-native-designer ↔ api-architect: confirm tool-to-endpoint mappings
-
-If SendMessage is NOT available, proceed directly to cross-review (STEP 6).
 
 ### STEP 4 — Verify all agents produced their files
 
@@ -426,8 +418,8 @@ Sub-steps: For step 5, track each parallel agent as a sub-step.
 
 ## Checklist
 - [ ] Read all precondition files (specs, project-config.md)
-- [ ] system-architect dispatched FIRST (synchronous, foreground)
-- [ ] Remaining agents dispatched IN PARALLEL (all in one message, run_in_background=True)
+- [ ] All agents dispatched SEQUENTIALLY in foreground (system-architect → api-architect → database-architect → ui-designer → agent-native-designer)
+- [ ] Each agent waited for completion before dispatching next
 - [ ] All subagents completed successfully
 - [ ] Cross-review completed (MEDIUM/BIG)
 - [ ] SUMMARY.md written to spec directory

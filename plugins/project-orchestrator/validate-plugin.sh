@@ -143,7 +143,7 @@ else
   ERRORS=$((ERRORS + 1))
 fi
 
-EXPECTED_PHASES=("phase-0.md" "phase-0-5.md" "phase-1.md" "phase-1-5.md" "phase-2.md" "phase-2-1.md" "phase-2-5.md" "phase-3.md" "phase-4.md" "phase-5.md" "phase-6.md" "phase-7.md" "phase-8.md" "phase-9.md")
+EXPECTED_PHASES=("phase-0.md" "phase-0-5.md" "phase-1.md" "phase-1-5.md" "phase-2.md" "phase-2-05.md" "phase-2-1.md" "phase-2-5.md" "phase-2-75.md" "phase-3.md" "phase-4.md" "phase-5.md" "phase-6.md" "phase-7.md" "phase-8.md" "phase-9.md")
 PHASE_COUNT=0
 EXPECTED_COUNT=${#EXPECTED_PHASES[@]}
 for phase_file in "${EXPECTED_PHASES[@]}"; do

@@ -1,0 +1,131 @@
+{
+  "skill_name": "batch-2-5-remaining-skills",
+  "evals": [
+    {
+      "id": 5,
+      "skill": "react-patterns",
+      "prompt": "I'm building a product catalog page in Next.js App Router. It needs: a server component page that fetches products, a client component for search/filter with debounced input, a product card grid that handles loading/empty/error states, and a 'Add to Cart' button with optimistic updates. Use TanStack Query for data fetching and Zustand for cart state.",
+      "expected_output": "Server component page, client search component with useDebouncedValue, TanStack Query hooks, Zustand cart store, error boundary, loading skeletons, empty state",
+      "assertions": [
+        {"name": "server_component_default", "description": "Page component is a server component (no 'use client' directive) that fetches data directly"},
+        {"name": "client_pushed_down", "description": "'use client' only on interactive components (search, button), not on the page itself"},
+        {"name": "tanstack_query_used", "description": "Uses useQuery/useMutation from @tanstack/react-query for data fetching, not raw useEffect"},
+        {"name": "zustand_store", "description": "Cart state managed with Zustand create() store, not useState or Context"},
+        {"name": "loading_error_empty_states", "description": "All three states handled: loading skeleton, error message, empty state with CTA"},
+        {"name": "debounced_search", "description": "Search input uses debouncing (custom hook or setTimeout pattern)"}
+      ]
+    },
+    {
+      "id": 6,
+      "skill": "ui-wireframes",
+      "prompt": "Create wireframes for an admin dashboard with these screens: 1) Dashboard overview with KPI cards and recent activity feed, 2) User management table with search, filters, and bulk actions, 3) Settings page with tabs for profile, notifications, and billing. Include navigation flow, responsive breakpoints, and component states.",
+      "expected_output": "ASCII wireframes for all 3 screens, component tables with data sources, all 4 states per screen, responsive breakpoints, navigation flow Mermaid diagram, interaction specs",
+      "assertions": [
+        {"name": "ascii_wireframes", "description": "At least 3 ASCII art wireframe layouts using box-drawing characters"},
+        {"name": "component_tables", "description": "Component tables with columns for name, data source, and actions"},
+        {"name": "four_states", "description": "Loading, empty, error, and loaded states specified for each screen"},
+        {"name": "responsive_breakpoints", "description": "Mobile, tablet, desktop breakpoints defined with layout changes"},
+        {"name": "navigation_flow", "description": "Mermaid flowchart showing navigation between screens"},
+        {"name": "interaction_specs", "description": "At least one interaction specification (e.g., bulk delete, filter)"}
+      ]
+    },
+    {
+      "id": 7,
+      "skill": "design-system-builder",
+      "prompt": "Set up a design system for a SaaS dashboard app. Create: design tokens (colors with primary/gray/semantic, spacing scale, typography), a Tailwind config that extends from the tokens, a Button component with variants (primary/secondary/ghost/danger) and sizes (sm/md/lg) using CVA, and a dark mode theme provider.",
+      "expected_output": "Token files, Tailwind config extending tokens, Button component with CVA variants and forwardRef, ThemeProvider with dark mode toggle, proper TypeScript types",
+      "assertions": [
+        {"name": "token_files", "description": "Separate token definitions for colors, spacing, and typography as TypeScript constants"},
+        {"name": "tailwind_extends_tokens", "description": "Tailwind config imports and extends from token files, not hardcoded values"},
+        {"name": "cva_button", "description": "Button uses class-variance-authority (CVA) with variant and size props"},
+        {"name": "forward_ref", "description": "Button uses forwardRef for DOM access"},
+        {"name": "dark_mode", "description": "ThemeProvider or dark mode implementation with class toggle or CSS variables"},
+        {"name": "accessibility", "description": "Button has focus-visible styles and aria attributes for loading/disabled states"}
+      ]
+    },
+    {
+      "id": 8,
+      "skill": "secrets-scanner",
+      "prompt": "I'm about to make my private repo public on GitHub. It's a Node.js/Express app that has been in development for 6 months. Scan for any secrets that might be committed and give me a remediation plan.",
+      "expected_output": "Gitleaks scan command, vendor pattern list to check, file types to flag, remediation steps (rotate, remove from history, gitignore, pre-commit hook), prevention setup",
+      "assertions": [
+        {"name": "scan_command", "description": "Provides gitleaks detect command or equivalent scanning approach"},
+        {"name": "vendor_patterns", "description": "Lists specific vendor patterns to check (AWS keys, GitHub tokens, Stripe keys, etc.)"},
+        {"name": "file_flags", "description": "Flags .env files, .pem/.key files, and other sensitive file types"},
+        {"name": "rotate_first", "description": "Emphasizes rotating/revoking secrets BEFORE removing from git history"},
+        {"name": "history_cleanup", "description": "Includes git history cleanup (BFG or git-filter-repo)"},
+        {"name": "prevention_setup", "description": "Sets up pre-commit hook and .gitignore to prevent future leaks"}
+      ]
+    },
+    {
+      "id": 9,
+      "skill": "dependency-audit",
+      "prompt": "Run a dependency audit on our NestJS backend and React frontend monorepo. We use npm workspaces. Check for vulnerabilities, outdated packages, and license issues. Prioritize findings and give me a remediation plan.",
+      "expected_output": "npm audit command, triage by severity+reachability, license check, supply chain checks, structured output table, remediation strategies",
+      "assertions": [
+        {"name": "audit_command", "description": "Provides npm audit or equivalent vulnerability scanning command"},
+        {"name": "severity_triage", "description": "Triages findings by severity AND reachability, not just CVSS score alone"},
+        {"name": "license_check", "description": "Checks license compatibility (flags GPL/AGPL in proprietary code)"},
+        {"name": "supply_chain", "description": "Checks for lockfile existence, unpinned deps, suspicious scripts"},
+        {"name": "structured_output", "description": "Produces a structured findings table with package, CVE, severity, fix version"},
+        {"name": "remediation_plan", "description": "Provides specific remediation strategies (upgrade, override, replace)"}
+      ]
+    },
+    {
+      "id": 10,
+      "skill": "estimation-skill",
+      "prompt": "Estimate the effort to add a real-time notification system to our NestJS + React app. It needs: WebSocket connection with Socket.IO, notification types (info, warning, error), a notification center UI with read/unread state, push notification support for mobile (via Firebase), and a notification preferences page.",
+      "expected_output": "Feature decomposed into tasks, each scored on 5 complexity factors, risk multipliers applied, estimate as a range with confidence level",
+      "assertions": [
+        {"name": "task_decomposition", "description": "Feature broken into 5+ concrete tasks before estimating"},
+        {"name": "complexity_scoring", "description": "Each task scored on complexity factors (code changes, new concepts, dependencies, testing, risk)"},
+        {"name": "size_mapping", "description": "Total score mapped to S/M/L/XL with story points"},
+        {"name": "risk_multipliers", "description": "Risk multipliers applied (e.g., new technology for WebSocket/Firebase)"},
+        {"name": "range_estimate", "description": "Final estimate given as a range, not a single number"},
+        {"name": "confidence_level", "description": "Confidence level stated (Low/Medium/High) with reasoning"}
+      ]
+    },
+    {
+      "id": 11,
+      "skill": "spec-driven-dev",
+      "prompt": "I want to add a multi-tenant billing system to our SaaS app. It needs subscription plans, usage-based billing, Stripe integration, invoice generation, and an admin billing dashboard. Set up the spec-driven development workflow for this feature.",
+      "expected_output": "Spec directory created, requirements.md template with user stories, design.md template with API/schema, tasks.md with ordered implementation tasks, phase gates defined",
+      "assertions": [
+        {"name": "spec_directory", "description": "Creates .claude/specs/billing/ or similar spec directory structure"},
+        {"name": "requirements_template", "description": "requirements.md with user stories, acceptance criteria, and scope boundaries (in/out)"},
+        {"name": "design_template", "description": "design.md covering API endpoints, data model, and error handling"},
+        {"name": "tasks_template", "description": "tasks.md with ordered tasks, dependencies, verification commands"},
+        {"name": "phase_gates", "description": "Phase gates defined (approval required before advancing)"},
+        {"name": "enforcement_rules", "description": "Enforcement rules stated (no code before design, no implementation before tasks)"}
+      ]
+    },
+    {
+      "id": 12,
+      "skill": "fullstack-dev",
+      "prompt": "Scaffold a new NestJS + PostgreSQL backend project for a task management API. Set up the project structure, Prisma ORM, JWT authentication, environment configuration, and initial tests.",
+      "expected_output": "NestJS project structure with modules, Prisma schema, auth module with JWT, .env.example, initial test, package.json with dependencies",
+      "assertions": [
+        {"name": "nestjs_structure", "description": "Creates NestJS project structure with src/, modules, controllers, services"},
+        {"name": "prisma_setup", "description": "Includes Prisma schema file with initial model"},
+        {"name": "auth_template", "description": "Auth module with JWT register/login/refresh flow"},
+        {"name": "env_example", "description": ".env.example with all required environment variables (placeholders only)"},
+        {"name": "initial_test", "description": "At least one test file that verifies the app starts"},
+        {"name": "scope_boundary", "description": "Does NOT include React/frontend setup (stays within backend scope)"}
+      ]
+    },
+    {
+      "id": 13,
+      "skill": "state-machine-designer",
+      "prompt": "Design a state machine for an e-commerce order lifecycle. States should include: draft, placed, payment_pending, payment_failed, confirmed, preparing, shipped, delivered, return_requested, returned, cancelled. Include guard conditions, side effects, a Mermaid diagram, and TypeScript implementation.",
+      "expected_output": "State table with descriptions and terminal flags, transition table with guards and side effects, Mermaid stateDiagram, TypeScript implementation with const enum + transition map, validation checklist",
+      "assertions": [
+        {"name": "state_table", "description": "All 11 states listed in a table with descriptions and terminal flags"},
+        {"name": "transition_table", "description": "Transition table with From, To, Trigger, Guard, and Side Effects columns"},
+        {"name": "guard_conditions", "description": "Guard conditions defined (e.g., payment verified, items in stock)"},
+        {"name": "side_effects", "description": "Side effects listed (e.g., send email, update inventory, create audit log)"},
+        {"name": "mermaid_diagram", "description": "Mermaid stateDiagram-v2 showing all states and transitions"},
+        {"name": "typescript_impl", "description": "TypeScript implementation using const enum + transition map pattern (not switch statements)"}
+      ]
+    }
+  ]
+}

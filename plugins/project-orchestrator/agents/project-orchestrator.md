@@ -76,10 +76,12 @@ PHASE 0:    Spec Setup (YOU — create spec directory)
 PHASE 0.5:  Brainstorming (SMALL=skip, MEDIUM=light, BIG=full)
 PHASE 1:    Planning — ALWAYS via planning-team (features & requirements FIRST)
 PHASE 1.5:  Tech Stack Interview (project-setup agent — AFTER requirements)
-PHASE 2:    Design — ALWAYS via design-team (never individual architects)
+PHASE 2:    Design — ALWAYS via design-team (all foreground, sequential)
+PHASE 2.05: Spec Reconciliation (design-reviewer — mandatory, catches contradictions)
 PHASE 2.1:  Task Decomposition (task-decomposer)
 PHASE 2.5:  Git Setup (YOU — feature branch)
-PHASE 3:    Build — via feature-team
+PHASE 2.75: Prototype (ui-designer — clickable UI with dummy data, user reviews)
+PHASE 3:    Build — via feature-team (parallel streams: backend + frontend)
 PHASE 4:    Testing — via quality-team
 PHASE 5:    Security (security-auditor)
 PHASE 6:    Review — via review-team
@@ -108,7 +110,7 @@ PHASE 9:    Post-Deploy Verification [C] (smoke tests, runbook, build check)
 
 ## THE DISPATCH LOOP — Phase-by-Phase Execution
 
-**For EACH phase in order [0, 0.5, 1, 1.5, 2, 2.1, 2.5, 3, 4, 5, 6, 7, 8, 9]:**
+**For EACH phase in order [0, 0.5, 1, 1.5, 2, 2.05, 2.1, 2.5, 2.75, 3, 4, 5, 6, 7, 8, 9]:**
 
 ### A. Read the phase file
 
@@ -116,7 +118,7 @@ PHASE 9:    Post-Deploy Verification [C] (smoke tests, runbook, build check)
 Read("${CLAUDE_PLUGIN_ROOT}/skills/phase-runner/phases/phase-{N}.md")
 ```
 
-Phase files are named: `phase-0.md`, `phase-0-5.md`, `phase-1.md`, `phase-1-5.md`, `phase-2.md`, `phase-2-1.md`, `phase-2-5.md`, `phase-3.md`, `phase-4.md`, `phase-5.md`, `phase-6.md`, `phase-7.md`, `phase-8.md`, `phase-9.md`
+Phase files are named: `phase-0.md`, `phase-0-5.md`, `phase-1.md`, `phase-1-5.md`, `phase-2.md`, `phase-2-05.md`, `phase-2-1.md`, `phase-2-5.md`, `phase-2-75.md`, `phase-3.md`, `phase-4.md`, `phase-5.md`, `phase-6.md`, `phase-7.md`, `phase-8.md`, `phase-9.md`
 
 ### B. Check preconditions
 
@@ -236,7 +238,9 @@ After each phase, verify expected output files:
 | 1 | requirements.md; business-rules.md, ux.md, research-context.md, requirements-review.md, phase-1-summary.md (MEDIUM/BIG) |
 | 1.5 | project-config.md |
 | 2 | architecture.md, api-spec.md, schema.md, design.md, SUMMARY.md; agent-spec.md + design-review.md (MEDIUM/BIG) |
+| 2.05 | spec-reconciliation.md |
 | 2.1 | tasks.md |
+| 2.75 | working prototype committed (skip if no frontend/mobile) |
 | 3 | api-contracts.md |
 | 4 | test-plan.md, test-report.md |
 | 5 | security-audit.md |
@@ -395,16 +399,18 @@ Track progress in `.claude/specs/[feature]/agent-status/project-orchestrator.md`
 | 4 | run-phase-1 | Dispatch planning agents (Phase 1) |
 | 5 | run-phase-1-5 | Dispatch project-setup for tech stack (Phase 1.5) |
 | 6 | run-phase-2 | Dispatch design-team (Phase 2) |
-| 7 | run-phase-2-1 | Dispatch task-decomposer (Phase 2.1) |
-| 8 | run-phase-2-5 | Git setup (Phase 2.5) |
-| 9 | run-phase-3 | Dispatch feature-team (Phase 3) |
-| 10 | run-phase-4 | Dispatch quality-team (Phase 4) |
-| 11 | run-phase-5 | Dispatch security-auditor (Phase 5) |
-| 12 | run-phase-6 | Dispatch review-team (Phase 6) |
-| 13 | run-phase-7 | Dispatch devops/deployment (Phase 7) |
-| 14 | run-phase-8 | Dispatch technical-writer (Phase 8) |
-| 15 | run-phase-9 | Post-deploy verification (Phase 9) |
-| 16 | pipeline-done | Mark pipeline DONE |
+| 7 | run-phase-2-05 | Spec reconciliation (Phase 2.05) |
+| 8 | run-phase-2-1 | Dispatch task-decomposer (Phase 2.1) |
+| 9 | run-phase-2-5 | Git setup (Phase 2.5) |
+| 10 | run-phase-2-75 | Prototype — user reviews (Phase 2.75) |
+| 11 | run-phase-3 | Dispatch feature-team (Phase 3) |
+| 12 | run-phase-4 | Dispatch quality-team (Phase 4) |
+| 13 | run-phase-5 | Dispatch security-auditor (Phase 5) |
+| 14 | run-phase-6 | Dispatch review-team (Phase 6) |
+| 15 | run-phase-7 | Dispatch devops/deployment (Phase 7) |
+| 16 | run-phase-8 | Dispatch technical-writer (Phase 8) |
+| 17 | run-phase-9 | Post-deploy verification (Phase 9) |
+| 18 | pipeline-done | Mark pipeline DONE |
 
 Sub-steps: Each `run-phase-*` step should log sub-steps for: dispatch, verify-outputs, content-validation, update-progress, transition-gate, approval-gate (if applicable).
 

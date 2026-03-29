@@ -208,51 +208,80 @@ Agent(
 
 If Pass 1 fails: log "agent-native-developer Pass 1 failed: [error]", set `skip_pass_2 = true`, continue to STEP 3.
 
-### STEP 3 — Spawn backend + senior + python IN PARALLEL
+### STEP 3 — Start parallel streams
 
-**YOU MUST send ALL Agent() calls below in ONE response with `run_in_background=True`. Do NOT send them one at a time. Multiple tool calls in a single message = parallel execution.**
+**Contract-first:** All agents implement against `api-spec.md` (the design contract from Phase 2). Backend MUST match the spec exactly. Frontend codes against the same spec. No wave waiting needed.
+
+**BACKEND STREAM (foreground, sequential — shared directories):**
+
+Backend agents run one at a time because they share `services/`. Each can ask questions via AskUserQuestion.
+
 ```
 Agent(
   subagent_type="project-orchestrator:backend-developer",
-  run_in_background=True,
   prompt="Implement your assigned tasks for [feature].
           Read .claude/specs/[feature]/tasks.md — execute these tasks IN ORDER: [TASK-NNN, TASK-NNN, ...].
-          Each task has Description, Files, Verification, and Commit message — follow them exactly.
+          Read .claude/specs/[feature]/api-spec.md — this is THE CONTRACT. Implement endpoints EXACTLY as specified.
           FILE OWNERSHIP: You own services/core-service/ (except src/common/) and prisma/.
           Do NOT touch services/api-gateway/ or services/shared/.
-          Follow TDD. When all endpoints are implemented, write actual API contracts
-          (routes, request/response shapes) to .claude/specs/[feature]/api-contracts.md
-          If .claude/specs/[feature]/agent-spec.md exists, read it for tool endpoint definitions
-          that need implementation."
+          Follow TDD. Use AskUserQuestion if the spec is ambiguous or contradicts schema.md.
+          If .claude/specs/[feature]/agent-spec.md exists, read it for tool endpoint definitions.
+          Commit as: feat(scope): description"
 )
+
+Wait for backend-developer to complete.
 
 Agent(
   subagent_type="project-orchestrator:senior-engineer",
-  run_in_background=True,
   prompt="Implement your assigned tasks for [feature].
           Read .claude/specs/[feature]/tasks.md — execute these tasks IN ORDER: [TASK-NNN, TASK-NNN, ...].
-          Each task has Description, Files, Verification, and Commit message — follow them exactly.
           FILE OWNERSHIP: You own services/core-service/src/common/, services/api-gateway/, services/shared/.
           Do NOT touch services/core-service/src/modules/ or .claude/agents/.
-          Handle service boundaries, auth middleware, error handling, timeouts."
+          Handle service boundaries, auth middleware, error handling, timeouts.
+          Use AskUserQuestion if cross-service integration decisions are ambiguous."
 )
+
+Wait for senior-engineer to complete.
 
 Agent(
   subagent_type="project-orchestrator:python-developer",
-  run_in_background=True,
   prompt="Implement your assigned tasks for [feature].
           Read .claude/specs/[feature]/tasks.md — execute these tasks IN ORDER: [TASK-NNN, TASK-NNN, ...].
-          Each task has Description, Files, Verification, and Commit message — follow them exactly.
           FILE OWNERSHIP: You own services/ai-service/ only.
-          Follow TDD."
+          Follow TDD. Use AskUserQuestion for AI integration decisions."
+)
+
+Wait for python-developer to complete.
+```
+
+**FRONTEND STREAM (background, parallel — separate directories, runs SIMULTANEOUSLY with backend):**
+
+Frontend agents code against `api-spec.md` (the contract). They start at the same time as the backend stream. Each works in its own directory — no conflicts.
+
+**NOTE: Phase 2.75 (Prototype) already built the base layout, design system, navigation, and app shell. Frontend agents build FEATURE PAGES on top of the existing prototype.**
+
+**Send ALL applicable frontend Agent() calls in ONE response with `run_in_background=True`:**
+
+```
+Agent(
+  subagent_type="project-orchestrator:frontend-developer",
+  run_in_background=True,
+  prompt="Implement your assigned FEATURE PAGES for [feature].
+          The base layout, design system, and navigation already exist from the prototype (Phase 2.75).
+          Read .claude/specs/[feature]/tasks.md — execute your tasks IN ORDER.
+          Read .claude/specs/[feature]/api-spec.md — this is THE CONTRACT. Use these endpoint shapes for API calls.
+          FILE OWNERSHIP: You own apps/web/ only.
+          Replace dummy data with real API calls using the endpoints from api-spec.md.
+          Follow TDD. Do NOT use AskUserQuestion (you run in background — questions are silently dropped)."
 )
 ```
 
-### STEP 4 — Verify backend wave, then spawn frontend
-You will be notified when each background agent completes. Do NOT poll.
+### STEP 4 — Wait for all streams, then reconcile
 
-**4a — Verify backend wave before proceeding:**
-When all backend agents (backend-developer, senior-engineer, python-developer) complete, run a quick verification:
+Wait for both the backend stream (foreground, completes when python-developer finishes) and the frontend stream (background agents) to complete.
+
+**4a — Verify backend implementation:**
+When the backend stream completes, run verification:
 ```bash
 # Lint affected services
 cd services/core-service && npm run lint

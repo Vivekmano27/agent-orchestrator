@@ -1,0 +1,66 @@
+{
+  "skill_name": "batch-1-testing-quality",
+  "evals": [
+    {
+      "id": 1,
+      "skill": "test-writer",
+      "prompt": "I have a UserService class in a NestJS app with methods: register(email, password, name), login(email, password), and resetPassword(email). Write comprehensive tests for this service using Jest. The service uses a UserRepository for database operations and BcryptService for password hashing.",
+      "expected_output": "Jest test file with AAA pattern, test factories, mock setup for repo and bcrypt, tests covering happy path, validation errors, duplicate email, wrong password, nonexistent user, and edge cases",
+      "assertions": [
+        {"name": "uses_arrange_act_assert", "description": "Tests follow AAA pattern with clear sections"},
+        {"name": "mocks_at_boundary", "description": "Mocks UserRepository and BcryptService, not internal methods"},
+        {"name": "covers_happy_path", "description": "At least one test per method for successful operation"},
+        {"name": "covers_error_cases", "description": "Tests for duplicate email, wrong password, user not found"},
+        {"name": "uses_factory_or_builder", "description": "Uses a factory function or builder for test data rather than inline objects everywhere"},
+        {"name": "no_implementation_testing", "description": "Does not spy on private/internal methods"}
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "skill": "tdd-skill",
+      "prompt": "Using TDD, implement a ShoppingCart class that supports: addItem(product, quantity), removeItem(productId), getTotal(), and applyDiscount(code). Write the tests first, then the implementation. Use TypeScript with Jest.",
+      "expected_output": "Tests written BEFORE implementation. Red-Green-Refactor cycle visible. Minimal implementation code. Tests cover add, remove, total calculation, discount codes, edge cases (empty cart, invalid discount).",
+      "assertions": [
+        {"name": "tests_before_implementation", "description": "Test code appears before or in separate file from implementation"},
+        {"name": "red_phase_visible", "description": "Tests reference types/interfaces that don't exist yet (showing RED phase)"},
+        {"name": "minimal_implementation", "description": "Implementation is minimal - no extra features beyond what tests require"},
+        {"name": "refactor_phase", "description": "Evidence of refactoring step (extracted helpers, improved naming)"},
+        {"name": "incremental_tests", "description": "Tests are written one behavior at a time, not all at once"},
+        {"name": "edge_cases_tested", "description": "Empty cart, negative quantity, invalid discount code tested"}
+      ],
+      "files": []
+    },
+    {
+      "id": 3,
+      "skill": "api-tester",
+      "prompt": "Generate API tests for a REST API with these endpoints: POST /api/v1/products (create), GET /api/v1/products (list with pagination), GET /api/v1/products/:id (get by ID), PUT /api/v1/products/:id (update), DELETE /api/v1/products/:id (delete). The API uses JWT auth with admin and user roles. Only admins can create/update/delete. Use Supertest with NestJS.",
+      "expected_output": "Complete E2E test file covering all 7 test categories (CRUD, auth, validation, errors, pagination, rate limiting, authorization). Role-based tests for admin vs user. Error response format validation.",
+      "assertions": [
+        {"name": "covers_all_endpoints", "description": "Tests exist for all 5 endpoints (POST, GET list, GET by ID, PUT, DELETE)"},
+        {"name": "tests_auth", "description": "401 tests for unauthenticated requests on protected endpoints"},
+        {"name": "tests_authorization", "description": "403 tests showing regular users cannot create/update/delete"},
+        {"name": "tests_validation", "description": "400 tests for missing/invalid fields on POST and PUT"},
+        {"name": "tests_not_found", "description": "404 test for non-existent product ID"},
+        {"name": "tests_pagination", "description": "Tests for page/limit params and response meta"},
+        {"name": "consistent_error_format", "description": "Error responses validated for standard format (statusCode, error, message)"}
+      ],
+      "files": []
+    },
+    {
+      "id": 4,
+      "skill": "code-simplify",
+      "prompt": "Simplify this TypeScript code:\n\n```typescript\nfunction processUsers(users: any[]) {\n  let result = [];\n  for (let i = 0; i < users.length; i++) {\n    if (users[i] !== null && users[i] !== undefined) {\n      if (users[i].status === 'active') {\n        if (users[i].age >= 18) {\n          let formattedName = '';\n          if (users[i].firstName && users[i].lastName) {\n            formattedName = users[i].firstName + ' ' + users[i].lastName;\n          } else if (users[i].firstName) {\n            formattedName = users[i].firstName;\n          } else {\n            formattedName = 'Unknown';\n          }\n          result.push({\n            id: users[i].id,\n            name: formattedName,\n            email: users[i].email,\n            isAdult: true,\n            registeredDays: Math.floor((Date.now() - new Date(users[i].createdAt).getTime()) / 86400000)\n          });\n        }\n      }\n    }\n  }\n  return result;\n}\n```",
+      "expected_output": "Simplified version using guard clauses, named constants, extracted helper functions, proper TypeScript types, filter/map instead of manual loop, and clear naming.",
+      "assertions": [
+        {"name": "reduces_nesting", "description": "Maximum nesting depth reduced from 5 to 2 or less"},
+        {"name": "uses_guard_clauses_or_filter", "description": "Uses early returns, filter(), or guard clauses instead of nested ifs"},
+        {"name": "extracts_constants", "description": "86400000 replaced with a named constant like MS_PER_DAY"},
+        {"name": "adds_types", "description": "Replaces 'any' with proper TypeScript interface/type"},
+        {"name": "extracts_helper", "description": "Name formatting logic extracted to a separate function"},
+        {"name": "uses_modern_syntax", "description": "Uses const/let, template literals, or array methods instead of manual loop"}
+      ],
+      "files": []
+    }
+  ]
+}

@@ -143,6 +143,29 @@ Agent(
 ### STEP 2 — Wait for all reviewers to complete
 You will be notified as each reviewer finishes. Do NOT poll.
 
+### STEP 2.5 — Present critical findings to user before finalizing
+
+If ANY reviewer reported CRITICAL or HIGH findings, present them to the user BEFORE writing the final report:
+
+```
+AskUserQuestion(
+  question="Reviewers found [N] critical/high issues:
+  1. [Finding — source reviewer, severity, 1-line description]
+  2. [Finding]
+  3. [Finding]
+
+  Are any of these intentional or false positives?",
+  options=[
+    "All are real issues — include in report",
+    "Some are intentional — let me explain",
+    "Review looks wrong — show me details"
+  ]
+)
+```
+
+If user says some are intentional → remove those from the report or downgrade severity.
+If no CRITICAL/HIGH findings → skip this step.
+
 ### STEP 3 — Compile combined report
 After all reviewers complete, merge findings into a single report and **write to `.claude/specs/[feature]/review-report.md`**:
 
