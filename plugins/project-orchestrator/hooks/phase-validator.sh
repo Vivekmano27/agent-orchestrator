@@ -17,7 +17,7 @@ AGENT_NAME="${SUBAGENT_TYPE#project-orchestrator:}"
 
 # Map agent/team names to their expected phase
 declare -A AGENT_PHASE_MAP
-AGENT_PHASE_MAP[project-setup]="0.5"
+AGENT_PHASE_MAP[project-setup]="1.5"
 AGENT_PHASE_MAP[product-manager]="1"
 AGENT_PHASE_MAP[business-analyst]="1"
 AGENT_PHASE_MAP[ux-researcher]="1"
@@ -31,6 +31,7 @@ AGENT_PHASE_MAP[review-team]="6"
 AGENT_PHASE_MAP[devops-engineer]="7"
 AGENT_PHASE_MAP[deployment-engineer]="7"
 AGENT_PHASE_MAP[technical-writer]="8"
+# Phase 9 is handled by orchestrator directly (no subagent dispatch)
 
 EXPECTED_PHASE="${AGENT_PHASE_MAP[$AGENT_NAME]}"
 
@@ -43,7 +44,8 @@ fi
 declare -A PREREQ_MAP
 PREREQ_MAP["0.5"]="0"
 PREREQ_MAP["1"]="0.5"
-PREREQ_MAP["2"]="1"
+PREREQ_MAP["1.5"]="1"
+PREREQ_MAP["2"]="1.5"
 PREREQ_MAP["2.1"]="2"
 PREREQ_MAP["3"]="2.1"
 PREREQ_MAP["4"]="3"
@@ -51,6 +53,7 @@ PREREQ_MAP["5"]="4"
 PREREQ_MAP["6"]="5"
 PREREQ_MAP["7"]="6"
 PREREQ_MAP["8"]="7"
+PREREQ_MAP["9"]="8"
 
 PREREQ_PHASE="${PREREQ_MAP[$EXPECTED_PHASE]}"
 

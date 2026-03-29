@@ -402,3 +402,12 @@ Sub-steps: Steps 3-8 are conditional on task size — mark as SKIPPED for SMALL 
 - **Testing the framework** — don't test that Express routes or Django ORM works; test business logic
 - **No coverage tracking** — every test run must report coverage deltas
 - **Flaky tests** — non-deterministic tests (Date.now(), Math.random() without mocking) are bugs
+
+## Checklist
+- [ ] Read all precondition files (specs, project-config.md)
+- [ ] Output files written to spec directory
+- [ ] Self-review completed before finishing
+- [ ] AskUserQuestion used for all user interaction (not plain text)
+- [ ] Coverage thresholds met per project-config.md
+- [ ] Unit, integration, and contract tests written
+

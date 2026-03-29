@@ -39,11 +39,9 @@ memory: project
 
 ## STEP 0 — YOUR VERY FIRST ACTION (MANDATORY)
 
-**DO NOT write any text. DO NOT describe your plan. DO NOT ask any questions.**
+**Phase 0 ONLY:** Create the spec directory silently. No text, no questions for this one step.
 
-Phase 0 does ONE thing: create the spec directory so planning agents have somewhere to write. No questions — tech stack is decided in Phase 0.5 (project-setup agent) before planning begins.
-
-Proceed directly to Phase 0 execution.
+After Phase 0 is done, ALL subsequent phases MUST use AskUserQuestion for user interaction. The "no questions" rule applies ONLY to Phase 0 (creating a directory needs no confirmation).
 
 ---
 
@@ -71,13 +69,13 @@ Bash: echo "Do you want to proceed?"
 
 ---
 
-## The Full Pipeline — All 9 Phases
+## The Full Pipeline
 
 ```
 PHASE 0:    Spec Setup (YOU — create spec directory)
-PHASE 0.5:  Project Setup (project-setup agent — tech stack interview)
-PHASE 0.75: Brainstorming (SMALL=skip, MEDIUM=light, BIG=full)
-PHASE 1:    Planning — ALWAYS via planning-team (never individual PM/BA/UX)
+PHASE 0.5:  Brainstorming (SMALL=skip, MEDIUM=light, BIG=full)
+PHASE 1:    Planning — ALWAYS via planning-team (features & requirements FIRST)
+PHASE 1.5:  Tech Stack Interview (project-setup agent — AFTER requirements)
 PHASE 2:    Design — ALWAYS via design-team (never individual architects)
 PHASE 2.1:  Task Decomposition (task-decomposer)
 PHASE 2.5:  Git Setup (YOU — feature branch)
@@ -87,9 +85,12 @@ PHASE 5:    Security (security-auditor)
 PHASE 6:    Review — via review-team
 PHASE 7:    DevOps [C] (skip if no cloud deployment)
 PHASE 8:    Documentation (technical-writer)
+PHASE 9:    Post-Deploy Verification [C] (smoke tests, runbook, build check)
 ```
 
 [C] = conditional on project-config.md.
+
+**WHY this order:** Requirements come before tech stack. You must know WHAT you're building before choosing HOW to build it. The PM gathers features first, then the project-setup agent picks the right tech stack based on those requirements.
 
 ### Skip Cascade Table
 
@@ -107,7 +108,7 @@ PHASE 8:    Documentation (technical-writer)
 
 ## THE DISPATCH LOOP — Phase-by-Phase Execution
 
-**For EACH phase in order [0, 0.5, 0.75, 1, 2, 2.1, 2.5, 3, 4, 5, 6, 7, 8]:**
+**For EACH phase in order [0, 0.5, 1, 1.5, 2, 2.1, 2.5, 3, 4, 5, 6, 7, 8, 9]:**
 
 ### A. Read the phase file
 
@@ -115,7 +116,7 @@ PHASE 8:    Documentation (technical-writer)
 Read("${CLAUDE_PLUGIN_ROOT}/skills/phase-runner/phases/phase-{N}.md")
 ```
 
-Phase files are named: `phase-0.md`, `phase-0-5.md`, `phase-0-75.md`, `phase-1.md`, `phase-2.md`, `phase-2-1.md`, `phase-2-5.md`, `phase-3.md`, `phase-4.md`, `phase-5.md`, `phase-6.md`, `phase-7.md`, `phase-8.md`
+Phase files are named: `phase-0.md`, `phase-0-5.md`, `phase-1.md`, `phase-1-5.md`, `phase-2.md`, `phase-2-1.md`, `phase-2-5.md`, `phase-3.md`, `phase-4.md`, `phase-5.md`, `phase-6.md`, `phase-7.md`, `phase-8.md`, `phase-9.md`
 
 ### B. Check preconditions
 
@@ -231,8 +232,9 @@ After each phase, verify expected output files:
 | Phase | Expected Files |
 |-------|---------------|
 | 0 | progress.md |
-| 0.5 | project-config.md |
+| 0.5 | brainstorm.md (BIG only); scope clarified (MEDIUM) |
 | 1 | requirements.md; business-rules.md, ux.md, research-context.md, requirements-review.md, phase-1-summary.md (MEDIUM/BIG) |
+| 1.5 | project-config.md |
 | 2 | architecture.md, api-spec.md, schema.md, design.md, SUMMARY.md; agent-spec.md + design-review.md (MEDIUM/BIG) |
 | 2.1 | tasks.md |
 | 3 | api-contracts.md |
@@ -241,6 +243,7 @@ After each phase, verify expected output files:
 | 6 | review-report.md |
 | 7 | deploy-monitoring.md, deployment-plan.md (skip if Phase 7 skipped) |
 | 8 | README.md; 2 of 3: docs/API.md, docs/DEPLOYMENT.md, CHANGELOG.md (MEDIUM/BIG) |
+| 9 | runbook.md (MEDIUM/BIG); build verification passed (all sizes) |
 
 ---
 
@@ -280,6 +283,61 @@ Present recovery options: retry, unit tests only, skip testing, cancel.
 
 ### STOP from security-auditor
 Halt pipeline. Present: fix immediately, rotate credentials, false positive, cancel.
+
+---
+
+## Pipeline Mode (Lean / Standard / Enterprise)
+
+Read `project-config.md > Pipeline Mode` to determine dispatch density. If not set, default to `standard`.
+
+| Mode | Planning | Design | Build | Review | Description |
+|------|----------|--------|-------|--------|-------------|
+| **lean** | PM only (skip BA, UX) | system-architect + 1 parallel wave (skip design-reviewer) | Merge devops+deployment into 1 dispatch | code-reviewer + security spot-check only | Solo dev, fast iteration |
+| **standard** | PM → BA → UX sequential | Full design-team | Full feature-team | Full review-team | Default — balanced quality/speed |
+| **enterprise** | PM → BA → UX + requirements-reviewer | Full design-team + design-reviewer always | Full feature-team + all specialists | All 6 reviewers always | Maximum quality gates |
+
+### Lean Mode Merges
+
+When `mode: lean`:
+- **Phase 1**: Dispatch only product-manager. Skip business-analyst, ux-researcher, requirements-reviewer. PM writes abbreviated requirements.md with inline business rules.
+- **Phase 2**: Dispatch system-architect synchronously, then api-architect + database-architect in parallel. Skip ui-designer (frontend reads existing patterns), skip agent-native-designer (unless explicitly in project-config.md), skip design-reviewer.
+- **Phase 7**: Dispatch devops-engineer only (handles both CI/CD and deployment plan). Skip deployment-engineer.
+- **Phase 6**: Dispatch code-reviewer + security-auditor (spot-check) only. Skip performance-reviewer, static-analyzer, agent-native-reviewer, spec-tracer.
+
+### Enterprise Mode Additions
+
+When `mode: enterprise`:
+- **Phase 1**: Always run requirements-reviewer, even for SMALL tasks.
+- **Phase 2**: Always run design-reviewer, even for SMALL tasks.
+- **Phase 6**: Always run all 6 reviewers, even for SMALL tasks. Always run spec-tracer.
+
+---
+
+## Cost/Context Budget Checkpoints
+
+After Phases 2.1, 4, and 6, check whether to continue or optimize:
+
+```
+AskUserQuestion(
+  question="Pipeline checkpoint — Phase [N] complete.
+  Phases completed: [list]. Remaining: [list].
+  Estimated remaining phases: [count].
+
+  Continue with all remaining phases?",
+  options=[
+    "Continue — run all remaining phases",
+    "Skip optional phases (DevOps, Documentation) — go straight to commit",
+    "Stop here — I'll handle the rest manually"
+  ]
+)
+```
+
+**When to show:** Only show this checkpoint if:
+- Task size is BIG, OR
+- Pipeline has already run 6+ phases
+- Do NOT show for SMALL tasks (they're fast enough to just run)
+
+**"Skip optional"** means: skip Phase 7 (DevOps) and Phase 8 (Documentation) but still run Phase 9 (verification).
 
 ---
 
@@ -333,9 +391,9 @@ Track progress in `.claude/specs/[feature]/agent-status/project-orchestrator.md`
 |---|---------|------|
 | 1 | classify-task | Classify task size (SMALL/MEDIUM/BIG) |
 | 2 | create-spec-dir | Create spec directory and initial progress.md |
-| 3 | run-phase-0-5 | Dispatch project-setup (Phase 0.5) |
-| 4 | run-phase-0-75 | Brainstorming gate (Phase 0.75) |
-| 5 | run-phase-1 | Dispatch planning agents (Phase 1) |
+| 3 | run-phase-0-5 | Brainstorming gate (Phase 0.5) |
+| 4 | run-phase-1 | Dispatch planning agents (Phase 1) |
+| 5 | run-phase-1-5 | Dispatch project-setup for tech stack (Phase 1.5) |
 | 6 | run-phase-2 | Dispatch design-team (Phase 2) |
 | 7 | run-phase-2-1 | Dispatch task-decomposer (Phase 2.1) |
 | 8 | run-phase-2-5 | Git setup (Phase 2.5) |
@@ -345,7 +403,8 @@ Track progress in `.claude/specs/[feature]/agent-status/project-orchestrator.md`
 | 12 | run-phase-6 | Dispatch review-team (Phase 6) |
 | 13 | run-phase-7 | Dispatch devops/deployment (Phase 7) |
 | 14 | run-phase-8 | Dispatch technical-writer (Phase 8) |
-| 15 | pipeline-done | Mark pipeline DONE |
+| 15 | run-phase-9 | Post-deploy verification (Phase 9) |
+| 16 | pipeline-done | Mark pipeline DONE |
 
 Sub-steps: Each `run-phase-*` step should log sub-steps for: dispatch, verify-outputs, content-validation, update-progress, transition-gate, approval-gate (if applicable).
 
@@ -370,3 +429,15 @@ After Phase 6 identifies issues or user corrects at a gate:
 - **Wrong task classification** — treating a 20-file feature as SMALL; classify accurately to get proper approval gates
 - **No lessons learned** — finishing a pipeline without capturing corrections in lessons.md; mistakes repeat
 - **Phase files from memory** — always read the phase file fresh; phase content evolves
+
+## Checklist
+- [ ] Read all precondition files (specs, project-config.md)
+- [ ] Task size classified (SMALL/MEDIUM/BIG)
+- [ ] All phases executed in order
+- [ ] Phase transition gates called (AskUserQuestion after every phase)
+- [ ] Approval gates presented at correct phases for task size
+- [ ] progress.md updated after each phase
+- [ ] Feedback loops handled (4→3, 5→3, 6→3) if needed
+- [ ] Pipeline mode (lean/standard/enterprise) respected
+- [ ] AskUserQuestion used for all user interaction (not plain text)
+

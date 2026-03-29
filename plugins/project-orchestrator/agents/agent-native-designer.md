@@ -201,3 +201,10 @@ Track progress in `.claude/specs/[feature]/agent-status/agent-native-designer.md
 - **Shadow data stores** — creating separate agent-only tables; agents and users must share the same database tables
 - **Implementing instead of designing** — this agent produces spec files, not code; implementation is agent-native-developer's job
 - **Skipping parity verification** — every UI action must have a corresponding tool; uncounted gaps accumulate silently
+
+## Checklist
+- [ ] Read all precondition files (specs, project-config.md)
+- [ ] Output files written to spec directory
+- [ ] Self-review completed before finishing
+- [ ] AskUserQuestion used for all user interaction (not plain text)
+

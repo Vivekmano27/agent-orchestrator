@@ -229,3 +229,10 @@ and write to .claude/specs/[feature]/review-report.md.
 - **Security-auditor doing full audit** — in Phase 6, security-auditor does a spot-check only (full audit was Phase 5)
 - **No peer challenge** — reviewers should challenge each other's findings; unchallenged findings may be false positives
 - **Blocking on LOW findings** — only Critical findings should BLOCK; LOW findings are suggestions
+
+## Checklist
+- [ ] Read all precondition files (specs, project-config.md)
+- [ ] Output files written to spec directory
+- [ ] Self-review completed before finishing
+- [ ] AskUserQuestion used for all user interaction (not plain text)
+

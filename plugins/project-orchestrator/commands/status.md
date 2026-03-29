@@ -62,8 +62,9 @@ Display a comprehensive project status dashboard with real-time pipeline progres
 |                                                   |
 |  COMPLETED PHASES                                 |
 |  [x] Phase 0   Spec Setup         (0.1 min)      |
-|  [x] Phase 0.5 Project Setup      (3.2 min)      |
+|  [x] Phase 0.5 Brainstorming      (1.0 min)      |
 |  [x] Phase 1   Planning           (8.5 min)      |
+|  [x] Phase 1.5 Tech Stack         (3.2 min)      |
 |  [x] Phase 2   Design             (12.1 min)     |
 |  [x] Phase 2.1 Task Decomposition (2.3 min)      |
 |  [x] Phase 2.5 Git Setup          (0.2 min)      |
@@ -73,6 +74,7 @@ Display a comprehensive project status dashboard with real-time pipeline progres
 |  [ ] Phase 6   Review                             |
 |  [ ] Phase 7   DevOps                             |
 |  [ ] Phase 8   Documentation                      |
+|  [ ] Phase 9   Post-Deploy Verification            |
 |                                                   |
 |  FEEDBACK LOOPS                                   |
 |  (none active)                                    |
@@ -183,7 +185,7 @@ If no progress.md files exist, show a simplified dashboard:
 +==================================================+
 |                                                   |
 |  PIPELINE: No active pipeline                     |
-|  Run /new or /start to begin a new feature.       |
+|  Run /new to begin a new feature.       |
 |                                                   |
 |  [show git status and any existing spec files]    |
 +==================================================+

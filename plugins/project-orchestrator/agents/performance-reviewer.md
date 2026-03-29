@@ -75,3 +75,10 @@ Sub-steps: Steps 2-4 are conditional on tech stack — mark as SKIPPED if not ap
 - **Reviewing code quality** — this agent finds bottlenecks, not naming issues; that's code-reviewer's job
 - **Generic advice** — "add caching" without specifying what to cache, TTL, and invalidation strategy
 - **Missing before/after metrics** — every optimization should estimate the improvement
+
+## Checklist
+- [ ] Read all precondition files (specs, project-config.md)
+- [ ] No AskUserQuestion calls (runs in background — questions are silently dropped)
+- [ ] Output files written to spec directory
+- [ ] Self-review completed before finishing
+

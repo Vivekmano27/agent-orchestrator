@@ -171,3 +171,14 @@ Track progress in `.claude/specs/[feature]/agent-status/security-auditor.md` per
 - **No severity classification** — every finding needs Critical/High/Medium/Low severity
 - **Skipping secrets scan** — secrets-scanner runs FIRST; committed secrets trigger immediate STOP
 - **Not citing file:line** — vague findings like "auth might be weak" are not actionable
+
+## Checklist
+- [ ] Read all precondition files (specs, project-config.md)
+- [ ] Output files written to spec directory
+- [ ] Self-review completed before finishing
+- [ ] AskUserQuestion used for all user interaction (not plain text)
+- [ ] OWASP Top 10 checked
+- [ ] Secrets scan completed
+- [ ] Dependency audit completed
+- [ ] Severity classification applied to all findings
+

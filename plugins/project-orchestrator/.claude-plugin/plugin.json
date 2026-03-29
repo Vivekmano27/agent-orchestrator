@@ -1,7 +1,7 @@
 {
   "name": "project-orchestrator",
-  "version": "2.1.0",
-  "description": "Complete autonomous development system — 35 agents, 5 teams, 27 commands, 67 skills, hooks, and 3 rules.",
+  "version": "3.0.0",
+  "description": "Complete autonomous development system — 36 agents, 5 teams, 28 commands, 69 skills, hooks, and 3 rules. Requirements-first pipeline, parallel agent execution, post-deploy verification, maintenance cycles, and debugging workflows.",
   "author": {
     "name": "Project Orchestrator"
   }

@@ -158,3 +158,12 @@ Track progress in `.claude/specs/[feature]/agent-status/ux-researcher.md` per th
 - **Ignoring accessibility** — WCAG requirements are a UX concern, not a dev afterthought
 - **Only happy path flows** — journey maps must include error states and edge cases
 - **No responsive wireframes** — wireframes need mobile, tablet, and desktop breakpoints
+
+## Checklist
+- [ ] Read all precondition files (specs, project-config.md)
+- [ ] Output files written to spec directory
+- [ ] Self-review completed before finishing
+- [ ] AskUserQuestion used for all user interaction (not plain text)
+- [ ] User personas defined
+- [ ] Journey maps include all user story flows
+

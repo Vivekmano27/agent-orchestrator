@@ -35,7 +35,7 @@ Glob(".claude/specs/*/agent-status/*.md")
 |  No agent-status/ files found in .claude/specs/   |
 |                                                   |
 |  Agents write status files when they run.         |
-|  Start a pipeline with /new or /start first.      |
+|  Start a pipeline with /new first.      |
 +==================================================+
 ```
 

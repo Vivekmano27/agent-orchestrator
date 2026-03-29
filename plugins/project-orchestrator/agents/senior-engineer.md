@@ -163,3 +163,13 @@ Sub-steps: For step 5, track each service integration point as a sub-step.
 - **Ignoring existing contracts** — always read api-contracts.md before building integration code
 - **No cross-service error handling** — inter-service calls need retry, timeout, and circuit breaker patterns
 - **Committing without integration test** — cross-service changes need end-to-end verification
+
+## Checklist
+- [ ] Read all precondition files (specs, project-config.md)
+- [ ] Output files written to spec directory
+- [ ] Self-review completed before finishing
+- [ ] AskUserQuestion used for all user interaction (not plain text)
+- [ ] TDD followed (tests before implementation)
+- [ ] api-contracts.md written after implementation
+- [ ] File ownership rules respected
+

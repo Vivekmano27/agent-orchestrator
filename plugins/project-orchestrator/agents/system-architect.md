@@ -195,3 +195,12 @@ Track progress in `.claude/specs/[feature]/agent-status/system-architect.md` per
 - **No diagrams** — architecture without Mermaid diagrams is incomplete; visual communication matters
 - **Implementing** — this agent designs architecture, not code; implementation is backend-developer's job
 - **Ignoring team size** — designing for 10 teams when there are 2 developers
+
+## Checklist
+- [ ] Read all precondition files (specs, project-config.md)
+- [ ] Output files written to spec directory
+- [ ] Self-review completed before finishing
+- [ ] AskUserQuestion used for all user interaction (not plain text)
+- [ ] Architecture Decision Records (ADRs) written
+- [ ] Mermaid diagrams included
+

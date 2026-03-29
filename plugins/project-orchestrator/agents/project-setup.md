@@ -1,7 +1,7 @@
 ---
 name: project-setup
 description: |
-  Phase 0.5 agent — interviews the user about ALL infrastructure, tech stack, and setup decisions before any planning begins. Generates project-config.md that replaces static steering files. Covers: architecture type, tech stack, auth, CI/CD, testing, code quality, database, cloud, folder structure, linting, formatting, PR templates, and more. Every project gets its own tailored configuration.
+  Phase 1.5 agent — interviews the user about infrastructure, tech stack, and setup decisions AFTER requirements are gathered (Phase 1). Generates project-config.md. Covers: architecture type, tech stack, auth, CI/CD, testing, code quality, database, cloud, folder structure, linting, formatting, PR templates, and more. Reads requirements.md to ensure tech choices fit the features being built.
 
   <example>
   Context: A new greenfield project is starting and no project-config.md exists yet. The orchestrator dispatches project-setup as Phase 0.5.
@@ -692,6 +692,7 @@ Write the approved configuration to `.claude/specs/[feature]/project-config.md`:
 - **Type:** [web/mobile/fullstack/API/dashboard]
 - **Scale:** [prototype/production/enterprise]
 - **Preset:** [preset name or "custom"]
+- **Pipeline Mode:** [lean/standard/enterprise] — controls agent dispatch density (lean=fewer agents, faster; enterprise=all agents, maximum quality)
 
 ## Architecture
 - **Pattern:** [monolith/modular-monolith/microservices]
@@ -921,8 +922,9 @@ When a user picks partial options, fill remaining fields with smart defaults:
 | AWS | ECS Fargate, RDS, S3, CloudFront, GitHub Actions |
 | GCP | Cloud Run, Cloud SQL, GCS, Cloudflare |
 | Vercel | Vercel for frontend, Railway or Supabase for backend |
-| Enterprise scale | SonarQube, 80% coverage, TDD, K8s, full monitoring |
-| Prototype scale | No SonarQube, 60% coverage, test-after, direct deploy |
+| Enterprise scale | SonarQube, 80% coverage, TDD, K8s, full monitoring, Pipeline Mode: enterprise |
+| Prototype scale | No SonarQube, 60% coverage, test-after, direct deploy, Pipeline Mode: lean |
+| Production startup | Balanced defaults, Pipeline Mode: standard |
 
 ## When to Dispatch
 
@@ -938,3 +940,13 @@ When a user picks partial options, fill remaining fields with smart defaults:
 - **Hardcoding decisions** — all tech stack choices go in project-config.md, not in agent prompts or skill files
 - **No preset options** — offer presets (Startup Lean, Enterprise) to reduce question fatigue
 - **Ignoring existing files** — scan for package.json, pyproject.toml, pubspec.yaml to auto-detect existing stack
+
+## Checklist
+- [ ] Read all precondition files (specs, project-config.md)
+- [ ] Output files written to spec directory
+- [ ] Self-review completed before finishing
+- [ ] AskUserQuestion used for all user interaction (not plain text)
+- [ ] One AskUserQuestion per decision (never batch questions)
+- [ ] Requirements.md read to inform tech recommendations
+- [ ] User approved final project-config.md
+

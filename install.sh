@@ -1,7 +1,7 @@
 #!/bin/bash
 # ============================================================
 # Solo Dev Orchestrator — Installer
-# Installs all 35 agents (30 + 5 teams), 26 commands, 66 skills,
+# Installs all 36 agents (31 + 5 teams), 28 commands, 69 skills,
 # 1 hooks config, 3 rules, and CLAUDE.md into
 # your project.
 # ============================================================
@@ -42,20 +42,20 @@ mkdir -p "$DEST/.claude/skills"
 mkdir -p "$DEST/.claude/specs"
 mkdir -p "$DEST/.claude/rules"
 
-# Copy agents (30 agents + 5 teams)
-echo -e "${YELLOW}Installing agents (30 + 5 teams)...${NC}"
+# Copy agents (31 agents + 5 teams)
+echo -e "${YELLOW}Installing agents (31 + 5 teams)...${NC}"
 cp "$PLUGIN_DIR"/agents/*.md "$DEST/.claude/agents/"
 AGENT_COUNT=$(ls "$DEST/.claude/agents/"*.md 2>/dev/null | wc -l | tr -d ' ')
 echo -e "  ${GREEN}$AGENT_COUNT agent files installed${NC}"
 
-# Copy commands (26)
-echo -e "${YELLOW}Installing 26 commands...${NC}"
+# Copy commands (28)
+echo -e "${YELLOW}Installing 28 commands...${NC}"
 cp "$PLUGIN_DIR"/commands/*.md "$DEST/.claude/commands/"
 CMD_COUNT=$(ls "$DEST/.claude/commands/"*.md 2>/dev/null | wc -l | tr -d ' ')
 echo -e "  ${GREEN}$CMD_COUNT commands installed${NC}"
 
-# Copy skills (66)
-echo -e "${YELLOW}Installing 66 skills...${NC}"
+# Copy skills (69)
+echo -e "${YELLOW}Installing 69 skills...${NC}"
 cp -r "$PLUGIN_DIR"/skills/* "$DEST/.claude/skills/"
 SKILL_COUNT=$(ls -d "$DEST/.claude/skills/"*/ 2>/dev/null | wc -l | tr -d ' ')
 echo -e "  ${GREEN}$SKILL_COUNT skills installed${NC}"

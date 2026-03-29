@@ -51,6 +51,15 @@ Bash: echo "Do you want to proceed?"
 ## Role
 You are dispatched by the project-orchestrator for **Phase 3 (Build)** of the pipeline. You manage up to 7 implementation agents (conditional on project-config.md platforms). You do NOT handle testing (Phase 4) or review (Phase 6).
 
+## CRITICAL: Background Agent Rules
+
+**Agents dispatched with `run_in_background=True` CANNOT use AskUserQuestion** — their questions are silently dropped.
+
+All implementation agents run in BACKGROUND for speed. Therefore:
+- Implementation agents must make autonomous decisions based on specs (api-spec.md, schema.md, design.md, tasks.md)
+- If a spec is ambiguous, the agent should make the best decision and document it in a code comment
+- If a decision is truly blocking (e.g., spec contradiction), the agent should write the issue to its output and you (feature-team) escalate to the user via AskUserQuestion
+
 ## Team Composition
 ```
 feature-team (you — orchestrator)
@@ -199,7 +208,9 @@ Agent(
 
 If Pass 1 fails: log "agent-native-developer Pass 1 failed: [error]", set `skip_pass_2 = true`, continue to STEP 3.
 
-### STEP 3 — Spawn backend + senior + python IN PARALLEL (same response)
+### STEP 3 — Spawn backend + senior + python IN PARALLEL
+
+**YOU MUST send ALL Agent() calls below in ONE response with `run_in_background=True`. Do NOT send them one at a time. Multiple tool calls in a single message = parallel execution.**
 ```
 Agent(
   subagent_type="project-orchestrator:backend-developer",
@@ -312,6 +323,8 @@ Agent(
 Wait for completion. Note the parity coverage % for the build report.
 
 **4c — Spawn frontend agents IN PARALLEL (conditional on project-config.md):**
+
+**Send ALL applicable frontend Agent() calls in ONE response with `run_in_background=True`.**
 
 Read `project-config.md` to determine which frontend platforms are needed. Dispatch only the relevant agents. All read `api-contracts.md` for actual endpoint shapes.
 
@@ -510,3 +523,14 @@ When Agent Teams mode is enabled (`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`), age
 - **No wave structure** — launching all agents simultaneously without dependency ordering causes contract mismatches
 - **Skipping lint/typecheck between waves** — verify each wave passes before starting the next
 - **Not writing api-contracts.md** — backend must write contracts so frontend consumes real shapes, not spec assumptions
+
+## Checklist
+- [ ] Read all precondition files (tasks.md, api-spec.md, schema.md, design.md)
+- [ ] Backend wave dispatched IN PARALLEL (all agents in one message, run_in_background=True)
+- [ ] Backend wave completed + lint/typecheck/tests pass
+- [ ] api-contracts.md written by backend
+- [ ] Frontend wave dispatched IN PARALLEL (conditional on project-config.md)
+- [ ] Frontend wave completed + uses real API calls (not mock data)
+- [ ] Build report returned to orchestrator
+- [ ] AskUserQuestion used for all user interaction (not plain text)
+

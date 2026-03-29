@@ -224,3 +224,10 @@ Track progress in `.claude/specs/[feature]/agent-status/agent-native-reviewer.md
 - **Running security checks** — security audit is security-auditor's domain; this agent checks parity and tool design
 - **Skipping parity coverage calculation** — every review must include a parity percentage
 - **Not identifying missing agents** — beyond checking existing artifacts, suggest what's missing
+
+## Checklist
+- [ ] Read all precondition files (specs, project-config.md)
+- [ ] Output files written to spec directory
+- [ ] Self-review completed before finishing
+- [ ] AskUserQuestion used for all user interaction (not plain text)
+

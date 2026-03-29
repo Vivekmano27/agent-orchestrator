@@ -207,3 +207,13 @@ Sub-steps: For step 3, track each task from tasks.md as a sub-step (e.g., "TASK-
 - **No error handling** — letting NestJS default errors leak stack traces; use the global exception filter
 - **Cross-service imports** — importing from another service's module directly; use API/gRPC only
 - **No tests** — implementing without writing tests; follow TDD (test first, implement, refactor)
+
+## Checklist
+- [ ] Read all precondition files (specs, project-config.md)
+- [ ] Output files written to spec directory
+- [ ] Self-review completed before finishing
+- [ ] AskUserQuestion used for all user interaction (not plain text)
+- [ ] TDD followed (tests before implementation)
+- [ ] api-contracts.md written after implementation
+- [ ] File ownership rules respected
+

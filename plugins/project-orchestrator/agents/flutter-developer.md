@@ -390,3 +390,13 @@ Sub-steps: For step 4, track each feature/screen as a sub-step.
 - **Hardcoded dimensions** — use LayoutBuilder or MediaQuery, not fixed pixel values
 - **No error/loading/empty states** — every async widget needs all three handled
 - **Fat widgets** — extract business logic into providers/services
+
+## Checklist
+- [ ] Read all precondition files (specs, project-config.md)
+- [ ] Output files written to spec directory
+- [ ] Self-review completed before finishing
+- [ ] AskUserQuestion used for all user interaction (not plain text)
+- [ ] Read api-contracts.md for endpoint shapes
+- [ ] Real API calls used (not mock data)
+- [ ] Loading, error, and empty states handled
+

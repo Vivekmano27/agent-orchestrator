@@ -172,3 +172,12 @@ Track progress in `.claude/specs/[feature]/agent-status/business-analyst.md` per
 - **Scope creep** — adding business rules not in the requirements; stick to what the product-manager specified
 - **No state machine for stateful entities** — any entity with 3+ statuses needs a formal state machine
 - **Ignoring data ownership** — in microservices, every entity has one owning service; cross-service ownership is a design error
+
+## Checklist
+- [ ] Read all precondition files (specs, project-config.md)
+- [ ] Output files written to spec directory
+- [ ] Self-review completed before finishing
+- [ ] AskUserQuestion used for all user interaction (not plain text)
+- [ ] Business rules numbered (BR-NNN)
+- [ ] State machines documented for stateful entities
+

@@ -87,18 +87,20 @@ fi
 echo -e "Agent frontmatter check:"
 for agent_file in "$SCRIPT_DIR"/agents/*.md; do
   agent_name=$(basename "$agent_file" .md)
+  # Extract frontmatter (between first --- and second ---)
+  FRONTMATTER=$(sed -n '/^---$/,/^---$/p' "$agent_file")
   # Check for name field
-  if ! head -20 "$agent_file" | grep -q "^name:"; then
+  if ! echo "$FRONTMATTER" | grep -q "^name:"; then
     echo -e "  ${RED}ERROR: $agent_name missing 'name:' in frontmatter${NC}"
     ERRORS=$((ERRORS + 1))
   fi
   # Check for description field
-  if ! head -20 "$agent_file" | grep -q "^description:"; then
+  if ! echo "$FRONTMATTER" | grep -q "^description:"; then
     echo -e "  ${RED}ERROR: $agent_name missing 'description:' in frontmatter${NC}"
     ERRORS=$((ERRORS + 1))
   fi
   # Check for tools field
-  if ! head -20 "$agent_file" | grep -q "^tools:"; then
+  if ! echo "$FRONTMATTER" | grep -q "^tools:"; then
     echo -e "  ${YELLOW}WARNING: $agent_name missing 'tools:' in frontmatter${NC}"
     WARNINGS=$((WARNINGS + 1))
   fi
@@ -141,8 +143,9 @@ else
   ERRORS=$((ERRORS + 1))
 fi
 
-EXPECTED_PHASES=("phase-0.md" "phase-0-5.md" "phase-0-75.md" "phase-1.md" "phase-2.md" "phase-2-1.md" "phase-2-5.md" "phase-3.md" "phase-4.md" "phase-5.md" "phase-6.md" "phase-7.md" "phase-8.md")
+EXPECTED_PHASES=("phase-0.md" "phase-0-5.md" "phase-1.md" "phase-1-5.md" "phase-2.md" "phase-2-1.md" "phase-2-5.md" "phase-3.md" "phase-4.md" "phase-5.md" "phase-6.md" "phase-7.md" "phase-8.md" "phase-9.md")
 PHASE_COUNT=0
+EXPECTED_COUNT=${#EXPECTED_PHASES[@]}
 for phase_file in "${EXPECTED_PHASES[@]}"; do
   if [ -f "$PHASE_DIR/$phase_file" ]; then
     PHASE_COUNT=$((PHASE_COUNT + 1))
@@ -151,8 +154,8 @@ for phase_file in "${EXPECTED_PHASES[@]}"; do
     ERRORS=$((ERRORS + 1))
   fi
 done
-echo -e "  Phase files: $PHASE_COUNT/13"
-if [ "$PHASE_COUNT" -eq 13 ]; then
+echo -e "  Phase files: $PHASE_COUNT/$EXPECTED_COUNT"
+if [ "$PHASE_COUNT" -eq "$EXPECTED_COUNT" ]; then
   echo -e "  ${GREEN}All phase files present${NC}"
 fi
 
@@ -186,7 +189,8 @@ echo -e "Write tool check for output-producing agents:"
 for agent_name in business-analyst security-auditor code-reviewer performance-reviewer review-team requirements-reviewer; do
   agent_file="$SCRIPT_DIR/agents/$agent_name.md"
   if [ -f "$agent_file" ]; then
-    if ! head -20 "$agent_file" | grep "^tools:" | grep -q "Write"; then
+    AGENT_FM=$(sed -n '/^---$/,/^---$/p' "$agent_file")
+    if ! echo "$AGENT_FM" | grep "^tools:" | grep -q "Write"; then
       echo -e "  ${RED}ERROR: $agent_name produces output but lacks Write tool${NC}"
       ERRORS=$((ERRORS + 1))
     fi

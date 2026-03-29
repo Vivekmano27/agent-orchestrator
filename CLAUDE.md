@@ -16,7 +16,7 @@ application development for ANY tech stack.
 ## Target Project Configuration
 > The sections below apply to the **project where this plugin is installed**, not this plugin repo itself.
 > Tech stack, architecture, and infrastructure are NOT hardcoded — the project-setup agent
-> (Phase 0.5) interviews the user and generates `project-config.md` per project.
+> (Phase 1.5, after requirements) interviews the user and generates `project-config.md` per project.
 
 ## Project Overview
 Configurable per project. The project-setup agent asks about architecture pattern (monolith/microservices),
@@ -138,15 +138,16 @@ The project-orchestrator MUST be the entry point. It classifies the task
 (SMALL/MEDIUM/BIG), then runs the full agent pipeline with approval
 gates determined by task size.
 
-Pipeline dispatch model (hybrid):
-- Phase 0.5 (Project Setup): orchestrator dispatches project-setup agent
-- Phase 1 (Planning): orchestrator dispatches planning-team (sequential coordinator)
-- Phase 2 (Design): orchestrator dispatches design-team (Agent Teams peer-to-peer)
-- Phase 3 (Build): orchestrator dispatches feature-team (Agent Teams peer-to-peer)
-- Phase 4 (Testing): orchestrator dispatches quality-team (Agent Teams peer-to-peer)
+Pipeline dispatch model:
+- Phase 0.5 (Brainstorming): orchestrator handles directly (MEDIUM/BIG only)
+- Phase 1 (Planning): orchestrator dispatches planning-team (sequential — PM, BA, UX)
+- Phase 1.5 (Tech Stack): orchestrator dispatches project-setup agent (AFTER requirements)
+- Phase 2 (Design): orchestrator dispatches design-team (parallel subagents)
+- Phase 3 (Build): orchestrator dispatches feature-team (parallel subagents)
+- Phase 4 (Testing): orchestrator dispatches quality-team (parallel subagents)
 - Phase 5 (Security): orchestrator dispatches security-auditor directly
-- Phase 6 (Review): orchestrator dispatches review-team (Agent Teams peer-to-peer)
-- Phases 7-8 (DevOps/Docs): orchestrator dispatches agents directly
+- Phase 6 (Review): orchestrator dispatches review-team (parallel subagents)
+- Phases 7-9 (DevOps/Docs/Verification): orchestrator dispatches agents directly
 
 NEVER let individual skills (fullstack-dev, react-patterns, frontend-design, etc.)
 handle a new application request directly. They are used BY agents, not invoked

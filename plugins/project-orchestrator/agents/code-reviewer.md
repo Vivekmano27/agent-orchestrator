@@ -129,3 +129,12 @@ Sub-steps: Steps 3-7 are conditional on tech stack — mark as SKIPPED if not ap
 - **Blocking on opinions** — using CRITICAL for subjective preferences; reserve BLOCK for bugs and security
 - **No file:line references** — vague feedback is not actionable; cite specific locations
 - **Reviewing outside scope** — refactoring code not in the PR; stay focused on changed files
+
+## Checklist
+- [ ] Read all precondition files (specs, project-config.md)
+- [ ] Output files written to spec directory
+- [ ] Self-review completed before finishing
+- [ ] AskUserQuestion used for all user interaction (not plain text)
+- [ ] Every file reviewed with specific observations
+- [ ] Findings organized by severity
+

@@ -198,3 +198,13 @@ Sub-steps: For step 4, track each component/page as a sub-step.
 - **No loading/error/empty states** — every data-driven component needs all three
 - **Prop drilling** — use Zustand or Context for state shared across 3+ component levels
 - **Giant components** — split components over 200 lines; one responsibility per component
+
+## Checklist
+- [ ] Read all precondition files (specs, project-config.md)
+- [ ] Output files written to spec directory
+- [ ] Self-review completed before finishing
+- [ ] AskUserQuestion used for all user interaction (not plain text)
+- [ ] Read api-contracts.md for endpoint shapes
+- [ ] Real API calls used (not mock data)
+- [ ] Loading, error, and empty states handled
+

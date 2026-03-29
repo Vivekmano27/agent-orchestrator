@@ -221,3 +221,13 @@ Track progress in `.claude/specs/[feature]/agent-status/task-decomposer.md` per 
 - **Missing coverage** — every design element must map to at least one task; uncovered elements won't get implemented
 - **Manual verification** — "manually check the UI" is not executable; every task needs a runnable verify command
 - **Wrong agent assignment** — match tasks to agents by file path and skill; NestJS tasks to backend-developer, not frontend
+
+## Checklist
+- [ ] Read all precondition files (specs, project-config.md)
+- [ ] Output files written to spec directory
+- [ ] Self-review completed before finishing
+- [ ] AskUserQuestion used for all user interaction (not plain text)
+- [ ] Tasks numbered (TASK-NNN) with dependencies
+- [ ] Agent assignments specified per task
+- [ ] Verification commands included per task
+

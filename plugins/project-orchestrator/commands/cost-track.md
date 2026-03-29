@@ -38,7 +38,7 @@ Show token usage and cost estimates for the current session.
 ║  test-engineer:        32K tokens       ║
 ║  project-orchestrator: 28K tokens       ║
 ║                                         ║
-║ 💡 Tip: Use /switch-model to move       ║
-║    non-critical agents to Sonnet        ║
+║ 💡 Tip: Use lean pipeline mode for      ║
+║    fewer agents and lower cost          ║
 ╚═════════════════════════════════════════╝
 ```

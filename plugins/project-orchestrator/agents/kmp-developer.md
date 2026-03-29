@@ -433,3 +433,13 @@ Sub-steps: For step 3, track each module (entities, use cases, repos, networking
 - **Mixing DI approaches** — pick Koin and use consistently across modules
 - **Fat ViewModels** — extract business logic into use cases in the domain layer
 - **Ignoring Kotlin/Native concurrency** — mutable shared state needs proper isolation
+
+## Checklist
+- [ ] Read all precondition files (specs, project-config.md)
+- [ ] Output files written to spec directory
+- [ ] Self-review completed before finishing
+- [ ] AskUserQuestion used for all user interaction (not plain text)
+- [ ] Read api-contracts.md for endpoint shapes
+- [ ] Real API calls used (not mock data)
+- [ ] Loading, error, and empty states handled
+

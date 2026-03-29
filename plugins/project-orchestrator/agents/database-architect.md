@@ -217,3 +217,12 @@ Sub-steps: For step 2, track each table as a sub-step.
 - **Missing timestamps** — every table needs created_at and updated_at with triggers
 - **Shared databases across services** — in microservices, each service owns its database; sharing couples services at the data layer
 - **No migration rollback** — every migration must have a reversible down function
+
+## Checklist
+- [ ] Read all precondition files (specs, project-config.md)
+- [ ] Output files written to spec directory
+- [ ] Self-review completed before finishing
+- [ ] AskUserQuestion used for all user interaction (not plain text)
+- [ ] Schema includes indexes, constraints, and migration strategy
+- [ ] docker-compose.dev.yml included for local DB
+

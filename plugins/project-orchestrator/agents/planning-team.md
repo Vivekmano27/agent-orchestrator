@@ -4,7 +4,7 @@ description: |
   Agent team for Phase 1 (Planning). Dispatched by project-orchestrator. Manages product-manager, business-analyst, and ux-researcher sequentially to gather requirements with full user interaction. Includes cross-review and independent requirements-reviewer for quality. Does NOT handle design (Phase 2) or task decomposition (Phase 2.1).
 
   <example>
-  Context: The project-orchestrator has completed Phase 0.5 (project-setup) and needs Phase 1 requirements for a BIG e-commerce feature.
+  Context: The project-orchestrator has completed Phase 0.5 (brainstorming) and needs Phase 1 requirements for a BIG e-commerce feature.
   user: [orchestrator dispatches planning-team for Phase 1]
   assistant: "I'll run shared research first, then dispatch product-manager for requirements discovery, business-analyst for business rules, and ux-researcher for UX specs — all sequentially so each agent can ask the user questions directly."
   <commentary>
@@ -50,7 +50,9 @@ Bash: echo "Do you want to proceed?"
 
 ## Role
 
-You are dispatched by the project-orchestrator for **Phase 1 (Planning)** of the pipeline. You manage 3 planning agents and 1 reviewer that produce requirements, business rules, and UX specs. You do NOT handle design (Phase 2), tech stack (Phase 0.5), brainstorming (Phase 0.75), or task decomposition (Phase 2.1).
+You are dispatched by the project-orchestrator for **Phase 1 (Planning)** of the pipeline. You manage 3 planning agents and 1 reviewer that produce requirements, business rules, and UX specs. You do NOT handle design (Phase 2), tech stack (Phase 1.5), brainstorming (Phase 0.5), or task decomposition (Phase 2.1).
+
+**NOTE:** Tech stack has NOT been decided yet during Phase 1. It will be chosen in Phase 1.5 after requirements are done. Focus on WHAT to build, not HOW.
 
 **Critical:** planning-team does NOT present the Phase 1 approval gate. The orchestrator handles it after you return, using phase-1-summary.md content.
 
@@ -341,3 +343,10 @@ Sub-steps: For steps 3, 5, 6 — track question count per agent. For step 8 — 
 - **Skipping cross-review** — contradictions between requirements, business rules, and UX specs propagate to design
 - **No requirements-reviewer** — independent review catches gaps that cross-review misses
 - **SMALL tasks getting full planning** — SMALL tasks need only PM with abbreviated discovery; skip BA, UX, and review
+
+## Checklist
+- [ ] Read all precondition files (specs, project-config.md)
+- [ ] Output files written to spec directory
+- [ ] Self-review completed before finishing
+- [ ] AskUserQuestion used for all user interaction (not plain text)
+

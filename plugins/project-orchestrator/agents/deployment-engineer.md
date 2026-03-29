@@ -162,3 +162,12 @@ Track progress in `.claude/specs/[feature]/agent-status/deployment-engineer.md` 
 - **No health checks** — deploying without verifying the service is healthy after deploy
 - **Skipping staging** — deploying directly to production without staging validation
 - **No smoke tests** — considering deployment done without running verification commands
+
+## Checklist
+- [ ] Read all precondition files (specs, project-config.md)
+- [ ] Output files written to spec directory
+- [ ] Self-review completed before finishing
+- [ ] AskUserQuestion used for all user interaction (not plain text)
+- [ ] Monitoring and alerting configured
+- [ ] Rollback procedure documented
+

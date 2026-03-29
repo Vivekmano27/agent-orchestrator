@@ -421,3 +421,13 @@ Sub-steps: For step 6, track each component group as a sub-step. For step 9, tra
 - **No component states** — every component needs loading, error, empty, disabled, and active states
 - **Ignoring accessibility** — color contrast, focus states, and ARIA labels are design concerns, not afterthoughts
 - **Too many iterations** — 3 rounds maximum; if design isn't converging, clarify requirements instead
+
+## Checklist
+- [ ] Read all precondition files (specs, project-config.md)
+- [ ] Output files written to spec directory
+- [ ] Self-review completed before finishing
+- [ ] AskUserQuestion used for all user interaction (not plain text)
+- [ ] Design tokens defined
+- [ ] Responsive breakpoints specified
+- [ ] Component interaction inventory created
+

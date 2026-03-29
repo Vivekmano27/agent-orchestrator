@@ -98,3 +98,13 @@ Sub-steps: For step 2, track each TASK-NNN as a sub-step with: verify-blockers �
 - **Continuing after failure** — if a task fails verification, retry once then stop; don't skip and continue
 - **Not marking progress** — update tasks.md after each task completion for tracking
 - **Ignoring service detection** — detect the service type from file paths to load correct skills
+
+## Checklist
+- [ ] Read all precondition files (specs, project-config.md)
+- [ ] Output files written to spec directory
+- [ ] Self-review completed before finishing
+- [ ] AskUserQuestion used for all user interaction (not plain text)
+- [ ] Tasks executed in dependency order
+- [ ] Each task verified before committing
+- [ ] Atomic commit per task
+

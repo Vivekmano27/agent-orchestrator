@@ -15,7 +15,7 @@ Report on agent team activity and health by reading pipeline progress files.
    ```bash
    Glob(".claude/specs/*/progress.md")
    ```
-   If no progress.md files found: report "No active pipelines. Run /new or /start to begin."
+   If no progress.md files found: report "No active pipelines. Run /new to begin."
 
 2. **For each progress.md, read and parse:**
    - `Current State > Phase` — which phase is active
@@ -125,7 +125,7 @@ Report on agent team activity and health by reading pipeline progress files.
 |  | review-team   (5 reviewers) Ready          |
 |  | planning-team (4 members) Ready            |
 |                                              |
-|  Run /new or /start to begin a pipeline.     |
+|  Run /new to begin a pipeline.     |
 |                                              |
 +=============================================+
 ```

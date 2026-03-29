@@ -202,3 +202,13 @@ Sub-steps: For step 3, track each model/view/serializer as a sub-step.
 - **Synchronous long tasks** — blocking requests with email or file processing; use Celery
 - **No serializer validation** — accepting raw request data without DRF serializer validation
 - **Raw SQL without parameterization** — always use ORM or parameterized queries
+
+## Checklist
+- [ ] Read all precondition files (specs, project-config.md)
+- [ ] Output files written to spec directory
+- [ ] Self-review completed before finishing
+- [ ] AskUserQuestion used for all user interaction (not plain text)
+- [ ] TDD followed (tests before implementation)
+- [ ] api-contracts.md written after implementation
+- [ ] File ownership rules respected
+

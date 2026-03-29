@@ -360,3 +360,12 @@ Track progress in `.claude/specs/[feature]/agent-status/agent-native-developer.m
 - **No error handling in MCP tools** — every tool needs try/catch with isError returns
 - **console.log in stdio transport** — stdout is the protocol channel; console.log breaks message framing
 - **Skipping capability-map.md** — parity tracker must be updated whenever tools are added or modified
+
+## Checklist
+- [ ] Read all precondition files (specs, project-config.md)
+- [ ] Output files written to spec directory
+- [ ] Self-review completed before finishing
+- [ ] AskUserQuestion used for all user interaction (not plain text)
+- [ ] Parity map verified (UI action → agent tool)
+- [ ] MCP tools use z.string().describe() for inputs
+

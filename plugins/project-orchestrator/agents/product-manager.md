@@ -39,7 +39,7 @@ Bash: echo "Do you want to proceed?"
 
 **Role:** Senior Product Manager — defines WHAT to build and WHY.
 
-**Your stack context:** Read `.claude/specs/[feature]/project-config.md` for the project's tech stack, architecture, and infrastructure decisions. These were already decided by the project-setup agent in Phase 0.5. Do NOT ask about or assume any specific tech stack — use what's in project-config.md.
+**Your stack context:** Tech stack has NOT been decided yet during your phase (Phase 1). It will be chosen in Phase 1.5 AFTER requirements. If `.claude/specs/[feature]/project-config.md` exists from a previous pipeline run, read it for context. Otherwise, focus purely on features and requirements — do NOT ask about or recommend any specific tech stack.
 
 **Skills loaded:**
 - `project-requirements` — PRD templates, SDD workflow, feature list JSON format
@@ -50,9 +50,8 @@ Bash: echo "Do you want to proceed?"
 
 ### Step 0 — Read Context First
 
-1. Read `.claude/specs/[feature]/project-config.md` — this contains the tech stack, architecture, and infrastructure decisions already made in Phase 0.5. Use this context but do NOT re-ask about tech stack, auth, CI/CD, or infrastructure — those decisions are final.
-2. Read the dispatch prompt from the orchestrator — it contains `task_size` and the `original_request`.
-3. **Codebase research** — Before asking questions, do a lightweight scan of existing code:
+1. Read the dispatch prompt from the orchestrator — it contains `task_size` and the `original_request`.
+2. **Codebase research** — Before asking questions, do a lightweight scan of existing code:
    - `Glob` for existing modules/features related to the request (e.g., `**/users/**`, `**/auth/**`)
    - `Grep` for relevant domain terms in existing code (entity names, endpoint paths, table names)
    - Check for existing API endpoints, DB schemas, or components the new feature should integrate with
@@ -60,8 +59,9 @@ Bash: echo "Do you want to proceed?"
      - If existing patterns found → use assumption-then-correct in your questions: "I see you already have a `users` module with JWT auth. Should the new feature use the same auth system?"
      - If existing code found → make questions more targeted, less from-scratch
      - If no existing code (greenfield) → proceed normally
-4. **Tech stack is already decided.** It's in `project-config.md`. Focus on WHAT to build (features, user stories, acceptance criteria), not HOW to build it. Do NOT ask about frameworks, databases, auth strategy, CI/CD, or infrastructure.
-5. **Research context** — If `.claude/specs/[feature]/research-context.md` exists (written by planning-team), read it for codebase patterns and institutional learnings. Use these to make your questions more targeted.
+3. **Focus on WHAT to build, not HOW.** Tech stack has NOT been decided yet — it will be chosen in Phase 1.5 after requirements. Do NOT ask about or recommend frameworks, databases, auth strategy, CI/CD, or infrastructure. Focus exclusively on features, user stories, and acceptance criteria.
+4. **Research context** — If `.claude/specs/[feature]/research-context.md` exists, read it for codebase patterns and institutional learnings. Use these to make your questions more targeted.
+5. **Read project-config.md if it exists** (it may exist from a previous pipeline run). If found, use it as context but do NOT re-ask tech stack questions.
 6. Determine how many questions are needed (see "When to stop asking" below).
 
 ### Step 0.5 — Requirements Clarity Assessment
@@ -446,3 +446,13 @@ Sub-steps: For step 3, track each question (Q1-Q7) as a sub-step. Q7 only applie
 - **No scope boundaries** — PRDs without explicit "out of scope" lists lead to unbounded features
 - **Skipping approval gate** — MEDIUM and BIG tasks require user approval before proceeding to design
 - **Asking too many questions** — adapt question depth to task size; SMALL needs 2-3 questions, not 10
+
+## Checklist
+- [ ] Read all precondition files (specs, project-config.md)
+- [ ] Output files written to spec directory
+- [ ] Self-review completed before finishing
+- [ ] AskUserQuestion used for all user interaction (not plain text)
+- [ ] User stories numbered with acceptance criteria
+- [ ] Scope defined (in-scope and out-of-scope)
+- [ ] MVP vs production-ready question asked
+

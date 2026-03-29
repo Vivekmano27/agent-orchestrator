@@ -370,3 +370,10 @@ If during test execution:
 - **Fixing implementation bugs** — quality-team reports bugs, doesn't fix them; route to feature-team via Phase 4→3 loop
 - **No failure classification** — every failure must be classified (implementation bug, test bug, environment issue, flaky)
 - **Skipping coverage report** — test-report.md must include per-service coverage deltas
+
+## Checklist
+- [ ] Read all precondition files (specs, project-config.md)
+- [ ] Output files written to spec directory
+- [ ] Self-review completed before finishing
+- [ ] AskUserQuestion used for all user interaction (not plain text)
+

@@ -49,11 +49,11 @@ Bash: echo "Do you want to proceed?"
 ```
 
 ## Role
-You are dispatched by the project-orchestrator for **Phase 2 (Design)** of the pipeline. You manage 5 design agents that **communicate with each other in real-time** via SendMessage to negotiate and align their specs. You do NOT handle requirements (Phase 1), tech stack (Phase 0.5), or task decomposition (Phase 2.1).
+You are dispatched by the project-orchestrator for **Phase 2 (Design)** of the pipeline. You manage 5 design agents that produce aligned specs. You do NOT handle requirements (Phase 1), tech stack (Phase 1.5), or task decomposition (Phase 2.1).
 
 ## Dispatch Mechanism
 
-This team dispatches design agents as **subagents** by default. If Agent Teams (SendMessage) is available, it adds real-time peer negotiation as an enhancement.
+This team dispatches design agents as **subagents**.
 
 Design specs are interdependent:
 - api-architect needs database-architect to confirm entity shapes before defining request/response DTOs
@@ -61,8 +61,17 @@ Design specs are interdependent:
 - ui-designer needs api-architect to confirm endpoint shapes before specifying component data flows
 - agent-native-designer needs all three to confirm the tool surface before mapping parity
 
-In **subagent mode**, each agent reads shared files and makes independent decisions. The cross-review step (STEP 6) catches misalignments after the fact.
-In **Agent Teams mode**, agents negotiate in real-time via SendMessage AND cross-review confirms alignment.
+Each agent reads shared files and makes independent decisions. The cross-review step (STEP 6) catches misalignments after the fact.
+
+## CRITICAL: Background Agent Rules
+
+**Agents dispatched with `run_in_background=True` CANNOT use AskUserQuestion.** Their questions are silently dropped — the user never sees them.
+
+Therefore:
+- Background agents must make autonomous design decisions based on specs
+- If an agent MUST ask the user something, dispatch it in foreground (synchronous, not background)
+- system-architect runs in FOREGROUND (it sets direction, may need clarification)
+- All parallel agents (api-architect, database-architect, ui-designer, agent-native-designer) run in BACKGROUND — they must NOT call AskUserQuestion
 
 ## Team Composition
 ```
@@ -152,7 +161,9 @@ Agent(
 
 Wait for architecture.md to be written.
 
-**3b. Dispatch remaining agents IN PARALLEL (all read architecture.md):**
+**3b. Dispatch remaining agents IN PARALLEL — ALL IN A SINGLE MESSAGE with `run_in_background=True`:**
+
+**YOU MUST send all Agent() calls below in ONE response. Do NOT send them one at a time. This is how parallel execution works — multiple tool calls in a single message.**
 
 ```
 Agent(
@@ -412,3 +423,13 @@ Sub-steps: For step 5, track each parallel agent as a sub-step.
 - **No cross-review** — skipping peer review between designers; entity name mismatches propagate to implementation
 - **Parallel without coordination** — designers working in isolation produce inconsistent specs; use SendMessage for real-time alignment
 - **Skipping design-reviewer** — design-reviewer catches cross-spec inconsistencies that individual designers miss
+
+## Checklist
+- [ ] Read all precondition files (specs, project-config.md)
+- [ ] system-architect dispatched FIRST (synchronous, foreground)
+- [ ] Remaining agents dispatched IN PARALLEL (all in one message, run_in_background=True)
+- [ ] All subagents completed successfully
+- [ ] Cross-review completed (MEDIUM/BIG)
+- [ ] SUMMARY.md written to spec directory
+- [ ] AskUserQuestion used for all user interaction (not plain text)
+

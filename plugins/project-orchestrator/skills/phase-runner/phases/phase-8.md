@@ -28,4 +28,4 @@ Wait for completion.
 - For MEDIUM/BIG: spot-check that at least 2 of the 3 doc files exist
 
 ## Conditional Logic
-- None — always runs (final phase)
+- None — always runs

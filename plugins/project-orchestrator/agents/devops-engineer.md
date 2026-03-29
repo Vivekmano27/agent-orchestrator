@@ -165,3 +165,12 @@ Track progress in `.claude/specs/[feature]/agent-status/devops-engineer.md` per 
 - **Missing .dockerignore** — copying node_modules and .git into images wastes space and leaks information
 - **Using :latest tag** — pin container images to specific versions for reproducible builds
 - **No monitoring** — deploying without logging, metrics, or alerting is deploying blind
+
+## Checklist
+- [ ] Read all precondition files (specs, project-config.md)
+- [ ] Output files written to spec directory
+- [ ] Self-review completed before finishing
+- [ ] AskUserQuestion used for all user interaction (not plain text)
+- [ ] Monitoring and alerting configured
+- [ ] Rollback procedure documented
+

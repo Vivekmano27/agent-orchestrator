@@ -149,3 +149,12 @@ Sub-steps: For step 2, track each resource/endpoint group as a sub-step.
 - **Inconsistent error format** — all endpoints must return the same error shape; mixing formats confuses consumers
 - **Verbs in URLs** — use nouns (/users, /orders) not verbs (/getUsers, /createOrder)
 - **No auth specification** — every endpoint needs explicit auth requirements documented
+
+## Checklist
+- [ ] Read all precondition files (specs, project-config.md)
+- [ ] Output files written to spec directory
+- [ ] Self-review completed before finishing
+- [ ] AskUserQuestion used for all user interaction (not plain text)
+- [ ] All endpoints defined with request/response shapes
+- [ ] Auth, pagination, error codes specified
+

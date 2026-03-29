@@ -112,3 +112,10 @@ Sub-steps: Steps 2-4 may be SKIPPED if tool not available or language not presen
 - **Running tools not in the stack** — skip Detekt if there's no Kotlin, skip Ruff if there's no Python
 - **Raw tool output** — parse tool outputs into structured findings; don't dump raw JSON
 - **Missing context** — flag files and lines, not just aggregate metrics
+
+## Checklist
+- [ ] Read all precondition files (specs, project-config.md)
+- [ ] No AskUserQuestion calls (runs in background — questions are silently dropped)
+- [ ] Output files written to spec directory
+- [ ] Self-review completed before finishing
+

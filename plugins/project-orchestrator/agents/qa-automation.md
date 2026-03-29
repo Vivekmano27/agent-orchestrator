@@ -144,3 +144,12 @@ Sub-steps: Steps 2-5 are conditional on platforms — mark as SKIPPED if platfor
 - **Login form per test** — use storageState for session reuse; form login is slow and fragile
 - **No cross-browser** — test across Chromium, Firefox, WebKit; not just Chrome
 - **Ignoring mobile viewports** — test at least one mobile viewport (375px) for responsive issues
+
+## Checklist
+- [ ] Read all precondition files (specs, project-config.md)
+- [ ] Output files written to spec directory
+- [ ] Self-review completed before finishing
+- [ ] AskUserQuestion used for all user interaction (not plain text)
+- [ ] E2E tests cover critical user flows
+- [ ] Cross-browser/device testing included
+

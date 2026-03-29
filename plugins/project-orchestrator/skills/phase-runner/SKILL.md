@@ -13,11 +13,11 @@ For each phase in the pipeline, read the corresponding phase file before executi
 Read("${CLAUDE_PLUGIN_ROOT}/skills/phase-runner/phases/phase-{N}.md")
 ```
 
-Phase files are named: `phase-0.md`, `phase-0-5.md`, `phase-0-75.md`, `phase-1.md`, `phase-2.md`, `phase-2-1.md`, `phase-2-5.md`, `phase-3.md`, `phase-4.md`, `phase-5.md`, `phase-6.md`, `phase-7.md`, `phase-8.md`
+Phase files are named: `phase-0.md`, `phase-0-5.md`, `phase-1.md`, `phase-1-5.md`, `phase-2.md`, `phase-2-1.md`, `phase-2-5.md`, `phase-3.md`, `phase-4.md`, `phase-5.md`, `phase-6.md`, `phase-7.md`, `phase-8.md`, `phase-9.md`
 
 ## Execution Loop
 
-For EACH phase in order [0, 0.5, 0.75, 1, 2, 2.1, 2.5, 3, 4, 5, 6, 7, 8]:
+For EACH phase in order [0, 0.5, 1, 1.5, 2, 2.1, 2.5, 3, 4, 5, 6, 7, 8, 9]:
 
 1. **Read** the phase file: `Read("${CLAUDE_PLUGIN_ROOT}/skills/phase-runner/phases/phase-{N}.md")`
 2. **Check preconditions** — verify required files exist
@@ -35,9 +35,9 @@ If content validation fails, re-dispatch the responsible agent with a retry prom
 | Phase | File | Description |
 |-------|------|-------------|
 | 0 | phase-0.md | Spec directory setup |
-| 0.5 | phase-0-5.md | Project setup (tech stack interview) |
-| 0.75 | phase-0-75.md | Brainstorming |
+| 0.5 | phase-0-5.md | Brainstorming |
 | 1 | phase-1.md | Planning (via planning-team) |
+| 1.5 | phase-1-5.md | Tech stack interview (after requirements) |
 | 2 | phase-2.md | Design via design-team |
 | 2.1 | phase-2-1.md | Task decomposition |
 | 2.5 | phase-2-5.md | Git setup |
@@ -47,6 +47,7 @@ If content validation fails, re-dispatch the responsible agent with a retry prom
 | 6 | phase-6.md | Code review via review-team |
 | 7 | phase-7.md | DevOps & deployment |
 | 8 | phase-8.md | Documentation |
+| 9 | phase-9.md | Post-deploy verification |
 
 ## Anti-Patterns
 

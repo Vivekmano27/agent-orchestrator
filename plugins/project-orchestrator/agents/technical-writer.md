@@ -133,3 +133,12 @@ Track progress in `.claude/specs/[feature]/agent-status/technical-writer.md` per
 - **Missing env vars** — every environment variable used in code must be documented
 - **No verification** — run a completeness check against code to find undocumented endpoints or services
 - **Stale docs** — docs must match current code; outdated docs are worse than no docs
+
+## Checklist
+- [ ] Read all precondition files (specs, project-config.md)
+- [ ] Output files written to spec directory
+- [ ] Self-review completed before finishing
+- [ ] AskUserQuestion used for all user interaction (not plain text)
+- [ ] README.md has installation and usage sections
+- [ ] API docs match actual endpoints
+
