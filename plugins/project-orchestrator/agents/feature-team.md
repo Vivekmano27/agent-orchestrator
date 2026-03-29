@@ -260,19 +260,58 @@ Frontend agents code against `api-spec.md` (the contract). They start at the sam
 
 **NOTE: Phase 2.75 (Prototype) already built the base layout, design system, navigation, and app shell. Frontend agents build FEATURE PAGES on top of the existing prototype.**
 
-**Send ALL applicable frontend Agent() calls in ONE response with `run_in_background=True`:**
+**Send ALL applicable frontend Agent() calls below in ONE response with `run_in_background=True`:**
 
+**Always dispatch (if web frontend in project-config.md):**
 ```
 Agent(
   subagent_type="project-orchestrator:frontend-developer",
   run_in_background=True,
   prompt="Implement your assigned FEATURE PAGES for [feature].
           The base layout, design system, and navigation already exist from the prototype (Phase 2.75).
-          Read .claude/specs/[feature]/tasks.md — execute your tasks IN ORDER.
+          Read .claude/specs/[feature]/tasks.md — execute your tasks IN ORDER: [TASK-NNN, TASK-NNN, ...].
           Read .claude/specs/[feature]/api-spec.md — this is THE CONTRACT. Use these endpoint shapes for API calls.
-          FILE OWNERSHIP: You own apps/web/ only.
-          Replace dummy data with real API calls using the endpoints from api-spec.md.
-          Follow TDD. Do NOT use AskUserQuestion (you run in background — questions are silently dropped)."
+          Replace mock/dummy data with real API calls using endpoints from api-spec.md.
+          - State management: TanStack Query for server state, Zustand for client state
+          - Form validation: React Hook Form + Zod schemas matching api-spec.md DTOs
+          - Add auth guards, error boundaries, loading/error/empty states
+          - Add tests for all new logic
+          FILE OWNERSHIP: You own apps/web/ ONLY.
+          Do NOT touch services/, apps/mobile-flutter/, or apps/mobile-kmp/.
+          Follow TDD. Do NOT use AskUserQuestion (you run in background)."
+)
+```
+
+**Dispatch if Flutter in project-config.md:**
+```
+Agent(
+  subagent_type="project-orchestrator:flutter-developer",
+  run_in_background=True,
+  prompt="Implement your assigned tasks for [feature].
+          Read .claude/specs/[feature]/tasks.md — execute your tasks IN ORDER: [TASK-NNN, TASK-NNN, ...].
+          Read .claude/specs/[feature]/api-spec.md — this is THE CONTRACT. Use these endpoint shapes.
+          Read .claude/specs/[feature]/design.md for UI components and design tokens.
+          Implement using Clean Architecture (data/domain/presentation).
+          - State: Riverpod. Navigation: go_router. Networking: Dio. Models: freezed.
+          - Handle: push notifications, permissions, offline caching, deep linking
+          FILE OWNERSHIP: You own apps/mobile-flutter/ ONLY.
+          Follow TDD. Do NOT use AskUserQuestion (you run in background)."
+)
+```
+
+**Dispatch if KMP in project-config.md:**
+```
+Agent(
+  subagent_type="project-orchestrator:kmp-developer",
+  run_in_background=True,
+  prompt="Implement your assigned tasks for [feature].
+          Read .claude/specs/[feature]/tasks.md — execute your tasks IN ORDER: [TASK-NNN, TASK-NNN, ...].
+          Read .claude/specs/[feature]/api-spec.md — this is THE CONTRACT.
+          Implement shared logic in commonMain, platform-specific in androidMain/iosMain.
+          - Networking: Ktor. Persistence: SQLDelight. DI: Koin. UI: Compose Multiplatform.
+          - State: StateFlow in ViewModels. Navigation: Decompose or Voyager.
+          FILE OWNERSHIP: You own apps/mobile-kmp/ ONLY.
+          Follow TDD. Do NOT use AskUserQuestion (you run in background)."
 )
 ```
 
@@ -350,69 +389,6 @@ Agent(
 ```
 
 Wait for completion. Note the parity coverage % for the build report.
-
-**4c — Spawn frontend agents IN PARALLEL (conditional on project-config.md):**
-
-**Send ALL applicable frontend Agent() calls in ONE response with `run_in_background=True`.**
-
-Read `project-config.md` to determine which frontend platforms are needed. Dispatch only the relevant agents. All read `api-contracts.md` for actual endpoint shapes.
-
-**Always dispatch (if web frontend in project-config.md):**
-```
-Agent(
-  subagent_type="project-orchestrator:frontend-developer",
-  run_in_background=True,
-  prompt="Implement your assigned tasks for [feature].
-          Read .claude/specs/[feature]/tasks.md — execute these tasks IN ORDER: [TASK-NNN, TASK-NNN, ...].
-          Read .claude/specs/[feature]/api-contracts.md for exact backend API routes and shapes.
-          The UI prototype already exists at apps/web/ — created by ui-designer in Phase 2.
-          DO NOT rewrite existing components. Build on top of them:
-          - Replace mock data with real API calls (read api-contracts.md)
-          - Add state management (TanStack Query + Zustand)
-          - Add form validation (React Hook Form + Zod)
-          - Add auth guards, error boundaries
-          - Add tests for all new logic
-          FILE OWNERSHIP: You own apps/web/ ONLY.
-          Do NOT touch services/, apps/mobile-flutter/, or apps/mobile-kmp/.
-          Follow TDD."
-)
-```
-
-**Dispatch if Flutter in project-config.md:**
-```
-Agent(
-  subagent_type="project-orchestrator:flutter-developer",
-  run_in_background=True,
-  prompt="Implement your assigned tasks for [feature].
-          Read .claude/specs/[feature]/tasks.md — execute these tasks IN ORDER: [TASK-NNN, TASK-NNN, ...].
-          Read .claude/specs/[feature]/api-contracts.md for exact backend API routes and shapes.
-          Read .claude/specs/[feature]/design.md for UI components and design tokens.
-          Implement Flutter mobile app using Clean Architecture (data/domain/presentation).
-          Use Riverpod for state, go_router for navigation, Dio for networking, freezed for models.
-          Handle: push notifications, permissions, offline caching, deep linking.
-          FILE OWNERSHIP: You own apps/mobile-flutter/ ONLY.
-          Do NOT touch services/, apps/web/, or apps/mobile-kmp/.
-          Follow TDD."
-)
-```
-
-**Dispatch if KMP in project-config.md:**
-```
-Agent(
-  subagent_type="project-orchestrator:kmp-developer",
-  run_in_background=True,
-  prompt="Implement your assigned tasks for [feature].
-          Read .claude/specs/[feature]/tasks.md — execute these tasks IN ORDER: [TASK-NNN, TASK-NNN, ...].
-          Read .claude/specs/[feature]/api-contracts.md for exact backend API routes and shapes.
-          Read .claude/specs/[feature]/design.md for UI components and design tokens.
-          Implement KMP mobile app: shared business logic in commonMain, Compose Multiplatform UI.
-          Use Ktor for networking, SQLDelight for persistence, Koin for DI, coroutines/Flow for state.
-          Handle: platform-specific features via expect/actual, push notifications, secure storage.
-          FILE OWNERSHIP: You own apps/mobile-kmp/ ONLY.
-          Do NOT touch services/, apps/web/, or apps/mobile-flutter/.
-          Follow TDD."
-)
-```
 
 ### STEP 5 — Verify frontend wave
 When all dispatched frontend agents complete, run verification for each platform:
