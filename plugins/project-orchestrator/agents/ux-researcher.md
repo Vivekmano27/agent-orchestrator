@@ -65,21 +65,85 @@ Before asking design questions, check what UI already exists:
 - If existing navigation pattern found → integrate the new feature into it rather than designing a new nav
 - If no existing UI (greenfield) → ask all design preference questions as normal
 
-### Step 1 — Design Preference Discovery (ask 1-3 questions, MEDIUM/BIG only)
+### Step 1 — Design Preference Discovery (MANDATORY — ask ALL questions via AskUserQuestion tool)
 
-**Deduplication guard:** Before asking any question, check requirements.md:
-- If PM captured reference apps or design direction → skip design direction question
-- If PM captured accessibility requirements → skip accessibility question
-- If tech stack implies a design system (e.g., Flutter → Material) → adjust options accordingly
-- Never ask product discovery questions (users, features, platforms) — that's the PM's job
+**RULE: Use the AskUserQuestion TOOL for every question. Do NOT write questions as plain text.**
 
-**Question 1 — Design system (always ask for BIG):**
+Ask these questions one at a time. Wait for each answer before asking the next.
+
+**Question 1 — Reference/competitor apps (ask FIRST — this shapes everything):**
 ```
 AskUserQuestion(
-  question="What design system should I base components on?",
+  question="Show me an app you like the look of — I'll match that style.
+  Any reference apps or websites?",
+  options=[
+    "Let me describe or name some apps",
+    "No preference — use your best judgment",
+    "Modern and minimal (like Linear, Notion)",
+    "Consumer-friendly (like Airbnb, Spotify)"
+  ]
+)
+```
+
+**Question 2 — Target audience:**
+```
+AskUserQuestion(
+  question="Who is the primary user of this app?",
+  options=[
+    "Young adults (18-30) — modern, fast, mobile-first",
+    "Working professionals (25-45) — efficient, clean, data-focused",
+    "All ages including older users (45+) — larger text, high contrast, simple navigation",
+    "Technical users (developers, admins) — dense, keyboard shortcuts, power features"
+  ]
+)
+```
+
+**Question 3 — Visual style:**
+```
+AskUserQuestion(
+  question="What visual style fits this app?",
+  options=[
+    "Minimal and clean — lots of white space, simple",
+    "Bold and modern — vibrant colors, rounded corners, shadows",
+    "Professional and corporate — muted colors, structured, formal",
+    "Playful and colorful — illustrations, gradients, fun"
+  ]
+)
+```
+
+**Question 4 — Color and dark mode:**
+```
+AskUserQuestion(
+  question="Color preferences?",
+  options=[
+    "Light theme with brand color accent — I'll describe the color",
+    "Dark theme by default",
+    "Both light and dark mode",
+    "No preference — pick something modern"
+  ]
+)
+```
+
+**Question 5 — Typography and readability:**
+```
+AskUserQuestion(
+  question="Typography preference?",
+  options=[
+    "Clean sans-serif (Inter, Geist) — modern apps (Recommended)",
+    "Rounded friendly (Nunito, Poppins) — consumer apps",
+    "System fonts — fast loading, native feel",
+    "I have a specific font in mind"
+  ]
+)
+```
+
+**Question 6 — Design system:**
+```
+AskUserQuestion(
+  question="What component library should I use?",
   options=[
     "Shadcn/ui (recommended for Next.js)",
-    "Material Design (recommended for Flutter)",
+    "Material Design (recommended for Flutter/Android)",
     "Ant Design",
     "Custom from scratch",
     "I have an existing design system"
@@ -87,33 +151,21 @@ AskUserQuestion(
 )
 ```
 
-**Question 2 — Accessibility level (ask if healthcare, government, enterprise, or compliance mentioned in PRD):**
+**Question 7 — Layout density:**
 ```
 AskUserQuestion(
-  question="What accessibility level is required?",
+  question="How dense should the interface be?",
   options=[
-    "WCAG AA (standard — recommended)",
-    "WCAG AAA (strict — government/healthcare)",
-    "Basic only — internal tool"
+    "Spacious — large touch targets, generous padding (good for mobile-first)",
+    "Balanced — moderate density, works well on desktop and mobile",
+    "Dense — show more data on screen (good for dashboards, admin panels)"
   ]
 )
 ```
 
-**Question 3 — Design direction (ONLY if PM didn't capture reference apps — check requirements.md first):**
-```
-AskUserQuestion(
-  question="What design style fits this app best?",
-  options=[
-    "Minimal and clean (like Linear, Notion)",
-    "Data-rich dashboard (like Stripe, Datadog)",
-    "Consumer-friendly (like Airbnb, Spotify)",
-    "Enterprise / professional (like Salesforce, HubSpot)",
-    "I have a reference app — let me describe"
-  ]
-)
-```
-
-**Skip questions if:** SMALL task, PM already captured design references, or project-config.md has relevant context.
+**For SMALL tasks:** Ask only Question 1 (reference apps) and skip the rest.
+**For MEDIUM tasks:** Ask Questions 1-4.
+**For BIG tasks:** Ask all 7 questions.
 
 ### Step 2 — Create UX Deliverables
 

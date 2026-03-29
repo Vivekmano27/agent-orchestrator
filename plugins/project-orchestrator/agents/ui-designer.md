@@ -163,41 +163,30 @@ Message the team: "Self-review complete. Fixed [N] issues: [brief list]."
 
 ## Prototype Generation (MEDIUM/BIG tasks only, skip for SMALL)
 
-### Design Preferences Gate (BEFORE designing — MANDATORY)
+### Design Preferences (READ from ux.md — do NOT re-ask)
 
-Before writing design.md or building the prototype, ask the user about their design preferences. These choices drive every downstream decision (tokens, components, layout).
+**The UX researcher already asked the user about visual style, audience, colors, typography, layout density, and reference apps in Phase 1.** Those answers are captured in `.claude/specs/[feature]/ux.md`.
 
+**Read ux.md and extract:**
+- Reference/competitor apps the user mentioned
+- Target audience age group
+- Visual style preference (minimal/bold/professional/playful)
+- Color preference (light/dark/both, accent color)
+- Typography preference (font family)
+- Component library choice (Shadcn, Material, etc.)
+- Layout density (spacious/balanced/dense)
+
+**Use these answers to drive ALL design decisions.** Do NOT re-ask the user questions the UX researcher already asked.
+
+**Only ask if ux.md is missing or incomplete:**
 ```
 AskUserQuestion(
-  question="Before I design the UI, I need to understand your preferences:
-
-1. **App type:** What kind of app is this?
-   (e.g., dashboard, e-commerce, social, SaaS tool, landing page, mobile-first)
-
-2. **Visual style:** What feel are you going for?
-   - Modern/minimal (clean lines, lots of whitespace, subtle shadows)
-   - Bold/vibrant (strong colors, large typography, dynamic)
-   - Corporate/professional (neutral tones, structured, data-dense)
-   - Playful/creative (rounded corners, illustrations, bright accents)
-
-3. **Typography:** Any font preference?
-   - System fonts (fast, no external deps)
-   - Inter / Plus Jakarta Sans (modern SaaS look)
-   - Custom font (specify name)
-   - No preference — pick something that fits the style
-
-4. **Color palette:** Any brand colors or preference?
-   - I have brand colors (share hex codes)
-   - Cool tones (blue/purple/teal)
-   - Warm tones (orange/red/amber)
-   - Neutral (gray/slate)
-   - No preference",
+  question="I don't have design preferences from the UX phase. Quick question — what visual style fits this app?",
   options=[
-    "Let me answer those questions",
-    "Modern minimal with system fonts — just go",
-    "Dashboard-heavy with data tables — professional look",
-    "I'll share a reference app/screenshot instead",
-    "Use your best judgment based on the requirements"
+    "Modern and minimal (like Linear, Notion)",
+    "Bold and colorful (like Spotify, Duolingo)",
+    "Professional and clean (like Stripe, GitHub)",
+    "Use your best judgment"
   ]
 )
 ```
