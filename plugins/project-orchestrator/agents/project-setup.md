@@ -140,7 +140,7 @@ Glob("CLAUDE.md")
 
 ```
 AskUserQuestion(
-  question="I detected an existing project with: [detected stack summary, e.g. Next.js 14 + Prisma + Tailwind + GitHub Actions]. Should I use this as the base configuration?",
+  question="I detected an existing project with: [detected stack summary, e.g. Next.js 16 + Prisma + Tailwind + GitHub Actions]. Should I use this as the base configuration?",
   options=[
     "Yes — use detected stack, ask about missing pieces only",
     "No — start fresh with full tech stack interview",
@@ -223,9 +223,9 @@ Generate the complete project-config.md from the selected preset. Each preset ma
 Architecture: monolith (modular)
 Repository: monorepo
 Backend: Next.js API Routes (TypeScript)
-Frontend: React / Next.js 14+ (App Router)
+Frontend: React / Next.js 16+ (App Router)
 Mobile: none (responsive web)
-Database: PostgreSQL 16 via Prisma
+Database: PostgreSQL 18+ via Prisma
 Cache: none (start without)
 Queue: none (start without)
 Auth: NextAuth.js with JWT
@@ -250,11 +250,11 @@ PR Templates: yes (basic)
 ```
 Architecture: microservices
 Repository: monorepo
-Backend: NestJS 10+ (API Gateway + Core Service) + Python/Django (AI/data service)
-Frontend: React / Next.js 14+ (App Router)
+Backend: NestJS 11+ (API Gateway + Core Service) + Python/Django (AI/data service)
+Frontend: React / Next.js 16+ (App Router)
 Mobile: Flutter 3.x + Kotlin Multiplatform 2.0+
-Database: PostgreSQL 16 (per-service DBs)
-Cache: Redis 7
+Database: PostgreSQL 18+ (per-service DBs)
+Cache: Redis 8+
 Queue: RabbitMQ or AWS SQS
 Auth: Passport + JWT (access 15min, refresh 7d) + OAuth2/OIDC
 Session: stateless JWT
@@ -283,11 +283,11 @@ Monitoring: Prometheus + Grafana / CloudWatch
 ```
 Architecture: monolith (API backend)
 Repository: monorepo
-Backend: NestJS 10+ (single service)
+Backend: NestJS 11+ (single service)
 Frontend: none (mobile-only)
 Mobile: Flutter 3.x (iOS + Android)
-Database: PostgreSQL 16 via Prisma
-Cache: Redis 7 (sessions + cache)
+Database: PostgreSQL 18+ via Prisma
+Cache: Redis 8+ (sessions + cache)
 Queue: BullMQ (background jobs)
 Auth: JWT (Passport) + Firebase Auth (mobile social login)
 Session: stateless JWT
@@ -311,11 +311,11 @@ PR Templates: yes (basic)
 ```
 Architecture: monolith (modular)
 Repository: single repo
-Backend: NestJS 10+ (TypeScript) or Django 5 (Python) — ask user preference
+Backend: NestJS 11+ (TypeScript) or Django 6+ (Python) — ask user preference
 Frontend: none (Swagger UI for docs)
 Mobile: none
-Database: PostgreSQL 16
-Cache: Redis 7
+Database: PostgreSQL 18+
+Cache: Redis 8+
 Queue: BullMQ (NestJS) or Celery (Django)
 Auth: JWT (API keys + Bearer tokens)
 Session: stateless
@@ -339,11 +339,11 @@ PR Templates: yes (API changelog)
 ```
 Architecture: microservices (API Gateway + Core + optional AI service)
 Repository: monorepo
-Backend: NestJS 10+ (API Gateway + Core Service)
-Frontend: React / Next.js 14+ (App Router)
+Backend: NestJS 11+ (API Gateway + Core Service)
+Frontend: React / Next.js 16+ (App Router)
 Mobile: Flutter 3.x
-Database: PostgreSQL 16 (per-service)
-Cache: Redis 7
+Database: PostgreSQL 18+ (per-service)
+Cache: Redis 8+
 Queue: BullMQ
 Auth: Passport + JWT + optional social login
 Session: stateless JWT
@@ -704,13 +704,13 @@ Write the approved configuration to `.claude/specs/[feature]/project-config.md`:
 ## Tech Stack
 
 ### Backend
-- **Framework:** [NestJS 10+ / Express / Django 5 / FastAPI / Spring Boot / Rails / Go]
-- **Language:** [TypeScript 5+ / Python 3.12+ / Java 21+ / Ruby 3.3+ / Go 1.22+]
+- **Framework:** [NestJS 11+ / Express / Django 6+ / FastAPI / Spring Boot / Rails / Go]
+- **Language:** [TypeScript 6+ / Python 3.14+ / Java 23+ / Ruby 3.3+ / Go 1.24+]
 - **ORM:** [Prisma / TypeORM / Django ORM / SQLAlchemy / ActiveRecord / GORM]
 - **API Style:** [REST / GraphQL / gRPC / REST + gRPC]
 
 ### Frontend
-- **Framework:** [React / Next.js 14+ / Vue / Nuxt / Angular / Svelte / none]
+- **Framework:** [React / Next.js 16+ / Vue / Nuxt / Angular / Svelte / none]
 - **CSS:** [Tailwind CSS / styled-components / CSS Modules / MUI / Ant Design]
 - **State Management:** [Zustand / TanStack Query / Redux / Pinia / Signals / none]
 - **Forms:** [React Hook Form + Zod / Formik + Yup / native / none]
@@ -722,8 +722,8 @@ Write the approved configuration to `.claude/specs/[feature]/project-config.md`:
 - **HTTP Client:** [Dio / Retrofit / Ktor / URLSession + OkHttp / none]
 
 ### Database & Data
-- **Primary DB:** [PostgreSQL 16 / MySQL 8 / MongoDB 7 / SQLite / Supabase / Firebase]
-- **Cache:** [Redis 7 / Memcached / none]
+- **Primary DB:** [PostgreSQL 18+ / MySQL 8 / MongoDB 7 / SQLite / Supabase / Firebase]
+- **Cache:** [Redis 8+ / Memcached / none]
 - **Message Queue:** [RabbitMQ / SQS / Kafka / BullMQ / Celery / none]
 - **Search:** [Elasticsearch / Meilisearch / Algolia / none]
 - **File Storage:** [S3 / GCS / Cloudflare R2 / Supabase Storage / local / none]

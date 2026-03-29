@@ -90,14 +90,14 @@ cd services/ai-service && python manage.py migrate && python manage.py loaddata 
 ## Toolchain Requirements
 
 ```bash
-# Node.js 20+ (API Gateway, Core Service, Web)
-nvm install 20 && nvm use 20
+# Node.js 24+ (API Gateway, Core Service, Web)
+nvm install 24 && nvm use 24
 cd services/core-service && npm ci
 cd apps/web && npm ci
 
-# Python 3.12+ (AI Service)
+# Python 3.14+ (AI Service)
 cd services/ai-service
-python3.12 -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt
+python3.14 -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt
 
 # Flutter 3.x (Mobile)
 flutter doctor
@@ -136,6 +136,6 @@ Recommended extensions: `esbenp.prettier-vscode`, `dbaeumer.vscode-eslint`, `cha
 - [ ] PostgreSQL and Redis containers have health checks
 - [ ] Each service has .env.example committed, .env git-ignored
 - [ ] Database migrations run (Prisma + Django)
-- [ ] Node.js 20+, Python 3.12+, Flutter SDK installed
+- [ ] Node.js 24+, Python 3.14+, Flutter SDK installed
 - [ ] VSCode settings and extensions configured
 - [ ] Pre-commit hooks active for Node.js and Python services

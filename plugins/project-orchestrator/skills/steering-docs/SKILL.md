@@ -40,9 +40,9 @@ Create three persistent context files in `.claude/steering/` that the agent read
 # Technical Context
 
 ## Stack
-- Language: [e.g., TypeScript 5.4]
-- Framework: [e.g., Next.js 14 App Router]
-- Database: [e.g., PostgreSQL 16 via Prisma]
+- Language: [e.g., TypeScript 6+]
+- Framework: [e.g., Next.js 16+ App Router]
+- Database: [e.g., PostgreSQL 18+ via Prisma]
 - Auth: [e.g., NextAuth.js v5]
 - Hosting: [e.g., Vercel + Supabase]
 - CI/CD: [e.g., GitHub Actions]

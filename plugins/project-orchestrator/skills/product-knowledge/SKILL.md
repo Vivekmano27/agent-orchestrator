@@ -50,8 +50,8 @@ spreadsheet-based sprint tracking with a kanban board that integrates with GitHu
 ## Architecture Overview
 - **Pattern:** [REPLACE: monolith | modular monolith | microservices]
 - **Backend:** [REPLACE: e.g., Node.js + Express, Python + FastAPI]
-- **Frontend:** [REPLACE: e.g., Next.js 14 App Router, Flutter]
-- **Database:** [REPLACE: e.g., PostgreSQL 16, MongoDB]
+- **Frontend:** [REPLACE: e.g., Next.js 16+ App Router, Flutter]
+- **Database:** [REPLACE: e.g., PostgreSQL 18+, MongoDB]
 - **Auth:** [REPLACE: e.g., NextAuth.js with GitHub OAuth, Firebase Auth]
 - **Hosting:** [REPLACE: e.g., Vercel + Supabase, AWS ECS + RDS]
 - **Architecture diagram:** [REPLACE: path to diagram file or "see docs/architecture.md"]

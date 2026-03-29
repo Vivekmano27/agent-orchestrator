@@ -74,8 +74,8 @@ flowchart LR
 | Component | Technology | Hosting | Purpose |
 |-----------|-----------|---------|---------|
 | API | [framework] | [platform] | Request handling |
-| Database | PostgreSQL 16 | [provider] | Primary data store |
-| Cache | Redis 7 | [provider] | Session + query cache |
+| Database | PostgreSQL 18+ | [provider] | Primary data store |
+| Cache | Redis 8+ | [provider] | Session + query cache |
 | CDN | [provider] | Edge | Static assets |
 | CI/CD | GitHub Actions | GitHub | Build + deploy |
 

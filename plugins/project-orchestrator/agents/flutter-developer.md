@@ -86,7 +86,7 @@ apps/mobile-flutter/
 // StateNotifierProvider → mutable state with methods
 // FutureProvider     → async data fetching
 // StreamProvider     → real-time data (WebSocket, Firestore)
-// NotifierProvider   → modern replacement for StateNotifierProvider (Riverpod 2.0+)
+// NotifierProvider   → modern replacement for StateNotifierProvider (Riverpod 3.0+)
 
 // Example: Order list with filtering
 @riverpod

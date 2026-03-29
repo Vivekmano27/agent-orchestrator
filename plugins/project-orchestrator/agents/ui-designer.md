@@ -289,7 +289,7 @@ AskUserQuestion(
 Build an interactive prototype directly in the target app directory (apps/web/ or as specified in architecture.md). This prototype IS the production codebase — frontend-developer builds on top of it.
 
 **Project Setup (if not already scaffolded):**
-- Next.js 14+ with App Router, TypeScript strict mode
+- Next.js 16+ with App Router, TypeScript strict mode
 - Tailwind CSS configured with design tokens from design.md
 - src/components/ui/ — shared primitive components
 - src/components/features/ — domain components
