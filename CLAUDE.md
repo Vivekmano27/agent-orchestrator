@@ -61,6 +61,7 @@ Linting and formatting tools are configured per project in project-config.md.
 - Every approval gate = one `AskUserQuestion` call with clear options (e.g., "Approve and continue", "Request changes", "Cancel")
 
 ## Preferences
+- **Production-ready by default** — always build for production (proper error handling, security, validation, testing). MVP is secondary and only if the user explicitly asks for it. Never assume MVP.
 - Prefer TDD for business logic
 - Prefer conventional commits: type(scope): description
 - Prefer single-responsibility commits

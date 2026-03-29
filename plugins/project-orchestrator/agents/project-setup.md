@@ -179,9 +179,9 @@ AskUserQuestion(
 AskUserQuestion(
   question="What's the intended scale and maturity level?",
   options=[
-    "Quick prototype / MVP — ship fast, iterate later",
-    "Production startup — solid foundation, real users from day one",
-    "Enterprise grade — compliance, security, high availability, full CI/CD"
+    "Production startup — solid foundation, real users from day one (Recommended)",
+    "Enterprise grade — compliance, security, high availability, full CI/CD",
+    "Quick prototype / MVP — ship fast, iterate later"
   ]
 )
 ```

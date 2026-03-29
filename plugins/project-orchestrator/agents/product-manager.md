@@ -66,6 +66,8 @@ Bash: echo "Do you want to proceed?"
 
 ### Step 0.5 — Requirements Clarity Assessment
 
+**DEFAULT: Production-ready.** Always scope for production (proper error handling, security, validation, testing, deployment). ONLY scope as MVP if the user EXPLICITLY says "MVP", "prototype", or "quick version". Never assume MVP. Never suggest MVP unless asked.
+
 Before asking Tier 1 questions, evaluate whether the user's request already has clear requirements.
 
 **Clear requirements indicators:**
