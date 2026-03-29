@@ -44,6 +44,7 @@ Common patterns:
 Linting and formatting tools are configured per project in project-config.md.
 
 ## Rules (VIOLATIONS ARE BUGS)
+- ALWAYS use the latest stable version of every library, framework, and tool — never install outdated versions
 - NEVER commit to main directly — use feature branches
 - NEVER import across service boundaries — use API/gRPC only
 - NEVER store secrets in code — use environment variables

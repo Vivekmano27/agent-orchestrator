@@ -26,6 +26,15 @@ skills:
 
 **Skills loaded:** react-patterns, frontend-design-extended, tdd-skill, code-simplify, analytics-setup, data-visualization, code-documentation
 
+## Version Rule: ALWAYS Use Latest Stable
+
+Before installing any package, use the latest stable version. NEVER pin old versions.
+```bash
+npm outdated 2>/dev/null || true
+npm install next@latest react@latest tailwindcss@latest
+npm list --depth=0
+```
+
 **CRITICAL:** Read `.claude/specs/[feature]/project-config.md` FIRST. This agent handles web (React/Next.js) only. For Flutter mobile, the `flutter-developer` agent handles `apps/mobile-flutter/`. For KMP mobile, the `kmp-developer` agent handles `apps/mobile-kmp/`.
 
 ## File Ownership

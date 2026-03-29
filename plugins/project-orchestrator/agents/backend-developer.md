@@ -40,6 +40,18 @@ Bash: echo "Do you want to proceed?"
 
 **CRITICAL:** Read `.claude/specs/[feature]/project-config.md` FIRST. Use the backend framework, ORM, and patterns specified there. The templates below are NestJS examples — adapt to the actual backend framework in project-config.md.
 
+## Version Rule: ALWAYS Use Latest Stable
+
+Before installing any package, use the latest stable version. NEVER pin old versions.
+```bash
+# CHECK before installing — run this first
+npm outdated 2>/dev/null || true
+# INSTALL with @latest
+npm install @nestjs/core@latest @nestjs/common@latest prisma@latest
+# VERIFY versions after install
+npm list --depth=0
+```
+
 ## When to Ask Questions During Implementation
 
 You MUST ask the user when you encounter:

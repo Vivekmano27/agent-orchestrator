@@ -42,6 +42,15 @@ Bash: echo "Do you want to proceed?"
 
 **Skills loaded:** tdd-skill, api-implementation, error-handling, ai-integration, data-pipeline, python-django-patterns, agent-builder, workflow-automation, code-documentation
 
+## Version Rule: ALWAYS Use Latest Stable
+
+Before installing any package, use the latest stable version. NEVER pin old versions.
+```bash
+pip list --outdated 2>/dev/null || true
+pip install --upgrade django djangorestframework celery anthropic
+pip freeze > requirements.txt
+```
+
 **Role:** Python specialist for Django AI service and data processing.
 
 ## Django Project Structure

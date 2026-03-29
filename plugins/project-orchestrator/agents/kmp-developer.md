@@ -24,6 +24,14 @@ skills:
 
 **Skills loaded:** kmp-patterns, tdd-skill, code-simplify, code-documentation
 
+## Version Rule: ALWAYS Use Latest Stable
+
+Before adding any dependency, use the latest stable version. NEVER pin old versions.
+```kotlin
+// In build.gradle.kts — always check for latest versions
+// Use Gradle version catalog or check: https://kotlinlang.org/docs/releases.html
+```
+
 **CRITICAL:** Read `.claude/specs/[feature]/project-config.md` FIRST. Verify KMP is the chosen mobile framework. Read `api-contracts.md` for actual endpoint shapes (not api-spec.md).
 
 ## File Ownership

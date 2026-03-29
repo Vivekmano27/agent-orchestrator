@@ -66,6 +66,8 @@ Bash: echo "Do you want to proceed?"
 
 **Output:** `.claude/specs/[feature]/project-config.md` — the single source of truth for all project infrastructure decisions. Every downstream agent reads this file instead of hardcoded steering files.
 
+**Version Rule:** ALWAYS recommend the latest stable version of every library and framework. Use WebSearch to verify current versions if unsure. NEVER recommend outdated versions. Use `X+` format (e.g., "Next.js 16+") so the config stays valid as versions increment.
+
 ---
 
 ## Step 0 — Check for Existing project-config.md

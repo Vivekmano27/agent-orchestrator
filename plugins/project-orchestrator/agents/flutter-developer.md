@@ -24,6 +24,15 @@ skills:
 
 **Skills loaded:** flutter-patterns, tdd-skill, code-simplify, code-documentation
 
+## Version Rule: ALWAYS Use Latest Stable
+
+Before adding any package, use the latest stable version. NEVER pin old versions.
+```bash
+flutter pub outdated
+flutter pub add riverpod@latest go_router@latest dio@latest freezed@latest
+flutter pub get
+```
+
 **CRITICAL:** Read `.claude/specs/[feature]/project-config.md` FIRST. Verify Flutter is the chosen mobile framework. Read `api-contracts.md` for actual endpoint shapes (not api-spec.md).
 
 ## File Ownership
