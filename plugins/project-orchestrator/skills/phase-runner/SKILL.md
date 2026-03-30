@@ -13,11 +13,11 @@ For each phase in the pipeline, read the corresponding phase file before executi
 Read("${CLAUDE_PLUGIN_ROOT}/skills/phase-runner/phases/phase-{N}.md")
 ```
 
-Phase files are named: `phase-0.md`, `phase-0-5.md`, `phase-1.md`, `phase-1-5.md`, `phase-2.md`, `phase-2-05.md`, `phase-2-1.md`, `phase-2-5.md`, `phase-2-75.md`, `phase-3.md`, `phase-4.md`, `phase-5.md`, `phase-6.md`, `phase-7.md`, `phase-8.md`, `phase-9.md`
+Phase files are named: `phase-0.md`, `phase-0-5.md`, `phase-1.md`, `phase-1-5.md`, `phase-2.md`, `phase-2-05.md`, `phase-2-1.md`, `phase-2-15.md`, `phase-2-5.md`, `phase-2-75.md`, `phase-3.md`, `phase-4.md`, `phase-5.md`, `phase-6.md`, `phase-7.md`, `phase-8.md`, `phase-9.md`
 
 ## Execution Loop
 
-For EACH phase in order [0, 0.5, 1, 1.5, 2, 2.05, 2.1, 2.5, 2.75, 3, 4, 5, 6, 7, 8, 9]:
+For EACH phase in order [0, 0.5, 1, 1.5, 2, 2.05, 2.1, 2.15, 2.5, 2.75, 3, 4, 5, 6, 7, 8, 9]:
 
 1. **Read** the phase file: `Read("${CLAUDE_PLUGIN_ROOT}/skills/phase-runner/phases/phase-{N}.md")`
 2. **Check preconditions** — verify required files exist
@@ -41,6 +41,7 @@ If content validation fails, re-dispatch the responsible agent with a retry prom
 | 2 | phase-2.md | Design via design-team |
 | 2.05 | phase-2-05.md | Spec reconciliation (mandatory) |
 | 2.1 | phase-2-1.md | Task decomposition |
+| 2.15 | phase-2-15.md | Project-specific gap analysis |
 | 2.5 | phase-2-5.md | Git setup |
 | 2.75 | phase-2-75.md | Prototype (clickable UI with dummy data) |
 | 3 | phase-3.md | Build via feature-team |

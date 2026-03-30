@@ -70,7 +70,7 @@ AskUserQuestion(
 
 ## STEP 2 — THE DISPATCH LOOP
 
-**Phase order: 0, 0.5, 1, 1.5, 2, 2.05, 2.1, 2.5, 2.75, 3, 4, 5, 6, 7, 8, 9**
+**Phase order: 0, 0.5, 1, 1.5, 2, 2.05, 2.1, 2.15, 2.5, 2.75, 3, 4, 5, 6, 7, 8, 9**
 
 **For EACH phase, do these steps IN ORDER:**
 
@@ -90,6 +90,7 @@ File mapping:
 - Phase 2 → `phase-2.md`
 - Phase 2.05 → `phase-2-05.md`
 - Phase 2.1 → `phase-2-1.md`
+- Phase 2.15 → `phase-2-15.md`
 - Phase 2.5 → `phase-2-5.md`
 - Phase 2.75 → `phase-2-75.md`
 - Phase 3 → `phase-3.md`
